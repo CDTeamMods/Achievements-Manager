@@ -1,0 +1,739 @@
+/* Animações e Micro-interações */
+
+/* Keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideOutUp {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+}
+
+@keyframes slideOutDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scaleOut {
+  from {
+    opacity: 1;
+    transform: scale(1);
+  }
+  to {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+  50% {
+    transform: scale(1.05);
+    opacity: 0.8;
+  }
+}
+
+@keyframes bounce {
+  0%,
+  20%,
+  53%,
+  80%,
+  100% {
+    transform: translateY(0);
+  }
+  40%,
+  43% {
+    transform: translateY(-8px);
+  }
+  70% {
+    transform: translateY(-4px);
+  }
+  90% {
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes shake {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  10%,
+  30%,
+  50%,
+  70%,
+  90% {
+    transform: translateX(-4px);
+  }
+  20%,
+  40%,
+  60%,
+  80% {
+    transform: translateX(4px);
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes glow {
+  0%,
+  100% {
+    box-shadow: 0 0 5px var(--primary-color);
+  }
+  50% {
+    box-shadow:
+      0 0 20px var(--primary-color),
+      0 0 30px var(--primary-color);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200px 0;
+  }
+  100% {
+    background-position: calc(200px + 100%) 0;
+  }
+}
+
+@keyframes progressBar {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* Classes de Animação */
+.animate-fade-in {
+  animation: fadeIn var(--transition-normal) ease-out;
+}
+
+.animate-fade-out {
+  animation: fadeOut var(--transition-normal) ease-out;
+}
+
+.animate-slide-in-up {
+  animation: slideInUp var(--transition-normal) ease-out;
+}
+
+.animate-slide-in-down {
+  animation: slideInDown var(--transition-normal) ease-out;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft var(--transition-normal) ease-out;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight var(--transition-normal) ease-out;
+}
+
+.animate-slide-out-up {
+  animation: slideOutUp var(--transition-normal) ease-out;
+}
+
+.animate-slide-out-down {
+  animation: slideOutDown var(--transition-normal) ease-out;
+}
+
+.animate-scale-in {
+  animation: scaleIn var(--transition-normal) ease-out;
+}
+
+.animate-scale-out {
+  animation: scaleOut var(--transition-normal) ease-out;
+}
+
+.animate-pulse {
+  animation: pulse 2s infinite;
+}
+
+.animate-bounce {
+  animation: bounce 1s;
+}
+
+.animate-shake {
+  animation: shake 0.5s;
+}
+
+.animate-spin {
+  animation: spin 1s linear infinite;
+}
+
+.animate-glow {
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+/* Micro-interações */
+.hover-lift {
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.hover-scale {
+  transition: transform var(--transition-fast);
+}
+
+.hover-scale:hover {
+  transform: scale(1.02);
+}
+
+.hover-glow {
+  transition: box-shadow var(--transition-fast);
+}
+
+.hover-glow:hover {
+  box-shadow: 0 0 20px var(--primary-color-alpha);
+}
+
+.hover-rotate {
+  transition: transform var(--transition-fast);
+}
+
+.hover-rotate:hover {
+  transform: rotate(5deg);
+}
+
+.click-scale {
+  transition: transform var(--transition-fast);
+}
+
+.click-scale:active {
+  transform: scale(0.95);
+}
+
+/* Efeito Ripple */
+.ripple {
+  position: relative;
+  overflow: hidden;
+}
+
+.ripple::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition:
+    width var(--transition-fast),
+    height var(--transition-fast);
+}
+
+.ripple:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Loading States */
+.loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+.loading::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid var(--primary-color);
+  border-top: 2px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* Skeleton Loading */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--bg-tertiary) 25%,
+    var(--bg-secondary) 50%,
+    var(--bg-tertiary) 75%
+  );
+  background-size: 200px 100%;
+  animation: shimmer 1.5s infinite;
+  border-radius: var(--radius-md);
+}
+
+.skeleton-text {
+  height: 1em;
+  margin-bottom: 0.5em;
+}
+
+.skeleton-text:last-child {
+  margin-bottom: 0;
+  width: 80%;
+}
+
+.skeleton-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.skeleton-button {
+  height: 40px;
+  width: 120px;
+}
+
+.skeleton-card {
+  height: 200px;
+  width: 100%;
+}
+
+/* Transições de Página */
+.page-transition-enter {
+  opacity: 0;
+  transform: translateX(20px);
+}
+
+.page-transition-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition:
+    opacity var(--transition-normal),
+    transform var(--transition-normal);
+}
+
+.page-transition-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.page-transition-exit-active {
+  opacity: 0;
+  transform: translateX(-20px);
+  transition:
+    opacity var(--transition-normal),
+    transform var(--transition-normal);
+}
+
+/* Animações de Lista */
+.list-enter {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+.list-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity var(--transition-normal),
+    transform var(--transition-normal);
+}
+
+.list-exit {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.list-exit-active {
+  opacity: 0;
+  transform: translateY(-20px);
+  transition:
+    opacity var(--transition-normal),
+    transform var(--transition-normal);
+}
+
+/* Animações de Modal */
+.modal-enter {
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.modal-enter-active {
+  opacity: 1;
+  transform: scale(1);
+  transition:
+    opacity var(--transition-normal),
+    transform var(--transition-normal);
+}
+
+.modal-exit {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.modal-exit-active {
+  opacity: 0;
+  transform: scale(0.8);
+  transition:
+    opacity var(--transition-normal),
+    transform var(--transition-normal);
+}
+
+/* Backdrop Animations */
+.backdrop-enter {
+  opacity: 0;
+}
+
+.backdrop-enter-active {
+  opacity: 1;
+  transition: opacity var(--transition-normal);
+}
+
+.backdrop-exit {
+  opacity: 1;
+}
+
+.backdrop-exit-active {
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+/* Stagger Animations */
+.stagger-item {
+  opacity: 0;
+  transform: translateY(20px);
+  animation: slideInUp var(--transition-normal) ease-out forwards;
+}
+
+.stagger-item:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.stagger-item:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.stagger-item:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.stagger-item:nth-child(4) {
+  animation-delay: 0.4s;
+}
+.stagger-item:nth-child(5) {
+  animation-delay: 0.5s;
+}
+.stagger-item:nth-child(6) {
+  animation-delay: 0.6s;
+}
+.stagger-item:nth-child(7) {
+  animation-delay: 0.7s;
+}
+.stagger-item:nth-child(8) {
+  animation-delay: 0.8s;
+}
+.stagger-item:nth-child(9) {
+  animation-delay: 0.9s;
+}
+.stagger-item:nth-child(10) {
+  animation-delay: 1s;
+}
+
+/* Progress Animations */
+.progress-bar-animated {
+  animation: progressBar 2s ease-in-out;
+}
+
+/* Notification Animations */
+.notification-enter {
+  opacity: 0;
+  transform: translateX(100%);
+}
+
+.notification-enter-active {
+  opacity: 1;
+  transform: translateX(0);
+  transition:
+    opacity var(--transition-normal),
+    transform var(--transition-normal);
+}
+
+.notification-exit {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.notification-exit-active {
+  opacity: 0;
+  transform: translateX(100%);
+  transition:
+    opacity var(--transition-normal),
+    transform var(--transition-normal);
+}
+
+/* Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .animate-pulse,
+  .animate-bounce,
+  .animate-spin,
+  .animate-glow {
+    animation: none !important;
+  }
+}
+
+/* Lite Mode - Desabilita TODAS as animações e transições */
+[data-lite-mode="true"] *,
+[data-lite-mode="true"] *::before,
+[data-lite-mode="true"] *::after {
+  animation: none !important;
+  transition: none !important;
+  transform: none !important;
+  animation-duration: 0s !important;
+  transition-duration: 0s !important;
+  animation-delay: 0s !important;
+  transition-delay: 0s !important;
+}
+
+/* Desabilita hovers específicos */
+[data-lite-mode="true"] .hover-lift:hover,
+[data-lite-mode="true"] .hover-scale:hover,
+[data-lite-mode="true"] .hover-rotate:hover,
+[data-lite-mode="true"] .click-scale:active {
+  transform: none !important;
+}
+
+[data-lite-mode="true"] .hover-lift:hover {
+  box-shadow: none !important;
+}
+
+[data-lite-mode="true"] .hover-glow:hover {
+  box-shadow: none !important;
+}
+
+/* Desabilita classes de animação específicas */
+[data-lite-mode="true"] .animate-fade-in,
+[data-lite-mode="true"] .animate-fade-out,
+[data-lite-mode="true"] .animate-slide-in-up,
+[data-lite-mode="true"] .animate-slide-in-down,
+[data-lite-mode="true"] .animate-slide-in-left,
+[data-lite-mode="true"] .animate-slide-in-right,
+[data-lite-mode="true"] .animate-slide-out-up,
+[data-lite-mode="true"] .animate-slide-out-down,
+[data-lite-mode="true"] .animate-scale-in,
+[data-lite-mode="true"] .animate-scale-out,
+[data-lite-mode="true"] .animate-pulse,
+[data-lite-mode="true"] .animate-bounce,
+[data-lite-mode="true"] .animate-shake,
+[data-lite-mode="true"] .animate-spin,
+[data-lite-mode="true"] .animate-glow {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Desabilita animações de loading e skeleton no modo lite */
+[data-lite-mode="true"] .loading-spinner,
+[data-lite-mode="true"] .skeleton-loading,
+[data-lite-mode="true"] .shimmer-effect {
+  animation: none !important;
+}
+
+/* Desabilita animações de progresso no modo lite */
+[data-lite-mode="true"] .progress-bar,
+[data-lite-mode="true"] .progress-indicator {
+  animation: none !important;
+}
+
+/* Desabilita efeitos de ripple no modo lite */
+[data-lite-mode="true"] .ripple-effect::before,
+[data-lite-mode="true"] .ripple-effect::after {
+  animation: none !important;
+  opacity: 0 !important;
+}
+
+/* Desabilita animações específicas da splash screen */
+[data-lite-mode="true"] .splash-container,
+[data-lite-mode="true"] .loading-content,
+[data-lite-mode="true"] .loading-logo,
+[data-lite-mode="true"] .loading-text,
+[data-lite-mode="true"] .loading-progress {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+/* Desabilita gradientes animados */
+[data-lite-mode="true"] body::after,
+[data-lite-mode="true"] .splash-container::before {
+  animation: none !important;
+  opacity: 0 !important;
+}
+
+/* Força visibilidade imediata de elementos */
+[data-lite-mode="true"] .fade-in,
+[data-lite-mode="true"] .slide-in,
+[data-lite-mode="true"] .scale-in {
+  opacity: 1 !important;
+  transform: none !important;
+  visibility: visible !important;
+}
+
+/* Focus Animations */
+.focus-ring {
+  outline: none;
+  position: relative;
+}
+
+.focus-ring:focus::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  border: 2px solid var(--primary-color);
+  border-radius: inherit;
+  animation: glow 1s ease-in-out;
+}
+
+/* Scroll Animations */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition:
+    opacity 0.6s ease-out,
+    transform 0.6s ease-out;
+}
+
+.scroll-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Performance Optimizations */
+.will-change-transform {
+  will-change: transform;
+}
+
+.will-change-opacity {
+  will-change: opacity;
+}
+
+.will-change-auto {
+  will-change: auto;
+}
+
+/* GPU Acceleration */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}

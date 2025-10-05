@@ -1,0 +1,2268 @@
+/* Estilos da Página de Configurações - Design Moderno */
+
+.settings-page-container {
+  padding: var(--spacing-xl);
+  max-width: 1200px;
+  margin: 0 auto;
+  animation: fadeInUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Header da Página */
+.settings-header {
+  text-align: center;
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-xl) 0;
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.1) 0%, rgba(147, 51, 234, 0.1) 100%);
+  border-radius: var(--radius-xl);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  backdrop-filter: blur(10px);
+  position: relative;
+  overflow: hidden;
+}
+
+.settings-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  animation: shimmer 3s infinite;
+}
+
+.settings-header h2 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  background: linear-gradient(135deg, #3b82f6, #9333ea);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0 0 var(--spacing-sm) 0;
+  text-shadow: 0 0 30px rgba(59, 130, 246, 0.3);
+}
+
+.settings-header p {
+  font-size: 1.1rem;
+  color: var(--text-secondary);
+  margin: 0;
+  opacity: 0.9;
+}
+
+/* Grid de Configurações */
+.settings-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: var(--spacing-xl);
+  margin-bottom: var(--spacing-xl);
+}
+
+/* Cards de Configuração */
+.settings-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.05) 0%, rgba(255, 255, 255, 0.02) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-xl);
+  padding: 0;
+  backdrop-filter: blur(20px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.1),
+    0 0 0 1px rgba(255, 255, 255, 0.05);
+}
+
+.settings-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #3b82f6, #9333ea, #06b6d4);
+  background-size: 200% 100%;
+  animation: gradientShift 4s ease-in-out infinite;
+}
+
+.settings-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.2),
+    0 0 40px rgba(59, 130, 246, 0.1),
+    0 0 0 1px rgba(59, 130, 246, 0.2);
+}
+
+.settings-card:hover::before {
+  animation-duration: 2s;
+}
+
+/* Header do Card */
+.settings-card-header {
+  padding: var(--spacing-lg) var(--spacing-lg) var(--spacing-md);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.05) 0%, rgba(147, 51, 234, 0.05) 100%);
+}
+
+.settings-card-header h3 {
+  margin: 0;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.settings-card-header h3 i {
+  font-size: 1.2rem;
+  color: var(--primary-color);
+  text-shadow: 0 0 10px rgba(59, 130, 246, 0.3);
+}
+
+/* Body do Card */
+.settings-card-body {
+  padding: var(--spacing-lg);
+}
+
+/* Item de Configuração */
+.setting-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: var(--radius-lg);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.setting-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
+  transition: left 0.5s ease;
+}
+
+.setting-item:hover {
+  background: rgba(59, 130, 246, 0.05);
+  border-color: rgba(59, 130, 246, 0.2);
+  transform: translateX(4px);
+}
+
+.setting-item:hover::before {
+  left: 100%;
+}
+
+.setting-item:last-child {
+  margin-bottom: 0;
+}
+
+/* Informações da Configuração */
+.setting-info {
+  flex: 1;
+  margin-right: var(--spacing-md);
+}
+
+.setting-info label {
+  display: block;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--spacing-xs);
+  cursor: pointer;
+}
+
+.setting-description {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+/* Nota de configurações do sistema */
+.setting-note {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: var(--radius-md);
+  margin-top: var(--spacing-md);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+}
+
+.setting-note i {
+  color: #fbbf24;
+  font-size: 1rem;
+}
+
+/* Controles */
+.form-control {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm) var(--spacing-md);
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  min-width: 150px;
+  transition: all 0.3s ease;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+/* Toggle Switch Moderno */
+.toggle-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 32px;
+  margin: 0;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  border-radius: 32px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 24px;
+  width: 24px;
+  left: 3px;
+  bottom: 3px;
+  background: linear-gradient(135deg, #ffffff, #f1f5f9);
+  border-radius: 50%;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    0 0 0 1px rgba(255, 255, 255, 0.1);
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  border-color: #3b82f6;
+  box-shadow:
+    inset 0 2px 4px rgba(0, 0, 0, 0.1),
+    0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+.toggle-switch input:checked + .toggle-slider:before {
+  transform: translateX(31px);
+  background: linear-gradient(135deg, #ffffff, #f8fafc);
+  box-shadow:
+    0 2px 12px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.2);
+}
+
+/* Ações da Página */
+.settings-actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-xl) var(--spacing-md);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: var(--spacing-xl);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.02) 0%, rgba(255, 255, 255, 0.01) 100%);
+  border-radius: var(--radius-xl);
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+/* Botões Modernos */
+.settings-actions .btn {
+  padding: var(--spacing-md) var(--spacing-xl);
+  border-radius: var(--radius-lg);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  border: 1px solid transparent;
+  min-width: 140px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.settings-actions .btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s ease;
+}
+
+.settings-actions .btn:hover::before {
+  left: 100%;
+}
+
+.settings-actions .btn-primary {
+  background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+  color: white;
+  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.settings-actions .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
+}
+
+.settings-actions .btn-secondary {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.settings-actions .btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.1);
+  transform: translateY(-2px);
+}
+
+.settings-actions .btn-ghost {
+  background: transparent;
+  color: var(--text-secondary);
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.settings-actions .btn-ghost:hover {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+}
+
+/* Animações */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    left: -100%;
+  }
+  100% {
+    left: 100%;
+  }
+}
+
+@keyframes gradientShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* Responsividade */
+/* Tablets e telas médias */
+@media (max-width: 1024px) {
+  .settings-page-container {
+    padding: var(--spacing-lg);
+  }
+
+  .settings-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+}
+
+/* Telas médias - Laptops pequenos e tablets grandes */
+@media (max-width: 1024px) {
+  .settings-actions {
+    padding: var(--spacing-lg) var(--spacing-md);
+    gap: var(--spacing-sm);
+  }
+
+  .settings-actions .btn {
+    min-width: 120px;
+    font-size: 0.9rem;
+    padding: var(--spacing-sm) var(--spacing-lg);
+  }
+}
+
+/* Tablets pequenos e celulares grandes */
+@media (max-width: 768px) {
+  .settings-page-container {
+    padding: var(--spacing-md);
+  }
+
+  .settings-grid {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-lg);
+  }
+
+  .settings-header {
+    padding: var(--spacing-lg) var(--spacing-md);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .settings-header h2 {
+    font-size: 2rem;
+  }
+
+  .settings-card {
+    padding: var(--spacing-lg);
+  }
+
+  .setting-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-sm);
+    padding: var(--spacing-md);
+  }
+
+  .setting-info {
+    margin-right: 0;
+    margin-bottom: var(--spacing-sm);
+    width: 100%;
+  }
+
+  .setting-label {
+    font-size: 1rem;
+  }
+
+  .setting-description {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .settings-actions {
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-md);
+    width: 100%;
+  }
+
+  .settings-actions .btn {
+    width: 100%;
+    max-width: 300px;
+    min-height: 44px;
+    font-size: 1rem;
+    padding: var(--spacing-md) var(--spacing-lg);
+  }
+
+  .setting-control {
+    width: 100%;
+    justify-content: flex-start;
+  }
+
+  .input,
+  .select {
+    width: 100%;
+    min-height: 44px;
+    font-size: 1rem;
+    padding: var(--spacing-sm) var(--spacing-md);
+  }
+}
+
+/* Celulares */
+@media (max-width: 480px) {
+  .settings-page-container {
+    padding: var(--spacing-sm);
+  }
+
+  .settings-card {
+    margin: 0 -var(--spacing-sm);
+    padding: var(--spacing-md);
+    border-radius: var(--radius-lg);
+  }
+
+  .settings-header {
+    margin: 0 -var(--spacing-sm) var(--spacing-lg);
+    border-radius: 0;
+    padding: var(--spacing-md);
+  }
+
+  .settings-header h2 {
+    font-size: 1.75rem;
+    line-height: 1.2;
+  }
+
+  .settings-header p {
+    font-size: 1rem;
+    margin-top: var(--spacing-xs);
+  }
+
+  .setting-item {
+    gap: var(--spacing-xs);
+    padding: var(--spacing-sm);
+  }
+
+  .setting-label {
+    font-size: 0.95rem;
+    font-weight: 600;
+  }
+
+  .setting-description {
+    font-size: 0.85rem;
+    line-height: 1.4;
+    margin-top: var(--spacing-xs);
+  }
+
+  .settings-actions {
+    gap: var(--spacing-sm);
+    margin-top: var(--spacing-md);
+  }
+
+  .settings-actions .btn {
+    font-size: 0.9rem;
+    padding: var(--spacing-sm) var(--spacing-md);
+    min-height: 40px;
+    border-radius: var(--radius-lg);
+  }
+
+  .input,
+  .select {
+    font-size: 0.9rem;
+    min-height: 40px;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-lg);
+  }
+
+  .toggle-switch {
+    transform: scale(0.9);
+  }
+}
+
+/* Telas muito pequenas */
+@media (max-width: 360px) {
+  .settings-page-container {
+    padding: var(--spacing-xs);
+  }
+
+  .settings-card {
+    margin: 0;
+    padding: var(--spacing-sm);
+  }
+
+  .settings-header {
+    margin: 0 0 var(--spacing-lg);
+    padding: var(--spacing-sm);
+  }
+
+  .settings-header h2 {
+    font-size: 1.5rem;
+  }
+
+  .setting-label {
+    font-size: 13px;
+  }
+
+  .setting-description {
+    font-size: 12px;
+  }
+
+  .settings-actions {
+    padding: var(--spacing-md) var(--spacing-sm);
+    margin: var(--spacing-md) 0;
+    gap: var(--spacing-sm);
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .settings-actions .btn {
+    font-size: 14px;
+    padding: var(--spacing-sm) var(--spacing-md);
+    width: 100%;
+    max-width: none;
+    min-height: 44px;
+    min-width: auto;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    flex-shrink: 1;
+  }
+}
+
+/* Correções adicionais para telas extremamente pequenas */
+@media (max-width: 320px) {
+  .settings-actions {
+    padding: var(--spacing-sm) 0;
+    margin: var(--spacing-sm) 0;
+  }
+
+  .settings-actions .btn {
+    font-size: 12px;
+    padding: 8px 12px;
+    min-height: 32px;
+    border-radius: 6px;
+  }
+
+  .settings-actions .btn i {
+    font-size: 12px;
+    margin-right: 4px;
+  }
+}
+
+/* Modo Lite - Desabilita todos os hovers e animações */
+[data-lite-mode="true"] .settings-card:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+[data-lite-mode="true"] .settings-card:hover::before {
+  opacity: 0 !important;
+}
+
+[data-lite-mode="true"] .setting-item:hover {
+  background: transparent !important;
+  transform: none !important;
+}
+
+[data-lite-mode="true"] .setting-item:hover::before {
+  width: 0 !important;
+}
+
+[data-lite-mode="true"] .settings-actions .btn:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+[data-lite-mode="true"] .settings-actions .btn:hover::before {
+  width: 0 !important;
+}
+
+[data-lite-mode="true"] .settings-actions .btn-primary:hover {
+  background: var(--primary-color) !important;
+  transform: none !important;
+}
+
+[data-lite-mode="true"] .settings-actions .btn-secondary:hover {
+  background: var(--secondary-color) !important;
+  transform: none !important;
+}
+
+[data-lite-mode="true"] .settings-actions .btn-ghost:hover {
+  background: transparent !important;
+  transform: none !important;
+}
+
+/* Desabilita animações específicas das configurações no modo lite */
+[data-lite-mode="true"] .settings-card {
+  animation: none !important;
+}
+
+[data-lite-mode="true"] .settings-header {
+  animation: none !important;
+}
+
+[data-lite-mode="true"] .settings-header::before {
+  animation: none !important;
+}
+
+[data-lite-mode="true"] .setting-item {
+  animation: none !important;
+}
+
+[data-lite-mode="true"] .settings-actions .btn {
+  animation: none !important;
+}
+
+[data-lite-mode="true"] .settings-actions .btn::before {
+  animation: none !important;
+}
+
+/* ===== MODAL DE CONFIGURAÇÕES ===== */
+#settingsModal .modal-content {
+  max-width: 600px;
+  width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.settings-container {
+  padding: var(--spacing-md);
+}
+
+.settings-section {
+  margin-bottom: var(--spacing-xl);
+  padding: var(--spacing-lg);
+  background: var(--bg-secondary);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.settings-section:hover {
+  border-color: var(--accent-primary);
+  box-shadow: 0 4px 12px rgba(var(--primary-color-rgb), 0.1);
+}
+
+.settings-section h3 {
+  margin: 0 0 var(--spacing-lg) 0;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.settings-section h3 i {
+  color: var(--accent-primary);
+  font-size: 1.1rem;
+}
+
+.settings-section .form-group {
+  margin-bottom: var(--spacing-md);
+}
+
+.settings-section .form-group:last-child {
+  margin-bottom: 0;
+}
+
+.settings-section label {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.settings-section .form-control {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-md);
+  background: var(--bg-tertiary);
+  color: var(--text-primary);
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.settings-section .form-control:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.1);
+}
+
+.toggle-group {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+}
+
+.toggle-switch {
+  position: relative;
+  width: 50px;
+  height: 26px;
+  flex-shrink: 0;
+}
+
+.toggle-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.toggle-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--bg-quaternary);
+  border: 1px solid var(--border-color);
+  transition: all 0.3s ease;
+  border-radius: 13px;
+}
+
+.toggle-slider:before {
+  position: absolute;
+  content: "";
+  height: 18px;
+  width: 18px;
+  left: 3px;
+  bottom: 3px;
+  background-color: var(--text-secondary);
+  transition: all 0.3s ease;
+  border-radius: 50%;
+}
+
+.toggle-switch input:checked + .toggle-slider {
+  background-color: var(--accent-primary);
+  border-color: var(--accent-primary);
+}
+
+.toggle-switch input:checked + .toggle-slider:before {
+  transform: translateX(24px);
+  background-color: white;
+}
+
+.toggle-switch:hover .toggle-slider {
+  box-shadow: 0 2px 8px rgba(var(--primary-color-rgb), 0.2);
+}
+
+.form-text {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  margin-top: var(--spacing-xs);
+  line-height: 1.4;
+}
+
+/* Estilo bonito para o link da Steam API Key */
+.form-text a {
+  color: #10b981;
+  text-decoration: none;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(16, 185, 129, 0.05));
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  font-size: 0.875rem;
+  margin-top: 0.5rem;
+}
+
+.form-text a:hover {
+  color: #059669;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.08));
+  border-color: rgba(16, 185, 129, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.2);
+}
+
+.form-text a:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.15);
+}
+
+.form-text a i {
+  font-size: 0.75rem;
+  opacity: 0.8;
+  transition: opacity 0.3s ease;
+}
+
+.form-text a:hover i {
+  opacity: 1;
+}
+
+/* Modo Lite para Modal */
+[data-lite-mode="true"] .settings-section {
+  transition: none;
+}
+
+[data-lite-mode="true"] .settings-section:hover {
+  box-shadow: none;
+}
+
+[data-lite-mode="true"] .toggle-switch:hover .toggle-slider {
+  box-shadow: none;
+}
+
+/* Forçar visibilidade das abas e seus elementos */
+.settings-tabs .tab-content {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  min-height: 400px !important;
+}
+
+.settings-tabs .tab-pane {
+  display: none !important;
+  visibility: hidden !important;
+  opacity: 0 !important;
+}
+
+.settings-tabs .tab-pane.active {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  animation: fadeIn 0.3s ease forwards !important;
+}
+
+/* Forçar visibilidade dos elementos de formulário nas abas */
+.tab-pane .settings-section .form-control,
+.tab-pane .settings-section select,
+.tab-pane .settings-section input,
+.tab-pane .settings-section .toggle-switch {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: relative !important;
+  z-index: 1 !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #e2e8f0 !important;
+}
+
+.tab-pane .settings-section .form-group {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  margin-bottom: 1rem !important;
+}
+
+.tab-pane .settings-section label {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  color: #e2e8f0 !important;
+  font-weight: 500 !important;
+  margin-bottom: 0.5rem !important;
+}
+
+.tab-pane .settings-section .toggle-group {
+  display: flex !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+}
+
+.tab-pane .settings-section .toggle-slider {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+
+.tab-pane .settings-section .form-text {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  color: #94a3b8 !important;
+}
+
+.tab-pane .settings-section {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  margin-bottom: 2rem !important;
+}
+
+.tab-pane .settings-section h3 {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  color: #e2e8f0 !important;
+}
+
+/* 🎨 Bordas arredondadas para o campo Steam API Key */
+#steamApiKeyGroup .input-group {
+  border-radius: 12px;
+  overflow: hidden;
+  background: transparent;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+#steamApiKeyGroup .form-control {
+  border-radius: 12px 0 0 12px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-right: none;
+  background: rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+  padding-left: 1.5rem; /* Espaço para o ícone da chave */
+  color: #ffffff !important; /* Cor branca para tema escuro */
+  opacity: 1 !important;
+}
+
+/* Garantir cor branca para tema escuro quando toggle está ativo/inativo */
+#steamApiKeyGroup input[type="text"].form-control,
+#steamApiKeyGroup input[type="password"].form-control {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+/* Força cor branca para o input específico da Steam API Key no tema escuro */
+#steamApiKeyInput {
+  color: #ffffff !important;
+  opacity: 1 !important;
+}
+
+/* Ajuste específico para o input da Steam API Key */
+.input-with-icon .form-control {
+  padding-left: 2.5rem;
+}
+
+#steamApiKeyGroup .form-control:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+#steamApiKeyGroup .form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+  background: rgba(255, 255, 255, 0.08);
+  border-right: none;
+}
+
+#steamApiKeyGroup .btn {
+  border-radius: 0 12px 12px 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-left: none;
+  background: rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+  padding: 0.5rem 0.75rem;
+  height: calc(1.5em + 1rem + 2px); /* Altura exata igual ao input */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff; /* Cor branca para tema escuro */
+}
+
+#steamApiKeyGroup .btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--primary-color);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+#steamApiKeyGroup .form-control:focus + .btn {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* 🎨 Cores do ícone para tema claro */
+[data-theme="light"] #steamApiKeyGroup .btn {
+  color: #1a202c; /* Cor preta para tema claro */
+  border-color: rgba(0, 0, 0, 0.1);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] #steamApiKeyGroup .btn:hover {
+  background: rgba(0, 0, 0, 0.1);
+  color: var(--primary-color);
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="light"] #steamApiKeyGroup .form-control {
+  color: #000000 !important;
+  opacity: 1 !important;
+  border-color: rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+[data-theme="light"] #steamApiKeyGroup .form-control:hover {
+  color: #000000 !important;
+  opacity: 1 !important;
+  border-color: rgba(0, 0, 0, 0.2);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+[data-theme="light"] #steamApiKeyGroup .form-control:focus {
+  color: #000000 !important;
+  opacity: 1 !important;
+  border-color: var(--primary-600);
+  background: rgba(255, 255, 255, 0.95);
+}
+
+/* Placeholder específico para Steam API Key */
+[data-theme="light"] #steamApiKeyGroup .form-control::placeholder {
+  color: var(--neutral-600);
+  opacity: 1;
+}
+
+/* Texto digitado no Steam API Key - força cor preta */
+[data-theme="light"] #steamApiKeyGroup .form-control:not(:placeholder-shown) {
+  color: #000000 !important;
+  opacity: 1 !important;
+}
+
+/* Garantir que o valor do input seja sempre preto */
+[data-theme="light"] #steamApiKeyGroup input.form-control {
+  color: #000000 !important;
+  opacity: 1 !important;
+  padding-left: 1.5rem; /* Espaço para o ícone da chave */
+}
+
+/* Garantir cor preta quando toggle está ativo (tipo text) */
+[data-theme="light"] #steamApiKeyGroup input[type="text"].form-control {
+  color: #000000 !important;
+  opacity: 1 !important;
+}
+
+/* Garantir cor preta quando toggle está inativo (tipo password) */
+[data-theme="light"] #steamApiKeyGroup input[type="password"].form-control {
+  color: #000000 !important;
+  opacity: 1 !important;
+}
+
+/* Força cor preta para o input específico da Steam API Key */
+[data-theme="light"] #steamApiKeyInput {
+  color: #000000 !important;
+  opacity: 1 !important;
+}
+
+/* Placeholders gerais para todos os inputs e selects no tema light */
+[data-theme="light"] .form-control::placeholder {
+  color: var(--neutral-600);
+  opacity: 1;
+}
+
+[data-theme="light"] input.form-control::placeholder {
+  color: var(--neutral-600);
+  opacity: 1;
+}
+
+[data-theme="light"] select.form-control::placeholder {
+  color: var(--neutral-600);
+  opacity: 1;
+}
+
+/* Opções de select com placeholder */
+[data-theme="light"] select.form-control option[value=""] {
+  color: var(--neutral-600) !important;
+}
+
+[data-theme="light"] select.form-control option:first-child {
+  color: var(--neutral-600) !important;
+}
+
+/* Correções específicas para dropdowns problemáticos */
+[data-theme="light"] .theme-dropdown {
+  color: var(--neutral-900) !important;
+}
+
+[data-theme="light"] .theme-dropdown option {
+  color: var(--neutral-900) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+}
+
+[data-theme="light"] .language-dropdown {
+  color: var(--neutral-900) !important;
+}
+
+[data-theme="light"] .language-dropdown option {
+  color: var(--neutral-900) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Placeholder para dropdowns específicos */
+[data-theme="light"] .theme-dropdown::placeholder {
+  color: var(--neutral-600) !important;
+  opacity: 1 !important;
+}
+
+[data-theme="light"] .language-dropdown::placeholder {
+  color: var(--neutral-600) !important;
+  opacity: 1 !important;
+}
+
+/* Correções abrangentes para todos os selects */
+[data-theme="light"] select {
+  color: #000000 !important;
+}
+
+/* Garantir que todos os dropdowns tenham texto preto */
+[data-theme="light"] .select,
+[data-theme="light"] select,
+[data-theme="light"] .form-control.select,
+[data-theme="light"] select.form-control,
+[data-theme="light"] .theme-dropdown,
+[data-theme="light"] .language-dropdown {
+  color: #000000 !important;
+}
+
+[data-theme="light"] #apiSourceSelect option {
+  color: #000000 !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* 📱 RESPONSIVIDADE - Configurações de API */
+
+/* Tablets e telas médias (768px - 1024px) */
+@media (max-width: 1024px) {
+  .settings-section {
+    padding: var(--spacing-md);
+  }
+
+  .steam-api-section {
+    padding: var(--spacing-md);
+  }
+
+  .steam-status-card {
+    padding: var(--spacing-md);
+  }
+}
+
+/* Tablets pequenos (576px - 768px) */
+@media (max-width: 768px) {
+  .settings-section h3 {
+    font-size: 1.25rem;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .steam-api-section h4 {
+    font-size: 1.1rem;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  /* Dropdown da API */
+  #apiSourceSelect {
+    font-size: 16px; /* Evita zoom no iOS */
+    padding: 12px 16px;
+    min-height: 48px; /* Touch target mínimo */
+  }
+
+  /* Campo Steam API Key */
+  .input-with-icon {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .input-with-icon .form-control {
+    width: 100%;
+    padding: 12px 16px 12px 40px;
+    font-size: 16px;
+    min-height: 48px;
+  }
+
+  .input-with-icon .btn {
+    position: absolute;
+    right: 8px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border-radius: 50%;
+  }
+
+  /* Status card responsivo */
+  .steam-status-card .status-header {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--spacing-sm);
+  }
+
+  .steam-status-card .status-actions {
+    margin-top: var(--spacing-md);
+  }
+
+  .steam-status-card .btn {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 16px;
+    min-height: 48px;
+  }
+}
+
+/* Smartphones (até 576px) */
+@media (max-width: 576px) {
+  .settings-section {
+    padding: var(--spacing-sm);
+    margin: 0 -var(--spacing-sm);
+  }
+
+  .settings-section h3 {
+    font-size: 1.1rem;
+    text-align: center;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .steam-api-section {
+    padding: var(--spacing-sm);
+    margin: var(--spacing-md) 0;
+    border-radius: var(--radius-md);
+  }
+
+  .steam-api-section h4 {
+    font-size: 1rem;
+    text-align: center;
+    margin-bottom: var(--spacing-md);
+  }
+
+  /* Form groups em mobile */
+  .form-group {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .form-group label {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+    display: block;
+  }
+
+  /* Dropdown otimizado para mobile */
+  #apiSourceSelect {
+    width: 100%;
+    font-size: 16px;
+    padding: 14px 16px;
+    min-height: 52px;
+    border-radius: var(--radius-lg);
+    background-size: 16px;
+    background-position: right 12px center;
+  }
+
+  /* Campo API Key em mobile */
+  .input-with-icon {
+    position: relative;
+    display: block;
+  }
+
+  .input-with-icon .form-control {
+    width: 100%;
+    padding: 14px 50px 14px 40px;
+    font-size: 16px;
+    min-height: 52px;
+    border-radius: var(--radius-lg);
+  }
+
+  .input-with-icon i.fas.fa-key {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    z-index: 2;
+  }
+
+  .input-with-icon .btn.toggle-password {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 24px;
+    height: 24px;
+    padding: 0;
+    border: none;
+    background: transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+    cursor: pointer;
+  }
+
+  .input-with-icon .btn.toggle-password:hover {
+    color: var(--text-primary);
+    transform: translateY(-50%) scale(1.1);
+  }
+
+  .input-with-icon .btn.toggle-password:active {
+    transform: translateY(-50%) scale(0.9);
+  }
+
+  .input-with-icon .btn.toggle-password i {
+    font-size: 14px;
+    transition: all 0.2s ease;
+  }
+
+  /* Status card em mobile */
+  .steam-status-card {
+    padding: var(--spacing-md);
+    border-radius: var(--radius-lg);
+    margin: var(--spacing-lg) 0;
+  }
+
+  .steam-status-card .status-header {
+    flex-direction: column;
+    text-align: center;
+    gap: var(--spacing-md);
+  }
+
+  .steam-status-card .status-icon {
+    font-size: 2rem;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  .steam-status-card .status-info h4 {
+    font-size: 1.1rem;
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .steam-status-card .status-info p {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  .steam-status-card .status-actions {
+    margin-top: var(--spacing-lg);
+  }
+
+  .steam-status-card .btn {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 16px;
+    min-height: 52px;
+    border-radius: var(--radius-lg);
+    font-weight: 600;
+  }
+
+  /* Mensagem Hydra API em mobile */
+  #hydraApiMessage {
+    margin: var(--spacing-lg) 0;
+    padding: var(--spacing-lg);
+    border-radius: var(--radius-lg);
+    text-align: center;
+  }
+
+  #hydraApiMessage .fa-clock {
+    font-size: 2.5rem !important;
+    margin-bottom: var(--spacing-md) !important;
+  }
+
+  #hydraApiMessage h4 {
+    font-size: 1.2rem;
+    margin-bottom: var(--spacing-sm);
+  }
+
+  #hydraApiMessage p {
+    font-size: 14px;
+    line-height: 1.4;
+  }
+
+  #hydraApiMessage small {
+    font-size: 12px;
+  }
+
+  /* Form text em mobile */
+  .form-text {
+    font-size: 12px;
+    line-height: 1.4;
+    margin-top: var(--spacing-xs);
+  }
+
+  .form-text a {
+    display: inline-block;
+    margin-top: var(--spacing-xs);
+    word-break: break-all;
+  }
+}
+
+/* Smartphones muito pequenos (até 375px) */
+@media (max-width: 375px) {
+  .settings-section {
+    padding: var(--spacing-xs);
+    margin: 0 -var(--spacing-xs);
+  }
+
+  .steam-api-section {
+    padding: var(--spacing-xs);
+  }
+
+  .steam-status-card {
+    padding: var(--spacing-sm);
+  }
+
+  #apiSourceSelect,
+  .input-with-icon .form-control,
+  .steam-status-card .btn {
+    min-height: 48px;
+    font-size: 15px;
+  }
+
+  .settings-section h3 {
+    font-size: 1rem;
+  }
+
+  .steam-api-section h4 {
+    font-size: 0.95rem;
+  }
+}
+
+[data-theme="light"] select::placeholder {
+  color: var(--neutral-600) !important;
+  opacity: 1 !important;
+}
+
+/* Correção para selects com classe .select */
+[data-theme="light"] .select {
+  color: var(--neutral-900) !important;
+}
+
+[data-theme="light"] #apiSourceSelect option {
+  color: #000000 !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+}
+
+[data-theme="light"] .select::placeholder {
+  color: var(--neutral-600) !important;
+  opacity: 1 !important;
+}
+
+/* Sobrescrever definições de var(--text-muted) para placeholders */
+[data-theme="light"] .input::placeholder {
+  color: var(--neutral-600) !important;
+  opacity: 1 !important;
+}
+
+[data-theme="light"] .input-with-icon .input::placeholder {
+  color: var(--neutral-600) !important;
+  opacity: 1 !important;
+}
+
+[data-theme="light"] .input-with-icon .select::placeholder {
+  color: var(--neutral-600) !important;
+  opacity: 1 !important;
+}
+
+/* Correção específica para selects em estado inválido */
+[data-theme="light"] .input-with-icon .select:invalid {
+  color: var(--neutral-900) !important;
+}
+
+/* Correção para input-field */
+[data-theme="light"] .input-field::placeholder {
+  color: var(--neutral-600) !important;
+  opacity: 1 !important;
+}
+
+/* Correção ultra-específica para o dropdown de tema */
+[data-theme="light"] #themeSelect {
+  color: #000000 !important;
+  background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+[data-theme="light"] #themeSelect option {
+  color: #000000 !important;
+  background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Forçar cor do texto selecionado no dropdown */
+[data-theme="light"] #themeSelect option:checked {
+  color: #000000 !important;
+  background-color: var(--primary-100) !important;
+}
+
+/* Correção ultra-específica para o dropdown de idiomas */
+[data-theme="light"] #languageSelect {
+  color: #000000 !important;
+  background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+[data-theme="light"] #languageSelect option {
+  color: #000000 !important;
+  background-color: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Forçar cor do texto selecionado no dropdown de idiomas */
+[data-theme="light"] #languageSelect option:checked {
+  color: #000000 !important;
+  background-color: var(--primary-100) !important;
+}
+
+/* Garantir que o valor selecionado seja visível */
+[data-theme="light"] select option[selected] {
+  color: #000000 !important;
+}
+
+[data-theme="light"] #steamApiKeyGroup .form-control:focus + .btn {
+  border-color: var(--primary-color);
+}
+
+/* 🎨 Melhorias de contraste para tema claro */
+[data-theme="light"] .settings-page-container {
+  color: var(--neutral-900);
+}
+
+[data-theme="light"] .settings-header h2 {
+  background: linear-gradient(135deg, #1e40af, #7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+[data-theme="light"] .settings-header p {
+  color: var(--neutral-800);
+}
+
+[data-theme="light"] .settings-card {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.9) 0%, rgba(248, 250, 252, 0.95) 100%);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(0, 0, 0, 0.02);
+}
+
+[data-theme="light"] .settings-card:hover {
+  border-color: rgba(59, 130, 246, 0.2);
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.12),
+    0 0 40px rgba(59, 130, 246, 0.08),
+    0 0 0 1px rgba(59, 130, 246, 0.1);
+}
+
+[data-theme="light"] .settings-card-header {
+  background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(147, 51, 234, 0.08) 100%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+[data-theme="light"] .settings-card-header h3 {
+  color: var(--neutral-900);
+}
+
+[data-theme="light"] .settings-card-header h3 i {
+  color: var(--primary-600);
+}
+
+[data-theme="light"] .setting-item {
+  background: rgba(0, 0, 0, 0.02);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .setting-item:hover {
+  background: rgba(59, 130, 246, 0.08);
+  border-color: rgba(59, 130, 246, 0.15);
+}
+
+[data-theme="light"] .setting-info label {
+  color: var(--neutral-900);
+}
+
+[data-theme="light"] .setting-description {
+  color: var(--neutral-700);
+}
+
+[data-theme="light"] .setting-note {
+  background: rgba(251, 191, 36, 0.15);
+  border: 1px solid rgba(251, 191, 36, 0.25);
+  color: var(--neutral-800);
+}
+
+[data-theme="light"] .setting-note i {
+  color: #d97706;
+}
+
+/* 🔧 Melhorias para switches e controles */
+[data-theme="light"] .switch {
+  background: rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .switch:hover {
+  background: rgba(0, 0, 0, 0.15);
+  border-color: rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="light"] .switch.active {
+  background: var(--primary-600);
+  border-color: var(--primary-600);
+}
+
+[data-theme="light"] .switch-handle {
+  background: #ffffff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* 📝 Melhorias para inputs e selects */
+[data-theme="light"] .form-control {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  color: var(--neutral-900);
+}
+
+[data-theme="light"] .form-control:hover {
+  border-color: rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+[data-theme="light"] .form-control:focus {
+  border-color: var(--primary-600);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+[data-theme="light"] .select {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  color: var(--neutral-900);
+}
+
+[data-theme="light"] .select:hover {
+  border-color: rgba(0, 0, 0, 0.25);
+  background: rgba(255, 255, 255, 0.9);
+}
+
+[data-theme="light"] .select:focus {
+  border-color: var(--primary-600);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+/* 📝 Melhorias para toggle-groups e labels */
+[data-theme="light"] .toggle-group label {
+  color: var(--neutral-900);
+  font-weight: 600;
+}
+
+[data-theme="light"] .toggle-group .form-text {
+  color: var(--neutral-700);
+}
+
+[data-theme="light"] .form-group label {
+  color: var(--neutral-900);
+  font-weight: 600;
+}
+
+[data-theme="light"] .form-text {
+  color: var(--neutral-700);
+}
+
+/* Correções de contraste para modo light */
+[data-theme="light"] .toggle-group label,
+[data-theme="light"] .form-group label {
+  color: var(--neutral-900) !important;
+  font-weight: 600 !important;
+}
+
+/* Correções mais agressivas para textos de descrição dos toggles */
+[data-theme="light"] .toggle-group .form-text,
+[data-theme="light"] .form-group .form-text {
+  color: var(--neutral-800) !important;
+  font-weight: 500 !important;
+  opacity: 1 !important;
+}
+
+/* Correção específica para textos de descrição problemáticos */
+[data-theme="light"] .toggle-group div .form-text {
+  color: #1f2937 !important; /* Cor mais escura e específica */
+  font-weight: 500 !important;
+  opacity: 1 !important;
+  text-shadow: none !important;
+}
+
+/* Correções para títulos h3 das seções */
+[data-theme="light"] .settings-section h3,
+[data-theme="light"] .settings-section h3 span {
+  color: var(--neutral-900) !important;
+  font-weight: 600 !important;
+}
+
+/* Correções para inputs e dropdowns */
+[data-theme="light"] .form-control,
+[data-theme="light"] .form-control.select,
+[data-theme="light"] select.form-control {
+  color: var(--neutral-900) !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-color: rgba(0, 0, 0, 0.15) !important;
+}
+
+[data-theme="light"] .form-control:focus,
+[data-theme="light"] .form-control.select:focus,
+[data-theme="light"] select.form-control:focus {
+  color: var(--neutral-900) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+  border-color: var(--primary-600) !important;
+}
+
+/* Correções específicas para options dos selects */
+[data-theme="light"] .form-control option,
+[data-theme="light"] select.form-control option {
+  color: var(--neutral-900) !important;
+  background: rgba(255, 255, 255, 0.95) !important;
+}
+
+/* Correções específicas para os ícones da aba estatística no tema light */
+[data-theme="light"] .stat-icon {
+  color: #000000 !important;
+}
+
+[data-theme="light"] .chart-icon {
+  color: #000000 !important;
+}
+
+[data-theme="light"] .chart-icon i {
+  color: #000000 !important;
+}
+
+[data-theme="light"] .empty-state .chart-icon {
+  color: #000000 !important;
+}
+
+[data-theme="light"] .empty-state .chart-icon i {
+  color: #000000 !important;
+}
+
+/* Estilos para seção de API Steam */
+.steam-api-section {
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  background: rgba(59, 130, 246, 0.05);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: var(--radius-lg);
+}
+
+.api-field-group {
+  margin-bottom: var(--spacing-md);
+}
+
+.api-field-group label {
+  display: block;
+  margin-bottom: var(--spacing-xs);
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.api-field-group .help-link {
+  color: var(--primary-500);
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.api-field-group .help-link:hover {
+  text-decoration: underline;
+}
+
+.connection-test-section {
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background: rgba(0, 0, 0, 0.05);
+}
+
+/* Estilos para seção de informações do Steam */
+.steam-paths-info {
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  background: rgba(59, 130, 246, 0.05);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: var(--radius-lg);
+  display: none;
+}
+
+.steam-paths-info h4 {
+  margin: 0 0 var(--spacing-md) 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.steam-paths-info h4 i {
+  color: var(--primary-500);
+}
+
+.steam-default-paths {
+  margin-bottom: var(--spacing-lg);
+}
+
+.steam-default-paths h5 {
+  margin: 0 0 var(--spacing-sm) 0;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+}
+
+.steam-default-paths-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-sm);
+}
+
+.steam-path-item {
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  font-family: "Courier New", monospace;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.steam-path-item:last-child {
+  border-bottom: none;
+}
+
+.steam-directory-selector {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.steam-directory-selector label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.steam-path-input-group {
+  display: flex;
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+
+.steam-path-input {
+  flex: 1;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-md);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-primary);
+  font-size: 0.875rem;
+  font-family: "Courier New", monospace;
+  transition: all 0.3s ease;
+}
+
+.steam-path-input:focus {
+  outline: none;
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.steam-path-input:read-only {
+  background: rgba(255, 255, 255, 0.02);
+  cursor: default;
+}
+
+.select-steam-dir-btn {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--primary-500);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  white-space: nowrap;
+}
+
+.select-steam-dir-btn:hover {
+  background: var(--primary-600);
+  transform: translateY(-1px);
+}
+
+.select-steam-dir-btn:active {
+  transform: translateY(0);
+}
+
+/* Tema claro */
+[data-theme="light"] .steam-paths-info {
+  background: rgba(59, 130, 246, 0.08);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+[data-theme="light"] .steam-default-paths-list {
+  background: rgba(0, 0, 0, 0.03);
+}
+
+[data-theme="light"] .steam-path-item {
+  color: var(--neutral-700);
+  border-bottom-color: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .steam-path-input {
+  border-color: rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 0.8);
+  color: var(--neutral-900);
+}
+
+[data-theme="light"] .steam-path-input:read-only {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+.test-connection-btn {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-bottom: var(--spacing-md);
+}
+
+.test-connection-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.test-connection-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.connection-status {
+  margin-top: var(--spacing-sm);
+}
+
+.status-loading {
+  color: var(--primary-500);
+  padding: var(--spacing-sm);
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.2);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+}
+
+.status-success {
+  color: var(--success-600);
+  padding: var(--spacing-sm);
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+}
+
+.status-error {
+  color: var(--error-600);
+  padding: var(--spacing-sm);
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+}
+
+.status-warning {
+  color: var(--warning-700);
+  padding: var(--spacing-sm);
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+}
+
+.hydra-api-warning {
+  padding: var(--spacing-md);
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  border-radius: var(--radius-md);
+  color: var(--warning-700);
+  font-weight: 500;
+}
+
+/* Tema light - ajustes para seção de API */
+[data-theme="light"] .steam-api-section {
+  background: rgba(248, 250, 252, 0.8);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  color: var(--neutral-900);
+}
+
+[data-theme="light"] .steam-api-section h3 {
+  color: var(--neutral-900);
+  font-weight: 600;
+}
+
+[data-theme="light"] .steam-api-section label {
+  color: var(--neutral-800);
+  font-weight: 500;
+}
+
+[data-theme="light"] .connection-test-section {
+  background: rgba(241, 245, 249, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+}
+
+[data-theme="light"] .steam-status-card {
+  background: rgba(248, 250, 252, 0.95);
+  border: 1px solid rgba(148, 163, 184, 0.3);
+  color: var(--neutral-800);
+}
+
+[data-theme="light"] .steam-status-card .status-text {
+  color: var(--neutral-700);
+}
+
+[data-theme="light"] .status-loading {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.25);
+  color: #1e40af;
+}
+
+[data-theme="light"] .status-success {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  color: #047857;
+}
+
+[data-theme="light"] .status-error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.25);
+  color: #dc2626;
+}
+
+[data-theme="light"] .status-warning {
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  color: #d97706;
+}
+
+[data-theme="light"] .hydra-api-warning {
+  background: rgba(254, 243, 199, 0.8);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #92400e;
+}
+
+[data-theme="light"] .hydra-api-warning i {
+  color: #d97706;
+}
+
+/* 🔧 Correção específica para o dropdown da API */
+#apiSourceSelect {
+  background: var(--bg-secondary) !important;
+  border: 1px solid rgba(255, 255, 255, 0.1) !important;
+  color: var(--text-primary) !important;
+  box-shadow: none !important;
+}
+
+#apiSourceSelect:hover {
+  border-color: var(--accent-primary) !important;
+  background: var(--bg-tertiary) !important;
+}
+
+#apiSourceSelect:focus {
+  border-color: var(--primary-600) !important;
+  box-shadow: 0 0 0 3px rgba(var(--primary-color-rgb), 0.3) !important;
+}
+
+#apiSourceSelect option {
+  background: var(--bg-secondary) !important;
+  color: var(--text-primary) !important;
+  border: none !important;
+}
+
+/* Tema claro - dropdown da API */
+[data-theme="light"] #apiSourceSelect {
+  background: #ffffff !important;
+  border: 2px solid rgba(148, 163, 184, 0.4) !important;
+  color: #000000 !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="light"] #apiSourceSelect:hover {
+  border-color: rgba(59, 130, 246, 0.5) !important;
+  background: #ffffff !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="light"] #apiSourceSelect:focus {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+  outline: none !important;
+}
+
+[data-theme="light"] #apiSourceSelect option {
+  background: #ffffff !important;
+  color: var(--neutral-900) !important;
+  padding: 8px 12px !important;
+}
+
+/* Tema claro - campos de entrada */
+[data-theme="light"] .input-with-icon input {
+  background: #ffffff !important;
+  border: 2px solid rgba(148, 163, 184, 0.4) !important;
+  color: var(--neutral-900) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="light"] .input-with-icon input:hover {
+  border-color: rgba(59, 130, 246, 0.5) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="light"] .input-with-icon input:focus {
+  border-color: #3b82f6 !important;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2) !important;
+  outline: none !important;
+}
+
+[data-theme="light"] .input-with-icon input::placeholder {
+  color: rgba(107, 114, 128, 0.8) !important;
+}
+
+[data-theme="light"] .input-with-icon .input-icon {
+  color: rgba(107, 114, 128, 0.7) !important;
+}
+
+[data-theme="light"] .input-with-icon .toggle-password {
+  color: #666666 !important;
+}
+
+[data-theme="light"] .input-with-icon .toggle-password:hover {
+  color: #000000 !important;
+}
+
+/* Tema claro - botões e links */
+[data-theme="light"] .test-connection-btn {
+  background: #000000 !important;
+  border: 2px solid #000000 !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2) !important;
+}
+
+[data-theme="light"] .test-connection-btn:hover {
+  background: #1f1f1f !important;
+  border-color: #1f1f1f !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+  transform: translateY(-1px) !important;
+}
+
+[data-theme="light"] .test-connection-btn:active {
+  background: #0a0a0a !important;
+  border-color: #0a0a0a !important;
+  transform: translateY(0) !important;
+}
+
+[data-theme="light"] .api-key-link {
+  color: #059669 !important;
+  text-decoration: none !important;
+  font-weight: 500 !important;
+}
+
+[data-theme="light"] .api-key-link:hover {
+  color: #047857 !important;
+  text-decoration: underline !important;
+}
+
+[data-theme="light"] .api-key-info {
+  color: var(--neutral-700) !important;
+  font-size: 0.875rem !important;
+}
+
+/* Tema claro - melhorias gerais de texto */
+[data-theme="light"] .steam-api-section p,
+[data-theme="light"] .steam-api-section span {
+  color: var(--neutral-700) !important;
+}
+
+[data-theme="light"] .steam-api-section strong {
+  color: var(--neutral-900) !important;
+  font-weight: 600 !important;
+}

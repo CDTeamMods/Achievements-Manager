@@ -1,0 +1,126 @@
+{
+  "name": "achievements-manager",
+  "version": "0.0.1-beta",
+  "main": "dist/main/main.js",
+  "description": "Gerenciador moderno de conquistas para jogos com suporte a múltiplas plataformas",
+  "author": {
+    "name": "CDTeamMods",
+    "email": "contato@cdteam.xyz",
+    "url": "https://github.com/CDTeamMods"
+  },
+  "homepage": "https://github.com/CDTeamMods/Achievements-Manager",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/CDTeamMods/Achievements-Manager.git"
+  },
+  "bugs": {
+    "url": "https://github.com/CDTeamMods/Achievements-Manager/issues"
+  },
+  "license": "MIT",
+  "engines": {
+    "npm": "please-use-yarn",
+    "yarn": ">= 1.22.22"
+  },
+  "scripts": {
+    "publish:public": "node scripts/strip-and-commit.mjs \"chore: strip comments (public)\"",
+    "start": "electron-vite .",
+    "dev": "cross-env DEBUG_TOOLS=false electron-vite dev --mode development",
+    "dev:debug": "cross-env DEBUG_TOOLS=true electron-vite dev --mode development",
+    "build": "electron-vite build",
+    "build:win": "electron-vite build && electron-builder --win",
+    "preview": "electron-vite preview",
+    "postinstall": "electron-builder install-app-deps",
+    "clear": "babel src --out-dir src_dist",
+    "clean": "rimraf dist",
+    "clean:all": "rimraf dist node_modules yarn.lock && yarn install",
+    "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint src --ext .js,.jsx,.ts,.tsx --fix",
+    "format": "yarn format:write && yarn clear",
+    "format:write": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css}\"",
+    "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css}\"",
+    "lint-staged": "lint-staged",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "axios": "^1.12.2",
+    "electron-store": "^11.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.28.3",
+    "@babel/core": "^7.28.4",
+    "@babel/preset-env": "^7.28.3",
+    "@eslint/js": "^9.36.0",
+    "@types/node": "^24.6.2",
+    "autoprefixer": "^10.4.21",
+    "cross-env": "^10.1.0",
+    "cssnano": "^7.1.1",
+    "electron": "^38.2.0",
+    "electron-builder": "^26.0.12",
+    "electron-vite": "^4.0.1",
+    "esbuild": "^0.25.10",
+    "eslint": "^9.36.0",
+    "eslint-plugin-prettier": "^5.5.4",
+    "fs-extra": "^11.3.2",
+    "glob": "^11.0.3",
+    "globals": "^16.4.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.2.3",
+    "postcss": "^8.5.6",
+    "prettier": "^3.6.2",
+    "rimraf": "^6.0.1",
+    "vite": "^7.1.8"
+  },
+  "build": {
+    "appId": "com.cdteam.achievementsmanager",
+    "productName": "Achievement Manager",
+    "copyright": "Copyright © 2025 CDTeam",
+    "asar": true,
+    "asarUnpack": [
+      "src/locales/**/*"
+    ],
+    "files": [
+      "dist/**/*",
+      "src/locales/**/*",
+      "package.json"
+    ],
+    "directories": {
+      "output": "release",
+      "buildResources": "build"
+    },
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        },
+        {
+          "target": "portable",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ],
+      "icon": "assets/icons/icon.ico",
+      "requestedExecutionLevel": "asInvoker"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true
+    }
+  },
+  "lint-staged": {
+    "*.{js,jsx,ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,css,md}": [
+      "prettier --write"
+    ]
+  }
+}

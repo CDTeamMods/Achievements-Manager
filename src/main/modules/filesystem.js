@@ -1,0 +1,983 @@
+// Filesystem Manager Module
+// Handles all file system operations for the Achievements Manager
+
+const { ipcMain, dialog } = require('electron');
+const fs = require('fs').promises;
+const path = require('path');
+const { getDebugManager } = require('./debug-manager');
+
+class FilesystemManager {
+  constructor(pathManager, crashReporter = null, configManager = null) {
+    this.pathManager = pathManager;
+    this.crashReporter = crashReporter;
+    this.configManager = configManager;
+    this.debug = getDebugManager();
+    const paths = pathManager.getPaths();
+    this.dataPath = pathManager.getDataPath();
+    this.cachePath = paths.cache;
+    this.logsPath = paths.logs;
+    this.backupsPath = paths.backups;
+    this.tempPath = paths.temp;
+  }
+
+  async init() {
+    try {
+      await this.createDirectories();
+      this.setupFileWatchers();
+      this.debug.info('📁 Filesystem Manager initialized successfully');
+      return true;
+    } catch (error) {
+      this.debug.error('❌ Error initializing Filesystem Manager:', error);
+      await this.reportFilesystemError('init', error, { operation: 'initialization' });
+      throw error;
+    }
+  }
+
+  /**
+   * Reporta erros de filesystem para o crash-reporter
+   */
+  async reportFilesystemError(operation, error, context = {}) {
+    try {
+      if (this.crashReporter) {
+        const errorContext = {
+          operation,
+          isPortable: this.pathManager?.isInstalledVersion() === false,
+          dataPath: this.dataPath,
+          timestamp: new Date().toISOString(),
+          ...context,
+        };
+
+        await this.crashReporter.reportCrash('filesystem', error, errorContext);
+
+        if (this.debug?.isDebugEnabled) {
+          this.debug.error('Filesystem error reported:', operation, error.message);
+        }
+      }
+    } catch (reportError) {
+      // Não quebrar a aplicação se o crash report falhar
+      this.debug.warn('⚠️ Failed to report filesystem error:', reportError);
+    }
+  }
+
+  async createDirectories() {
+    // Criar apenas as pastas essenciais para o funcionamento da aplicação
+    // As pastas achievements, games, exports e imports serão criadas apenas quando necessário
+    const essentialDirectories = [
+      this.dataPath,
+      path.join(this.dataPath, 'settings'),
+      this.cachePath,
+      this.logsPath,
+      this.backupsPath,
+      this.tempPath,
+    ];
+
+    for (const dir of essentialDirectories) {
+      try {
+        await fs.mkdir(dir, { recursive: true });
+        this.debug.log(`📁 Pasta criada: ${path.relative(this.dataPath, dir) || 'data'}`);
+      } catch (error) {
+        this.debug.error(`❌ Erro ao criar pasta ${dir}:`, error);
+        await this.reportFilesystemError('createDirectories', error, { directory: dir });
+        throw error;
+      }
+    }
+
+    this.debug.log('✅ Estrutura de pastas essenciais criada com sucesso');
+  }
+
+  /**
+   * Cria pastas específicas apenas quando necessário
+   */
+  async ensureDataDirectories() {
+    const dataDirectories = [
+      path.join(this.dataPath, 'achievements'),
+      path.join(this.dataPath, 'games'),
+      path.join(this.dataPath, 'exports'),
+      path.join(this.dataPath, 'imports'),
+    ];
+
+    for (const dir of dataDirectories) {
+      try {
+        await fs.mkdir(dir, { recursive: true });
+        this.debug.log(`📁 Pasta de dados criada: ${path.relative(this.dataPath, dir)}`);
+      } catch (error) {
+        this.debug.error(`❌ Erro ao criar pasta de dados ${dir}:`, error);
+        await this.reportFilesystemError('ensureDataDirectories', error, { directory: dir });
+        throw error;
+      }
+    }
+
+    return true;
+  }
+
+  setupIPC() {
+    // File operations
+    ipcMain.handle('fs:readFile', async (event, filePath, encoding = 'utf8') => {
+      return await this.readFile(filePath, encoding);
+    });
+
+    ipcMain.handle('fs:writeFile', async (event, filePath, data, encoding = 'utf8') => {
+      return await this.writeFile(filePath, data, encoding);
+    });
+
+    ipcMain.handle('fs:deleteFile', async (event, filePath) => {
+      return await this.deleteFile(filePath);
+    });
+
+    ipcMain.handle('fs:exists', async (event, filePath) => {
+      return await this.exists(filePath);
+    });
+
+    // Directory operations
+    ipcMain.handle('fs:readDirectory', async (event, dirPath) => {
+      return await this.readDirectory(dirPath);
+    });
+
+    ipcMain.handle('fs:createDirectory', async (event, dirPath) => {
+      return await this.createDirectory(dirPath);
+    });
+
+    ipcMain.handle('fs:deleteDirectory', async (event, dirPath) => {
+      return await this.deleteDirectory(dirPath);
+    });
+
+    // File info
+    ipcMain.handle('fs:getFileInfo', async (event, filePath) => {
+      return await this.getFileInfo(filePath);
+    });
+
+    // Data management
+    ipcMain.handle('fs:saveGameData', async (event, gameId, data) => {
+      return await this.saveGameData(gameId, data);
+    });
+
+    ipcMain.handle('fs:loadGameData', async (event, gameId) => {
+      return await this.loadGameData(gameId);
+    });
+
+    ipcMain.handle('fs:saveAchievementData', async (event, gameId, achievements) => {
+      return await this.saveAchievementData(gameId, achievements);
+    });
+
+    ipcMain.handle('fs:loadAchievementData', async (event, gameId) => {
+      return await this.loadAchievementData(gameId);
+    });
+
+    // Settings
+    ipcMain.handle('fs:saveSettings', async (event, settings) => {
+      return await this.saveSettings(settings);
+    });
+
+    ipcMain.handle('fs:loadSettings', async event => {
+      return await this.loadSettings();
+    });
+
+    // Backup operations
+    ipcMain.handle('fs:createBackup', async (event, name) => {
+      return await this.createBackup(name);
+    });
+
+    ipcMain.handle('fs:restoreBackup', async (event, backupId) => {
+      return await this.restoreBackup(backupId);
+    });
+
+    ipcMain.handle('fs:listBackups', async event => {
+      return await this.listBackups();
+    });
+
+    ipcMain.handle('fs:deleteBackup', async (event, backupId) => {
+      return await this.deleteBackup(backupId);
+    });
+
+    // Import/Export
+    ipcMain.handle('fs:exportData', async (event, options = {}) => {
+      return await this.exportData(options);
+    });
+
+    ipcMain.handle('fs:importData', async (event, filePath) => {
+      return await this.importData(filePath);
+    });
+
+    // Dialog operations
+    ipcMain.handle('fs:showOpenDialog', async (event, options = {}) => {
+      return await this.showOpenDialog(options);
+    });
+
+    ipcMain.handle('fs:showSaveDialog', async (event, options = {}) => {
+      return await this.showSaveDialog(options);
+    });
+
+    // Cache operations
+    ipcMain.handle('fs:clearCache', async event => {
+      return await this.clearCache();
+    });
+
+    ipcMain.handle('fs:getCacheSize', async event => {
+      return await this.getCacheSize();
+    });
+
+    // Logs
+    ipcMain.handle('fs:getLogs', async (event, options = {}) => {
+      return await this.getLogs(options);
+    });
+
+    ipcMain.handle('fs:clearLogs', async event => {
+      return await this.clearLogs();
+    });
+  }
+
+  // File operations
+  async readFile(filePath, encoding = 'utf8') {
+    let safePath;
+    try {
+      safePath = this.getSafePath(filePath);
+      return await fs.readFile(safePath, encoding);
+    } catch (error) {
+      this.debug.error(`Error reading file ${filePath}:`, error);
+      await this.reportFilesystemError('readFile', error, {
+        filePath,
+        encoding,
+        safePath: safePath || 'unknown',
+      });
+      throw error;
+    }
+  }
+
+  async writeFile(filePath, data, encoding = 'utf8') {
+    let safePath;
+    try {
+      safePath = this.getSafePath(filePath);
+      await this.ensureDirectoryExists(path.dirname(safePath));
+      await fs.writeFile(safePath, data, encoding);
+      return true;
+    } catch (error) {
+      this.debug.error(`Error writing file ${filePath}:`, error);
+      await this.reportFilesystemError('writeFile', error, {
+        filePath,
+        encoding,
+        dataSize: data?.length || 0,
+        safePath: safePath || 'unknown',
+      });
+      throw error;
+    }
+  }
+
+  async deleteFile(filePath) {
+    let safePath;
+    try {
+      safePath = this.getSafePath(filePath);
+      await fs.unlink(safePath);
+      return true;
+    } catch (error) {
+      this.debug.error(`Error deleting file ${filePath}:`, error);
+      await this.reportFilesystemError('deleteFile', error, {
+        filePath,
+        safePath: safePath || 'unknown',
+      });
+      throw error;
+    }
+  }
+
+  async exists(filePath) {
+    try {
+      const safePath = this.getSafePath(filePath);
+      await fs.access(safePath);
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  async ensureDirectoryExists(dirPath) {
+    try {
+      await fs.mkdir(dirPath, { recursive: true });
+      return true;
+    } catch (error) {
+      this.debug.error(`Error creating directory ${dirPath}:`, error);
+      await this.reportFilesystemError('ensureDirectoryExists', error, {
+        dirPath,
+      });
+      throw error;
+    }
+  }
+
+  getSafePath(filePath) {
+    // Ensure the path is within the allowed data directory
+    const resolvedPath = path.resolve(this.dataPath, filePath);
+    if (!resolvedPath.startsWith(this.dataPath)) {
+      throw new Error('Access denied: Path outside allowed directory');
+    }
+    return resolvedPath;
+  }
+
+  // Directory operations
+  async readDirectory(dirPath) {
+    let safePath;
+    try {
+      safePath = this.getSafePath(dirPath);
+      const entries = await fs.readdir(safePath, { withFileTypes: true });
+
+      return entries.map(entry => ({
+        name: entry.name,
+        isDirectory: entry.isDirectory(),
+        isFile: entry.isFile(),
+        path: path.join(dirPath, entry.name),
+      }));
+    } catch (error) {
+      this.debug.error(`Error reading directory ${dirPath}:`, error);
+      await this.reportFilesystemError('readDirectory', error, {
+        dirPath,
+        safePath: safePath || 'unknown',
+      });
+      throw error;
+    }
+  }
+
+  async listDirectory(dirPath) {
+    let safePath;
+    try {
+      safePath = this.getSafePath(dirPath);
+      return await fs.readdir(safePath);
+    } catch (error) {
+      this.debug.error(`Error listing directory ${dirPath}:`, error);
+      await this.reportFilesystemError('listDirectory', error, {
+        dirPath,
+        safePath: safePath || 'unknown',
+      });
+      throw error;
+    }
+  }
+
+  async createDirectory(dirPath) {
+    let safePath;
+    try {
+      safePath = this.getSafePath(dirPath);
+      await fs.mkdir(safePath, { recursive: true });
+      return true;
+    } catch (error) {
+      this.debug.error(`Error creating directory ${dirPath}:`, error);
+      await this.reportFilesystemError('createDirectory', error, {
+        dirPath,
+        safePath: safePath || 'unknown',
+      });
+      throw error;
+    }
+  }
+
+  async deleteDirectory(dirPath) {
+    let safePath;
+    try {
+      safePath = this.getSafePath(dirPath);
+      await fs.rmdir(safePath, { recursive: true });
+      return true;
+    } catch (error) {
+      this.debug.error(`Error deleting directory ${dirPath}:`, error);
+      await this.reportFilesystemError('deleteDirectory', error, {
+        dirPath,
+        safePath: safePath || 'unknown',
+      });
+      throw error;
+    }
+  }
+
+  async getFileInfo(filePath) {
+    try {
+      const safePath = this.getSafePath(filePath);
+      const stats = await fs.stat(safePath);
+
+      return {
+        size: stats.size,
+        created: stats.birthtime,
+        modified: stats.mtime,
+        accessed: stats.atime,
+        isDirectory: stats.isDirectory(),
+        isFile: stats.isFile(),
+      };
+    } catch (error) {
+      this.debug.error(`Error getting file info ${filePath}:`, error);
+      throw error;
+    }
+  }
+
+  // Data management
+  async saveGameData(gameId, data) {
+    try {
+      const filePath = path.join('games', `${gameId}.json`);
+      const gameData = {
+        ...data,
+        id: gameId,
+        lastModified: new Date().toISOString(),
+        version: '0.0.1-beta',
+      };
+
+      await this.writeFile(filePath, JSON.stringify(gameData, null, 2));
+      return true;
+    } catch (error) {
+      this.debug.error(`Error saving game data for ${gameId}:`, error);
+      throw error;
+    }
+  }
+
+  async loadGameData(gameId) {
+    try {
+      const filePath = path.join('games', `${gameId}.json`);
+
+      if (!(await this.exists(filePath))) {
+        return null;
+      }
+
+      const data = await this.readFile(filePath);
+      return JSON.parse(data);
+    } catch (error) {
+      this.debug.error(`Error loading game data for ${gameId}:`, error);
+      throw error;
+    }
+  }
+
+  async saveAchievementData(gameId, achievements) {
+    try {
+      const filePath = path.join('achievements', `${gameId}.json`);
+      const achievementData = {
+        gameId,
+        achievements,
+        lastModified: new Date().toISOString(),
+        version: '0.0.1-beta',
+      };
+
+      await this.writeFile(filePath, JSON.stringify(achievementData, null, 2));
+      return true;
+    } catch (error) {
+      this.debug.error(`Error saving achievement data for ${gameId}:`, error);
+      throw error;
+    }
+  }
+
+  async loadAchievementData(gameId) {
+    try {
+      const filePath = path.join('achievements', `${gameId}.json`);
+
+      if (!(await this.exists(filePath))) {
+        return null;
+      }
+
+      const data = await this.readFile(filePath);
+      return JSON.parse(data);
+    } catch (error) {
+      this.debug.error(`Error loading achievement data for ${gameId}:`, error);
+      throw error;
+    }
+  }
+
+  async saveSettings(settings) {
+    try {
+      // Usar o ConfigManager se disponível para manter consistência
+      if (this.configManager) {
+        // Salvar cada configuração individualmente através do ConfigManager
+        for (const [key, value] of Object.entries(settings)) {
+          await this.configManager.set(key, value);
+        }
+        return true;
+      }
+
+      // Fallback: salvar diretamente no arquivo (modo legado)
+      const filePath = path.join('settings', 'app.json');
+      const settingsData = {
+        ...settings,
+        lastModified: new Date().toISOString(),
+        version: '0.0.1-beta',
+      };
+
+      await this.writeFile(filePath, JSON.stringify(settingsData, null, 2));
+      return true;
+    } catch (error) {
+      this.debug.error('Error saving settings:', error);
+      throw error;
+    }
+  }
+
+  async loadSettings() {
+    try {
+      const filePath = path.join('settings', 'app.json');
+
+      if (!(await this.exists(filePath))) {
+        // Return default settings
+        return {
+          language: 'pt-BR',
+          theme: 'auto',
+          performanceMode: 'normal',
+          animations: 'enabled',
+          version: '0.0.1-beta',
+        };
+      }
+
+      const data = await this.readFile(filePath);
+      return JSON.parse(data);
+    } catch (error) {
+      this.debug.error('Error loading settings:', error);
+      throw error;
+    }
+  }
+
+  // Backup operations
+  async createBackup(name) {
+    try {
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const backupId = `${timestamp}_${name || 'manual'}`;
+      const backupDir = path.join(this.backupsPath, backupId);
+
+      await fs.mkdir(backupDir, { recursive: true });
+
+      // Copy all data files
+      await this.copyDirectoryRecursive(this.dataPath, backupDir, [
+        'backups',
+        'cache',
+        'temp',
+        'logs',
+      ]);
+
+      // Create backup metadata
+      const metadata = {
+        id: backupId,
+        name: name || 'Manual Backup',
+        created: new Date().toISOString(),
+        version: '0.0.1-beta',
+        size: await this.getDirectorySize(backupDir),
+      };
+
+      await fs.writeFile(path.join(backupDir, 'backup.json'), JSON.stringify(metadata, null, 2));
+
+      return metadata;
+    } catch (error) {
+      this.debug.error('Error creating backup:', error);
+      throw error;
+    }
+  }
+
+  async restoreBackup(backupId) {
+    try {
+      const backupDir = path.join(this.backupsPath, backupId);
+
+      if (!(await this.exists(backupDir))) {
+        throw new Error('Backup not found');
+      }
+
+      // Create current backup before restore
+      await this.createBackup('pre_restore');
+
+      // Clear current data (except backups)
+      const dataEntries = await fs.readdir(this.dataPath, { withFileTypes: true });
+
+      for (const entry of dataEntries) {
+        if (entry.name !== 'backups' && entry.name !== 'temp') {
+          const entryPath = path.join(this.dataPath, entry.name);
+
+          if (entry.isDirectory()) {
+            await fs.rmdir(entryPath, { recursive: true });
+          } else {
+            await fs.unlink(entryPath);
+          }
+        }
+      }
+
+      // Restore from backup
+      await this.copyDirectoryRecursive(backupDir, this.dataPath, ['backup.json']);
+
+      return true;
+    } catch (error) {
+      this.debug.error('Error restoring backup:', error);
+      throw error;
+    }
+  }
+
+  async listBackups() {
+    try {
+      const backups = [];
+      const entries = await fs.readdir(this.backupsPath, { withFileTypes: true });
+
+      for (const entry of entries) {
+        if (entry.isDirectory()) {
+          const metadataPath = path.join(this.backupsPath, entry.name, 'backup.json');
+
+          if (await this.exists(metadataPath)) {
+            try {
+              const metadata = JSON.parse(await fs.readFile(metadataPath, 'utf8'));
+              backups.push(metadata);
+            } catch (error) {
+              console.warn(`Invalid backup metadata: ${entry.name}`);
+            }
+          }
+        }
+      }
+
+      return backups.sort((a, b) => new Date(b.created) - new Date(a.created));
+    } catch (error) {
+      this.debug.error('Error listing backups:', error);
+      throw error;
+    }
+  }
+
+  async deleteBackup(backupId) {
+    try {
+      const backupDir = path.join(this.backupsPath, backupId);
+      await fs.rmdir(backupDir, { recursive: true });
+      return true;
+    } catch (error) {
+      this.debug.error(`Error deleting backup ${backupId}:`, error);
+      throw error;
+    }
+  }
+
+  // Import/Export
+  async exportData(options = {}) {
+    try {
+      const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+      const exportName = options.name || `achievements_export_${timestamp}`;
+      const exportPath = path.join(this.dataPath, 'exports', `${exportName}.json`);
+
+      await this.ensureDirectoryExists(path.dirname(exportPath));
+
+      const exportData = {
+        metadata: {
+          name: exportName,
+          created: new Date().toISOString(),
+          version: '0.0.1-beta',
+          type: options.type || 'full',
+        },
+        games: [],
+        achievements: [],
+        settings: await this.loadSettings(),
+      };
+
+      // Export games
+      if (options.includeGames !== false) {
+        const gamesDir = path.join(this.dataPath, 'games');
+        try {
+          const gameFiles = await fs.readdir(gamesDir);
+
+          for (const file of gameFiles) {
+            if (file.endsWith('.json')) {
+              const gameData = JSON.parse(await fs.readFile(path.join(gamesDir, file), 'utf8'));
+              exportData.games.push(gameData);
+            }
+          }
+        } catch (error) {
+          console.warn('No games to export:', error);
+        }
+      }
+
+      // Export achievements
+      if (options.includeAchievements !== false) {
+        const achievementsDir = path.join(this.dataPath, 'achievements');
+        try {
+          const achievementFiles = await fs.readdir(achievementsDir);
+
+          for (const file of achievementFiles) {
+            if (file.endsWith('.json')) {
+              const achievementData = JSON.parse(
+                await fs.readFile(path.join(achievementsDir, file), 'utf8')
+              );
+              exportData.achievements.push(achievementData);
+            }
+          }
+        } catch (error) {
+          console.warn('No achievements to export:', error);
+        }
+      }
+
+      await fs.writeFile(exportPath, JSON.stringify(exportData, null, 2));
+
+      return {
+        path: exportPath,
+        name: exportName,
+        size: (await this.getFileInfo(exportPath)).size,
+      };
+    } catch (error) {
+      this.debug.error('Error exporting data:', error);
+      throw error;
+    }
+  }
+
+  async importData(filePath) {
+    try {
+      const data = JSON.parse(await fs.readFile(filePath, 'utf8'));
+
+      if (!data.metadata || !data.metadata.version) {
+        throw new Error('Invalid export file format');
+      }
+
+      // Create backup before import
+      await this.createBackup('pre_import');
+
+      const results = {
+        games: 0,
+        achievements: 0,
+        settings: false,
+      };
+
+      // Import games
+      if (data.games && Array.isArray(data.games)) {
+        for (const game of data.games) {
+          await this.saveGameData(game.id, game);
+          results.games++;
+        }
+      }
+
+      // Import achievements
+      if (data.achievements && Array.isArray(data.achievements)) {
+        for (const achievement of data.achievements) {
+          await this.saveAchievementData(achievement.gameId, achievement.achievements);
+          results.achievements++;
+        }
+      }
+
+      // Import settings
+      if (data.settings) {
+        await this.saveSettings(data.settings);
+        results.settings = true;
+      }
+
+      return results;
+    } catch (error) {
+      this.debug.error('Error importing data:', error);
+      throw error;
+    }
+  }
+
+  // Dialog operations
+  async showOpenDialog(options = {}) {
+    try {
+      const result = await dialog.showOpenDialog({
+        properties: ['openFile'],
+        filters: [
+          { name: 'JSON Files', extensions: ['json'] },
+          { name: 'All Files', extensions: ['*'] },
+        ],
+        ...options,
+      });
+
+      return result;
+    } catch (error) {
+      this.debug.error('Error showing open dialog:', error);
+      throw error;
+    }
+  }
+
+  async showSaveDialog(options = {}) {
+    try {
+      const result = await dialog.showSaveDialog({
+        filters: [
+          { name: 'JSON Files', extensions: ['json'] },
+          { name: 'All Files', extensions: ['*'] },
+        ],
+        ...options,
+      });
+
+      return result;
+    } catch (error) {
+      this.debug.error('Error showing save dialog:', error);
+      throw error;
+    }
+  }
+
+  // Cache operations
+  async clearCache() {
+    try {
+      await fs.rmdir(this.cachePath, { recursive: true });
+      await fs.mkdir(this.cachePath, { recursive: true });
+      return true;
+    } catch (error) {
+      this.debug.error('Error clearing cache:', error);
+      throw error;
+    }
+  }
+
+  async getCacheSize() {
+    try {
+      return await this.getDirectorySize(this.cachePath);
+    } catch (error) {
+      this.debug.error('Error getting cache size:', error);
+      return 0;
+    }
+  }
+
+  // Logs
+  async getLogs(options = {}) {
+    try {
+      const logs = [];
+      const logFiles = await fs.readdir(this.logsPath);
+
+      for (const file of logFiles) {
+        if (file.endsWith('.log')) {
+          const filePath = path.join(this.logsPath, file);
+          const content = await fs.readFile(filePath, 'utf8');
+          const stats = await this.getFileInfo(filePath);
+
+          logs.push({
+            name: file,
+            content: content,
+            size: stats.size,
+            modified: stats.modified,
+          });
+        }
+      }
+
+      return logs.sort((a, b) => new Date(b.modified) - new Date(a.modified));
+    } catch (error) {
+      this.debug.error('Error getting logs:', error);
+      throw error;
+    }
+  }
+
+  async clearLogs() {
+    try {
+      const logFiles = await fs.readdir(this.logsPath);
+
+      for (const file of logFiles) {
+        if (file.endsWith('.log')) {
+          await fs.unlink(path.join(this.logsPath, file));
+        }
+      }
+
+      return true;
+    } catch (error) {
+      this.debug.error('Error clearing logs:', error);
+      throw error;
+    }
+  }
+
+  async copyFile(sourcePath, destPath) {
+    let safeSrc, safeDest;
+    try {
+      safeSrc = this.getSafePath(sourcePath);
+      safeDest = this.getSafePath(destPath);
+      await this.ensureDirectoryExists(path.dirname(safeDest));
+      await fs.copyFile(safeSrc, safeDest);
+      return true;
+    } catch (error) {
+      this.debug.error(`Error copying file from ${sourcePath} to ${destPath}:`, error);
+      await this.reportFilesystemError('copyFile', error, {
+        sourcePath,
+        destPath,
+        safeSrc: safeSrc || 'unknown',
+        safeDest: safeDest || 'unknown',
+      });
+      throw error;
+    }
+  }
+
+  async moveFile(sourcePath, destPath) {
+    let safeSrc, safeDest;
+    try {
+      safeSrc = this.getSafePath(sourcePath);
+      safeDest = this.getSafePath(destPath);
+      await this.ensureDirectoryExists(path.dirname(safeDest));
+      await fs.rename(safeSrc, safeDest);
+      return true;
+    } catch (error) {
+      this.debug.error(`Error moving file from ${sourcePath} to ${destPath}:`, error);
+      await this.reportFilesystemError('moveFile', error, {
+        sourcePath,
+        destPath,
+        safeSrc: safeSrc || 'unknown',
+        safeDest: safeDest || 'unknown',
+      });
+      throw error;
+    }
+  }
+
+  // Utility methods
+  async copyDirectoryRecursive(source, destination, exclude = []) {
+    await fs.mkdir(destination, { recursive: true });
+
+    const entries = await fs.readdir(source, { withFileTypes: true });
+
+    for (const entry of entries) {
+      if (exclude.includes(entry.name)) {
+        continue;
+      }
+
+      const sourcePath = path.join(source, entry.name);
+      const destPath = path.join(destination, entry.name);
+
+      if (entry.isDirectory()) {
+        await this.copyDirectoryRecursive(sourcePath, destPath, exclude);
+      } else {
+        await fs.copyFile(sourcePath, destPath);
+      }
+    }
+  }
+
+  async getDirectorySize(dirPath) {
+    let totalSize = 0;
+
+    try {
+      const entries = await fs.readdir(dirPath, { withFileTypes: true });
+
+      for (const entry of entries) {
+        const entryPath = path.join(dirPath, entry.name);
+
+        if (entry.isDirectory()) {
+          totalSize += await this.getDirectorySize(entryPath);
+        } else {
+          const stats = await fs.stat(entryPath);
+          totalSize += stats.size;
+        }
+      }
+    } catch (error) {
+      console.warn(`Error calculating directory size for ${dirPath}:`, error);
+    }
+
+    return totalSize;
+  }
+
+  setupFileWatchers() {
+    // Watch for changes in data files
+    const watchOptions = { recursive: true };
+
+    try {
+      fs.watch(this.dataPath, watchOptions, (eventType, filename) => {
+        if (filename && !filename.includes('temp') && !filename.includes('cache')) {
+          // Emit file change event
+          if (global.mainWindow && !global.mainWindow.isDestroyed()) {
+            try {
+              // Criar dados completamente primitivos para evitar problemas de clonagem
+              const fileChangeData = JSON.parse(
+                JSON.stringify({
+                  type: String(eventType || 'unknown'),
+                  filename: String(filename || ''),
+                  timestamp: new Date().toISOString(),
+                })
+              );
+
+              // Verificar se os dados são clonáveis antes do envio
+              try {
+                structuredClone(fileChangeData);
+                global.mainWindow.webContents.send('file-changed', fileChangeData);
+              } catch (cloneError) {
+                console.error('📁 [FILESYSTEM] ❌ ERRO DE CLONAGEM em file-changed:', cloneError);
+                console.error('📁 [FILESYSTEM] Dados problemáticos:', fileChangeData);
+              }
+            } catch (sendError) {
+              console.error('📁 [FILESYSTEM] ❌ Erro ao enviar evento file-changed:', sendError);
+            }
+          }
+        }
+      });
+    } catch (error) {
+      console.warn('Could not setup file watchers:', error);
+    }
+  }
+}
+
+// Global instance
+let filesystemManager = null;
+
+// Setup function
+async function setupFileSystem(store, pathManager, crashReporter = null, configManager = null) {
+  filesystemManager = new FilesystemManager(pathManager, crashReporter, configManager);
+  await filesystemManager.init();
+  filesystemManager.setupIPC();
+  return filesystemManager;
+}
+
+module.exports = { FilesystemManager, setupFileSystem };

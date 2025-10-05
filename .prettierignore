@@ -1,0 +1,9 @@
+dist
+.trae
+.husky
+node_modules
+examples
+LICENSE.md
+README.md
+*.json
+Indexes

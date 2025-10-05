@@ -1,0 +1,448 @@
+{
+  "splash": {
+    "title": "Achievements Manager",
+    "subtitle": "Game Achievements Manager",
+    "version": "v0.0.1-beta",
+    "loading": {
+      "modules": "Loading modules...",
+      "initializing": "Initializing system...",
+      "apis": "Connecting APIs...",
+      "interface": "Preparing interface...",
+      "settings": "Loading settings...",
+      "complete": "Loading complete!",
+      "components": "Loading components..."
+    }
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "warning": "Warning",
+    "info": "Information",
+    "save": "Save",
+    "cancel": "Cancel",
+    "confirm": "Confirm",
+    "delete": "Delete",
+    "edit": "Edit",
+    "add": "Add",
+    "remove": "Remove",
+    "close": "Close",
+    "open": "Open",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "first": "First",
+    "last": "Last",
+    "total": "Total",
+    "user": "User",
+    "folder": "Folder",
+    "path": "Path",
+    "name": "Name",
+    "description": "Description",
+    "title": "Title",
+    "message": "Message",
+    "search": "Search",
+    "filter": "Filter",
+    "select": "Select",
+    "configure": "Configure",
+    "connect": "Connect",
+    "disconnect": "Disconnect",
+    "refresh": "Refresh",
+    "reload": "Reload",
+    "retry": "Retry",
+    "continue": "Continue",
+    "finish": "Finish",
+    "reset": "Reset Defaults",
+    "complete": "Complete",
+    "incomplete": "Incomplete",
+    "progress": "Progress",
+    "status": "Status",
+    "enabled": "Enabled",
+    "disabled": "Disabled",
+    "active": "Active",
+    "inactive": "Inactive",
+    "online": "Online",
+    "offline": "Offline",
+    "available": "Available",
+    "unavailable": "Unavailable",
+    "connected": "Connected",
+    "disconnected": "Disconnected",
+    "found": "Found",
+    "notFound": "Not found",
+    "detected": "Detected",
+    "notDetected": "Not detected",
+    "of": "of",
+    "gotIt": "Got it"
+  },
+  "games": {
+    "empty": {
+      "title": "No games found"
+    },
+    "addGame": {
+      "title": "Add Game",
+      "gameName": "Game Name",
+      "gamePath": "Game Path"
+    }
+  },
+  "errors": {
+    "pageLoad": "Error loading page",
+    "pageLoadMessage": "An error occurred while loading the page content.",
+    "unknownError": "An unknown error occurred",
+    "loadingGames": "Error loading games",
+    "loadingAchievements": "Error loading achievements",
+    "steamConnection": "Steam connection error",
+    "steamApi": "Steam API error",
+    "fileNotFound": "File not found",
+    "folderNotFound": "Folder not found",
+    "invalidData": "Invalid data",
+    "saveError": "Error saving",
+    "loadError": "Error loading"
+  },
+  "steam": {
+    "errorApi": "Steam API not available",
+    "loading": "Loading Steam games...",
+    "noGames": "Could not find games in your Steam account",
+    "configureApi": "Configure your Steam API Key in settings to see your games automatically",
+    "loadGames": "Load Games",
+    "refreshGames": "Refresh Games",
+    "convert": "Convert",
+    "convertToGse": "Convert to GSE",
+    "viewAchievements": "View achievements",
+    "convertNow": "Convert Now",
+    "converting": "Converting...",
+    "converted": "Converted",
+    "conversionComplete": "Conversion complete",
+    "conversionError": "Conversion error",
+    "gettingLibrary": "Fetching your game library",
+    "library": {
+      "title": "Library",
+      "gamesFound": "games found"
+    },
+    "achievements": {
+      "loading": "Loading achievements...",
+      "title": "Achievements",
+      "progress": "Achievement Progress",
+      "total": "Total",
+      "unlocked": "Unlocked",
+      "locked": "Locked",
+      "earned": "Earned",
+      "earnedOn": "Earned on",
+      "notEarned": "Not earned",
+      "loadError": "Error loading achievements"
+    },
+    "conversion": {
+      "title": "Convert to GSE",
+      "description": "This tool will convert Steam achievements to GSE Saves format.",
+      "explanation": "Achievements will be converted to GSE Saves format",
+      "warning": "This action will replace any existing achievement files for this game.",
+      "whatWillHappen": "What will happen:",
+      "step1": "Your Steam achievements will be downloaded",
+      "step2": "Will be converted to GSE Saves format",
+      "step3": "Saved in:",
+      "step4": "Compatible with Goldberg Steam Emulator",
+      "converting": "Converting...",
+      "success": "Game \"{gameName}\" converted successfully!\n\n📊 {earnedAchievements} of {totalAchievements} achievements ({completionPercentage}%)\n📁 File saved in: {filePath}",
+      "error": "Conversion error: {error}",
+      "fileSaved": "File saved in:",
+      "benefits": {
+        "title": "Conversion benefits:",
+        "item1": "Will be converted to GSE Saves format",
+        "item2": "Emulator compatibility",
+        "item3": "Local achievement backup"
+      }
+    },
+    "playtime": {
+      "hours": "hours",
+      "notPlayed": "Not played",
+      "weeks": "weeks"
+    }
+  },
+  "setup": {
+    "welcome": {
+      "title": "🌍 Welcome to Achievements Manager"
+    },
+    "language": {
+      "title": "🌍 Choose your language",
+      "select": "Select your preferred language"
+    },
+    "theme": {
+      "title": "🎨 Choose your theme",
+      "description": "Customize the app appearance",
+      "auto": "Auto",
+      "dark": "Dark",
+      "light": "Light"
+    },
+    "performance": {
+      "title": "⚡ Performance Settings",
+      "description": "Optimize the app for your system",
+      "litemode": {
+        "title": "Lite Mode",
+        "description": "Disables animations for better performance"
+      },
+      "virtualscroll": {
+        "title": "Virtual Scrolling",
+        "description": "Improves performance with large lists"
+      }
+    },
+    "complete": {
+      "title": "✅ Setup Complete!",
+      "description": "All set to start"
+    },
+    "summary": {
+      "title": "📋 Settings Summary",
+      "language": "Language",
+      "theme": "Theme",
+      "performance": "Performance",
+      "ready": "All set! Ready to start?"
+    }
+  },
+  "app": {
+    "title": "Achievements Manager",
+    "subtitle": "Modern and Optimized Achievements Manager",
+    "version": "v0.0.1-beta"
+  },
+  "nav": {
+    "section": {
+      "main": "Main",
+      "tools": "Tools"
+    },
+    "dashboard": "Dashboard",
+    "statistics": "Statistics",
+    "backup": "Backup",
+    "settings": "Settings"
+  },
+  "window": {
+    "minimize": "Minimize",
+    "maximize": "Maximize"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "steamGames": "Steam Library",
+    "configureSteam": "Configure Steam",
+    "loadSteam": "Load Games",
+    "clearCache": "Clear Cache",
+    "recentGames": "Recent Games",
+    "steam": {
+      "connect": "Connect your Steam account",
+      "description": "Configure your Steam API Key in settings to see your games automatically",
+      "configureNow": "Configure Now"
+    },
+    "trophies": {
+      "platinum": {
+        "name": "Platinum Trophy",
+        "description": "Absolute master! You completed 95% or more of the achievements!"
+      },
+      "gold": {
+        "name": "Gold Trophy",
+        "description": "Excellent work! You completed between 80% and 94% of the achievements!"
+      },
+      "silver": {
+        "name": "Silver Trophy",
+        "description": "Good progress! You completed between 60% and 79% of the achievements!"
+      },
+      "bronze": {
+        "name": "Bronze Trophy",
+        "description": "Getting started! You completed between 30% and 59% of the achievements!"
+      },
+      "none": {
+        "name": "No Trophy",
+        "description": "Keep playing to unlock your first trophy!"
+      }
+    },
+    "error": {
+      "title": "Error loading dashboard",
+      "message": "Could not load dashboard data."
+    },
+    "games": "Games",
+    "achievements": "Achievements",
+    "progress": "Progress"
+  },
+  "statistics": {
+    "title": "Detailed Statistics",
+    "description": "Complete analysis of your progress in games and achievements",
+    "totalGames": "Total Games",
+    "unlockedAchievements": "Unlocked Achievements",
+    "completionRate": "Completion Rate",
+    "trend": {
+      "thisMonth": "+2 this month",
+      "thisWeek": "+15 this week",
+      "excellent": "Excellent!",
+      "keepGoing": "Keep going!"
+    },
+    "monthlyProgress": {
+      "comingSoon": "Monthly progress chart will be implemented soon"
+    },
+    "achievementsByCategory": {
+      "comingSoon": "Category chart will be implemented soon"
+    },
+    "error": {
+      "title": "Error loading statistics",
+      "message": "Could not load statistics data.",
+      "retry": "Try again"
+    }
+  },
+  "backup": {
+    "title": "Backup & Restore",
+    "description": "Protect your game and achievement data with total security",
+    "secureData": "Secure Data",
+    "autoBackup": "Auto Backup",
+    "creating": "Creating backup...",
+    "created": "Backup created successfully!",
+    "downloaded": "Backup downloaded successfully!",
+    "error": "Error creating backup:",
+    "processError": "Error processing backup file:",
+    "restoreError": "Error restoring backup:",
+    "create": {
+      "title": "Create Backup",
+      "description": "Make a complete backup of all your game data, achievements and settings",
+      "gameData": "Game Data",
+      "achievements": "Achievements",
+      "settings": "Settings",
+      "button": "Create Backup"
+    },
+    "restore": {
+      "title": "Restore Backup",
+      "description": "Restore your data from a previous backup file",
+      "fullHistory": "Full History",
+      "secureVerification": "Secure Verification",
+      "synchronization": "Synchronization",
+      "button": "Restore Backup"
+    }
+  },
+  "settings": {
+    "title": "Settings",
+    "description": "Customize your Achievements Manager experience",
+    "personalization": "Personalization",
+    "appearance": "Appearance",
+    "theme": {
+      "title": "Theme",
+      "dark": "Dark",
+      "light": "Light",
+      "auto": "Auto"
+    },
+    "customization": {
+      "liteMode": "Lite Mode",
+      "liteModeDescription": "Disables animations for better performance",
+      "compactMode": "Compact Mode",
+      "compactModeDescription": "More compact interface"
+    },
+    "language": {
+      "title": "Language",
+      "interface": "Interface Language"
+    },
+    "virtualScrolling": {
+      "title": "Virtual Scrolling",
+      "description": "Improves performance with large lists"
+    },
+    "showTooltips": {
+      "title": "Show Tooltips",
+      "description": "Display tips on mouse hover"
+    },
+    "performance": {
+      "autoSync": {
+        "title": "Auto Sync",
+        "description": "Automatically sync data"
+      },
+      "cacheSize": "Cache Size"
+    },
+    "goldberg": {
+      "title": "Goldberg Emu Conversion",
+      "checking": {
+        "title": "Checking...",
+        "description": "Looking for Goldberg files"
+      },
+      "autoMigration": "Auto Migration",
+      "showDialog": "Show Dialog",
+      "checkNow": "Check Now",
+      "migrateAll": "Convert All"
+    },
+    "steam": {
+      "connect": "Connect"
+    },
+    "api": {
+      "title": "API Settings",
+      "hydraWarningTitle": "Hydra API in Development",
+      "hydraWarningMessage": "This option is still in development and may not work correctly.",
+      "steam": {
+        "title": "Steam Web API",
+        "apiKey": "Steam API Key",
+        "apiKey.placeholder": "Enter your Steam API Key",
+        "apiKey.description": "Get your free API Key at:",
+        "steamId": "Steam ID",
+        "steamId.description": "To use the Steam API, you need your Steam ID. Click the button below to get it automatically through Steam authentication.",
+        "getSteamId": "Get Steam ID Automatically",
+        "authenticating": "Authenticating...",
+        "status": {
+          "notTested": "Not tested",
+          "notTested.description": "Configure your credentials and test the connection"
+        }
+      }
+    },
+    "status": {
+      "unsaved": "You have unsaved changes"
+    },
+    "saved": "Settings saved successfully!",
+    "reset": "Settings reset successfully!",
+    "restart": {
+      "title": "Restart Required",
+      "message": "To apply language changes, the application needs to be restarted.",
+      "confirm": "Restart Now",
+      "cancel": "Cancel",
+      "restarting": "Restarting application...",
+      "error": "Error restarting application"
+    }
+  },
+  "goldberg": {
+    "title": "Goldberg Conversion",
+    "description": "Configure automatic migration of Goldberg Emulator saves",
+    "status": {
+      "checking": "Checking Goldberg files...",
+      "found": "Goldberg detected",
+      "notFound": "Goldberg not found",
+      "error": "Verification error"
+    },
+    "settings": {
+      "autoMigration": "Auto Migration",
+      "autoMigration.description": "Automatically migrate Goldberg saves when detected",
+      "showDialog": "Show Dialog",
+      "showDialog.description": "Show confirmation before migrating saves",
+      "manualCheck": "Manual Check",
+      "manualCheck.description": "Manually check for Goldberg files"
+    },
+    "migration": {
+      "title": "Save Migration",
+      "description": "Migrate saves from Goldberg Emulator to Achievements Manager",
+      "inProgress": "Migrating saves...",
+      "completed": "Migration completed",
+      "error": "Migration error",
+      "confirm": "Confirm migration",
+      "reject": "Reject migration"
+    }
+  },
+  "api": {
+    "title": "API Settings",
+    "hydra": {
+      "warning": "Hydra API in Development",
+      "warningMessage": "This option is still in development and may not work correctly."
+    }
+  },
+  "feature": {
+    "coming": {
+      "soon": "🚀 Coming Soon!"
+    },
+    "dialog": {
+      "default": {
+        "name": "The feature"
+      },
+      "understood": "Got it"
+    },
+    "will": {
+      "be": {
+        "launched": "is being developed and will be available soon!"
+      }
+    },
+    "working": {
+      "hard": "We are working to bring this feature as soon as possible!"
+    }
+  }
+}

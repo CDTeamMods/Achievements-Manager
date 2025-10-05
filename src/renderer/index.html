@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="pt-BR" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Gerenciador de Conquistas Moderno e Otimizado" data-i18n-content="app.subtitle">
+  <title data-i18n="app.title">Achievements Manager</title>
+  
+  <!-- Preload de recursos críticos -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" as="style">
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap" as="style">
+  
+  <!-- Estilos -->
+  <link rel="stylesheet" href="styles/variables.css">
+  <link rel="stylesheet" href="styles/components.css">
+  <link rel="stylesheet" href="styles/layout.css">
+  <link rel="stylesheet" href="styles/animations.css">
+  <link rel="stylesheet" href="styles/settings.css">
+  <link rel="stylesheet" href="styles/goldberg.css">
+  <link rel="stylesheet" href="styles/steam.css">
+  <link rel="stylesheet" href="styles/steam-dashboard.css">
+  <link rel="stylesheet" href="styles/pages.css">
+  
+  <!-- Fontes -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap">
+  
+  <!-- Ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Favicon -->
+  <link rel="icon" href="../assets/icons/icon.png" type="image/png">
+  
+  <!-- CSP temporariamente removida para teste -->
+  <!-- CSP para segurança -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; object-src 'none';"> -->
+</head>
+<body>
+  <!-- Loading Screen -->
+  <div id="loadingScreen" class="loading-screen">
+    <div class="loading-content">
+      <div class="loading-logo">
+        <i class="fas fa-trophy"></i>
+      </div>
+      <div class="loading-spinner-container">
+        <div class="loading-spinner-icon">
+          <i class="fas fa-spinner fa-spin"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Setup Wizard -->
+  <div id="setupWizard" class="setup-wizard hidden">
+    <div class="setup-container">
+      <!-- Progress Indicator -->
+      <div class="setup-progress">
+        <div class="progress-step active" data-step="1"></div>
+        <div class="progress-connector"></div>
+        <div class="progress-step" data-step="2"></div>
+        <div class="progress-connector"></div>
+        <div class="progress-step" data-step="3"></div>
+        <div class="progress-connector"></div>
+        <div class="progress-step" data-step="4"></div>
+      </div>
+      
+      <!-- Step 1: Idioma -->
+      <div class="setup-step active" id="setupStep1">
+        <div class="setup-header">
+          <h2 data-i18n="setup.welcome.title">🌍 Bem-vindo ao Achievements Manager</h2>
+          <p data-i18n="setup.language.select">Selecione seu idioma preferido</p>
+        </div>
+        <div class="setup-content">
+          <div class="input-group">
+            <i class="fas fa-globe input-icon"></i>
+            <select id="setupLanguageSelect" class="input select language-dropdown">
+              <option value="" disabled selected>Idioma / Language</option>
+              <option value="en">🇺🇸 English (United States)</option>
+              <option value="pt-BR">🇧🇷 Português (Brasil)</option>
+            </select>
+          </div>
+        </div>
+        <div class="setup-actions">
+          <button class="btn btn-primary setup-next" onclick="window.setupWizard?.nextStep()">
+            <span data-i18n="common.next">Próximo</span> <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 2: Tema -->
+      <div class="setup-step" id="setupStep2">
+        <div class="setup-header">
+          <h2 data-i18n="setup.theme.title">🎨 Escolha seu tema</h2>
+          <p data-i18n="setup.theme.description">Personalize a aparência do aplicativo</p>
+        </div>
+        <div class="setup-content">
+          <div class="theme-options">
+            <div class="theme-option" data-theme="auto">
+              <div class="theme-preview theme-auto">
+                <div class="theme-header"></div>
+                <div class="theme-sidebar"></div>
+                <div class="theme-content"></div>
+                <div class="theme-auto-indicator">
+                  <i class="fas fa-adjust"></i>
+                </div>
+              </div>
+              <span data-i18n="setup.theme.auto">Automático</span>
+            </div>
+            <div class="theme-option" data-theme="dark">
+              <div class="theme-preview theme-dark">
+                <div class="theme-header"></div>
+                <div class="theme-sidebar"></div>
+                <div class="theme-content"></div>
+              </div>
+              <span data-i18n="setup.theme.dark">Escuro</span>
+            </div>
+            <div class="theme-option" data-theme="light">
+              <div class="theme-preview theme-light">
+                <div class="theme-header"></div>
+                <div class="theme-sidebar"></div>
+                <div class="theme-content"></div>
+              </div>
+              <span data-i18n="setup.theme.light">Claro</span>
+            </div>
+          </div>
+        </div>
+        <div class="setup-actions">
+          <button class="btn btn-secondary" onclick="window.setupWizard?.prevStep()">
+              <i class="fas fa-arrow-left"></i> <span data-i18n="common.previous">Anterior</span>
+          </button>
+          <button class="btn btn-primary setup-next" onclick="window.setupWizard?.nextStep()">
+            <span data-i18n="common.next">Próximo</span> <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 3: Performance -->
+      <div class="setup-step" id="setupStep3">
+        <div class="setup-header">
+          <h2 data-i18n="setup.performance.title">⚡ Configurações de Performance</h2>
+          <p data-i18n="setup.performance.description">Otimize o aplicativo para seu sistema</p>
+        </div>
+        <div class="setup-content">
+          <div class="performance-options">
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title" data-i18n="setup.performance.litemode.title">Modo Lite</div>
+                <div class="card-description" data-i18n="setup.performance.litemode.description">Desativa animações para melhor performance</div>
+              </div>
+              <div class="card-content">
+                <label class="toggle-switch">
+                  <input type="checkbox" id="setupLiteModeToggle">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+            
+            <div class="card">
+              <div class="card-header">
+                <div class="card-title" data-i18n="setup.performance.virtualscroll.title">Virtual Scrolling</div>
+                <div class="card-description" data-i18n="setup.performance.virtualscroll.description">Melhora performance com listas grandes</div>
+              </div>
+              <div class="card-content">
+                <label class="toggle-switch">
+                  <input type="checkbox" id="setupVirtualScrollToggle" checked>
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="setup-actions">
+          <button class="btn btn-secondary" onclick="window.setupWizard?.prevStep()">
+              <i class="fas fa-arrow-left"></i> <span data-i18n="common.previous">Anterior</span>
+            </button>
+            <button class="btn btn-primary setup-next" onclick="window.setupWizard?.nextStep()">
+            <span data-i18n="common.next">Próximo</span> <i class="fas fa-arrow-right"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Step 4: Finalização -->
+      <div class="setup-step" id="setupStep4">
+        <div class="setup-header">
+          <h2 data-i18n="setup.complete.title">✅ Configuração Concluída!</h2>
+          <p data-i18n="setup.complete.description">Tudo pronto para começar</p>
+        </div>
+        <div class="setup-content">
+          <div class="setup-summary">
+            <div class="summary-item">
+              <i class="fas fa-globe"></i>
+              <span>Idioma: <strong id="summaryLanguage">Português (Brasil)</strong></span>
+            </div>
+            <div class="summary-item">
+              <i class="fas fa-palette"></i>
+              <span>Tema: <strong id="summaryTheme">Escuro</strong></span>
+            </div>
+            <div class="summary-item">
+              <i class="fas fa-rocket"></i>
+              <span>Performance: <strong id="summaryPerformance">Otimizada</strong></span>
+            </div>
+          </div>
+        </div>
+        <div class="setup-actions">
+          <button class="btn btn-secondary" onclick="window.setupWizard?.prevStep()">
+              <i class="fas fa-arrow-left"></i> <span data-i18n="common.previous">Anterior</span>
+            </button>
+            <button class="btn btn-primary" onclick="window.setupWizard?.finishSetup()">
+            <span data-i18n="common.finish">Começar</span> <i class="fas fa-rocket"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Application -->
+  <div id="mainApp" class="main-app hidden">
+    <!-- Title Bar -->
+    <div class="title-bar">
+      <div class="title-bar-left">
+        <div class="app-logo">
+          <i class="fas fa-trophy"></i>
+        </div>
+        <div class="app-title">
+          <span>Achievements Manager</span>
+          <span class="app-version">v0.0.1-beta</span>
+        </div>
+      </div>
+      
+      <div class="title-bar-center">
+        <!-- Barra de pesquisa removida conforme solicitado -->
+      </div>
+      
+      <div class="title-bar-right">
+        <button class="btn btn-icon btn-ghost" id="minimizeBtn" title="Minimizar" data-i18n-title="window.minimize">
+          <i class="fas fa-minus"></i>
+        </button>
+        <button class="btn btn-icon btn-ghost" id="maximizeBtn" title="Maximizar" data-i18n-title="window.maximize">
+          <i class="fas fa-square"></i>
+        </button>
+        <button class="btn btn-icon btn-ghost" id="closeBtn" title="Fechar" data-i18n-title="common.close">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <nav class="sidebar-nav">
+          <div class="nav-section">
+            <div class="nav-section-title" data-i18n="nav.section.main">Principal</div>
+            <a href="#dashboard" class="nav-item active">
+              <i class="fas fa-home"></i>
+              <span data-i18n="nav.dashboard">Dashboard</span>
+            </a>
+            <a href="#statistics" class="nav-item">
+              <i class="fas fa-chart-bar"></i>
+              <span data-i18n="nav.statistics">Statistics</span>
+            </a>
+          </div>
+          
+          <div class="nav-section">
+            <div class="nav-section-title" data-i18n="nav.section.tools">Ferramentas</div>
+            <a href="#backup" class="nav-item">
+              <i class="fas fa-download"></i>
+              <span data-i18n="nav.backup">Backup</span>
+            </a>
+            <a href="#configuracoes" class="nav-item" id="sidebarSettingsBtn">
+              <i class="fas fa-cog"></i>
+              <span data-i18n="nav.settings">Settings</span>
+            </a>
+          </div>
+        </nav>
+        
+        <div class="sidebar-footer">
+          <!-- Performance indicator removido -->
+        </div>
+      </aside>
+
+      <!-- Content Area -->
+      <main class="content-area">
+        <div class="content-header">
+          <h1 id="pageTitle" data-i18n="nav.dashboard">Dashboard</h1>
+          <div class="content-actions">
+            <!-- Botão Atualizar será movido para o Dashboard -->
+          </div>
+        </div>
+        
+        <div class="content-body" id="contentBody">
+          <!-- Conteúdo será carregado dinamicamente -->
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Modal Container -->
+  <div id="modalContainer"></div>
+
+  <!-- Scripts -->
+  <!-- Sistema de internacionalização deve ser carregado primeiro -->
+  <script type="module" src="scripts/i18n-hot.js"></script>
+  <!-- Configuração centralizada será carregada via imports -->
+  <script type="module" src="scripts/utils.js"></script>
+  <script type="module" src="scripts/components.js"></script>
+  <script type="module" src="scripts/performance.js"></script>
+  <script type="module" src="scripts/utils/debug-manager.js"></script>
+  <script type="module" src="scripts/utils/ipc-sanitizer.js"></script>
+  <script type="module" src="scripts/crash-handler.js"></script>
+  <script type="module" src="scripts/setup.js"></script>
+  <script type="module" src="scripts/app.js"></script>
+  <!--
+  <script type="module" src="scripts/modules/steam-games.js"></script> -->
+
+
+</body>
+</html>

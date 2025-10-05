@@ -1,0 +1,1382 @@
+/* Estilos para seção Steam no Dashboard */
+
+/* Steam Section */
+.steam-section {
+  background: var(--card-bg, #2a2a2a);
+  border: 1px solid var(--border-color, #404040);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.steam-section .section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.steam-section .section-header h3 {
+  color: var(--text-primary, #ffffff);
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.steam-section .section-header h3 i {
+  color: #1b2838;
+  background: linear-gradient(135deg, #1b2838 0%, #2a475e 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 20px;
+}
+
+.steam-section .section-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.steam-section .btn-sm {
+  padding: 8px 12px;
+  font-size: 12px;
+  border-radius: 6px;
+}
+
+/* Steam Placeholder */
+.steam-placeholder {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary, #a0a0a0);
+}
+
+.steam-placeholder .placeholder-icon {
+  font-size: 48px;
+  color: var(--accent-color, #667eea);
+  margin-bottom: 16px;
+  opacity: 0.7;
+}
+
+.steam-placeholder h4 {
+  color: var(--text-primary, #ffffff);
+  font-size: 20px;
+  margin: 0 0 8px;
+}
+
+.steam-placeholder p {
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0 0 20px;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.steam-placeholder .btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.steam-placeholder .btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+/* Games Grid Steam */
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 16px;
+  margin-top: 16px;
+}
+
+/* Game Card Steam */
+.game-card {
+  background: var(--bg-tertiary, #1a1a1a);
+  border: 1px solid var(--border-color, #404040);
+  border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.game-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+  border-color: var(--accent-color, #667eea);
+}
+
+.game-card .game-image {
+  position: relative;
+  height: 120px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.game-card .game-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.game-card:hover .game-image img {
+  transform: scale(1.05);
+}
+
+.game-card .game-placeholder {
+  color: var(--text-secondary, #a0a0a0);
+  font-size: 32px;
+  opacity: 0.5;
+}
+
+.game-card .game-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.game-card:hover .game-overlay {
+  opacity: 1;
+}
+
+.game-card .btn-convert {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+  border: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+}
+
+.game-card .btn-convert:hover {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.4);
+}
+
+.game-card .game-info {
+  padding: 16px;
+  flex: 1;
+}
+
+.game-card .game-title {
+  color: var(--text-primary, #ffffff);
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.game-card .game-stats {
+  font-size: 12px;
+  color: var(--text-secondary, #a0a0a0);
+}
+
+.game-card .playtime {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.game-card .recent-playtime {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: var(--accent-color, #667eea);
+}
+
+.game-card .game-actions {
+  padding: 12px 16px;
+  border-top: 1px solid var(--border-color, #404040);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.game-card .game-actions .btn {
+  background: var(--accent-color, #667eea);
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.2s ease;
+}
+
+.game-card .game-actions .btn:hover {
+  background: #5a67d8;
+  transform: scale(1.05);
+}
+
+/* Games Header */
+.games-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.games-header .games-info h2 {
+  color: var(--text-primary, #ffffff);
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0 0 4px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.games-header .games-info p {
+  color: var(--text-secondary, #a0a0a0);
+  font-size: 14px;
+  margin: 0;
+}
+
+.games-header .games-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* Estados especiais */
+.loading-state,
+.empty-state,
+.error-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: var(--text-secondary, #a0a0a0);
+}
+
+.loading-state .loading-spinner,
+.empty-state .empty-icon,
+.error-state .error-icon {
+  font-size: 48px;
+  color: var(--accent-color, #667eea);
+  margin-bottom: 16px;
+}
+
+.error-state .error-icon {
+  color: #ef4444;
+}
+
+.loading-state h3,
+.empty-state h3,
+.error-state h3 {
+  color: var(--text-primary, #ffffff);
+  font-size: 18px;
+  margin: 0 0 8px;
+}
+
+.loading-state p,
+.empty-state p,
+.error-state p {
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0 0 20px;
+}
+
+.empty-state .empty-actions,
+.error-state .error-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Dialog Overlay */
+.dialog-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 20px;
+}
+
+.convert-dialog,
+.achievements-dialog {
+  background: var(--card-bg, #2a2a2a);
+  border: 1px solid var(--border-color, #404040);
+  border-radius: 12px;
+  max-width: 600px;
+  width: 100%;
+  max-height: 80vh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Estilos para diferentes tipos de erro */
+.achievements-dialog.error {
+  border-color: #dc2626;
+}
+
+.achievements-dialog.warning {
+  border-color: #f59e0b;
+}
+
+.achievements-dialog.info {
+  border-color: #3b82f6;
+}
+
+.achievements-dialog.error .dialog-header {
+  background: rgba(220, 38, 38, 0.1);
+  border-bottom-color: #dc2626;
+}
+
+.achievements-dialog.warning .dialog-header {
+  background: rgba(245, 158, 11, 0.1);
+  border-bottom-color: #f59e0b;
+}
+
+.achievements-dialog.info .dialog-header {
+  background: rgba(59, 130, 246, 0.1);
+  border-bottom-color: #3b82f6;
+}
+
+.achievements-dialog.error .dialog-header h3 {
+  color: #fca5a5;
+}
+
+.achievements-dialog.warning .dialog-header h3 {
+  color: #fbbf24;
+}
+
+.achievements-dialog.info .dialog-header h3 {
+  color: #93c5fd;
+}
+
+/* Estilos para seção de sugestões */
+.error-suggestions {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 8px;
+  padding: 16px;
+  margin-top: 16px;
+}
+
+.error-suggestions h4 {
+  color: #93c5fd;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.error-suggestions p {
+  color: var(--text-secondary, #a0a0a0);
+  font-size: 13px;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Mensagem de aviso */
+.warning-message {
+  background: linear-gradient(135deg, #ffa726, #ff9800);
+  color: white;
+  padding: 12px 15px;
+  border-radius: 6px;
+  margin-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  box-shadow: 0 3px 10px rgba(255, 167, 38, 0.3);
+  font-size: 0.9em;
+}
+
+.warning-message i {
+  font-size: 1.1em;
+  opacity: 0.9;
+}
+
+.convert-dialog .dialog-header,
+.achievements-dialog .dialog-header {
+  padding: 20px;
+  border-bottom: 1px solid var(--border-color, #404040);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.convert-dialog .dialog-header h3,
+.achievements-dialog .dialog-header h3 {
+  color: var(--text-primary, #ffffff);
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.convert-dialog .btn-close,
+.achievements-dialog .btn-close {
+  background: transparent;
+  border: none;
+  color: var(--text-secondary, #a0a0a0);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.convert-dialog .btn-close:hover,
+.achievements-dialog .btn-close:hover {
+  background: var(--bg-tertiary, #1a1a1a);
+  color: var(--text-primary, #ffffff);
+}
+
+.convert-dialog .dialog-content,
+.achievements-dialog .dialog-content {
+  padding: 20px;
+  overflow-y: auto;
+  flex: 1;
+}
+
+.convert-dialog .dialog-actions {
+  padding: 20px;
+  border-top: 1px solid var(--border-color, #404040);
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+/* === ESTILOS PARA CONQUISTAS === */
+
+/* Lista de conquistas */
+.achievements-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+/* Virtual Scrolling para conquistas */
+[data-virtual-scrolling="true"] .achievements-list {
+  position: relative;
+  contain: layout style paint;
+  will-change: transform;
+}
+
+[data-virtual-scrolling="true"] .achievements-list .virtual-scroller__viewport {
+  position: relative;
+  width: 100%;
+  overflow: visible;
+}
+
+[data-virtual-scrolling="true"] .achievements-list .virtual-scroller__spacer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+[data-virtual-scrolling="true"] .achievements-list .virtual-scroller__item {
+  position: absolute;
+  width: 100%;
+  left: 0;
+  contain: layout style paint;
+  transform: translateZ(0);
+}
+
+/* Otimizações para performance com Virtual Scrolling */
+[data-virtual-scrolling="true"] .achievement-item {
+  contain: layout style paint;
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+.achievements-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.achievements-list::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 3px;
+}
+
+.achievements-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 3px;
+}
+
+.achievements-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+/* Item de conquista */
+.achievement-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+  padding: 24px;
+  min-height: 120px;
+  border-radius: 16px;
+  border: 1px solid var(--border-color, #404040);
+  background: var(--bg-tertiary, #1a1a1a);
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.achievement-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: transparent;
+  transition: all 0.3s ease;
+}
+
+/* Conquista desbloqueada */
+.achievement-item.earned {
+  background: linear-gradient(135deg, var(--bg-tertiary, #1a1a1a) 0%, rgba(34, 197, 94, 0.08) 100%);
+  border-color: rgba(34, 197, 94, 0.3);
+}
+
+.achievement-item.earned::before {
+  background: linear-gradient(180deg, #22c55e, #16a34a);
+}
+
+.achievement-item.earned:hover {
+  background: linear-gradient(135deg, var(--bg-tertiary, #1a1a1a) 0%, rgba(34, 197, 94, 0.12) 100%);
+  border-color: rgba(34, 197, 94, 0.5);
+  transform: translateX(4px);
+}
+
+/* Conquista não desbloqueada */
+.achievement-item.unearned {
+  background: var(--bg-tertiary, #1a1a1a);
+  border-color: var(--border-color, #404040);
+  opacity: 0.7;
+}
+
+.achievement-item.unearned::before {
+  background: rgba(156, 163, 175, 0.3);
+}
+
+.achievement-item.unearned:hover {
+  opacity: 0.85;
+  border-color: rgba(156, 163, 175, 0.5);
+  transform: translateX(2px);
+}
+
+/* Ícone da conquista */
+.achievement-icon {
+  position: relative;
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  border-radius: 16px;
+  overflow: hidden;
+  background: var(--bg-secondary, #2a2a2a);
+  border: 2px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.achievement-item.earned .achievement-icon {
+  border-color: rgba(34, 197, 94, 0.4);
+  box-shadow: 0 0 20px rgba(34, 197, 94, 0.2);
+}
+
+.achievement-item.unearned .achievement-icon {
+  border-color: rgba(156, 163, 175, 0.2);
+  filter: grayscale(0.6);
+}
+
+.achievement-icon img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: all 0.3s ease;
+}
+
+.achievement-item.unearned .achievement-icon img {
+  filter: grayscale(0.8) brightness(0.6);
+}
+
+/* Status da conquista */
+.achievement-status {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  border: 2px solid var(--bg-tertiary, #1a1a1a);
+  transition: all 0.3s ease;
+}
+
+.achievement-item.earned .achievement-status {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+}
+
+.achievement-item.unearned .achievement-status {
+  background: rgba(156, 163, 175, 0.3);
+  color: rgba(156, 163, 175, 0.8);
+}
+
+/* Detalhes da conquista */
+.achievement-details {
+  flex: 1;
+  min-width: 0;
+}
+
+.achievement-details h4 {
+  color: var(--text-primary, #ffffff);
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 12px 0;
+  line-height: 1.4;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.achievement-item.earned .achievement-details h4 {
+  color: #ffffff;
+}
+
+.achievement-item.unearned .achievement-details h4 {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.achievement-details p {
+  color: var(--text-secondary, #a0a0a0);
+  font-size: 15px;
+  line-height: 1.5;
+  margin: 0 0 16px 0;
+}
+
+.achievement-item.unearned .achievement-details p {
+  color: rgba(160, 160, 160, 0.6);
+}
+
+/* Data de desbloqueio */
+.earned-date {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: rgba(34, 197, 94, 0.8);
+  background: rgba(34, 197, 94, 0.1);
+  padding: 4px 8px;
+  border-radius: 6px;
+  margin-bottom: 8px;
+  width: fit-content;
+}
+
+.earned-date i {
+  font-size: 10px;
+}
+
+/* Raridade da conquista */
+.achievement-rarity {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.achievement-rarity.common {
+  background: rgba(156, 163, 175, 0.15);
+  color: #9ca3af;
+}
+
+.achievement-rarity.rare {
+  background: rgba(59, 130, 246, 0.15);
+  color: #3b82f6;
+}
+
+.achievement-rarity.epic {
+  background: rgba(168, 85, 247, 0.15);
+  color: #a855f7;
+}
+
+.achievement-rarity.legendary {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.15), rgba(245, 158, 11, 0.15));
+  color: #fbbf24;
+}
+
+/* Progresso das conquistas */
+.achievements-progress {
+  background: var(--bg-secondary, #2a2a2a);
+  border: 1px solid var(--border-color, #404040);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+.achievements-progress h4 {
+  color: var(--text-primary, #ffffff);
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.progress-stats {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.progress-stats p {
+  color: var(--text-secondary, #a0a0a0);
+  font-size: 14px;
+  margin: 0;
+}
+
+.progress-percentage {
+  color: var(--text-primary, #ffffff);
+  font-weight: 600;
+  font-size: 16px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #22c55e, #16a34a);
+  border-radius: 4px;
+  transition: width 0.8s ease;
+  position: relative;
+}
+
+.progress-fill::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* Informações da fonte de dados */
+.data-source-info {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
+  border-radius: 8px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-size: 13px;
+  color: #93c5fd;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.data-source-info.success {
+  background: rgba(34, 197, 94, 0.1);
+  border-color: rgba(34, 197, 94, 0.3);
+  color: #86efac;
+}
+
+.data-source-info.warning {
+  background: rgba(245, 158, 11, 0.1);
+  border-color: rgba(245, 158, 11, 0.3);
+  color: #fbbf24;
+}
+
+/* Loading state para conquistas */
+.loading-achievements {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 40px 20px;
+  color: var(--text-secondary, #a0a0a0);
+}
+
+.loading-achievements i {
+  font-size: 32px;
+  color: var(--accent-color, #667eea);
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .steam-section .section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .games-grid {
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 12px;
+  }
+
+  .games-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .convert-dialog,
+  .achievements-dialog {
+    margin: 10px;
+    max-height: 90vh;
+  }
+
+  /* Responsividade para conquistas em telas pequenas */
+  .achievement-item {
+    gap: 16px;
+    padding: 20px;
+    min-height: 100px;
+    border-radius: 12px;
+  }
+
+  .achievement-icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 12px;
+  }
+
+  .achievement-details h4 {
+    font-size: 16px;
+    margin: 0 0 10px 0;
+    gap: 8px;
+  }
+
+  .achievement-details p {
+    font-size: 14px;
+    margin: 0 0 12px 0;
+  }
+
+  .achievements-list {
+    gap: 10px;
+    max-height: 350px;
+  }
+
+  .earned-date {
+    font-size: 11px;
+    padding: 3px 6px;
+  }
+
+  .achievement-rarity {
+    font-size: 10px;
+    padding: 3px 6px;
+  }
+}
+
+/* Responsividade para telas muito pequenas */
+@media (max-width: 480px) {
+  .achievement-item {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 12px;
+    padding: 16px;
+    min-height: auto;
+  }
+
+  .achievement-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 10px;
+  }
+
+  .achievement-details {
+    width: 100%;
+  }
+
+  .achievement-details h4 {
+    font-size: 15px;
+    justify-content: center;
+  }
+
+  .achievement-details p {
+    font-size: 13px;
+  }
+
+  .achievements-list {
+    gap: 8px;
+    max-height: 300px;
+  }
+
+  .achievements-dialog {
+    margin: 5px;
+    max-height: 95vh;
+  }
+
+  .earned-date,
+  .achievement-rarity {
+    align-self: center;
+  }
+}
+
+/* Tema claro */
+@media (prefers-color-scheme: light) {
+  [data-theme="light"] .steam-section,
+  [data-theme="auto"] .steam-section {
+    background: var(--card-bg-light, #ffffff);
+    border-color: var(--border-color-light, #e5e5e5);
+  }
+
+  [data-theme="light"] .game-card,
+  [data-theme="auto"] .game-card {
+    background: var(--bg-tertiary-light, #f8f9fa);
+    border-color: var(--border-color-light, #e5e5e5);
+  }
+}
+
+/* === ESTILOS PARA CONQUISTAS - TEMA CLARO === */
+
+[data-theme="light"] .achievements-list::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .achievements-list::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+[data-theme="light"] .achievements-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Item de conquista - tema claro */
+[data-theme="light"] .achievement-item {
+  background: #ffffff;
+  border-color: #e5e7eb;
+  color: #1f2937;
+}
+
+[data-theme="light"] .achievement-item::before {
+  background: transparent;
+}
+
+/* Conquista desbloqueada - tema claro */
+[data-theme="light"] .achievement-item.earned {
+  background: linear-gradient(135deg, #ffffff 0%, rgba(34, 197, 94, 0.05) 100%);
+  border-color: rgba(34, 197, 94, 0.4);
+}
+
+[data-theme="light"] .achievement-item.earned::before {
+  background: linear-gradient(180deg, #22c55e, #16a34a);
+}
+
+[data-theme="light"] .achievement-item.earned:hover {
+  background: linear-gradient(135deg, #ffffff 0%, rgba(34, 197, 94, 0.08) 100%);
+  border-color: rgba(34, 197, 94, 0.6);
+}
+
+/* Conquista não desbloqueada - tema claro */
+[data-theme="light"] .achievement-item.unearned {
+  background: #ffffff;
+  border-color: #e5e7eb;
+  opacity: 0.6;
+}
+
+[data-theme="light"] .achievement-item.unearned::before {
+  background: rgba(107, 114, 128, 0.3);
+}
+
+[data-theme="light"] .achievement-item.unearned:hover {
+  opacity: 0.8;
+  border-color: rgba(107, 114, 128, 0.4);
+}
+
+/* Ícone da conquista - tema claro */
+[data-theme="light"] .achievement-icon {
+  background: #f9fafb;
+  border-color: transparent;
+}
+
+[data-theme="light"] .achievement-item.earned .achievement-icon {
+  border-color: rgba(34, 197, 94, 0.3);
+  box-shadow: 0 0 15px rgba(34, 197, 94, 0.15);
+}
+
+[data-theme="light"] .achievement-item.unearned .achievement-icon {
+  border-color: rgba(107, 114, 128, 0.2);
+  filter: grayscale(0.4);
+}
+
+[data-theme="light"] .achievement-item.unearned .achievement-icon img {
+  filter: grayscale(0.6) brightness(0.8);
+}
+
+/* Status da conquista - tema claro */
+[data-theme="light"] .achievement-item.earned .achievement-status {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+}
+
+[data-theme="light"] .achievement-item.unearned .achievement-status {
+  background: rgba(107, 114, 128, 0.2);
+  color: rgba(107, 114, 128, 0.7);
+}
+
+/* Detalhes da conquista - tema claro */
+[data-theme="light"] .achievement-details h4 {
+  color: #1f2937;
+}
+
+[data-theme="light"] .achievement-item.earned .achievement-details h4 {
+  color: #111827;
+}
+
+[data-theme="light"] .achievement-item.unearned .achievement-details h4 {
+  color: rgba(31, 41, 55, 0.6);
+}
+
+[data-theme="light"] .achievement-details p {
+  color: #6b7280;
+}
+
+[data-theme="light"] .achievement-item.unearned .achievement-details p {
+  color: rgba(107, 114, 128, 0.5);
+}
+
+/* Data de desbloqueio - tema claro */
+[data-theme="light"] .earned-date {
+  color: rgba(34, 197, 94, 0.9);
+  background: rgba(34, 197, 94, 0.08);
+}
+
+/* Raridade da conquista - tema claro */
+[data-theme="light"] .achievement-rarity.common {
+  background: rgba(107, 114, 128, 0.1);
+  color: #6b7280;
+}
+
+[data-theme="light"] .achievement-rarity.rare {
+  background: rgba(59, 130, 246, 0.1);
+  color: #2563eb;
+}
+
+[data-theme="light"] .achievement-rarity.epic {
+  background: rgba(168, 85, 247, 0.1);
+  color: #7c3aed;
+}
+
+[data-theme="light"] .achievement-rarity.legendary {
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.1), rgba(245, 158, 11, 0.1));
+  color: #d97706;
+}
+
+/* Progresso das conquistas - tema claro */
+[data-theme="light"] .achievements-progress {
+  background: #ffffff;
+  border-color: #e5e7eb;
+}
+
+[data-theme="light"] .achievements-progress h4 {
+  color: #1f2937;
+}
+
+[data-theme="light"] .progress-stats p {
+  color: #6b7280;
+}
+
+[data-theme="light"] .progress-percentage {
+  color: #111827;
+}
+
+[data-theme="light"] .progress-bar {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+/* Informações da fonte de dados - tema claro */
+[data-theme="light"] .data-source-info {
+  background: rgba(59, 130, 246, 0.08);
+  border-color: rgba(59, 130, 246, 0.2);
+  color: #2563eb;
+}
+
+[data-theme="light"] .data-source-info.success {
+  background: rgba(34, 197, 94, 0.08);
+  border-color: rgba(34, 197, 94, 0.2);
+  color: #16a34a;
+}
+
+[data-theme="light"] .data-source-info.warning {
+  background: rgba(245, 158, 11, 0.08);
+  border-color: rgba(245, 158, 11, 0.2);
+  color: #d97706;
+}
+
+/* Loading state para conquistas - tema claro */
+[data-theme="light"] .loading-achievements {
+  color: #6b7280;
+}
+
+[data-theme="light"] .loading-achievements i {
+  color: #3b82f6;
+}
+
+/* Tema automático - herda estilos do tema claro quando o sistema prefere claro */
+@media (prefers-color-scheme: light) {
+  [data-theme="auto"] .achievements-list::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.05);
+  }
+
+  [data-theme="auto"] .achievements-list::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.2);
+  }
+
+  [data-theme="auto"] .achievement-item {
+    background: #ffffff;
+    border-color: #e5e7eb;
+    color: #1f2937;
+  }
+
+  [data-theme="auto"] .achievement-item.earned {
+    background: linear-gradient(135deg, #ffffff 0%, rgba(34, 197, 94, 0.05) 100%);
+    border-color: rgba(34, 197, 94, 0.4);
+  }
+
+  [data-theme="auto"] .achievement-item.unearned {
+    opacity: 0.6;
+  }
+
+  [data-theme="auto"] .achievement-details h4 {
+    color: #1f2937;
+  }
+
+  [data-theme="auto"] .achievement-details p {
+    color: #6b7280;
+  }
+
+  [data-theme="auto"] .achievements-progress {
+    background: #ffffff;
+    border-color: #e5e7eb;
+  }
+}
+
+/* === SISTEMA DE TROFÉUS === */
+
+/* Container do troféu */
+.trophy-display {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+  background: var(--bg-tertiary, #1a1a1a);
+  border: 1px solid var(--border-color, #404040);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.trophy-display:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+/* Ícone do troféu */
+.trophy-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  transition: all 0.3s ease;
+}
+
+.trophy-icon i {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+/* Cores dos troféus */
+.trophy-platinum {
+  background: linear-gradient(135deg, #e8f4fd 0%, #c3dafe 100%);
+  color: #1e40af;
+  border: 2px solid #3b82f6;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+.trophy-gold {
+  background: linear-gradient(135deg, #fef3c7 0%, #fbbf24 100%);
+  color: #92400e;
+  border: 2px solid #f59e0b;
+  box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+}
+
+.trophy-silver {
+  background: linear-gradient(135deg, #f1f5f9 0%, #cbd5e1 100%);
+  color: #475569;
+  border: 2px solid #64748b;
+  box-shadow: 0 0 20px rgba(100, 116, 139, 0.3);
+}
+
+.trophy-bronze {
+  background: linear-gradient(135deg, #fed7aa 0%, #fb923c 100%);
+  color: #9a3412;
+  border: 2px solid #ea580c;
+  box-shadow: 0 0 20px rgba(234, 88, 12, 0.3);
+}
+
+.trophy-none {
+  background: linear-gradient(135deg, #f3f4f6 0%, #d1d5db 100%);
+  color: #6b7280;
+  border: 2px solid #9ca3af;
+  opacity: 0.7;
+}
+
+/* Informações do troféu */
+.trophy-info {
+  flex: 1;
+}
+
+.trophy-name {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary, #ffffff);
+}
+
+.trophy-description {
+  margin: 0;
+  font-size: 12px;
+  color: var(--text-secondary, #a0a0a0);
+  line-height: 1.4;
+}
+
+/* Animações especiais para troféus altos */
+.trophy-platinum .trophy-icon {
+  animation: platinumGlow 2s ease-in-out infinite alternate;
+}
+
+.trophy-gold .trophy-icon {
+  animation: goldShine 3s ease-in-out infinite alternate;
+}
+
+@keyframes platinumGlow {
+  0% {
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 30px rgba(59, 130, 246, 0.6);
+  }
+}
+
+@keyframes goldShine {
+  0% {
+    box-shadow: 0 0 20px rgba(245, 158, 11, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 25px rgba(245, 158, 11, 0.5);
+  }
+}
+
+/* Responsividade para troféus */
+@media (max-width: 768px) {
+  .trophy-display {
+    padding: 10px 12px;
+    gap: 10px;
+  }
+
+  .trophy-icon {
+    width: 36px;
+    height: 36px;
+    font-size: 16px;
+  }
+
+  .trophy-name {
+    font-size: 13px;
+  }
+
+  .trophy-description {
+    font-size: 11px;
+  }
+}

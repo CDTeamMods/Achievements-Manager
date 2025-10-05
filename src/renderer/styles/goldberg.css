@@ -1,0 +1,416 @@
+/* Estilos para a guia de Conversão Goldberg */
+
+/* Status Card */
+.goldberg-status-card {
+  background: var(--card-bg, #2a2a2a);
+  border: 1px solid var(--border-color, #404040);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 24px;
+  transition: all 0.3s ease;
+}
+
+.goldberg-status-card.status-found {
+  border-color: #10b981;
+  background: rgba(16, 185, 129, 0.05);
+}
+
+.goldberg-status-card.status-not-found {
+  border-color: #ef4444;
+  background: rgba(239, 68, 68, 0.05);
+}
+
+.goldberg-status-card.status-empty {
+  border-color: #f59e0b;
+  background: rgba(245, 158, 11, 0.05);
+}
+
+.goldberg-status-card.status-error {
+  border-color: #8b5cf6;
+  background: rgba(139, 92, 246, 0.05);
+}
+
+.status-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+.status-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  background: rgba(59, 130, 246, 0.1);
+  color: #3b82f6;
+  flex-shrink: 0;
+}
+
+.status-found .status-icon {
+  background: rgba(16, 185, 129, 0.1);
+  color: #10b981;
+}
+
+.status-not-found .status-icon {
+  background: rgba(239, 68, 68, 0.1);
+  color: #ef4444;
+}
+
+.status-empty .status-icon {
+  background: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+}
+
+.status-error .status-icon {
+  background: rgba(139, 92, 246, 0.1);
+  color: #8b5cf6;
+}
+
+.status-info {
+  flex: 1;
+}
+
+.status-info h4 {
+  margin: 0 0 4px;
+  color: var(--text-primary, #ffffff);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.status-info p {
+  margin: 0;
+  color: var(--text-secondary, #a0a0a0);
+  font-size: 14px;
+}
+
+.status-details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border-color, #404040);
+}
+
+.detail-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 12px;
+  background: var(--bg-tertiary, #1a1a1a);
+  border-radius: 6px;
+}
+
+.detail-label {
+  color: var(--text-secondary, #a0a0a0);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.detail-value {
+  color: var(--text-primary, #ffffff);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* Estilos específicos para tema claro */
+[data-theme="light"] .detail-item {
+  background: rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+[data-theme="light"] .detail-label {
+  color: #666666;
+  font-weight: 600;
+}
+
+[data-theme="light"] .detail-value {
+  color: #1a1a1a;
+  font-weight: 700;
+}
+
+/* Estilos para status do usuário e pasta */
+.detail-value.user-detected,
+.detail-value.path-found {
+  color: #28a745;
+  font-weight: 700;
+}
+
+.detail-value.user-not-detected,
+.detail-value.path-not-found {
+  color: #dc3545;
+  font-weight: 700;
+}
+
+/* Estilos específicos para tema claro */
+[data-theme="light"] .detail-value.user-detected,
+[data-theme="light"] .detail-value.path-found {
+  color: #155724;
+  background: rgba(40, 167, 69, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(40, 167, 69, 0.2);
+}
+
+[data-theme="light"] .detail-value.user-not-detected,
+[data-theme="light"] .detail-value.path-not-found {
+  color: #721c24;
+  background: rgba(220, 53, 69, 0.1);
+  padding: 2px 6px;
+  border-radius: 4px;
+  border: 1px solid rgba(220, 53, 69, 0.2);
+}
+
+/* Item de aviso */
+.detail-item.warning-item {
+  background: rgba(255, 193, 7, 0.1);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  border-left: 4px solid #ffc107;
+}
+
+[data-theme="light"] .detail-item.warning-item {
+  background: rgba(255, 193, 7, 0.15);
+  border: 1px solid rgba(255, 193, 7, 0.4);
+  border-left: 4px solid #e0a800;
+}
+
+[data-theme="light"] .detail-item.warning-item .detail-value {
+  color: #856404;
+  font-weight: 600;
+}
+
+/* Configurações Goldberg */
+.goldberg-settings {
+  margin-bottom: 24px;
+}
+
+.goldberg-settings .toggle-group {
+  background: var(--card-bg, #2a2a2a);
+  border: 1px solid var(--border-color, #404040);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.goldberg-settings .toggle-group:last-child {
+  margin-bottom: 0;
+}
+
+.goldberg-settings .toggle-group > div {
+  flex: 1;
+}
+
+.goldberg-settings .toggle-group label {
+  color: var(--text-primary, #ffffff);
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 4px;
+  display: block;
+}
+
+.goldberg-settings .toggle-group .form-text {
+  color: var(--text-secondary, #a0a0a0);
+  font-size: 14px;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* Ações Goldberg */
+.goldberg-actions {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.goldberg-actions .btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  border-radius: 8px;
+  border: none;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.goldberg-actions .btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.goldberg-actions .btn-primary {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.goldberg-actions .btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+}
+
+.goldberg-actions .btn-success {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  color: white;
+}
+
+.goldberg-actions .btn-success:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+/* Informações Goldberg */
+.goldberg-info {
+  background: var(--bg-tertiary, #1a1a1a);
+  border: 1px solid var(--border-color, #404040);
+  border-radius: 12px;
+  padding: 16px;
+}
+
+.goldberg-info .info-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 0;
+  color: var(--text-secondary, #a0a0a0);
+  font-size: 14px;
+}
+
+.goldberg-info .info-item:last-child {
+  border-bottom: none;
+}
+
+.goldberg-info .info-item i {
+  color: var(--accent-color, #667eea);
+  font-size: 16px;
+  width: 20px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.goldberg-info .info-item span {
+  font-family: "JetBrains Mono", "Courier New", monospace;
+  font-size: 13px;
+  word-break: break-all;
+}
+
+/* Seção Settings */
+.settings-section {
+  margin-bottom: 32px;
+}
+
+.settings-section h3 {
+  color: var(--text-primary, #ffffff);
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.settings-section h3 i {
+  color: var(--accent-color, #667eea);
+}
+
+.section-description {
+  color: var(--text-secondary, #a0a0a0);
+  font-size: 14px;
+  line-height: 1.5;
+  margin: 0 0 24px;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .goldberg-status-card {
+    padding: 16px;
+  }
+
+  .status-header {
+    flex-direction: column;
+    align-items: flex-start;
+    text-align: left;
+  }
+
+  .status-details {
+    grid-template-columns: 1fr;
+  }
+
+  .goldberg-settings .toggle-group {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .goldberg-actions {
+    flex-direction: column;
+  }
+
+  .goldberg-actions .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .goldberg-info .info-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+
+  .goldberg-info .info-item span {
+    font-size: 12px;
+  }
+}
+
+/* Tema claro */
+@media (prefers-color-scheme: light) {
+  [data-theme="light"] .goldberg-status-card,
+  [data-theme="auto"] .goldberg-status-card {
+    background: var(--card-bg-light, #ffffff);
+    border-color: var(--border-color-light, #e5e5e5);
+  }
+
+  [data-theme="light"] .status-info h4,
+  [data-theme="auto"] .status-info h4 {
+    color: var(--text-primary-light, #1a1a1a);
+  }
+
+  [data-theme="light"] .status-info p,
+  [data-theme="auto"] .status-info p {
+    color: var(--text-secondary-light, #666666);
+  }
+
+  [data-theme="light"] .goldberg-settings .toggle-group,
+  [data-theme="auto"] .goldberg-settings .toggle-group {
+    background: var(--card-bg-light, #ffffff);
+    border-color: var(--border-color-light, #e5e5e5);
+  }
+
+  [data-theme="light"] .goldberg-info,
+  [data-theme="auto"] .goldberg-info {
+    background: var(--bg-tertiary-light, #f8f9fa);
+    border-color: var(--border-color-light, #e5e5e5);
+  }
+}
+
+/* Animações em modo lite desabilitadas */
+[data-lite-mode="true"] .goldberg-status-card,
+[data-lite-mode="true"] .goldberg-actions .btn,
+[data-lite-mode="true"] .status-icon {
+  transition: none !important;
+}
+
+[data-lite-mode="true"] .goldberg-actions .btn:hover:not(:disabled) {
+  transform: none !important;
+  box-shadow: none !important;
+}

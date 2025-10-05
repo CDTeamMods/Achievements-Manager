@@ -1,0 +1,454 @@
+{
+  "splash": {
+    "title": "Achievements Manager",
+    "subtitle": "Gerenciador de Conquistas para Jogos",
+    "version": "v0.0.1-beta",
+    "loading": {
+      "modules": "Carregando módulos...",
+      "initializing": "Inicializando sistema...",
+      "apis": "Conectando APIs...",
+      "interface": "Preparando interface...",
+      "settings": "Carregando configurações...",
+      "complete": "Carregamento concluído!",
+      "components": "Carregando componentes..."
+    }
+  },
+  "common": {
+    "loading": "Carregando...",
+    "error": "Erro",
+    "success": "Sucesso",
+    "warning": "Aviso",
+    "info": "Informação",
+    "save": "Salvar",
+    "cancel": "Cancelar",
+    "confirm": "Confirmar",
+    "delete": "Deletar",
+    "edit": "Editar",
+    "add": "Adicionar",
+    "remove": "Remover",
+    "close": "Fechar",
+    "open": "Abrir",
+    "back": "Voltar",
+    "next": "Próximo",
+    "previous": "Anterior",
+    "first": "Primeiro",
+    "last": "Último",
+    "total": "Total",
+    "user": "Usuário",
+    "folder": "Pasta",
+    "path": "Caminho",
+    "name": "Nome",
+    "description": "Descrição",
+    "title": "Título",
+    "message": "Mensagem",
+    "search": "Buscar",
+    "filter": "Filtrar",
+    "select": "Selecionar",
+    "configure": "Configurar",
+    "connect": "Conectar",
+    "disconnect": "Desconectar",
+    "refresh": "Atualizar",
+    "reload": "Recarregar",
+    "retry": "Tentar novamente",
+    "continue": "Continuar",
+    "finish": "Finalizar",
+    "reset": "Restaurar Padrões",
+    "complete": "Concluído",
+    "incomplete": "Incompleto",
+    "progress": "Progresso",
+    "status": "Status",
+    "enabled": "Habilitado",
+    "disabled": "Desabilitado",
+    "active": "Ativo",
+    "inactive": "Inativo",
+    "online": "Online",
+    "offline": "Offline",
+    "available": "Disponível",
+    "unavailable": "Indisponível",
+    "connected": "Conectado",
+    "disconnected": "Desconectado",
+    "found": "Encontrado",
+    "notFound": "Não encontrado",
+    "detected": "Detectado",
+    "notDetected": "Não detectado",
+    "of": "de",
+    "gotIt": "Entendi"
+  },
+  "games": {
+    "empty": {
+      "title": "Nenhum jogo encontrado"
+    },
+    "addGame": {
+      "title": "Adicionar Jogo",
+      "gameName": "Nome do Jogo",
+      "gamePath": "Caminho do Jogo"
+    }
+  },
+  "errors": {
+    "pageLoad": "Erro ao carregar página",
+    "pageLoadMessage": "Ocorreu um erro ao carregar o conteúdo da página.",
+    "unknownError": "Ocorreu um erro desconhecido",
+    "loadingGames": "Erro ao carregar jogos",
+    "loadingAchievements": "Erro ao carregar conquistas",
+    "steamConnection": "Erro de conexão com Steam",
+    "steamApi": "Erro na API do Steam",
+    "fileNotFound": "Arquivo não encontrado",
+    "folderNotFound": "Pasta não encontrada",
+    "invalidData": "Dados inválidos",
+    "saveError": "Erro ao salvar",
+    "loadError": "Erro ao carregar"
+  },
+  "steam": {
+    "errorApi": "Steam API não disponível",
+    "loading": "Carregando jogos da Steam...",
+    "noGames": "Não foi possível encontrar jogos na sua conta Steam",
+    "configureApi": "Configure sua Steam API Key nas configurações para ver seus jogos automaticamente",
+    "loadGames": "Carregar Jogos",
+    "refreshGames": "Atualizar Jogos",
+    "convert": "Converter",
+    "convertToGse": "Converter para GSE",
+    "viewAchievements": "Ver conquistas",
+    "convertNow": "Converter Agora",
+    "converting": "Convertendo...",
+    "converted": "Convertido",
+    "conversionComplete": "Conversão concluída",
+    "conversionError": "Erro na conversão",
+    "gettingLibrary": "Obtendo sua biblioteca de jogos",
+    "library": {
+      "title": "Biblioteca",
+      "gamesFound": "jogos encontrados"
+    },
+    "achievements": {
+      "loading": "Carregando conquistas...",
+      "title": "Conquistas",
+      "progress": "Progresso das Conquistas",
+      "total": "Total",
+      "unlocked": "Desbloqueadas",
+      "locked": "Bloqueadas",
+      "earned": "Conquistada",
+      "earnedOn": "Conquistada em",
+      "notEarned": "Não conquistada",
+      "loadError": "Erro ao carregar conquistas"
+    },
+    "conversion": {
+      "title": "Converter para GSE",
+      "description": "Esta ferramenta irá converter as conquistas do Steam para o formato GSE Saves.",
+      "explanation": "As conquistas serão convertidas para o formato GSE Saves",
+      "warning": "Esta ação irá substituir qualquer arquivo de conquistas existente para este jogo.",
+      "whatWillHappen": "O que irá acontecer:",
+      "step1": "Suas conquistas do Steam serão baixadas",
+      "step2": "Serão convertidas para o formato GSE Saves",
+      "step3": "Salvas em:",
+      "step4": "Compatível com Goldberg Steam Emulator",
+      "converting": "Convertendo...",
+      "success": "Jogo \"{gameName}\" convertido com sucesso!\n\n📊 {earnedAchievements} de {totalAchievements} conquistas ({completionPercentage}%)\n📁 Arquivo salvo em: {filePath}",
+      "error": "Erro na conversão: {error}",
+      "fileSaved": "Arquivo salvo em:",
+      "benefits": {
+        "title": "Benefícios da conversão:",
+        "item1": "Serão convertidas para o formato GSE Saves",
+        "item2": "Compatibilidade com emuladores",
+        "item3": "Backup local das conquistas"
+      }
+    },
+    "playtime": {
+      "hours": "horas",
+      "notPlayed": "Não jogado",
+      "weeks": "semanas"
+    }
+  },
+  "setup": {
+    "welcome": {
+      "title": "🌍 Bem-vindo ao Achievements Manager"
+    },
+    "language": {
+      "title": "🌍 Escolha seu idioma",
+      "select": "Selecione seu idioma preferido"
+    },
+    "theme": {
+      "title": "🎨 Escolha seu tema",
+      "description": "Personalize a aparência do aplicativo",
+      "auto": "Automático",
+      "dark": "Escuro",
+      "light": "Claro"
+    },
+    "performance": {
+      "title": "⚡ Configurações de Performance",
+      "description": "Otimize o aplicativo para seu sistema",
+      "litemode": {
+        "title": "Modo Lite",
+        "description": "Desativa animações para melhor performance"
+      },
+      "virtualscroll": {
+        "title": "Virtual Scrolling",
+        "description": "Melhora performance com listas grandes"
+      }
+    },
+    "complete": {
+      "title": "✅ Configuração Concluída!",
+      "description": "Tudo pronto para começar"
+    },
+    "summary": {
+      "title": "📋 Resumo das Configurações",
+      "language": "Idioma",
+      "theme": "Tema",
+      "performance": "Performance",
+      "ready": "Tudo pronto! Vamos começar?"
+    }
+  },
+  "app": {
+    "title": "Achievements Manager",
+    "subtitle": "Gerenciador de Conquistas Moderno e Otimizado",
+    "version": "v0.0.1-beta"
+  },
+  "nav": {
+    "section": {
+      "main": "Principal",
+      "tools": "Ferramentas"
+    },
+    "dashboard": "Dashboard",
+    "statistics": "Estatísticas",
+    "backup": "Backup",
+    "settings": "Configurações"
+  },
+  "window": {
+    "minimize": "Minimizar",
+    "maximize": "Maximizar"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "steamGames": "Biblioteca Steam",
+    "configureSteam": "Configurar Steam",
+    "loadSteam": "Carregar Jogos",
+    "clearCache": "Limpar Cache",
+    "recentGames": "Jogos Recentes",
+    "steam": {
+      "connect": "Conecte sua conta Steam",
+      "description": "Configure sua Steam API Key nas configurações para ver seus jogos automaticamente",
+      "configureNow": "Configurar Agora"
+    },
+    "trophies": {
+      "platinum": {
+        "name": "Troféu Platina",
+        "description": "Mestre absoluto! Você completou 95% ou mais das conquistas!"
+      },
+      "gold": {
+        "name": "Troféu Ouro",
+        "description": "Excelente trabalho! Você completou entre 80% e 94% das conquistas!"
+      },
+      "silver": {
+        "name": "Troféu Prata",
+        "description": "Bom progresso! Você completou entre 60% e 79% das conquistas!"
+      },
+      "bronze": {
+        "name": "Troféu Bronze",
+        "description": "Começando bem! Você completou entre 30% e 59% das conquistas!"
+      },
+      "none": {
+        "name": "Sem Troféu",
+        "description": "Continue jogando para desbloquear seu primeiro troféu!"
+      }
+    },
+    "error": {
+      "title": "Erro ao carregar painel",
+      "message": "Não foi possível carregar os dados do painel."
+    },
+    "games": "Jogos",
+    "achievements": "Conquistas",
+    "progress": "Progresso"
+  },
+  "statistics": {
+    "title": "Estatísticas Detalhadas",
+    "description": "Análise completa do seu progresso em jogos e conquistas",
+    "totalGames": "Total de Jogos",
+    "unlockedAchievements": "Conquistas Desbloqueadas",
+    "completionRate": "Taxa de Conclusão",
+    "trend": {
+      "thisMonth": "+2 este mês",
+      "thisWeek": "+15 esta semana",
+      "excellent": "Excelente!",
+      "keepGoing": "Continue assim!"
+    },
+    "monthlyProgress": {
+      "comingSoon": "Gráfico de progresso mensal será implementado em breve"
+    },
+    "achievementsByCategory": {
+      "comingSoon": "Gráfico por categoria será implementado em breve"
+    },
+    "error": {
+      "title": "Erro ao carregar estatísticas",
+      "message": "Não foi possível carregar os dados das estatísticas.",
+      "retry": "Tentar novamente"
+    }
+  },
+  "backup": {
+    "title": "Backup e Restauração",
+    "description": "Proteja seus dados de jogos e conquistas com total segurança",
+    "secureData": "Dados Seguros",
+    "autoBackup": "Backup Automático",
+    "creating": "Criando backup...",
+    "created": "Backup criado com sucesso!",
+    "downloaded": "Backup baixado com sucesso!",
+    "error": "Erro ao criar backup:",
+    "processError": "Erro ao processar arquivo de backup:",
+    "restoreError": "Erro ao restaurar backup:",
+    "create": {
+      "title": "Criar Backup",
+      "description": "Faça um backup completo de todos os seus dados de jogos, conquistas e configurações",
+      "gameData": "Dados dos Jogos",
+      "achievements": "Conquistas",
+      "settings": "Configurações",
+      "button": "Criar Backup"
+    },
+    "restore": {
+      "title": "Restaurar Backup",
+      "description": "Restaure seus dados de um arquivo de backup anterior",
+      "fullHistory": "Histórico Completo",
+      "secureVerification": "Verificação Segura",
+      "synchronization": "Sincronização",
+      "button": "Restaurar Backup"
+    }
+  },
+  "settings": {
+    "title": "Configurações",
+    "description": "Personalize sua experiência no Achievements Manager",
+    "personalization": "Personalização",
+    "appearance": "Aparência",
+    "theme": {
+      "title": "Tema",
+      "dark": "Escuro",
+      "light": "Claro",
+      "auto": "Automático"
+    },
+    "customization": {
+      "liteMode": "Modo Lite",
+      "liteModeDescription": "Desativa animações para melhor performance",
+      "compactMode": "Modo Compacto",
+      "compactModeDescription": "Interface mais compacta"
+    },
+    "language": {
+      "title": "Idioma",
+      "interface": "Idioma da Interface"
+    },
+    "virtualScrolling": {
+      "title": "Virtual Scrolling",
+      "description": "Melhora performance com listas grandes"
+    },
+    "showTooltips": {
+      "title": "Mostrar Dicas",
+      "description": "Exibir dicas ao passar o mouse"
+    },
+    "performance": {
+      "autoSync": {
+        "title": "Sincronização Automática",
+        "description": "Sincronizar dados automaticamente"
+      },
+      "cacheSize": "Tamanho do Cache"
+    },
+    "goldberg": {
+      "title": "Conversão Goldberg Emu",
+      "checking": {
+        "title": "Verificando...",
+        "description": "Procurando por arquivos Goldberg"
+      },
+      "autoMigration": {
+        "title": "Migração Automática",
+        "description": "Converta automaticamente quando novos jogos forem detectados"
+      },
+      "showDialog": {
+        "title": "Mostrar Diálogo",
+        "description": "Exibir confirmação antes de converter"
+      },
+      "checkNow": "Verificar Agora",
+      "migrateAll": "Converter Todos"
+    },
+    "steam": {
+      "connect": "Conectar"
+    },
+    "api": {
+      "title": "Configurações de API",
+      "hydraWarningTitle": "Hydra API em Desenvolvimento",
+      "hydraWarningMessage": "Esta opção ainda está em desenvolvimento e pode não funcionar corretamente.",
+      "steam": {
+        "title": "Steam Web API",
+        "apiKey": "Steam API Key",
+        "apiKey.placeholder": "Insira sua Steam API Key",
+        "apiKey.description": "Obtenha sua API Key gratuita em:",
+        "steamId": "Steam ID",
+        "steamId.description": "Para usar a Steam API, você precisa do seu Steam ID. Clique no botão abaixo para obtê-lo automaticamente através da autenticação Steam.",
+        "getSteamId": "Obter Steam ID Automaticamente",
+        "authenticating": "Autenticando...",
+        "status": {
+          "notTested": "Não testado",
+          "notTested.description": "Configure suas credenciais e teste a conexão"
+        }
+      }
+    },
+    "status": {
+      "unsaved": "Você tem alterações não salvas"
+    },
+    "saved": "Configurações salvas com sucesso!",
+    "reset": "Configurações restauradas com sucesso!",
+    "restart": {
+      "title": "Reinicialização Necessária",
+      "message": "Para aplicar as mudanças de idioma, o aplicativo precisa ser reiniciado.",
+      "confirm": "Reiniciar Agora",
+      "cancel": "Cancelar",
+      "restarting": "Reiniciando aplicativo...",
+      "error": "Erro ao reiniciar aplicativo"
+    }
+  },
+  "goldberg": {
+    "title": "Conversão Goldberg",
+    "description": "Configure a migração automática de saves do Goldberg Emulator",
+    "status": {
+      "checking": "Verificando arquivos Goldberg...",
+      "found": "Goldberg detectado",
+      "notFound": "Goldberg não encontrado",
+      "error": "Erro na verificação"
+    },
+    "settings": {
+      "autoMigration": "Migração Automática",
+      "autoMigration.description": "Migra automaticamente saves do Goldberg quando detectados",
+      "showDialog": "Mostrar Diálogo",
+      "showDialog.description": "Exibe confirmação antes de migrar saves",
+      "manualCheck": "Verificação Manual",
+      "manualCheck.description": "Verificar manualmente por arquivos Goldberg"
+    },
+    "migration": {
+      "title": "Migração de Saves",
+      "description": "Migrar saves do Goldberg Emulator para o Achievements Manager",
+      "inProgress": "Migrando saves...",
+      "completed": "Migração concluída",
+      "error": "Erro na migração",
+      "confirm": "Confirmar migração",
+      "reject": "Rejeitar migração"
+    }
+  },
+  "api": {
+    "title": "Configurações de API",
+    "hydra": {
+      "warning": "Hydra API em Desenvolvimento",
+      "warningMessage": "Esta opção ainda está em desenvolvimento e pode não funcionar corretamente."
+    }
+  },
+  "feature": {
+    "coming": {
+      "soon": "🚀 Em Breve!"
+    },
+    "dialog": {
+      "default": {
+        "name": "A funcionalidade"
+      },
+      "understood": "Entendi"
+    },
+    "will": {
+      "be": {
+        "launched": "está sendo desenvolvida e estará disponível em breve!"
+      }
+    },
+    "working": {
+      "hard": "Estamos trabalhando para trazer esta funcionalidade o mais rápido possível!"
+    }
+  }
+}

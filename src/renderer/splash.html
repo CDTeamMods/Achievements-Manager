@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title data-i18n="splash.title">Achievements Manager - Carregando</title>
+  
+  <!-- Sistema de internacionalização será carregado dinamicamente -->
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 25%, #16213e 50%, #0f3460 75%, #0a2463 100%);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* Partículas flutuantes de fundo */
+    body::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-image: 
+        radial-gradient(2px 2px at 20px 30px, rgba(0, 212, 255, 0.3), transparent),
+        radial-gradient(2px 2px at 40px 70px, rgba(16, 185, 129, 0.3), transparent),
+        radial-gradient(1px 1px at 90px 40px, rgba(139, 92, 246, 0.3), transparent),
+        radial-gradient(1px 1px at 130px 80px, rgba(236, 72, 153, 0.3), transparent),
+        radial-gradient(2px 2px at 160px 30px, rgba(251, 146, 60, 0.3), transparent);
+      background-repeat: repeat;
+      background-size: 200px 100px;
+      animation: particleFloat 20s linear infinite;
+      z-index: -1;
+    }
+
+    @keyframes particleFloat {
+      0% { transform: translateY(0px) translateX(0px); }
+      33% { transform: translateY(-10px) translateX(10px); }
+      66% { transform: translateY(5px) translateX(-5px); }
+      100% { transform: translateY(0px) translateX(0px); }
+    }
+
+    /* Background animated gradient */
+    body::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(45deg, 
+        rgba(0, 212, 255, 0.1) 0%, 
+        rgba(16, 185, 129, 0.1) 25%, 
+        rgba(139, 92, 246, 0.1) 50%, 
+        rgba(236, 72, 153, 0.1) 75%, 
+        rgba(251, 146, 60, 0.1) 100%);
+      animation: gradientShift 8s ease-in-out infinite;
+      z-index: -2;
+    }
+
+    @keyframes gradientShift {
+      0%, 100% { opacity: 0.3; transform: scale(1) rotate(0deg); }
+      50% { opacity: 0.6; transform: scale(1.1) rotate(180deg); }
+    }
+
+    .splash-container {
+      text-align: center;
+      animation: fadeInUp 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      z-index: 10;
+      padding: 1rem;
+      max-width: 100%;
+      max-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .logo-container {
+      position: relative;
+      margin-bottom: 1.5rem;
+    }
+
+    .logo {
+      font-size: 4rem;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #00d4ff 0%, #10b981 50%, #8b5cf6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: logoGlow 3s ease-in-out infinite;
+      position: relative;
+      display: inline-block;
+    }
+
+    .logo::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 120px;
+      height: 120px;
+      background: radial-gradient(circle, rgba(0, 212, 255, 0.2) 0%, transparent 70%);
+      border-radius: 50%;
+      animation: pulseGlow 2s ease-in-out infinite;
+      z-index: -1;
+    }
+
+    @keyframes logoGlow {
+      0%, 100% { 
+        filter: drop-shadow(0 0 20px rgba(0, 212, 255, 0.5));
+        transform: scale(1);
+      }
+      50% { 
+        filter: drop-shadow(0 0 30px rgba(16, 185, 129, 0.7));
+        transform: scale(1.05);
+      }
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { 
+        transform: translate(-50%, -50%) scale(1);
+        opacity: 0.3;
+      }
+      50% { 
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 0.6;
+      }
+    }
+
+    .title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(135deg, #ffffff 0%, #e5e7eb 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      letter-spacing: -0.02em;
+      animation: titleSlide 1s ease-out 0.3s both;
+    }
+
+    @keyframes titleSlide {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: #94a3b8;
+      margin-bottom: 1rem;
+      font-weight: 400;
+      animation: subtitleSlide 1s ease-out 0.5s both;
+    }
+
+    @keyframes subtitleSlide {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .version {
+      font-size: 0.9rem;
+      color: #64748b;
+      margin-bottom: 2rem;
+      padding: 0.5rem 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      display: inline-block;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      animation: versionFade 1s ease-out 0.7s both;
+    }
+
+    @keyframes versionFade {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .loading-section {
+      animation: loadingFade 1s ease-out 0.9s both;
+    }
+
+    @keyframes loadingFade {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .loading-text {
+      font-size: 1rem;
+      color: #cbd5e1;
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .loading-progress {
+      width: 300px;
+      height: 12px;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 15px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 
+        0 4px 20px rgba(0, 0, 0, 0.3),
+        inset 0 2px 4px rgba(255, 255, 255, 0.1);
+    }
+
+    .loading-progress::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, 
+        rgba(0, 212, 255, 0.1) 0%, 
+        rgba(16, 185, 129, 0.1) 25%, 
+        rgba(139, 92, 246, 0.1) 50%, 
+        rgba(236, 72, 153, 0.1) 75%, 
+        rgba(251, 146, 60, 0.1) 100%);
+      animation: progressGlow 3s ease-in-out infinite;
+    }
+
+    .loading-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, 
+        #00d4ff 0%, 
+        #10b981 25%, 
+        #8b5cf6 50%, 
+        #ec4899 75%, 
+        #fb9260 100%);
+      border-radius: 15px;
+      width: 0%;
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      box-shadow: 
+        0 0 25px rgba(0, 212, 255, 0.6),
+        0 0 50px rgba(0, 212, 255, 0.3),
+        inset 0 1px 2px rgba(255, 255, 255, 0.3);
+    }
+
+    @keyframes progressGlow {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.8; }
+    }
+
+    .loading-progress-bar::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.3) 50%, transparent 100%);
+      animation: shimmer 2s infinite;
+    }
+
+    @keyframes shimmer {
+      0% { transform: translateX(-100%); }
+      100% { transform: translateX(100%); }
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(40px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .particles {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      animation: float 8s infinite linear;
+    }
+
+    .particle.small {
+      width: 2px;
+      height: 2px;
+      background: rgba(0, 212, 255, 0.6);
+    }
+
+    .particle.medium {
+      width: 4px;
+      height: 4px;
+      background: rgba(16, 185, 129, 0.5);
+    }
+
+    .particle.large {
+      width: 6px;
+      height: 6px;
+      background: rgba(139, 92, 246, 0.4);
+    }
+
+    @keyframes float {
+      0% {
+        transform: translateY(100vh) rotate(0deg);
+        opacity: 0;
+      }
+      10% {
+        opacity: 1;
+      }
+      90% {
+        opacity: 1;
+      }
+      100% {
+        transform: translateY(-20px) rotate(360deg);
+        opacity: 0;
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .logo {
+        font-size: 4rem;
+      }
+      
+      .title {
+        font-size: 2rem;
+      }
+      
+      .subtitle {
+        font-size: 1rem;
+      }
+      
+      .loading-progress {
+        width: 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="particles" id="particles"></div>
+  
+  <div class="splash-container">
+    <div class="logo-container">
+      <div class="logo">🏆</div>
+    </div>
+    
+    <h1 class="title" data-i18n="splash.title">Achievements Manager</h1>
+    <p class="subtitle" data-i18n="splash.subtitle">Gerenciador de Conquistas para Jogos</p>
+    <div class="version" data-i18n="splash.version">v0.0.1-beta</div>
+    
+    <div class="loading-section">
+      <div class="loading-text" id="loadingText" data-i18n="splash.loading.modules">Carregando módulos...</div>
+      <div class="loading-progress">
+        <div class="loading-progress-bar" id="progressBar"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Verificar se modo lite está ativo
+    function checkLiteMode() {
+      // Verificar preferência de movimento reduzido
+      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      
+      // Verificar se modo lite foi passado como parâmetro (via Electron)
+      const urlParams = new URLSearchParams(window.location.search);
+      const liteMode = urlParams.get('liteMode') === 'true';
+      
+      return prefersReducedMotion || liteMode;
+    }
+
+    // Aplicar modo lite se necessário
+    function applyLiteModeIfNeeded() {
+      if (checkLiteMode()) {
+        document.body.setAttribute('data-lite-mode', 'true');
+        document.body.classList.add('lite-mode');
+        
+        // Adicionar estilos para desabilitar animações
+        const style = document.createElement('style');
+        style.textContent = `
+          [data-lite-mode="true"] *,
+          [data-lite-mode="true"] *::before,
+          [data-lite-mode="true"] *::after {
+            animation-duration: 0.01ms !important;
+            animation-iteration-count: 1 !important;
+            transition-duration: 0.01ms !important;
+            transform: none !important;
+          }
+          
+          [data-lite-mode="true"] .particles {
+            display: none !important;
+          }
+          
+          [data-lite-mode="true"] .loading-spinner::before,
+          [data-lite-mode="true"] .loading-spinner::after {
+            animation: none !important;
+          }
+          
+          [data-lite-mode="true"] .loading-progress-bar::before {
+            animation: none !important;
+          }
+        `;
+        document.head.appendChild(style);
+      }
+    }
+
+    // Criar partículas animadas com diferentes tamanhos
+    function createParticles() {
+      // Não criar partículas se modo lite estiver ativo
+      if (checkLiteMode()) {
+        return;
+      }
+
+      const particlesContainer = document.getElementById('particles');
+      const particleCount = 60;
+      const particleTypes = ['small', 'medium', 'large'];
+
+      for (let i = 0; i < particleCount; i++) {
+        const particle = document.createElement('div');
+        const type = particleTypes[Math.floor(Math.random() * particleTypes.length)];
+        particle.className = `particle ${type}`;
+        particle.style.left = Math.random() * 100 + '%';
+        particle.style.animationDelay = Math.random() * 8 + 's';
+        particle.style.animationDuration = (Math.random() * 4 + 6) + 's';
+        particlesContainer.appendChild(particle);
+      }
+    }
+
+    // Inicializar sistema de internacionalização
+    async function initializeI18n() {
+      try {
+        // Detectar idioma do sistema ou usar configuração salva
+        const savedLanguage = localStorage.getItem('app-language') || 'pt-BR';
+        
+        // Importar e inicializar o sistema i18n
+        const { initI18n, t } = await import('./scripts/i18n-hot.js');
+        await initI18n(savedLanguage);
+        
+        // Disponibilizar globalmente para uso nas funções
+        window.t = t;
+        
+        return true;
+      } catch (error) {
+        console.warn('⚠️ Erro ao carregar sistema i18n:', error);
+        // Fallback: continuar sem traduções
+        window.t = (key) => key;
+        return false;
+      }
+    }
+
+    // Simular carregamento com progresso e fases traduzidas
+    function simulateLoading() {
+      const progressBar = document.getElementById('progressBar');
+      const loadingText = document.getElementById('loadingText');
+      
+      let progress = 0;
+      let currentPhase = 0;
+      
+      // Fases de carregamento com suas respectivas chaves de tradução
+      const loadingPhases = [
+        'splash.loading.modules',      // 0-20%
+        'splash.loading.initializing', // 20-40%
+        'splash.loading.connecting',   // 40-60%
+        'splash.loading.preparing',    // 60-80%
+        'splash.loading.settings',     // 80-95%
+        'splash.loading.complete'      // 95-100%
+      ];
+      
+      const phaseThresholds = [20, 40, 60, 80, 95, 100];
+      
+      const updateProgress = () => {
+        progress += Math.random() * 6 + 2; // Incremento entre 2-8%
+        if (progress > 100) progress = 100;
+        
+        progressBar.style.width = progress + '%';
+        
+        // Atualizar fase de carregamento
+        const newPhase = phaseThresholds.findIndex(threshold => progress <= threshold);
+        if (newPhase !== -1 && newPhase !== currentPhase) {
+          currentPhase = newPhase;
+          const phaseKey = loadingPhases[currentPhase];
+          
+          // Atualizar texto de carregamento com tradução
+          if (window.t) {
+            loadingText.textContent = window.t(phaseKey);
+          }
+        }
+        
+        if (progress >= 100) {
+          setTimeout(() => {
+            // Aqui seria onde o Electron carregaria a janela principal
+            if (window.t) {
+              loadingText.textContent = window.t('splash.loading.complete');
+            }
+          }, 500);
+          return;
+        }
+        
+        // Próxima atualização
+        setTimeout(updateProgress, Math.random() * 400 + 300);
+      };
+
+      // Iniciar progresso
+      setTimeout(updateProgress, 500);
+    }
+
+    // Adicionar efeito de hover no logo
+    function addLogoInteraction() {
+      // Não adicionar interações se modo lite estiver ativo
+      if (checkLiteMode()) {
+        return;
+      }
+
+      const logo = document.querySelector('.logo');
+      let isHovered = false;
+      
+      logo.addEventListener('mouseenter', () => {
+        if (!isHovered) {
+          isHovered = true;
+          logo.style.transform = 'scale(1.1) rotate(10deg)';
+          logo.style.transition = 'transform 0.3s cubic-bezier(0.4, 0, 0.2, 1)';
+        }
+      });
+      
+      logo.addEventListener('mouseleave', () => {
+        isHovered = false;
+        logo.style.transform = 'scale(1) rotate(0deg)';
+      });
+    }
+
+    // Inicializar quando a página carregar
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        // Aplicar modo lite primeiro, antes de criar elementos
+        applyLiteModeIfNeeded();
+        
+        // Inicializar sistema de internacionalização
+        await initializeI18n();
+        
+        // Criar elementos visuais
+        createParticles();
+        
+        // Iniciar simulação de carregamento
+        simulateLoading();
+        
+        // Adicionar interações
+        addLogoInteraction();
+        
+        console.log('✅ Splash screen inicializado com sucesso');
+      } catch (error) {
+        console.warn('⚠️ Erro na inicialização do splash:', error);
+        
+        // Fallback: continuar mesmo com erro
+        applyLiteModeIfNeeded();
+        createParticles();
+        simulateLoading();
+        addLogoInteraction();
+      }
+    });
+  </script>
+
+  <!-- IPC Sanitizer para evitar problemas de clonagem -->
+  <script type="module" src="scripts/utils/ipc-sanitizer.js"></script>
+
+  <!-- Font Awesome para ícones -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</body>
+</html>
