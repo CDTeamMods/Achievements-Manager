@@ -27,7 +27,7 @@ async function stripFile(file) {
 }
 
 // arquivos staged
-const staged = sh('git diff --cached --name-only --diff-filter=ACM')
+const staged = sh('git diff --name-only')
   .split('\n')
   .filter(f => /\.(jsx?|tsx?)$/.test(f))
 
