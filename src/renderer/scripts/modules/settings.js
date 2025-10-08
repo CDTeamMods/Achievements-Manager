@@ -1,9 +1,14 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+var __defProp2 = Object.defineProperty;
+var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
 import { ALLOWED_SETTINGS_KEYS, filterAllowedSettings } from "../config/allowed-settings-keys.js";
 class SettingsManager {
   static {
     __name(this, "SettingsManager");
+  }
+  static {
+    __name2(this, "SettingsManager");
   }
   constructor(app) {
     this.app = app;

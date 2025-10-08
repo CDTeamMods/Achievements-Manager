@@ -1,5 +1,5 @@
 // Utilitário para configuração de encoding UTF-8
-const { execSync } = require('child_process');
+const { execSync } = require('node:child_process');
 
 /**
  * Configura a codificação UTF-8 para o console no Windows

@@ -2,8 +2,8 @@
 // Gerencia caminhos baseado no tipo de instalação (portable vs instalado)
 
 const { app } = require('electron');
-const path = require('path');
-const os = require('os');
+const path = require('node:path');
+const os = require('node:os');
 const { getDebugManager } = require('./debug-manager');
 
 class PathManager {

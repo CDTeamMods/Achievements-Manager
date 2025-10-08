@@ -1,8 +1,13 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+var __defProp2 = Object.defineProperty;
+var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
 class NavigationManager {
   static {
     __name(this, "NavigationManager");
+  }
+  static {
+    __name2(this, "NavigationManager");
   }
   constructor(app) {
     this.app = app;
@@ -995,7 +1000,10 @@ class NavigationManager {
             "data-i18n",
             "settings.api.steam.status.error.description"
           );
-          const looksLikeKey = /* @__PURE__ */ __name((s) => typeof s === "string" && s.includes(".") && !s.includes(" "), "looksLikeKey");
+          const looksLikeKey = /* @__PURE__ */ __name2(
+            (s) => typeof s === "string" && s.includes(".") && !s.includes(" "),
+            "looksLikeKey"
+          );
           let errorMessage = result.error || await this.app.t(
             "settings.api.steam.status.error.description",
             "Ocorreu um erro ao verificar a conex\xE3o Steam"
@@ -1162,7 +1170,10 @@ class NavigationManager {
   }
   async resetSettings() {
     try {
-      const titleText = await this.app.t("settings.reset.dialog.title", "Restaurar Configura\xE7\xF5es");
+      const titleText = await this.app.t(
+        "settings.reset.dialog.title",
+        "Restaurar Configura\xE7\xF5es"
+      );
       const subtitleText = await this.app.t(
         "settings.reset.dialog.subtitle",
         "Esta a\xE7\xE3o ir\xE1 redefinir todas as suas prefer\xEAncias"
@@ -1208,7 +1219,10 @@ class NavigationManager {
       this.app.openModal("resetSettingsDialog");
     } catch (error) {
       this.app.modules.helpers.showNotification(
-        await this.app.t("settings.reset.dialog.error", "Erro ao abrir di\xE1logo de confirma\xE7\xE3o"),
+        await this.app.t(
+          "settings.reset.dialog.error",
+          "Erro ao abrir di\xE1logo de confirma\xE7\xE3o"
+        ),
         "error"
       );
     }
@@ -1227,7 +1241,10 @@ class NavigationManager {
       );
     } catch (error) {
       this.app.modules.helpers.showNotification(
-        await this.app.t("settings.notifications.restoreError", "Erro ao resetar configura\xE7\xF5es"),
+        await this.app.t(
+          "settings.notifications.restoreError",
+          "Erro ao resetar configura\xE7\xF5es"
+        ),
         "error"
       );
     }
@@ -1458,7 +1475,10 @@ class NavigationManager {
               "data-i18n",
               "settings.api.steam.status.disconnected.description"
             );
-            const looksLikeKey = /* @__PURE__ */ __name((s) => typeof s === "string" && s.includes(".") && !s.includes(" "), "looksLikeKey");
+            const looksLikeKey = /* @__PURE__ */ __name2(
+              (s) => typeof s === "string" && s.includes(".") && !s.includes(" "),
+              "looksLikeKey"
+            );
             let descText = connection.error || await this.app.t(
               "settings.api.steam.status.disconnected.description",
               "Configure suas credenciais para conectar"
@@ -1833,7 +1853,10 @@ class NavigationManager {
         statusCard.className = "goldberg-status-card status-error";
         statusIcon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
         statusTitle.setAttribute("data-i18n", "goldberg.status.error");
-        statusTitle.textContent = await this.app.t("goldberg.status.error", "Erro na verifica\xE7\xE3o");
+        statusTitle.textContent = await this.app.t(
+          "goldberg.status.error",
+          "Erro na verifica\xE7\xE3o"
+        );
         statusDescription.setAttribute("data-i18n", "goldberg.status.error.description");
         statusDescription.textContent = await this.app.t(
           "goldberg.status.error.description",
@@ -2190,7 +2213,7 @@ ${devMessage}`);
           style.remove();
         }
       });
-      const handleEsc = /* @__PURE__ */ __name((e) => {
+      const handleEsc = /* @__PURE__ */ __name2((e) => {
         if (e.key === "Escape") {
           overlay.remove();
           style.remove();
@@ -2296,7 +2319,7 @@ ${devMessage}`);
           style.remove();
         }
       });
-      const handleEsc = /* @__PURE__ */ __name((e) => {
+      const handleEsc = /* @__PURE__ */ __name2((e) => {
         if (e.key === "Escape") {
           overlay.remove();
           style.remove();

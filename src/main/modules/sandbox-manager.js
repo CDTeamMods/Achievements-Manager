@@ -1,16 +1,21 @@
 var __defProp = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
-var __commonJS = (cb, mod) => function __require() {
+var __defProp2 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+var __commonJS = /* @__PURE__ */ __name((cb, mod) => /* @__PURE__ */ __name(function __require() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-};
+}, "__require"), "__commonJS");
 var require_sandbox_manager = __commonJS({
   "src/main/modules/sandbox-manager.js"(exports, module) {
     const { app, utilityProcess } = require("electron");
-    const path = require("path");
+    const path = require("node:path");
     class SandboxManager {
       static {
         __name(this, "SandboxManager");
+      }
+      static {
+        __name2(this, "SandboxManager");
       }
       constructor() {
         this.isDev = process.env.NODE_ENV === "development";
@@ -33,7 +38,11 @@ var require_sandbox_manager = __commonJS({
         this.isolationConfig = {
           fileOperations: {
             sandbox: true,
-            allowedPaths: [app.getPath("userData"), app.getPath("documents"), app.getPath("downloads")],
+            allowedPaths: [
+              app.getPath("userData"),
+              app.getPath("documents"),
+              app.getPath("downloads")
+            ],
             maxMemory: 128 * 1024 * 1024,
             // 128MB
             maxCPU: 50
@@ -221,7 +230,7 @@ var require_sandbox_manager = __commonJS({
             id: messageId,
             timestamp: Date.now()
           };
-          const responseListener = /* @__PURE__ */ __name((response) => {
+          const responseListener = /* @__PURE__ */ __name2((response) => {
             if (response.id === messageId) {
               clearTimeout(timeoutId);
               processInfo.process.off("message", responseListener);
@@ -263,7 +272,9 @@ var require_sandbox_manager = __commonJS({
         for (const id of processesToCleanup) {
           this.destroyProcess(id);
         }
-        console.log(`\u{1F9F9} Limpeza conclu\xEDda: ${processesToCleanup.length} processos removidos`);
+        console.log(
+          `\u{1F9F9} Limpeza conclu\xEDda: ${processesToCleanup.length} processos removidos`
+        );
       }
       /**
        * Monitora recursos dos processos
@@ -342,10 +353,14 @@ var require_sandbox_manager = __commonJS({
       return sandboxManager;
     }
     __name(getSandboxManager, "getSandboxManager");
+    __name2(getSandboxManager, "getSandboxManager");
     module.exports = {
       SandboxManager,
       getSandboxManager
     };
   }
 });
-export default require_sandbox_manager();
+var sandbox_manager_default = require_sandbox_manager();
+export {
+  sandbox_manager_default as default
+};

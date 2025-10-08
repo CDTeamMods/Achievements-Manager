@@ -1,8 +1,13 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+var __defProp2 = Object.defineProperty;
+var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
 class SteamGamesManager {
   static {
     __name(this, "SteamGamesManager");
+  }
+  static {
+    __name2(this, "SteamGamesManager");
   }
   constructor(app) {
     this.app = app;
@@ -655,7 +660,7 @@ class SteamGamesManager {
         // Itens extras para buffer
         threshold: 50,
         // Limite para ativar
-        renderItem: /* @__PURE__ */ __name((achievement, index) => {
+        renderItem: /* @__PURE__ */ __name2((achievement, index) => {
           const earnedClass = achievement.earned ? "earned" : "unearned";
           const earnedIcon = achievement.earned ? "fas fa-check-circle" : "far fa-circle";
           const earnedDate = achievement.earned && achievement.earnedTime ? new Date(achievement.earnedTime * 1e3).toLocaleDateString("pt-BR") : "";
@@ -714,7 +719,7 @@ class SteamGamesManager {
         this.closeDialog();
       }
     });
-    const handleEscKey = /* @__PURE__ */ __name((e) => {
+    const handleEscKey = /* @__PURE__ */ __name2((e) => {
       if (e.key === "Escape") {
         this.closeDialog();
       }

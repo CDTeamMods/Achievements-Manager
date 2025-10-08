@@ -1,9 +1,14 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+var __defProp2 = Object.defineProperty;
+var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
 import { EventEmitter } from "./utils.js";
 class VirtualScroller {
   static {
     __name(this, "VirtualScroller");
+  }
+  static {
+    __name2(this, "VirtualScroller");
   }
   constructor(container, options = {}) {
     this.container = typeof container === "string" ? document.querySelector(container) : container;
@@ -11,7 +16,10 @@ class VirtualScroller {
       itemHeight: 50,
       bufferSize: 5,
       threshold: 100,
-      renderItem: /* @__PURE__ */ __name((item, index) => `<div class="virtual-item">${item}</div>`, "renderItem"),
+      renderItem: /* @__PURE__ */ __name2(
+        (item, index) => `<div class="virtual-item">${item}</div>`,
+        "renderItem"
+      ),
       ...options
     };
     this.data = [];
@@ -104,6 +112,9 @@ class VirtualScroller {
 class LazyLoader {
   static {
     __name(this, "LazyLoader");
+  }
+  static {
+    __name2(this, "LazyLoader");
   }
   constructor(options = {}) {
     this.options = {
@@ -198,6 +209,9 @@ class LazyLoader {
 class CacheManager {
   static {
     __name(this, "CacheManager");
+  }
+  static {
+    __name2(this, "CacheManager");
   }
   constructor(options = {}) {
     this.options = {
@@ -378,6 +392,9 @@ class HttpCache extends CacheManager {
   static {
     __name(this, "HttpCache");
   }
+  static {
+    __name2(this, "HttpCache");
+  }
   constructor(options = {}) {
     super(options);
     this.requests = 0;
@@ -435,6 +452,9 @@ class ImageOptimizer {
   static {
     __name(this, "ImageOptimizer");
   }
+  static {
+    __name2(this, "ImageOptimizer");
+  }
   constructor(options = {}) {
     this.options = {
       quality: 0.8,
@@ -484,6 +504,9 @@ class ImageOptimizer {
 class PerformanceMonitor extends EventEmitter {
   static {
     __name(this, "PerformanceMonitor");
+  }
+  static {
+    __name2(this, "PerformanceMonitor");
   }
   constructor() {
     super();
@@ -543,7 +566,7 @@ class PerformanceMonitor extends EventEmitter {
   monitorFPS() {
     let lastTime = performance.now();
     let frames = 0;
-    const measureFPS = /* @__PURE__ */ __name(() => {
+    const measureFPS = /* @__PURE__ */ __name2(() => {
       if (!this.isMonitoring) return;
       frames++;
       const currentTime = performance.now();

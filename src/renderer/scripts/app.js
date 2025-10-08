@@ -1,11 +1,16 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+var __defProp2 = Object.defineProperty;
+var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
 import { initI18n, translatePage } from "./i18n-hot.js";
 import { lazyLoader, MODULE_CONFIG } from "./lazy-loader.js";
 import { codeSplitter, CHUNK_CONFIG } from "./code-splitter.js";
 class AchievementsApp {
   static {
     __name(this, "AchievementsApp");
+  }
+  static {
+    __name2(this, "AchievementsApp");
   }
   constructor() {
     this.isElectron = typeof window !== "undefined" && window.electronAPI;
@@ -181,7 +186,7 @@ class AchievementsApp {
           games: this.modules.state?.get("games") || [],
           achievements: this.modules.state?.get("achievements") || [],
           settings: this.modules.settings?.getAll() || {},
-          timestamp: (/* @__PURE__ */ new Date()).toISOString()
+          timestamp: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString()
         };
         const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
         const url = URL.createObjectURL(blob);
@@ -311,7 +316,10 @@ class AchievementsApp {
     try {
       this.modules.settings.reset();
       this.modules.helpers.showNotification(
-        await this.t("settings.reset.success", "Configura\xE7\xF5es restauradas para os padr\xF5es!"),
+        await this.t(
+          "settings.reset.success",
+          "Configura\xE7\xF5es restauradas para os padr\xF5es!"
+        ),
         "success"
       );
       this.modules.navigation.navigateTo("configuracoes");
@@ -749,7 +757,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   try {
     await new Promise((resolve) => setTimeout(resolve, 100));
     if (typeof StateManager === "undefined" || typeof NavigationManager === "undefined" || typeof SettingsManager === "undefined" || typeof EventsManager === "undefined" || typeof HelpersManager === "undefined" || typeof ComponentManager === "undefined" || typeof PerformanceMonitor === "undefined" || typeof SteamGamesManager === "undefined" || typeof DebugManager === "undefined") {
-      console.warn("Alguns m\xF3dulos n\xE3o foram carregados, tentando carregamento din\xE2mico...");
+      console.warn(
+        "Alguns m\xF3dulos n\xE3o foram carregados, tentando carregamento din\xE2mico..."
+      );
       const modulePromises = [];
       if (typeof StateManager === "undefined") {
         modulePromises.push(import("./modules/state.js"));

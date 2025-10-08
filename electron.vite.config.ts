@@ -1,10 +1,8 @@
-import { resolve } from 'path'
+import { resolve } from 'node:path'
 import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
 import { loadEnv } from 'vite'
 
 export default defineConfig(({ command, mode }) => {
-  // Carrega variáveis de ambiente
-  const env = loadEnv(mode, process.cwd(), '')
   const isProduction = mode === 'production'
 
   return {
@@ -46,7 +44,7 @@ export default defineConfig(({ command, mode }) => {
             preserveModulesRoot: 'src/main'
           }
         },
-        minify: isProduction ? false : false,
+        minify: false,
         sourcemap: !isProduction,
         commonjsOptions: {
           include: [/node_modules/, /src/],

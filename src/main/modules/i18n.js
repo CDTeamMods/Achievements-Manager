@@ -1,17 +1,22 @@
 var __defProp = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
-var __commonJS = (cb, mod) => function __require() {
+var __defProp2 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+var __commonJS = /* @__PURE__ */ __name((cb, mod) => /* @__PURE__ */ __name(function __require() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-};
+}, "__require"), "__commonJS");
 var require_i18n = __commonJS({
   "src/main/modules/i18n.js"(exports, module) {
     const { ipcMain, app } = require("electron");
-    const fs = require("fs").promises;
-    const path = require("path");
+    const fs = require("node:fs").promises;
+    const path = require("node:path");
     class I18nManager {
       static {
         __name(this, "I18nManager");
+      }
+      static {
+        __name2(this, "I18nManager");
       }
       constructor(pathManager = null, debugManager = null) {
         this.pathManager = pathManager;
@@ -36,7 +41,9 @@ var require_i18n = __commonJS({
             savedLanguage = settings.language;
             this.debugManager?.log(`\u{1F4C1} Idioma salvo encontrado: ${savedLanguage}`);
           } catch (error) {
-            this.debugManager?.log("\u{1F4C1} Nenhuma configura\xE7\xE3o de idioma salva encontrada");
+            this.debugManager?.log(
+              "\u{1F4C1} Nenhuma configura\xE7\xE3o de idioma salva encontrada"
+            );
           }
           if (savedLanguage && ["pt-BR", "en"].includes(savedLanguage)) {
             this.currentLanguage = savedLanguage;
@@ -398,7 +405,7 @@ var require_i18n = __commonJS({
         return this.interpolate(translation, params);
       }
       getTranslation(key) {
-        const getNestedValue = /* @__PURE__ */ __name((obj, path2) => {
+        const getNestedValue = /* @__PURE__ */ __name2((obj, path2) => {
           return path2.split(".").reduce((current, prop) => {
             return current && current[prop] !== void 0 ? current[prop] : void 0;
           }, obj);
@@ -519,7 +526,12 @@ var require_i18n = __commonJS({
       return i18nManager;
     }
     __name(setupI18n, "setupI18n");
+    __name2(setupI18n, "setupI18n");
     module.exports = { I18nManager, setupI18n };
+    module.exports.default = module.exports;
   }
 });
-export default require_i18n();
+var i18n_default = require_i18n();
+export {
+  i18n_default as default
+};

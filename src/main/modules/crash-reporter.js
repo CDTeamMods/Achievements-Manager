@@ -1,9 +1,9 @@
 // Sistema de Crash Reports - Achievements Manager
 
 const { app, ipcMain } = require('electron');
-const fs = require('fs').promises;
-const path = require('path');
-const os = require('os');
+const fs = require('node:fs').promises;
+const path = require('node:path');
+const os = require('node:os');
 const { getDebugManager } = require('./debug-manager');
 
 class CrashReporter {

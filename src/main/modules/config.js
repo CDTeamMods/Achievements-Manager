@@ -1,6 +1,6 @@
 const { ipcMain } = require('electron');
-const path = require('path');
-const fs = require('fs').promises;
+const path = require('node:path');
+const fs = require('node:fs').promises;
 const { getDebugManager } = require('./debug-manager');
 const { getPathManager } = require('./path-manager');
 

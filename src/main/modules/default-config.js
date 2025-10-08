@@ -1,17 +1,22 @@
 var __defProp = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
-var __commonJS = (cb, mod) => function __require() {
+var __defProp2 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+var __commonJS = /* @__PURE__ */ __name((cb, mod) => /* @__PURE__ */ __name(function __require() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-};
+}, "__require"), "__commonJS");
 var require_default_config = __commonJS({
   "src/main/modules/default-config.js"(exports, module) {
-    const fs = require("fs").promises;
-    const path = require("path");
+    const fs = require("node:fs").promises;
+    const path = require("node:path");
     const { getDebugManager } = require("./debug-manager");
     class DefaultConfigManager {
       static {
         __name(this, "DefaultConfigManager");
+      }
+      static {
+        __name2(this, "DefaultConfigManager");
       }
       constructor(pathManager = null, crashReporter = null) {
         this.pathManager = pathManager;
@@ -114,14 +119,20 @@ var require_default_config = __commonJS({
           const dataPath = this.pathManager ? this.pathManager.getDataPath() : path.join(__dirname, "..", "..", "data");
           const settingsPath = path.join(dataPath, "settings");
           await this.migrateOldSettings();
-          await this.ensureConfigFile(path.join(settingsPath, "app.json"), this.getDefaultAppConfig());
+          await this.ensureConfigFile(
+            path.join(settingsPath, "app.json"),
+            this.getDefaultAppConfig()
+          );
           await this.ensureConfigFile(
             path.join(settingsPath, "migration-settings.json"),
             this.getDefaultMigrationConfig()
           );
           this.debugManager.log("\u2705 Configura\xE7\xF5es padr\xE3o inicializadas com sucesso");
         } catch (error) {
-          this.debugManager.error("\u274C Erro ao inicializar configura\xE7\xF5es padr\xE3o:", error);
+          this.debugManager.error(
+            "\u274C Erro ao inicializar configura\xE7\xF5es padr\xE3o:",
+            error
+          );
           if (this.crashReporter && typeof this.crashReporter.logError === "function") {
             this.crashReporter.logError("DefaultConfigManager", error, {
               action: "initializeDefaultConfigs"
@@ -200,10 +211,12 @@ var require_default_config = __commonJS({
       return defaultConfigManager;
     }
     __name(setupDefaultConfig, "setupDefaultConfig");
+    __name2(setupDefaultConfig, "setupDefaultConfig");
     function getDefaultConfigManager() {
       return defaultConfigManager;
     }
     __name(getDefaultConfigManager, "getDefaultConfigManager");
+    __name2(getDefaultConfigManager, "getDefaultConfigManager");
     module.exports = {
       DefaultConfigManager,
       setupDefaultConfig,
@@ -211,4 +224,7 @@ var require_default_config = __commonJS({
     };
   }
 });
-export default require_default_config();
+var default_config_default = require_default_config();
+export {
+  default_config_default as default
+};

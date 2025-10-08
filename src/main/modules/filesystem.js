@@ -1,18 +1,24 @@
 var __defProp = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
-var __commonJS = (cb, mod) => function __require() {
+var __defProp2 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+var __commonJS = /* @__PURE__ */ __name((cb, mod) => /* @__PURE__ */ __name(function __require() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-};
+}, "__require"), "__commonJS");
 var require_filesystem = __commonJS({
   "src/main/modules/filesystem.js"(exports, module) {
     const { ipcMain, dialog } = require("electron");
-    const fs = require("fs").promises;
-    const path = require("path");
+    const fs = require("node:fs").promises;
+    const fsSync = require("node:fs");
+    const path = require("node:path");
     const { getDebugManager } = require("./debug-manager");
     class FilesystemManager {
       static {
         __name(this, "FilesystemManager");
+      }
+      static {
+        __name2(this, "FilesystemManager");
       }
       constructor(pathManager, crashReporter = null, configManager = null) {
         this.pathManager = pathManager;
@@ -46,7 +52,7 @@ var require_filesystem = __commonJS({
               operation,
               isPortable: this.pathManager?.isInstalledVersion() === false,
               dataPath: this.dataPath,
-              timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+              timestamp: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString(),
               ...context
             };
             await this.crashReporter.reportCrash("filesystem", error, errorContext);
@@ -68,7 +74,9 @@ var require_filesystem = __commonJS({
         for (const dir of essentialDirectories) {
           try {
             await fs.mkdir(dir, { recursive: true });
-            this.debug.log(`\u{1F4C1} Pasta criada: ${path.relative(this.dataPath, dir) || "data"}`);
+            this.debug.log(
+              `\u{1F4C1} Pasta criada: ${path.relative(this.dataPath, dir) || "data"}`
+            );
           } catch (error) {
             this.debug.error(`\u274C Erro ao criar pasta ${dir}:`, error);
             await this.reportFilesystemError("createDirectories", error, { directory: dir });
@@ -326,7 +334,7 @@ var require_filesystem = __commonJS({
           const gameData = {
             ...data,
             id: gameId,
-            lastModified: (/* @__PURE__ */ new Date()).toISOString(),
+            lastModified: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString(),
             version: "0.0.1-beta"
           };
           await this.writeFile(filePath, JSON.stringify(gameData, null, 2));
@@ -355,7 +363,7 @@ var require_filesystem = __commonJS({
           const achievementData = {
             gameId,
             achievements,
-            lastModified: (/* @__PURE__ */ new Date()).toISOString(),
+            lastModified: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString(),
             version: "0.0.1-beta"
           };
           await this.writeFile(filePath, JSON.stringify(achievementData, null, 2));
@@ -389,7 +397,7 @@ var require_filesystem = __commonJS({
           const filePath = path.join("settings", "app.json");
           const settingsData = {
             ...settings,
-            lastModified: (/* @__PURE__ */ new Date()).toISOString(),
+            lastModified: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString(),
             version: "0.0.1-beta"
           };
           await this.writeFile(filePath, JSON.stringify(settingsData, null, 2));
@@ -409,7 +417,9 @@ var require_filesystem = __commonJS({
           this.debug.info(`\u{1F6E1}\uFE0F SafePath: ${safePath}`);
           this.debug.info(`\u{1F4CB} File exists check: ${await this.exists(filePath)}`);
           if (!await this.exists(filePath)) {
-            this.debug.warn("\u26A0\uFE0F app.json n\xE3o encontrado, retornando configura\xE7\xF5es padr\xE3o");
+            this.debug.warn(
+              "\u26A0\uFE0F app.json n\xE3o encontrado, retornando configura\xE7\xF5es padr\xE3o"
+            );
             return {
               language: "pt-BR",
               theme: "auto",
@@ -436,7 +446,7 @@ var require_filesystem = __commonJS({
       // Backup operations
       async createBackup(name) {
         try {
-          const timestamp = (/* @__PURE__ */ new Date()).toISOString().replace(/[:.]/g, "-");
+          const timestamp = /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString().replace(/[:.]/g, "-");
           const backupId = `${timestamp}_${name || "manual"}`;
           const backupDir = path.join(this.backupsPath, backupId);
           await fs.mkdir(backupDir, { recursive: true });
@@ -449,11 +459,14 @@ var require_filesystem = __commonJS({
           const metadata = {
             id: backupId,
             name: name || "Manual Backup",
-            created: (/* @__PURE__ */ new Date()).toISOString(),
+            created: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString(),
             version: "0.0.1-beta",
             size: await this.getDirectorySize(backupDir)
           };
-          await fs.writeFile(path.join(backupDir, "backup.json"), JSON.stringify(metadata, null, 2));
+          await fs.writeFile(
+            path.join(backupDir, "backup.json"),
+            JSON.stringify(metadata, null, 2)
+          );
           return metadata;
         } catch (error) {
           this.debug.error("Error creating backup:", error);
@@ -521,14 +534,14 @@ var require_filesystem = __commonJS({
       // Import/Export
       async exportData(options = {}) {
         try {
-          const timestamp = (/* @__PURE__ */ new Date()).toISOString().replace(/[:.]/g, "-");
+          const timestamp = /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString().replace(/[:.]/g, "-");
           const exportName = options.name || `achievements_export_${timestamp}`;
           const exportPath = path.join(this.dataPath, "exports", `${exportName}.json`);
           await this.ensureDirectoryExists(path.dirname(exportPath));
           const exportData = {
             metadata: {
               name: exportName,
-              created: (/* @__PURE__ */ new Date()).toISOString(),
+              created: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString(),
               version: "0.0.1-beta",
               type: options.type || "full"
             },
@@ -776,7 +789,7 @@ var require_filesystem = __commonJS({
       setupFileWatchers() {
         const watchOptions = { recursive: true };
         try {
-          fs.watch(this.dataPath, watchOptions, (eventType, filename) => {
+          fsSync.watch(this.dataPath, watchOptions, (eventType, filename) => {
             if (filename && !filename.includes("temp") && !filename.includes("cache")) {
               if (global.mainWindow && !global.mainWindow.isDestroyed()) {
                 try {
@@ -784,18 +797,24 @@ var require_filesystem = __commonJS({
                     JSON.stringify({
                       type: String(eventType || "unknown"),
                       filename: String(filename || ""),
-                      timestamp: (/* @__PURE__ */ new Date()).toISOString()
+                      timestamp: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString()
                     })
                   );
                   try {
                     structuredClone(fileChangeData);
                     global.mainWindow.webContents.send("file-changed", fileChangeData);
                   } catch (cloneError) {
-                    console.error("\u{1F4C1} [FILESYSTEM] \u274C ERRO DE CLONAGEM em file-changed:", cloneError);
+                    console.error(
+                      "\u{1F4C1} [FILESYSTEM] \u274C ERRO DE CLONAGEM em file-changed:",
+                      cloneError
+                    );
                     console.error("\u{1F4C1} [FILESYSTEM] Dados problem\xE1ticos:", fileChangeData);
                   }
                 } catch (sendError) {
-                  console.error("\u{1F4C1} [FILESYSTEM] \u274C Erro ao enviar evento file-changed:", sendError);
+                  console.error(
+                    "\u{1F4C1} [FILESYSTEM] \u274C Erro ao enviar evento file-changed:",
+                    sendError
+                  );
                 }
               }
             }
@@ -813,7 +832,11 @@ var require_filesystem = __commonJS({
       return filesystemManager;
     }
     __name(setupFileSystem, "setupFileSystem");
+    __name2(setupFileSystem, "setupFileSystem");
     module.exports = { FilesystemManager, setupFileSystem };
   }
 });
-export default require_filesystem();
+var filesystem_default = require_filesystem();
+export {
+  filesystem_default as default
+};

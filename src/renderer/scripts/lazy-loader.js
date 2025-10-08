@@ -1,8 +1,13 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+var __defProp2 = Object.defineProperty;
+var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
 class LazyLoader {
   static {
     __name(this, "LazyLoader");
+  }
+  static {
+    __name2(this, "LazyLoader");
   }
   constructor() {
     this.loadedModules = /* @__PURE__ */ new Map();
@@ -39,14 +44,35 @@ class LazyLoader {
    */
   static getModuleImporter(modulePath) {
     const moduleMap = {
-      "./modules/state.js": /* @__PURE__ */ __name(() => import("./modules/state.js"), "./modules/state.js"),
-      "./modules/navigation.js": /* @__PURE__ */ __name(() => import("./modules/navigation.js"), "./modules/navigation.js"),
-      "./components.js": /* @__PURE__ */ __name(() => import("./components.js"), "./components.js"),
-      "./modules/settings.js": /* @__PURE__ */ __name(() => import("./modules/settings.js"), "./modules/settings.js"),
-      "./modules/events.js": /* @__PURE__ */ __name(() => import("./modules/events.js"), "./modules/events.js"),
-      "./modules/helpers.js": /* @__PURE__ */ __name(() => import("./modules/helpers.js"), "./modules/helpers.js"),
-      "./performance.js": /* @__PURE__ */ __name(() => import("./performance.js"), "./performance.js"),
-      "./modules/steam-games.js": /* @__PURE__ */ __name(() => import("./modules/steam-games.js"), "./modules/steam-games.js")
+      "./modules/state.js": /* @__PURE__ */ __name2(
+        () => import("./modules/state.js"),
+        "./modules/state.js"
+      ),
+      "./modules/navigation.js": /* @__PURE__ */ __name2(
+        () => import("./modules/navigation.js"),
+        "./modules/navigation.js"
+      ),
+      "./components.js": /* @__PURE__ */ __name2(() => import("./components.js"), "./components.js"),
+      "./modules/settings.js": /* @__PURE__ */ __name2(
+        () => import("./modules/settings.js"),
+        "./modules/settings.js"
+      ),
+      "./modules/events.js": /* @__PURE__ */ __name2(
+        () => import("./modules/events.js"),
+        "./modules/events.js"
+      ),
+      "./modules/helpers.js": /* @__PURE__ */ __name2(
+        () => import("./modules/helpers.js"),
+        "./modules/helpers.js"
+      ),
+      "./performance.js": /* @__PURE__ */ __name2(
+        () => import("./performance.js"),
+        "./performance.js"
+      ),
+      "./modules/steam-games.js": /* @__PURE__ */ __name2(
+        () => import("./modules/steam-games.js"),
+        "./modules/steam-games.js"
+      )
     };
     return moduleMap[modulePath] || (() => import(
       /* @vite-ignore */

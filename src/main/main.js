@@ -1,9 +1,11 @@
 var __defProp = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
-var __commonJS = (cb, mod) => function __require() {
+var __defProp2 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+var __commonJS = /* @__PURE__ */ __name((cb, mod) => /* @__PURE__ */ __name(function __require() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-};
+}, "__require"), "__commonJS");
 var require_main = __commonJS({
   "src/main/main.js"(exports, module) {
     const { setupUTF8Encoding, setupConsoleUTF8 } = require("./utils/encoding");
@@ -15,7 +17,16 @@ var require_main = __commonJS({
       }
       debugManager.warn("\u26A0\uFE0F Warning:", warning.message);
     });
-    const { app, BrowserWindow, ipcMain, shell, dialog, nativeTheme, Tray, Menu } = require("electron");
+    const {
+      app,
+      BrowserWindow,
+      ipcMain,
+      shell,
+      dialog,
+      nativeTheme,
+      Tray,
+      Menu
+    } = require("electron");
     app.commandLine.appendSwitch(
       "--disable-features",
       "AutofillServerCommunication,AutofillCrowdsourcing,AutofillAssistant,TranslateUI,MediaRouter,OutOfBlinkCors"
@@ -35,27 +46,41 @@ var require_main = __commonJS({
       app.commandLine.appendSwitch("--disable-logging");
       app.commandLine.appendSwitch("--disable-dev-shm-usage");
     }
-    const path = require("path");
-    const Store = require("electron-store");
-    const fs = require("fs").promises;
-    const os = require("os");
-    const { getDebugManager } = require("./modules/debug-manager");
+    const path = require("node:path");
+    const os = require("node:os");
+    const debugModule = require("./modules/debug-manager");
+    const getDebugManager = debugModule.getDebugManager || debugModule.default && debugModule.default.getDebugManager;
     const debugManager = getDebugManager();
-    const { setupI18n } = require("./modules/i18n");
-    const { setupFileSystem } = require("./modules/filesystem");
-    const { setupWindowManager } = require("./modules/window-manager");
-    const { setupPerformance } = require("./modules/performance");
-    const { setupCrashReporter } = require("./modules/crash-reporter");
-    const { getSecurityManager } = require("./modules/security-manager");
-    const { getSandboxManager } = require("./modules/sandbox-manager");
-    const { GSESavesManager } = require("./modules/gse-saves");
-    const ConfigManager = require("./modules/config");
-    const { GoldbergMigrationManager } = require("./modules/goldberg-migration");
-    const { SteamIntegrationManager } = require("./modules/steam-integration");
-    const SteamLocalGamesManager = require("./modules/steam-local-games");
-    const { setupPathManager } = require("./modules/path-manager");
-    const { setupGames } = require("./modules/games");
-    const { setupAchievements } = require("./modules/achievements");
+    const i18nModule = require("./modules/i18n");
+    const setupI18n = i18nModule.setupI18n || i18nModule.default && i18nModule.default.setupI18n;
+    const filesystemModule = require("./modules/filesystem");
+    const setupFileSystem = filesystemModule.setupFileSystem || filesystemModule.default && filesystemModule.default.setupFileSystem;
+    const windowManagerModule = require("./modules/window-manager");
+    const setupWindowManager = windowManagerModule.setupWindowManager || windowManagerModule.default && windowManagerModule.default.setupWindowManager;
+    const performanceModule = require("./modules/performance");
+    const setupPerformance = performanceModule.setupPerformance || performanceModule.default && performanceModule.default.setupPerformance;
+    const crashModule = require("./modules/crash-reporter");
+    const setupCrashReporter = crashModule.setupCrashReporter || crashModule.default && crashModule.default.setupCrashReporter;
+    const securityModule = require("./modules/security-manager");
+    const sandboxModule = require("./modules/sandbox-manager");
+    const getSecurityManager = securityModule.getSecurityManager || securityModule.default && securityModule.default.getSecurityManager;
+    const getSandboxManager = sandboxModule.getSandboxManager || sandboxModule.default && sandboxModule.default.getSandboxManager;
+    const gseModule = require("./modules/gse-saves");
+    const GSESavesManager = gseModule.GSESavesManager || gseModule.default && gseModule.default.GSESavesManager || gseModule;
+    const configModule = require("./modules/config");
+    const ConfigManager = configModule.ConfigManager || configModule.default || configModule;
+    const goldbergModule = require("./modules/goldberg-migration");
+    const GoldbergMigrationManager = goldbergModule.GoldbergMigrationManager || goldbergModule.default && goldbergModule.default.GoldbergMigrationManager || goldbergModule;
+    const steamIntegrationModule = require("./modules/steam-integration");
+    const SteamIntegrationManager = steamIntegrationModule.SteamIntegrationManager || steamIntegrationModule.default && steamIntegrationModule.default.SteamIntegrationManager || steamIntegrationModule;
+    const steamLocalModule = require("./modules/steam-local-games");
+    const SteamLocalGamesManager = steamLocalModule.SteamLocalGamesManager || steamLocalModule.default || steamLocalModule;
+    const pathModule = require("./modules/path-manager");
+    const setupPathManager = pathModule.setupPathManager || pathModule.default && pathModule.default.setupPathManager;
+    const gamesModule = require("./modules/games");
+    const setupGames = gamesModule.setupGames || gamesModule.default && gamesModule.default.setupGames;
+    const achievementsModule = require("./modules/achievements");
+    const setupAchievements = achievementsModule.setupAchievements || achievementsModule.default && achievementsModule.default.setupAchievements;
     process.on("uncaughtException", (error) => {
       debugManager.error("Erro cr\xEDtico n\xE3o tratado:", error);
       process.exit(1);
@@ -67,7 +92,7 @@ var require_main = __commonJS({
             "PROMISE REJECTION - ERRO DE CLONAGEM:",
             reason,
             promise,
-            (/* @__PURE__ */ new Date()).toISOString()
+            /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString()
           );
         }
       }
@@ -80,7 +105,7 @@ var require_main = __commonJS({
             warning.name,
             warning.message,
             warning.stack,
-            (/* @__PURE__ */ new Date()).toISOString()
+            /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString()
           );
         }
       }
@@ -102,6 +127,7 @@ var require_main = __commonJS({
       }
     }
     __name(isInstalledVersion, "isInstalledVersion");
+    __name2(isInstalledVersion, "isInstalledVersion");
     let store = null;
     let mainWindow;
     let splashWindow;
@@ -147,6 +173,7 @@ var require_main = __commonJS({
       });
     }
     __name(createSplashWindow, "createSplashWindow");
+    __name2(createSplashWindow, "createSplashWindow");
     function createMainWindow() {
       const bounds = windowBoundsCache;
       const preloadPath = path.join(__dirname, "../preload/preload.js");
@@ -157,8 +184,12 @@ var require_main = __commonJS({
         path.join(process.resourcesPath, "app.asar", "dist", "preload", "preload.js"),
         path.join(process.resourcesPath, "app.asar", "preload", "preload.js")
       ];
-      const securityManager = getSecurityManager();
-      const sandboxManager = getSandboxManager();
+      const securityManager = typeof getSecurityManager === "function" ? getSecurityManager() : (() => {
+        throw new Error("getSecurityManager is not available");
+      })();
+      const sandboxManager = typeof getSandboxManager === "function" ? getSandboxManager() : (() => {
+        throw new Error("getSandboxManager is not available");
+      })();
       mainWindow = new BrowserWindow({
         ...bounds,
         webPreferences: {
@@ -218,9 +249,19 @@ var require_main = __commonJS({
           mainWindow.webContents.openDevTools({ mode: "detach" });
         }
       });
-      mainWindow.webContents.on("did-fail-load", (event, errorCode, errorDescription, validatedURL) => {
-        console.error("Falha ao carregar:", errorCode, "-", errorDescription, "- URL:", validatedURL);
-      });
+      mainWindow.webContents.on(
+        "did-fail-load",
+        (event, errorCode, errorDescription, validatedURL) => {
+          console.error(
+            "Falha ao carregar:",
+            errorCode,
+            "-",
+            errorDescription,
+            "- URL:",
+            validatedURL
+          );
+        }
+      );
       mainWindow.webContents.on("did-finish-load", () => {
       });
       mainWindow.webContents.on("dom-ready", () => {
@@ -285,8 +326,9 @@ var require_main = __commonJS({
       });
     }
     __name(createMainWindow, "createMainWindow");
+    __name2(createMainWindow, "createMainWindow");
     function setupWindowEvents() {
-      const saveBoundsIfNormal = /* @__PURE__ */ __name(() => {
+      const saveBoundsIfNormal = /* @__PURE__ */ __name2(() => {
         if (!mainWindow || mainWindow.isDestroyed()) return;
         const isNormalState = !mainWindow.isMaximized() && !mainWindow.isMinimized() && !mainWindow.isFullScreen();
         if (isNormalState) {
@@ -328,6 +370,7 @@ var require_main = __commonJS({
       });
     }
     __name(setupWindowEvents, "setupWindowEvents");
+    __name2(setupWindowEvents, "setupWindowEvents");
     function setupSystemTheme() {
       const theme = store.get("theme", "auto");
       if (theme === "auto") {
@@ -400,6 +443,7 @@ var require_main = __commonJS({
       });
     }
     __name(setupSystemTheme, "setupSystemTheme");
+    __name2(setupSystemTheme, "setupSystemTheme");
     function setupAutoStart() {
       ipcMain.handle("set-auto-start", (event, enabled) => {
         try {
@@ -434,6 +478,7 @@ var require_main = __commonJS({
       });
     }
     __name(setupAutoStart, "setupAutoStart");
+    __name2(setupAutoStart, "setupAutoStart");
     function createTray() {
       try {
         const iconPath = path.join(__dirname, "../../assets/icons/icon.ico");
@@ -441,7 +486,7 @@ var require_main = __commonJS({
         const contextMenu = Menu.buildFromTemplate([
           {
             label: "Mostrar Achievements Manager",
-            click: /* @__PURE__ */ __name(() => {
+            click: /* @__PURE__ */ __name2(() => {
               if (mainWindow) {
                 mainWindow.show();
                 mainWindow.focus();
@@ -450,7 +495,7 @@ var require_main = __commonJS({
           },
           {
             label: "Sair",
-            click: /* @__PURE__ */ __name(() => {
+            click: /* @__PURE__ */ __name2(() => {
               app.isQuiting = true;
               app.quit();
             }, "click")
@@ -471,6 +516,7 @@ var require_main = __commonJS({
       }
     }
     __name(createTray, "createTray");
+    __name2(createTray, "createTray");
     function setupMinimizeToTray() {
       ipcMain.handle("set-minimize-to-tray", (event, enabled) => {
         try {
@@ -504,6 +550,7 @@ var require_main = __commonJS({
       });
     }
     __name(setupMinimizeToTray, "setupMinimizeToTray");
+    __name2(setupMinimizeToTray, "setupMinimizeToTray");
     function protectCriticalSettings(store2, pathManager) {
       try {
         if (!pathManager || pathManager.isInstalledVersion()) {
@@ -527,23 +574,30 @@ var require_main = __commonJS({
         const steamPath = store2.get("steamPath");
         const userDataPath = store2.get("userDataPath");
         if (steamPath !== void 0) {
-          console.warn(`\u{1F6E1}\uFE0F Prote\xE7\xE3o ativada: Removendo steamPath customizado em modo portable`);
+          console.warn(
+            `\u{1F6E1}\uFE0F Prote\xE7\xE3o ativada: Removendo steamPath customizado em modo portable`
+          );
           store2.delete("steamPath");
           needsCorrection = true;
         }
         if (userDataPath !== void 0) {
-          console.warn(`\u{1F6E1}\uFE0F Prote\xE7\xE3o ativada: Removendo userDataPath customizado em modo portable`);
+          console.warn(
+            `\u{1F6E1}\uFE0F Prote\xE7\xE3o ativada: Removendo userDataPath customizado em modo portable`
+          );
           store2.delete("userDataPath");
           needsCorrection = true;
         }
         if (needsCorrection) {
-          console.log("\u{1F6E1}\uFE0F Configura\xE7\xF5es cr\xEDticas protegidas e corrigidas automaticamente");
+          console.log(
+            "\u{1F6E1}\uFE0F Configura\xE7\xF5es cr\xEDticas protegidas e corrigidas automaticamente"
+          );
         }
       } catch (error) {
         console.error("\u274C Erro ao proteger configura\xE7\xF5es cr\xEDticas:", error);
       }
     }
     __name(protectCriticalSettings, "protectCriticalSettings");
+    __name2(protectCriticalSettings, "protectCriticalSettings");
     async function initializeApp() {
       try {
         const securityManager = getSecurityManager();
@@ -612,7 +666,11 @@ var require_main = __commonJS({
           pathManager
         );
         await goldbergMigrationManager.initialize();
-        const steamIntegration = new SteamIntegrationManager(pathManager, configManager, debugManager);
+        const steamIntegration = new SteamIntegrationManager(
+          pathManager,
+          configManager,
+          debugManager
+        );
         global.steamIntegrationManager = steamIntegration;
         const steamLocalGames = new SteamLocalGamesManager(debugManager, global.crashReporter);
         global.steamLocalGamesManager = steamLocalGames;
@@ -640,6 +698,7 @@ var require_main = __commonJS({
       }
     }
     __name(initializeApp, "initializeApp");
+    __name2(initializeApp, "initializeApp");
     app.whenReady().then(async () => {
       try {
         await initializeApp();
@@ -843,4 +902,7 @@ var require_main = __commonJS({
     module.exports = { mainWindow, store };
   }
 });
-export default require_main();
+var main_default = require_main();
+export {
+  main_default as default
+};

@@ -1,18 +1,23 @@
 var __defProp = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
-var __commonJS = (cb, mod) => function __require() {
+var __defProp2 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+var __commonJS = /* @__PURE__ */ __name((cb, mod) => /* @__PURE__ */ __name(function __require() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-};
+}, "__require"), "__commonJS");
 var require_steam_integration = __commonJS({
   "src/main/modules/steam-integration.js"(exports, module) {
     const { ipcMain } = require("electron");
     const axios = require("axios");
-    const path = require("path");
-    const fs = require("fs").promises;
+    const path = require("node:path");
+    const fs = require("node:fs").promises;
     class SteamIntegrationManager {
       static {
         __name(this, "SteamIntegrationManager");
+      }
+      static {
+        __name2(this, "SteamIntegrationManager");
       }
       constructor(pathManager = null, configManager = null, debugManager = null) {
         this.pathManager = pathManager;
@@ -205,7 +210,10 @@ var require_steam_integration = __commonJS({
           }
         } catch (error) {
           if (error.code !== "ENOENT" && this.debugManager) {
-            this.debugManager.error("steam", `Erro ao limpar cache de conex\xE3o: ${error.message}`);
+            this.debugManager.error(
+              "steam",
+              `Erro ao limpar cache de conex\xE3o: ${error.message}`
+            );
           }
         }
       }
@@ -219,7 +227,7 @@ var require_steam_integration = __commonJS({
             apiKey: apiKey || "",
             steamId: steamId || "",
             connected: true,
-            lastUpdated: (/* @__PURE__ */ new Date()).toISOString(),
+            lastUpdated: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString(),
             sessionId: Date.now().toString()
           };
           const dir = path.dirname(credentialsPath);
@@ -231,7 +239,10 @@ var require_steam_integration = __commonJS({
           return true;
         } catch (error) {
           if (this.debugManager) {
-            this.debugManager.error("steam", `\u274C Erro ao salvar credenciais Steam: ${error.message}`);
+            this.debugManager.error(
+              "steam",
+              `\u274C Erro ao salvar credenciais Steam: ${error.message}`
+            );
           }
           return false;
         }
@@ -264,7 +275,10 @@ var require_steam_integration = __commonJS({
             };
           }
           if (this.debugManager) {
-            this.debugManager.error("steam", `\u274C Erro ao carregar credenciais Steam: ${error.message}`);
+            this.debugManager.error(
+              "steam",
+              `\u274C Erro ao carregar credenciais Steam: ${error.message}`
+            );
           }
           return {
             success: false,
@@ -289,7 +303,10 @@ var require_steam_integration = __commonJS({
         } catch (error) {
           if (error.code !== "ENOENT") {
             if (this.debugManager) {
-              this.debugManager.error("steam", `\u274C Erro ao limpar credenciais Steam: ${error.message}`);
+              this.debugManager.error(
+                "steam",
+                `\u274C Erro ao limpar credenciais Steam: ${error.message}`
+              );
             }
             return false;
           }
@@ -330,7 +347,10 @@ var require_steam_integration = __commonJS({
         });
         ipcMain.handle("steam.clearCache", async (event, type = null) => {
           this.clearCache(type);
-          return { success: true, message: type ? `Cache ${type} limpo` : "Todo o cache foi limpo" };
+          return {
+            success: true,
+            message: type ? `Cache ${type} limpo` : "Todo o cache foi limpo"
+          };
         });
         ipcMain.handle("steam.getCacheStats", async () => {
           return this.getCacheStats();
@@ -690,7 +710,9 @@ var require_steam_integration = __commonJS({
                       installedGames.installedGames.map((appId) => String(appId))
                     );
                     const apiGameIds = new Set(mappedGames.map((game) => game.id));
-                    const matchingGames = Array.from(installedAppIds).filter((id) => apiGameIds.has(id));
+                    const matchingGames = Array.from(installedAppIds).filter(
+                      (id) => apiGameIds.has(id)
+                    );
                     finalGames = mappedGames.filter((game) => installedAppIds.has(game.id));
                   } else {
                   }
@@ -706,7 +728,7 @@ var require_steam_integration = __commonJS({
               reportedTotal: gameCount,
               installedOnly: options && options.installedOnly,
               metadata: {
-                fetchedAt: (/* @__PURE__ */ new Date()).toISOString(),
+                fetchedAt: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString(),
                 steamId: this.steamId,
                 hasPrivateProfile: gameCount === 0 && games.length === 0
               }
@@ -723,7 +745,7 @@ var require_steam_integration = __commonJS({
               totalGames: 0,
               reportedTotal: gameCount,
               metadata: {
-                fetchedAt: (/* @__PURE__ */ new Date()).toISOString(),
+                fetchedAt: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString(),
                 steamId: this.steamId,
                 hasPrivateProfile: isPrivateProfile
               },
@@ -836,7 +858,7 @@ var require_steam_integration = __commonJS({
               totalGames: 0,
               installedOnly: true,
               metadata: {
-                fetchedAt: (/* @__PURE__ */ new Date()).toISOString(),
+                fetchedAt: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString(),
                 steamId: this.steamId,
                 optimizedSearch: true
               }
@@ -903,7 +925,7 @@ var require_steam_integration = __commonJS({
             totalGames: sortedGames.length,
             installedOnly: true,
             metadata: {
-              fetchedAt: (/* @__PURE__ */ new Date()).toISOString(),
+              fetchedAt: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString(),
               steamId: this.steamId,
               optimizedSearch: true,
               totalInstalledFound: installedAppIds.length,
@@ -952,7 +974,7 @@ var require_steam_integration = __commonJS({
                 totalGames: 0,
                 installedOnly: true,
                 metadata: {
-                  fetchedAt: (/* @__PURE__ */ new Date()).toISOString(),
+                  fetchedAt: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString(),
                   steamId: this.steamId,
                   directSearch: true
                 }
@@ -1057,7 +1079,7 @@ var require_steam_integration = __commonJS({
             totalGames: sortedGames.length,
             installedOnly: true,
             metadata: {
-              fetchedAt: (/* @__PURE__ */ new Date()).toISOString(),
+              fetchedAt: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString(),
               steamId: this.steamId,
               directSearch: true,
               libraryDownloadAvoided: true,
@@ -1087,28 +1109,34 @@ var require_steam_integration = __commonJS({
             const batch = installedAppIds.slice(i, i + batchSize);
             const batchPromises = batch.map(async (appId) => {
               try {
-                const response = await this.http.get(`https://store.steampowered.com/api/appdetails`, {
-                  params: {
-                    appids: appId,
-                    l: "portuguese",
-                    cc: "BR"
-                  },
-                  timeout: 1e4
-                });
+                const response = await this.http.get(
+                  `https://store.steampowered.com/api/appdetails`,
+                  {
+                    params: {
+                      appids: appId,
+                      l: "portuguese",
+                      cc: "BR"
+                    },
+                    timeout: 1e4
+                  }
+                );
                 if (response.data && response.data[appId] && response.data[appId].success) {
                   const gameData = response.data[appId].data;
                   let playtimeData = null;
                   try {
-                    const playtimeResponse = await this.http.get("/IPlayerService/GetOwnedGames/v1/", {
-                      params: {
-                        key: this.apiKey,
-                        steamid: this.steamId,
-                        appids_filter: [appId],
-                        include_appinfo: true,
-                        format: "json"
-                      },
-                      timeout: 5e3
-                    });
+                    const playtimeResponse = await this.http.get(
+                      "/IPlayerService/GetOwnedGames/v1/",
+                      {
+                        params: {
+                          key: this.apiKey,
+                          steamid: this.steamId,
+                          appids_filter: [appId],
+                          include_appinfo: true,
+                          format: "json"
+                        },
+                        timeout: 5e3
+                      }
+                    );
                     if (playtimeResponse.data?.response?.games?.length > 0) {
                       playtimeData = playtimeResponse.data.response.games[0];
                     }
@@ -1156,7 +1184,7 @@ var require_steam_integration = __commonJS({
             totalGames: sortedGames.length,
             installedOnly: true,
             metadata: {
-              fetchedAt: (/* @__PURE__ */ new Date()).toISOString(),
+              fetchedAt: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString(),
               steamId: this.steamId,
               optimizedSearch: true,
               individualSearch: true,
@@ -1511,7 +1539,11 @@ var require_steam_integration = __commonJS({
           const gseSavesPath = path.join(this.pathManager.getDataPath(), "GSE Saves", gameId);
           const achievementsFilePath = path.join(gseSavesPath, "achievements.json");
           await fs.mkdir(gseSavesPath, { recursive: true });
-          await fs.writeFile(achievementsFilePath, JSON.stringify(gseAchievements, null, 2), "utf8");
+          await fs.writeFile(
+            achievementsFilePath,
+            JSON.stringify(gseAchievements, null, 2),
+            "utf8"
+          );
           return {
             success: true,
             message: "Conquistas convertidas com sucesso!",
@@ -1555,8 +1587,8 @@ var require_steam_integration = __commonJS({
        */
       async discoverSteamIdFromLocalFiles() {
         try {
-          const os = require("os");
-          const path2 = require("path");
+          const os = require("node:os");
+          const path2 = require("node:path");
           const steamPaths = [
             path2.join("C:", "Program Files (x86)", "Steam"),
             path2.join("C:", "Program Files", "Steam"),
@@ -1611,8 +1643,8 @@ var require_steam_integration = __commonJS({
        * Obter pastas padrão do Steam
        */
       getSteamDefaultPaths() {
-        const os = require("os");
-        const path2 = require("path");
+        const os = require("node:os");
+        const path2 = require("node:path");
         return [
           {
             path: path2.join("C:", "Program Files (x86)", "Steam"),
@@ -1716,4 +1748,7 @@ var require_steam_integration = __commonJS({
     };
   }
 });
-export default require_steam_integration();
+var steam_integration_default = require_steam_integration();
+export {
+  steam_integration_default as default
+};

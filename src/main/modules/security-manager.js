@@ -1,15 +1,20 @@
 var __defProp = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
-var __commonJS = (cb, mod) => function __require() {
+var __defProp2 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+var __commonJS = /* @__PURE__ */ __name((cb, mod) => /* @__PURE__ */ __name(function __require() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-};
+}, "__require"), "__commonJS");
 var require_security_manager = __commonJS({
   "src/main/modules/security-manager.js"(exports, module) {
     const { app } = require("electron");
     class SecurityManager {
       static {
         __name(this, "SecurityManager");
+      }
+      static {
+        __name2(this, "SecurityManager");
       }
       constructor() {
         this.isDev = process.env.NODE_ENV === "development";
@@ -262,7 +267,7 @@ var require_security_manager = __commonJS({
       async validateFileIntegrity(filePath) {
         try {
           const crypto = require("crypto");
-          const fs = require("fs").promises;
+          const fs = require("node:fs").promises;
           const fileBuffer = await fs.readFile(filePath);
           const hash = crypto.createHash("sha256").update(fileBuffer).digest("hex");
           return { valid: true, hash };
@@ -300,10 +305,15 @@ var require_security_manager = __commonJS({
       return securityManager;
     }
     __name(getSecurityManager, "getSecurityManager");
+    __name2(getSecurityManager, "getSecurityManager");
     module.exports = {
       SecurityManager,
       getSecurityManager
     };
+    module.exports.default = module.exports;
   }
 });
-export default require_security_manager();
+var security_manager_default = require_security_manager();
+export {
+  security_manager_default as default
+};

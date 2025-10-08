@@ -1,8 +1,13 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+var __defProp2 = Object.defineProperty;
+var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
 class CrashHandler {
   static {
     __name(this, "CrashHandler");
+  }
+  static {
+    __name2(this, "CrashHandler");
   }
   constructor() {
     this.isReporting = false;
@@ -10,17 +15,17 @@ class CrashHandler {
       this.debug = getDebugManager();
     } else {
       this.debug = {
-        ipc: /* @__PURE__ */ __name(() => {
+        ipc: /* @__PURE__ */ __name2(() => {
         }, "ipc"),
-        crash: /* @__PURE__ */ __name(() => {
+        crash: /* @__PURE__ */ __name2(() => {
         }, "crash"),
-        error: /* @__PURE__ */ __name(() => {
+        error: /* @__PURE__ */ __name2(() => {
         }, "error"),
-        info: /* @__PURE__ */ __name(() => {
+        info: /* @__PURE__ */ __name2(() => {
         }, "info"),
-        warn: /* @__PURE__ */ __name(() => {
+        warn: /* @__PURE__ */ __name2(() => {
         }, "warn"),
-        sanitize: /* @__PURE__ */ __name(() => {
+        sanitize: /* @__PURE__ */ __name2(() => {
         }, "sanitize")
       };
     }
@@ -36,7 +41,7 @@ class CrashHandler {
         lineno: event.lineno,
         colno: event.colno,
         stack: event.error?.stack,
-        timestamp: (/* @__PURE__ */ new Date()).toISOString()
+        timestamp: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString()
       });
     });
     window.addEventListener("unhandledrejection", (event) => {
@@ -44,7 +49,7 @@ class CrashHandler {
         type: "unhandled-promise-rejection",
         message: event.reason?.message || event.reason?.toString() || "Unknown rejection",
         stack: event.reason?.stack,
-        timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+        timestamp: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString(),
         context: {
           // Não incluir a promise diretamente para evitar problemas de clonagem
           promiseInfo: {
@@ -65,7 +70,7 @@ class CrashHandler {
             type: "resource-error",
             message: `Failed to load resource: ${event.target.src || event.target.href}`,
             element: event.target.tagName,
-            timestamp: (/* @__PURE__ */ new Date()).toISOString()
+            timestamp: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString()
           });
         }
       },
@@ -87,7 +92,7 @@ class CrashHandler {
             (arg) => arg instanceof Error ? arg.message : typeof arg === "object" ? JSON.stringify(arg) : String(arg)
           ).join(" "),
           stack: args[0] instanceof Error ? args[0].stack : void 0,
-          timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+          timestamp: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString(),
           context: { consoleArgs: args.length }
         });
       }
@@ -110,7 +115,7 @@ class CrashHandler {
       const contextInfo = {
         url: window.location.href,
         userAgent: navigator.userAgent,
-        timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+        timestamp: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString(),
         viewport: {
           width: window.innerWidth,
           height: window.innerHeight
@@ -206,7 +211,7 @@ class CrashHandler {
         type: "manual-error",
         message: error.message || error.toString(),
         stack: error.stack,
-        timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+        timestamp: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString(),
         context
       });
     }

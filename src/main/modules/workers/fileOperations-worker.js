@@ -1,11 +1,16 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
-const fs = require("fs").promises;
-const path = require("path");
+var __defProp2 = Object.defineProperty;
+var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+const fs = require("node:fs").promises;
+const path = require("node:path");
 const crypto = require("crypto");
 class FileOperationsWorker {
   static {
     __name(this, "FileOperationsWorker");
+  }
+  static {
+    __name2(this, "FileOperationsWorker");
   }
   constructor() {
     this.allowedPaths = [];

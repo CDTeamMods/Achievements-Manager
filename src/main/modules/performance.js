@@ -1,5 +1,5 @@
 const { app } = require('electron');
-const os = require('os');
+const os = require('node:os');
 
 /**
  * Gerenciador de performance otimizado
