@@ -22,6 +22,16 @@ var __name22222 = /* @__PURE__ */ __name2222(
   (target, value) => __defProp22222(target, "name", { value, configurable: true }),
   "__name"
 );
+var __defProp222222 = Object.defineProperty;
+var __name222222 = /* @__PURE__ */ __name22222(
+  (target, value) => __defProp222222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp2222222 = Object.defineProperty;
+var __name2222222 = /* @__PURE__ */ __name222222(
+  (target, value) => __defProp2222222(target, "name", { value, configurable: true }),
+  "__name"
+);
 import { ALLOWED_SETTINGS_KEYS } from "../config/allowed-settings-keys.js";
 class IPCSanitizer {
   static {
@@ -41,6 +51,12 @@ class IPCSanitizer {
   }
   static {
     __name22222(this, "IPCSanitizer");
+  }
+  static {
+    __name222222(this, "IPCSanitizer");
+  }
+  static {
+    __name2222222(this, "IPCSanitizer");
   }
   /**
    * Sanitiza um objeto removendo propriedades que não podem ser clonadas pelo IPC

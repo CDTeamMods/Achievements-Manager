@@ -12,6 +12,16 @@ var __name222 = /* @__PURE__ */ __name22(
   (target, value) => __defProp222(target, "name", { value, configurable: true }),
   "__name"
 );
+var __defProp2222 = Object.defineProperty;
+var __name2222 = /* @__PURE__ */ __name222(
+  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp22222 = Object.defineProperty;
+var __name22222 = /* @__PURE__ */ __name2222(
+  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
+  "__name"
+);
 class RendererDebugManager {
   static {
     __name(this, "RendererDebugManager");
@@ -24,6 +34,12 @@ class RendererDebugManager {
   }
   static {
     __name222(this, "RendererDebugManager");
+  }
+  static {
+    __name2222(this, "RendererDebugManager");
+  }
+  static {
+    __name22222(this, "RendererDebugManager");
   }
   constructor() {
     this.isDebugEnabled = this.checkDebugEnabled();
@@ -164,6 +180,8 @@ __name(getDebugManager, "getDebugManager");
 __name2(getDebugManager, "getDebugManager");
 __name22(getDebugManager, "getDebugManager");
 __name222(getDebugManager, "getDebugManager");
+__name2222(getDebugManager, "getDebugManager");
+__name22222(getDebugManager, "getDebugManager");
 window.DebugManager = RendererDebugManager;
 window.getDebugManager = getDebugManager;
 export {

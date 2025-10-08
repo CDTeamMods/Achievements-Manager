@@ -12,6 +12,16 @@ var __name222 = /* @__PURE__ */ __name22(
   (target, value) => __defProp222(target, "name", { value, configurable: true }),
   "__name"
 );
+var __defProp2222 = Object.defineProperty;
+var __name2222 = /* @__PURE__ */ __name222(
+  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp22222 = Object.defineProperty;
+var __name22222 = /* @__PURE__ */ __name2222(
+  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
+  "__name"
+);
 class HelpersManager {
   static {
     __name(this, "HelpersManager");
@@ -24,6 +34,12 @@ class HelpersManager {
   }
   static {
     __name222(this, "HelpersManager");
+  }
+  static {
+    __name2222(this, "HelpersManager");
+  }
+  static {
+    __name22222(this, "HelpersManager");
   }
   constructor(app) {
     this.app = app;
@@ -267,16 +283,22 @@ class HelpersManager {
   }
   debounce(func, wait) {
     let timeout;
-    return /* @__PURE__ */ __name222(
-      /* @__PURE__ */ __name22(
-        /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function executedFunction(...args) {
-          const later = /* @__PURE__ */ __name222(() => {
-            clearTimeout(timeout);
-            func(...args);
-          }, "later");
-          clearTimeout(timeout);
-          timeout = setTimeout(later, wait);
-        }, "executedFunction"), "executedFunction"),
+    return /* @__PURE__ */ __name22222(
+      /* @__PURE__ */ __name2222(
+        /* @__PURE__ */ __name222(
+          /* @__PURE__ */ __name22(
+            /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function executedFunction(...args) {
+              const later = /* @__PURE__ */ __name22222(() => {
+                clearTimeout(timeout);
+                func(...args);
+              }, "later");
+              clearTimeout(timeout);
+              timeout = setTimeout(later, wait);
+            }, "executedFunction"), "executedFunction"),
+            "executedFunction"
+          ),
+          "executedFunction"
+        ),
         "executedFunction"
       ),
       "executedFunction"

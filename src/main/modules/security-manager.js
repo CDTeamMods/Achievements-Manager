@@ -28,20 +28,36 @@ var __name222222 = /* @__PURE__ */ __name22222(
   "__name"
 );
 var __defProp2222222 = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name2222222 = /* @__PURE__ */ __name222222(
   (target, value) => __defProp2222222(target, "name", { value, configurable: true }),
   "__name"
 );
-var __commonJS = /* @__PURE__ */ __name222222(
-  (cb, mod) => /* @__PURE__ */ __name222222(
-    /* @__PURE__ */ __name22222(
-      /* @__PURE__ */ __name2222(
-        /* @__PURE__ */ __name222(
-          /* @__PURE__ */ __name22(
-            /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
-              return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-            }, "__require"), "__require"),
+var __defProp22222222 = Object.defineProperty;
+var __name22222222 = /* @__PURE__ */ __name2222222(
+  (target, value) => __defProp22222222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp222222222 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name222222222 = /* @__PURE__ */ __name22222222(
+  (target, value) => __defProp222222222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __commonJS = /* @__PURE__ */ __name22222222(
+  (cb, mod) => /* @__PURE__ */ __name22222222(
+    /* @__PURE__ */ __name2222222(
+      /* @__PURE__ */ __name222222(
+        /* @__PURE__ */ __name22222(
+          /* @__PURE__ */ __name2222(
+            /* @__PURE__ */ __name222(
+              /* @__PURE__ */ __name22(
+                /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
+                  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+                }, "__require"), "__require"),
+                "__require"
+              ),
+              "__require"
+            ),
             "__require"
           ),
           "__require"
@@ -81,6 +97,12 @@ var require_security_manager = __commonJS({
       }
       static {
         __name2222222(this, "SecurityManager");
+      }
+      static {
+        __name22222222(this, "SecurityManager");
+      }
+      static {
+        __name222222222(this, "SecurityManager");
       }
       constructor() {
         this.isDev = process.env.NODE_ENV === "development";
@@ -375,6 +397,8 @@ var require_security_manager = __commonJS({
     __name22222(getSecurityManager, "getSecurityManager");
     __name222222(getSecurityManager, "getSecurityManager");
     __name2222222(getSecurityManager, "getSecurityManager");
+    __name22222222(getSecurityManager, "getSecurityManager");
+    __name222222222(getSecurityManager, "getSecurityManager");
     module.exports = {
       SecurityManager,
       getSecurityManager

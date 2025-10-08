@@ -32,6 +32,16 @@ var __name2222222 = /* @__PURE__ */ __name222222(
   (target, value) => __defProp2222222(target, "name", { value, configurable: true }),
   "__name"
 );
+var __defProp22222222 = Object.defineProperty;
+var __name22222222 = /* @__PURE__ */ __name2222222(
+  (target, value) => __defProp22222222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp222222222 = Object.defineProperty;
+var __name222222222 = /* @__PURE__ */ __name22222222(
+  (target, value) => __defProp222222222(target, "name", { value, configurable: true }),
+  "__name"
+);
 class CodeSplitter {
   static {
     __name(this, "CodeSplitter");
@@ -56,6 +66,12 @@ class CodeSplitter {
   }
   static {
     __name2222222(this, "CodeSplitter");
+  }
+  static {
+    __name22222222(this, "CodeSplitter");
+  }
+  static {
+    __name222222222(this, "CodeSplitter");
   }
   constructor() {
     this.chunks = /* @__PURE__ */ new Map();

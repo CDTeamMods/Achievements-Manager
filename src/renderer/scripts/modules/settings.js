@@ -32,6 +32,16 @@ var __name2222222 = /* @__PURE__ */ __name222222(
   (target, value) => __defProp2222222(target, "name", { value, configurable: true }),
   "__name"
 );
+var __defProp22222222 = Object.defineProperty;
+var __name22222222 = /* @__PURE__ */ __name2222222(
+  (target, value) => __defProp22222222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp222222222 = Object.defineProperty;
+var __name222222222 = /* @__PURE__ */ __name22222222(
+  (target, value) => __defProp222222222(target, "name", { value, configurable: true }),
+  "__name"
+);
 import { filterAllowedSettings } from "../config/allowed-settings-keys.js";
 class SettingsManager {
   static {
@@ -57,6 +67,12 @@ class SettingsManager {
   }
   static {
     __name2222222(this, "SettingsManager");
+  }
+  static {
+    __name22222222(this, "SettingsManager");
+  }
+  static {
+    __name222222222(this, "SettingsManager");
   }
   constructor(app) {
     this.app = app;
@@ -97,17 +113,14 @@ class SettingsManager {
         }
       }
       if (this.app.isElectronAPIAvailable("i18n")) {
-        try {
-          const currentBackendLanguage = await this.app.safeElectronAPICall("i18n.getCurrentLanguage");
-          if (currentBackendLanguage && currentBackendLanguage !== settings.language) {
-            settings.language = currentBackendLanguage;
-            if (this.app.isElectron) {
-              await window.electronAPI.fs.saveSettings(settings);
-            } else {
-              localStorage.setItem("achievements-settings", JSON.stringify(settings));
-            }
+        const currentBackendLanguage = await this.app.safeElectronAPICall("i18n.getCurrentLanguage");
+        if (currentBackendLanguage && currentBackendLanguage !== settings.language) {
+          settings.language = currentBackendLanguage;
+          if (this.app.isElectron) {
+            await window.electronAPI.fs.saveSettings(settings);
+          } else {
+            localStorage.setItem("achievements-settings", JSON.stringify(settings));
           }
-        } catch {
         }
       }
       if (this.app.modules.state && this.app.modules.state.setState) {

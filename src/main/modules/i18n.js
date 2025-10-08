@@ -28,20 +28,36 @@ var __name222222 = /* @__PURE__ */ __name22222(
   "__name"
 );
 var __defProp2222222 = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name2222222 = /* @__PURE__ */ __name222222(
   (target, value) => __defProp2222222(target, "name", { value, configurable: true }),
   "__name"
 );
-var __commonJS = /* @__PURE__ */ __name222222(
-  (cb, mod) => /* @__PURE__ */ __name222222(
-    /* @__PURE__ */ __name22222(
-      /* @__PURE__ */ __name2222(
-        /* @__PURE__ */ __name222(
-          /* @__PURE__ */ __name22(
-            /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
-              return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-            }, "__require"), "__require"),
+var __defProp22222222 = Object.defineProperty;
+var __name22222222 = /* @__PURE__ */ __name2222222(
+  (target, value) => __defProp22222222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp222222222 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name222222222 = /* @__PURE__ */ __name22222222(
+  (target, value) => __defProp222222222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __commonJS = /* @__PURE__ */ __name22222222(
+  (cb, mod) => /* @__PURE__ */ __name22222222(
+    /* @__PURE__ */ __name2222222(
+      /* @__PURE__ */ __name222222(
+        /* @__PURE__ */ __name22222(
+          /* @__PURE__ */ __name2222(
+            /* @__PURE__ */ __name222(
+              /* @__PURE__ */ __name22(
+                /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
+                  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+                }, "__require"), "__require"),
+                "__require"
+              ),
+              "__require"
+            ),
             "__require"
           ),
           "__require"
@@ -83,6 +99,12 @@ var require_i18n = __commonJS({
       }
       static {
         __name2222222(this, "I18nManager");
+      }
+      static {
+        __name22222222(this, "I18nManager");
+      }
+      static {
+        __name222222222(this, "I18nManager");
       }
       constructor(pathManager = null, debugManager = null) {
         this.pathManager = pathManager;
@@ -425,7 +447,7 @@ var require_i18n = __commonJS({
         return this.interpolate(translation, params);
       }
       getTranslation(key) {
-        const getNestedValue = /* @__PURE__ */ __name2222222((obj, path2) => {
+        const getNestedValue = /* @__PURE__ */ __name222222222((obj, path2) => {
           return path2.split(".").reduce((current, prop) => {
             return current && current[prop] !== void 0 ? current[prop] : void 0;
           }, obj);
@@ -471,11 +493,8 @@ var require_i18n = __commonJS({
         try {
           const settingsPath = this.pathManager ? path.join(this.pathManager.getDataPath(), "settings", "app.json") : path.join(__dirname, "..", "..", "data", "settings", "app.json");
           let settings = {};
-          try {
-            const settingsContent = await fs.readFile(settingsPath, "utf8");
-            settings = JSON.parse(settingsContent);
-          } catch {
-          }
+          const settingsContent = await fs.readFile(settingsPath, "utf8");
+          settings = JSON.parse(settingsContent);
           settings.language = language;
           await fs.mkdir(path.dirname(settingsPath), { recursive: true });
           await fs.writeFile(settingsPath, JSON.stringify(settings, null, 2), "utf8");
@@ -549,6 +568,8 @@ var require_i18n = __commonJS({
     __name22222(setupI18n, "setupI18n");
     __name222222(setupI18n, "setupI18n");
     __name2222222(setupI18n, "setupI18n");
+    __name22222222(setupI18n, "setupI18n");
+    __name222222222(setupI18n, "setupI18n");
     module.exports = { I18nManager, setupI18n };
     module.exports.default = module.exports;
   }

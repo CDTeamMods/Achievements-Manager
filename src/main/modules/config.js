@@ -8,16 +8,32 @@ var __name22 = /* @__PURE__ */ __name2(
   "__name"
 );
 var __defProp222 = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name222 = /* @__PURE__ */ __name22(
   (target, value) => __defProp222(target, "name", { value, configurable: true }),
   "__name"
 );
-var __commonJS = /* @__PURE__ */ __name22(
-  (cb, mod) => /* @__PURE__ */ __name22(
-    /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
-      return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-    }, "__require"), "__require"),
+var __defProp2222 = Object.defineProperty;
+var __name2222 = /* @__PURE__ */ __name222(
+  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp22222 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name22222 = /* @__PURE__ */ __name2222(
+  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __commonJS = /* @__PURE__ */ __name2222(
+  (cb, mod) => /* @__PURE__ */ __name2222(
+    /* @__PURE__ */ __name222(
+      /* @__PURE__ */ __name22(
+        /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
+          return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+        }, "__require"), "__require"),
+        "__require"
+      ),
+      "__require"
+    ),
     "__require"
   ),
   "__commonJS"
@@ -41,6 +57,12 @@ var require_config = __commonJS({
       }
       static {
         __name222(this, "ConfigManager");
+      }
+      static {
+        __name2222(this, "ConfigManager");
+      }
+      static {
+        __name22222(this, "ConfigManager");
       }
       constructor() {
         this.configPath = null;
@@ -114,21 +136,13 @@ var require_config = __commonJS({
       /**
        * Garante que um arquivo de configuração existe com valores padrão
        */
-      async ensureConfigFile(filePath, defaultConfig) {
+      async ensureConfigFile(filePath) {
         try {
           const configDir = path.dirname(filePath);
           await fs.mkdir(configDir, { recursive: true });
-          try {
-            await fs.access(filePath);
-            this.debugManager.log(
-              `\u{1F4C4} Arquivo de configura\xE7\xE3o j\xE1 existe: ${path.basename(filePath)}`
-            );
-            return;
-          } catch {
-          }
-          await fs.writeFile(filePath, JSON.stringify(defaultConfig, null, 2), "utf8");
+          await fs.access(filePath);
           this.debugManager.log(
-            `\u{1F4C4} Arquivo de configura\xE7\xE3o criado: ${path.basename(filePath)}`
+            `\u{1F4C4} Arquivo de configura\xE7\xE3o j\xE1 existe: ${path.basename(filePath)}`
           );
         } catch (error) {
           this.debugManager.error(
@@ -247,7 +261,7 @@ var require_config = __commonJS({
        * Obtém todas as chaves de configuração permitidas
        */
       getAllowedSettingKeys() {
-        const flattenKeys = /* @__PURE__ */ __name222((obj, prefix = "") => {
+        const flattenKeys = /* @__PURE__ */ __name22222((obj, prefix = "") => {
           const keys = [];
           for (const [key, value] of Object.entries(obj)) {
             const fullKey = prefix ? `${prefix}.${key}` : key;

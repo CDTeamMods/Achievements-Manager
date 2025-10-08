@@ -2,36 +2,6 @@ var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 var __defProp2 = Object.defineProperty;
 var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
-var __defProp22 = Object.defineProperty;
-var __name22 = /* @__PURE__ */ __name2(
-  (target, value) => __defProp22(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp222 = Object.defineProperty;
-var __name222 = /* @__PURE__ */ __name22(
-  (target, value) => __defProp222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp2222 = Object.defineProperty;
-var __name2222 = /* @__PURE__ */ __name222(
-  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp22222 = Object.defineProperty;
-var __name22222 = /* @__PURE__ */ __name2222(
-  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp222222 = Object.defineProperty;
-var __name222222 = /* @__PURE__ */ __name22222(
-  (target, value) => __defProp222222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp2222222 = Object.defineProperty;
-var __name2222222 = /* @__PURE__ */ __name222222(
-  (target, value) => __defProp2222222(target, "name", { value, configurable: true }),
-  "__name"
-);
 import { StringUtils, DOMUtils, throttle } from "./utils";
 class AnimationEngine {
   static {
@@ -39,24 +9,6 @@ class AnimationEngine {
   }
   static {
     __name2(this, "AnimationEngine");
-  }
-  static {
-    __name22(this, "AnimationEngine");
-  }
-  static {
-    __name222(this, "AnimationEngine");
-  }
-  static {
-    __name2222(this, "AnimationEngine");
-  }
-  static {
-    __name22222(this, "AnimationEngine");
-  }
-  static {
-    __name222222(this, "AnimationEngine");
-  }
-  static {
-    __name2222222(this, "AnimationEngine");
   }
   constructor() {
     this.animations = /* @__PURE__ */ new Map();
@@ -300,24 +252,6 @@ class MicroInteractions {
   static {
     __name2(this, "MicroInteractions");
   }
-  static {
-    __name22(this, "MicroInteractions");
-  }
-  static {
-    __name222(this, "MicroInteractions");
-  }
-  static {
-    __name2222(this, "MicroInteractions");
-  }
-  static {
-    __name22222(this, "MicroInteractions");
-  }
-  static {
-    __name222222(this, "MicroInteractions");
-  }
-  static {
-    __name2222222(this, "MicroInteractions");
-  }
   constructor() {
     this.interactions = /* @__PURE__ */ new Map();
     this.isLiteMode = false;
@@ -558,24 +492,6 @@ class PageTransitions {
   static {
     __name2(this, "PageTransitions");
   }
-  static {
-    __name22(this, "PageTransitions");
-  }
-  static {
-    __name222(this, "PageTransitions");
-  }
-  static {
-    __name2222(this, "PageTransitions");
-  }
-  static {
-    __name22222(this, "PageTransitions");
-  }
-  static {
-    __name222222(this, "PageTransitions");
-  }
-  static {
-    __name2222222(this, "PageTransitions");
-  }
   constructor() {
     this.isTransitioning = false;
     this.currentPage = null;
@@ -676,24 +592,6 @@ class LoadingAnimations {
   }
   static {
     __name2(this, "LoadingAnimations");
-  }
-  static {
-    __name22(this, "LoadingAnimations");
-  }
-  static {
-    __name222(this, "LoadingAnimations");
-  }
-  static {
-    __name2222(this, "LoadingAnimations");
-  }
-  static {
-    __name22222(this, "LoadingAnimations");
-  }
-  static {
-    __name222222(this, "LoadingAnimations");
-  }
-  static {
-    __name2222222(this, "LoadingAnimations");
   }
   static createSkeleton(container, type = "card") {
     const skeletons = {

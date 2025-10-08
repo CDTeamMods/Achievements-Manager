@@ -8,16 +8,32 @@ var __name22 = /* @__PURE__ */ __name2(
   "__name"
 );
 var __defProp222 = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name222 = /* @__PURE__ */ __name22(
   (target, value) => __defProp222(target, "name", { value, configurable: true }),
   "__name"
 );
-var __commonJS = /* @__PURE__ */ __name22(
-  (cb, mod) => /* @__PURE__ */ __name22(
-    /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
-      return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-    }, "__require"), "__require"),
+var __defProp2222 = Object.defineProperty;
+var __name2222 = /* @__PURE__ */ __name222(
+  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp22222 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name22222 = /* @__PURE__ */ __name2222(
+  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __commonJS = /* @__PURE__ */ __name2222(
+  (cb, mod) => /* @__PURE__ */ __name2222(
+    /* @__PURE__ */ __name222(
+      /* @__PURE__ */ __name22(
+        /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
+          return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+        }, "__require"), "__require"),
+        "__require"
+      ),
+      "__require"
+    ),
     "__require"
   ),
   "__commonJS"
@@ -38,6 +54,12 @@ var require_games = __commonJS({
       }
       static {
         __name222(this, "GamesManager");
+      }
+      static {
+        __name2222(this, "GamesManager");
+      }
+      static {
+        __name22222(this, "GamesManager");
       }
       constructor(configManager, crashReporter, debugManager) {
         this.configManager = configManager;
@@ -317,6 +339,8 @@ var require_games = __commonJS({
     __name2(setupGames, "setupGames");
     __name22(setupGames, "setupGames");
     __name222(setupGames, "setupGames");
+    __name2222(setupGames, "setupGames");
+    __name22222(setupGames, "setupGames");
     module.exports = { GamesManager, setupGames };
   }
 });

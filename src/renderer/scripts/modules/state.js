@@ -12,6 +12,16 @@ var __name222 = /* @__PURE__ */ __name22(
   (target, value) => __defProp222(target, "name", { value, configurable: true }),
   "__name"
 );
+var __defProp2222 = Object.defineProperty;
+var __name2222 = /* @__PURE__ */ __name222(
+  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp22222 = Object.defineProperty;
+var __name22222 = /* @__PURE__ */ __name2222(
+  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
+  "__name"
+);
 class StateManager {
   static {
     __name(this, "StateManager");
@@ -24,6 +34,12 @@ class StateManager {
   }
   static {
     __name222(this, "StateManager");
+  }
+  static {
+    __name2222(this, "StateManager");
+  }
+  static {
+    __name22222(this, "StateManager");
   }
   constructor() {
     this.state = /* @__PURE__ */ new Map();
