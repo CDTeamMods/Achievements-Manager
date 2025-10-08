@@ -22,6 +22,11 @@ var __name22222 = /* @__PURE__ */ __name2222(
   (target, value) => __defProp22222(target, "name", { value, configurable: true }),
   "__name"
 );
+var __defProp222222 = Object.defineProperty;
+var __name222222 = /* @__PURE__ */ __name22222(
+  (target, value) => __defProp222222(target, "name", { value, configurable: true }),
+  "__name"
+);
 import { filterAllowedSettings } from "../config/allowed-settings-keys.js";
 class SettingsManager {
   static {
@@ -41,6 +46,9 @@ class SettingsManager {
   }
   static {
     __name22222(this, "SettingsManager");
+  }
+  static {
+    __name222222(this, "SettingsManager");
   }
   constructor(app) {
     this.app = app;

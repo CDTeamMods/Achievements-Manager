@@ -1,11 +1,19 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 var __defProp2 = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
-var __commonJS = /* @__PURE__ */ __name((cb, mod) => /* @__PURE__ */ __name(function __require() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-}, "__require"), "__commonJS");
+var __defProp22 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name22 = /* @__PURE__ */ __name2(
+  (target, value) => __defProp22(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __commonJS = /* @__PURE__ */ __name2(
+  (cb, mod) => /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
+    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  }, "__require"), "__require"),
+  "__commonJS"
+);
 var require_games = __commonJS({
   "src/main/modules/games.js"(exports, module) {
     const { ipcMain } = require("electron");
@@ -16,6 +24,9 @@ var require_games = __commonJS({
       }
       static {
         __name2(this, "GamesManager");
+      }
+      static {
+        __name22(this, "GamesManager");
       }
       constructor(configManager, crashReporter, debugManager) {
         this.configManager = configManager;
@@ -293,6 +304,7 @@ var require_games = __commonJS({
     }
     __name(setupGames, "setupGames");
     __name2(setupGames, "setupGames");
+    __name22(setupGames, "setupGames");
     module.exports = { GamesManager, setupGames };
   }
 });

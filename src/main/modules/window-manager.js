@@ -1,11 +1,19 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 var __defProp2 = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
-var __commonJS = /* @__PURE__ */ __name((cb, mod) => /* @__PURE__ */ __name(function __require() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-}, "__require"), "__commonJS");
+var __defProp22 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name22 = /* @__PURE__ */ __name2(
+  (target, value) => __defProp22(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __commonJS = /* @__PURE__ */ __name2(
+  (cb, mod) => /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
+    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  }, "__require"), "__require"),
+  "__commonJS"
+);
 var require_window_manager = __commonJS({
   "src/main/modules/window-manager.js"(exports, module) {
     const { BrowserWindow } = require("electron");
@@ -16,6 +24,9 @@ var require_window_manager = __commonJS({
       static {
         __name2(this, "WindowManager");
       }
+      static {
+        __name22(this, "WindowManager");
+      }
       constructor(store) {
         this.store = store;
         this.windows = /* @__PURE__ */ new Map();
@@ -25,7 +36,7 @@ var require_window_manager = __commonJS({
        * Configura handlers IPC para gerenciamento de janelas
        */
       setupIPC(ipcMain) {
-        const getEventWindow = /* @__PURE__ */ __name2((_event) => {
+        const getEventWindow = /* @__PURE__ */ __name22((_event) => {
           const winFromSender = BrowserWindow.fromWebContents(_event.sender);
           if (winFromSender) return winFromSender;
           const focused = BrowserWindow.getFocusedWindow();
@@ -169,6 +180,7 @@ var require_window_manager = __commonJS({
     }
     __name(setupWindowManager, "setupWindowManager");
     __name2(setupWindowManager, "setupWindowManager");
+    __name22(setupWindowManager, "setupWindowManager");
     module.exports = { WindowManager, setupWindowManager };
   }
 });

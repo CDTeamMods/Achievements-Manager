@@ -18,18 +18,26 @@ var __name2222 = /* @__PURE__ */ __name222(
   "__name"
 );
 var __defProp22222 = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name22222 = /* @__PURE__ */ __name2222(
   (target, value) => __defProp22222(target, "name", { value, configurable: true }),
   "__name"
 );
-var __commonJS = /* @__PURE__ */ __name2222(
-  (cb, mod) => /* @__PURE__ */ __name2222(
-    /* @__PURE__ */ __name222(
-      /* @__PURE__ */ __name22(
-        /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
-          return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-        }, "__require"), "__require"),
+var __defProp222222 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name222222 = /* @__PURE__ */ __name22222(
+  (target, value) => __defProp222222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __commonJS = /* @__PURE__ */ __name22222(
+  (cb, mod) => /* @__PURE__ */ __name22222(
+    /* @__PURE__ */ __name2222(
+      /* @__PURE__ */ __name222(
+        /* @__PURE__ */ __name22(
+          /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
+            return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+          }, "__require"), "__require"),
+          "__require"
+        ),
         "__require"
       ),
       "__require"
@@ -164,6 +172,7 @@ var require_main = __commonJS({
     __name222(isInstalledVersion, "isInstalledVersion");
     __name2222(isInstalledVersion, "isInstalledVersion");
     __name22222(isInstalledVersion, "isInstalledVersion");
+    __name222222(isInstalledVersion, "isInstalledVersion");
     let store = null;
     let mainWindow;
     let splashWindow;
@@ -211,6 +220,7 @@ var require_main = __commonJS({
     __name222(createSplashWindow, "createSplashWindow");
     __name2222(createSplashWindow, "createSplashWindow");
     __name22222(createSplashWindow, "createSplashWindow");
+    __name222222(createSplashWindow, "createSplashWindow");
     function createMainWindow() {
       const bounds = windowBoundsCache;
       const preloadPath = path.join(__dirname, "../preload/preload.js");
@@ -254,13 +264,13 @@ var require_main = __commonJS({
       securityManager.setupSecurityHeaders(mainWindow.webContents);
       securityManager.setupURLValidation(mainWindow.webContents);
       setupWindowEvents();
-      const closeSplashIfPresent = /* @__PURE__ */ __name22222(() => {
+      const closeSplashIfPresent = /* @__PURE__ */ __name222222(() => {
         if (splashWindow && !splashWindow.isDestroyed()) {
           splashWindow.close();
           splashWindow = null;
         }
       }, "closeSplashIfPresent");
-      const boostWindowFocus = /* @__PURE__ */ __name22222(() => {
+      const boostWindowFocus = /* @__PURE__ */ __name222222(() => {
         if (!mainWindow || mainWindow.isDestroyed()) return;
         mainWindow.show();
         setTimeout(() => {
@@ -272,7 +282,7 @@ var require_main = __commonJS({
           }, 1e3);
         }, 500);
       }, "boostWindowFocus");
-      const handleDidFailLoad = /* @__PURE__ */ __name22222((validatedURL) => {
+      const handleDidFailLoad = /* @__PURE__ */ __name222222((validatedURL) => {
         if (isDev && validatedURL && validatedURL.includes("localhost:3000")) {
           debugManager.warn(
             "\u26A0\uFE0F Servidor de desenvolvimento n\xE3o dispon\xEDvel, usando arquivo est\xE1tico"
@@ -281,11 +291,11 @@ var require_main = __commonJS({
           return;
         }
       }, "handleDidFailLoad");
-      const handleDidFinishLoad = /* @__PURE__ */ __name22222(() => {
+      const handleDidFinishLoad = /* @__PURE__ */ __name222222(() => {
         if (!isDev) return;
         debugManager.log("\u2705 P\xE1gina carregada com sucesso");
       }, "handleDidFinishLoad");
-      const ensureLiteModeCSS = /* @__PURE__ */ __name22222(() => {
+      const ensureLiteModeCSS = /* @__PURE__ */ __name222222(() => {
         if (!store.get("liteMode")) return;
         mainWindow.webContents.insertCSS(`
         * {
@@ -341,8 +351,9 @@ var require_main = __commonJS({
     __name222(createMainWindow, "createMainWindow");
     __name2222(createMainWindow, "createMainWindow");
     __name22222(createMainWindow, "createMainWindow");
+    __name222222(createMainWindow, "createMainWindow");
     function setupWindowEvents() {
-      const saveBoundsIfNormal = /* @__PURE__ */ __name22222(() => {
+      const saveBoundsIfNormal = /* @__PURE__ */ __name222222(() => {
         if (!mainWindow || mainWindow.isDestroyed()) return;
         const isNormalState = !mainWindow.isMaximized() && !mainWindow.isMinimized() && !mainWindow.isFullScreen();
         if (isNormalState) {
@@ -389,6 +400,7 @@ var require_main = __commonJS({
     __name222(setupWindowEvents, "setupWindowEvents");
     __name2222(setupWindowEvents, "setupWindowEvents");
     __name22222(setupWindowEvents, "setupWindowEvents");
+    __name222222(setupWindowEvents, "setupWindowEvents");
     function setupSystemTheme() {
       const theme = store.get("theme", "auto");
       if (theme === "auto") {
@@ -466,6 +478,7 @@ var require_main = __commonJS({
     __name222(setupSystemTheme, "setupSystemTheme");
     __name2222(setupSystemTheme, "setupSystemTheme");
     __name22222(setupSystemTheme, "setupSystemTheme");
+    __name222222(setupSystemTheme, "setupSystemTheme");
     function setupAutoStart() {
       ipcMain.handle("set-auto-start", (_event, enabled) => {
         try {
@@ -505,6 +518,7 @@ var require_main = __commonJS({
     __name222(setupAutoStart, "setupAutoStart");
     __name2222(setupAutoStart, "setupAutoStart");
     __name22222(setupAutoStart, "setupAutoStart");
+    __name222222(setupAutoStart, "setupAutoStart");
     function createTray() {
       try {
         const iconPath = path.join(__dirname, "../../assets/icons/icon.ico");
@@ -512,7 +526,7 @@ var require_main = __commonJS({
         const contextMenu = Menu.buildFromTemplate([
           {
             label: "Mostrar Achievements Manager",
-            click: /* @__PURE__ */ __name22222(() => {
+            click: /* @__PURE__ */ __name222222(() => {
               if (mainWindow) {
                 mainWindow.show();
                 mainWindow.focus();
@@ -521,7 +535,7 @@ var require_main = __commonJS({
           },
           {
             label: "Sair",
-            click: /* @__PURE__ */ __name22222(() => {
+            click: /* @__PURE__ */ __name222222(() => {
               app.isQuiting = true;
               app.quit();
             }, "click")
@@ -547,6 +561,7 @@ var require_main = __commonJS({
     __name222(createTray, "createTray");
     __name2222(createTray, "createTray");
     __name22222(createTray, "createTray");
+    __name222222(createTray, "createTray");
     function setupMinimizeToTray() {
       ipcMain.handle("set-minimize-to-tray", (_event, enabled) => {
         try {
@@ -585,6 +600,7 @@ var require_main = __commonJS({
     __name222(setupMinimizeToTray, "setupMinimizeToTray");
     __name2222(setupMinimizeToTray, "setupMinimizeToTray");
     __name22222(setupMinimizeToTray, "setupMinimizeToTray");
+    __name222222(setupMinimizeToTray, "setupMinimizeToTray");
     function protectCriticalSettings(store2, pathManager) {
       if (!pathManager || pathManager.isInstalledVersion()) {
         return;
@@ -610,6 +626,7 @@ var require_main = __commonJS({
     __name222(protectCriticalSettings, "protectCriticalSettings");
     __name2222(protectCriticalSettings, "protectCriticalSettings");
     __name22222(protectCriticalSettings, "protectCriticalSettings");
+    __name222222(protectCriticalSettings, "protectCriticalSettings");
     async function initializeApp() {
       try {
         const pathManager = await setupPathManager();
@@ -708,6 +725,7 @@ var require_main = __commonJS({
     __name222(initializeApp, "initializeApp");
     __name2222(initializeApp, "initializeApp");
     __name22222(initializeApp, "initializeApp");
+    __name222222(initializeApp, "initializeApp");
     app.whenReady().then(async () => {
       try {
         await initializeApp();

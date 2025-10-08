@@ -22,6 +22,11 @@ var __name22222 = /* @__PURE__ */ __name2222(
   (target, value) => __defProp22222(target, "name", { value, configurable: true }),
   "__name"
 );
+var __defProp222222 = Object.defineProperty;
+var __name222222 = /* @__PURE__ */ __name22222(
+  (target, value) => __defProp222222(target, "name", { value, configurable: true }),
+  "__name"
+);
 import Utils from "./utils";
 class AnimationEngine {
   static {
@@ -41,6 +46,9 @@ class AnimationEngine {
   }
   static {
     __name22222(this, "AnimationEngine");
+  }
+  static {
+    __name222222(this, "AnimationEngine");
   }
   constructor() {
     this.animations = /* @__PURE__ */ new Map();
@@ -296,6 +304,9 @@ class MicroInteractions {
   static {
     __name22222(this, "MicroInteractions");
   }
+  static {
+    __name222222(this, "MicroInteractions");
+  }
   constructor() {
     this.interactions = /* @__PURE__ */ new Map();
     this.isLiteMode = false;
@@ -548,6 +559,9 @@ class PageTransitions {
   static {
     __name22222(this, "PageTransitions");
   }
+  static {
+    __name222222(this, "PageTransitions");
+  }
   constructor() {
     this.isTransitioning = false;
     this.currentPage = null;
@@ -660,6 +674,9 @@ class LoadingAnimations {
   }
   static {
     __name22222(this, "LoadingAnimations");
+  }
+  static {
+    __name222222(this, "LoadingAnimations");
   }
   static createSkeleton(container, type = "card") {
     const skeletons = {

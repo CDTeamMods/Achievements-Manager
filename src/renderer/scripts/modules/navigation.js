@@ -22,6 +22,11 @@ var __name22222 = /* @__PURE__ */ __name2222(
   (target, value) => __defProp22222(target, "name", { value, configurable: true }),
   "__name"
 );
+var __defProp222222 = Object.defineProperty;
+var __name222222 = /* @__PURE__ */ __name22222(
+  (target, value) => __defProp222222(target, "name", { value, configurable: true }),
+  "__name"
+);
 class NavigationManager {
   static {
     __name(this, "NavigationManager");
@@ -40,6 +45,9 @@ class NavigationManager {
   }
   static {
     __name22222(this, "NavigationManager");
+  }
+  static {
+    __name222222(this, "NavigationManager");
   }
   constructor(app) {
     this.app = app;
@@ -983,7 +991,7 @@ class NavigationManager {
             "data-i18n",
             "settings.api.steam.status.error.description"
           );
-          const looksLikeKey = /* @__PURE__ */ __name22222(
+          const looksLikeKey = /* @__PURE__ */ __name222222(
             (s) => typeof s === "string" && s.includes(".") && !s.includes(" "),
             "looksLikeKey"
           );
@@ -1394,7 +1402,7 @@ class NavigationManager {
             "data-i18n",
             "settings.api.steam.status.disconnected.description"
           );
-          const looksLikeKey = /* @__PURE__ */ __name22222(
+          const looksLikeKey = /* @__PURE__ */ __name222222(
             (s) => typeof s === "string" && s.includes(".") && !s.includes(" "),
             "looksLikeKey"
           );
@@ -2055,7 +2063,7 @@ ${devMessage}`);
         style.remove();
       }
     });
-    const handleEsc = /* @__PURE__ */ __name22222((e) => {
+    const handleEsc = /* @__PURE__ */ __name222222((e) => {
       if (e.key === "Escape") {
         overlay.remove();
         style.remove();
@@ -2158,7 +2166,7 @@ ${devMessage}`);
         style.remove();
       }
     });
-    const handleEsc = /* @__PURE__ */ __name22222((e) => {
+    const handleEsc = /* @__PURE__ */ __name222222((e) => {
       if (e.key === "Escape") {
         overlay.remove();
         style.remove();

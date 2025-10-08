@@ -22,7 +22,12 @@ var __name22222 = /* @__PURE__ */ __name2222(
   (target, value) => __defProp22222(target, "name", { value, configurable: true }),
   "__name"
 );
-import Utils, { EventEmitter } from "./utils.js";
+var __defProp222222 = Object.defineProperty;
+var __name222222 = /* @__PURE__ */ __name22222(
+  (target, value) => __defProp222222(target, "name", { value, configurable: true }),
+  "__name"
+);
+import { EventEmitter, DOMUtils } from "./utils.js";
 class Component extends EventEmitter {
   static {
     __name(this, "Component");
@@ -41,6 +46,9 @@ class Component extends EventEmitter {
   }
   static {
     __name22222(this, "Component");
+  }
+  static {
+    __name222222(this, "Component");
   }
   constructor(element, options = {}) {
     super();
@@ -96,6 +104,9 @@ class Toast extends Component {
   static {
     __name22222(this, "Toast");
   }
+  static {
+    __name222222(this, "Toast");
+  }
   get defaultOptions() {
     return {
       type: "info",
@@ -117,7 +128,7 @@ class Toast extends Component {
     this.show();
   }
   createElement() {
-    this.element = Utils.DOMUtils.createElement("div", {
+    this.element = DOMUtils.createElement("div", {
       className: `toast toast--${this.options.type} toast--${this.options.animation}`,
       innerHTML: `
         <div class="toast__icon">
@@ -142,7 +153,7 @@ class Toast extends Component {
   appendToContainer() {
     let container = document.querySelector(".toast-container");
     if (!container) {
-      container = Utils.DOMUtils.createElement("div", {
+      container = DOMUtils.createElement("div", {
         className: `toast-container toast-container--${this.options.position}`
       });
       document.body.appendChild(container);
@@ -203,6 +214,9 @@ class Modal extends Component {
   static {
     __name22222(this, "Modal");
   }
+  static {
+    __name222222(this, "Modal");
+  }
   get defaultOptions() {
     return {
       closable: true,
@@ -225,7 +239,7 @@ class Modal extends Component {
     this.show();
   }
   createElement() {
-    this.element = Utils.DOMUtils.createElement("div", {
+    this.element = DOMUtils.createElement("div", {
       className: `modal modal--${this.options.size} modal--${this.options.animation}`,
       innerHTML: `
         <div class="modal__backdrop"></div>
@@ -328,6 +342,9 @@ class Loading extends Component {
   static {
     __name22222(this, "Loading");
   }
+  static {
+    __name222222(this, "Loading");
+  }
   get defaultOptions() {
     return {
       type: "spinner",
@@ -350,7 +367,7 @@ class Loading extends Component {
   }
   createElement() {
     const className = `loading loading--${this.options.type} loading--${this.options.size}`;
-    this.element = Utils.DOMUtils.createElement("div", {
+    this.element = DOMUtils.createElement("div", {
       className: this.options.overlay ? `${className} loading--overlay` : className,
       innerHTML: `
         <div class="loading__spinner">
@@ -402,6 +419,9 @@ class ProgressBar extends Component {
   static {
     __name22222(this, "ProgressBar");
   }
+  static {
+    __name222222(this, "ProgressBar");
+  }
   get defaultOptions() {
     return {
       value: 0,
@@ -410,7 +430,7 @@ class ProgressBar extends Component {
       striped: false,
       color: "primary",
       showLabel: true,
-      labelFormat: /* @__PURE__ */ __name22222(
+      labelFormat: /* @__PURE__ */ __name222222(
         (value, max) => `${Math.round(value / max * 100)}%`,
         "labelFormat"
       )
@@ -422,7 +442,7 @@ class ProgressBar extends Component {
   }
   createElement() {
     if (!this.element) {
-      this.element = Utils.DOMUtils.createElement("div", {
+      this.element = DOMUtils.createElement("div", {
         className: "progress-bar"
       });
     }
@@ -471,6 +491,9 @@ class Dropdown extends Component {
   }
   static {
     __name22222(this, "Dropdown");
+  }
+  static {
+    __name222222(this, "Dropdown");
   }
   get defaultOptions() {
     return {
@@ -614,6 +637,9 @@ class Tabs extends Component {
   static {
     __name22222(this, "Tabs");
   }
+  static {
+    __name222222(this, "Tabs");
+  }
   get defaultOptions() {
     return {
       activeTab: 0,
@@ -722,6 +748,9 @@ class Tooltip extends Component {
   static {
     __name22222(this, "Tooltip");
   }
+  static {
+    __name222222(this, "Tooltip");
+  }
   get defaultOptions() {
     return {
       placement: "top",
@@ -742,7 +771,7 @@ class Tooltip extends Component {
     super.init();
   }
   createTooltip() {
-    this.tooltip = Utils.DOMUtils.createElement("div", {
+    this.tooltip = DOMUtils.createElement("div", {
       className: `tooltip tooltip--${this.options.placement}`,
       innerHTML: `
         <div class="tooltip__content">${this.content}</div>
@@ -843,6 +872,9 @@ class ComponentFactory {
   static {
     __name22222(this, "ComponentFactory");
   }
+  static {
+    __name222222(this, "ComponentFactory");
+  }
   static components = /* @__PURE__ */ new Map([
     ["toast", Toast],
     ["modal", Modal],
@@ -917,6 +949,9 @@ class ComponentManager {
   }
   static {
     __name22222(this, "ComponentManager");
+  }
+  static {
+    __name222222(this, "ComponentManager");
   }
   constructor() {
     this.components = /* @__PURE__ */ new Map();

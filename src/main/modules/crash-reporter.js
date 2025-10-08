@@ -1,11 +1,19 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 var __defProp2 = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
-var __commonJS = /* @__PURE__ */ __name((cb, mod) => /* @__PURE__ */ __name(function __require() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-}, "__require"), "__commonJS");
+var __defProp22 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name22 = /* @__PURE__ */ __name2(
+  (target, value) => __defProp22(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __commonJS = /* @__PURE__ */ __name2(
+  (cb, mod) => /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
+    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  }, "__require"), "__require"),
+  "__commonJS"
+);
 var require_crash_reporter = __commonJS({
   "src/main/modules/crash-reporter.js"(exports, module) {
     const { app, ipcMain } = require("electron");
@@ -19,6 +27,9 @@ var require_crash_reporter = __commonJS({
       }
       static {
         __name2(this, "CrashReporter");
+      }
+      static {
+        __name22(this, "CrashReporter");
       }
       constructor() {
         this.appName = "Achievements Manager";
@@ -127,7 +138,7 @@ var require_crash_reporter = __commonJS({
         });
       }
       sanitizeErrorData(errorData) {
-        const sanitize = /* @__PURE__ */ __name2(
+        const sanitize = /* @__PURE__ */ __name22(
           (obj, depth = 0, seen = /* @__PURE__ */ new WeakSet()) => {
             if (depth > 10) return "[Max Depth Reached]";
             if (obj && typeof obj === "object" && seen.has(obj)) {
@@ -445,6 +456,7 @@ var require_crash_reporter = __commonJS({
     }
     __name(setupCrashReporter, "setupCrashReporter");
     __name2(setupCrashReporter, "setupCrashReporter");
+    __name22(setupCrashReporter, "setupCrashReporter");
     function reportRendererError(error, context = {}) {
       if (crashReporter) {
         return crashReporter.reportCrash("renderer-error", error, context);
@@ -453,6 +465,7 @@ var require_crash_reporter = __commonJS({
     }
     __name(reportRendererError, "reportRendererError");
     __name2(reportRendererError, "reportRendererError");
+    __name22(reportRendererError, "reportRendererError");
     module.exports = { CrashReporter, setupCrashReporter, reportRendererError };
   }
 });

@@ -2,12 +2,20 @@ var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 var __defProp2 = Object.defineProperty;
 var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+var __defProp22 = Object.defineProperty;
+var __name22 = /* @__PURE__ */ __name2(
+  (target, value) => __defProp22(target, "name", { value, configurable: true }),
+  "__name"
+);
 class HelpersManager {
   static {
     __name(this, "HelpersManager");
   }
   static {
     __name2(this, "HelpersManager");
+  }
+  static {
+    __name22(this, "HelpersManager");
   }
   constructor(app) {
     this.app = app;
@@ -251,14 +259,17 @@ class HelpersManager {
   }
   debounce(func, wait) {
     let timeout;
-    return /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function executedFunction(...args) {
-      const later = /* @__PURE__ */ __name2(() => {
+    return /* @__PURE__ */ __name22(
+      /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function executedFunction(...args) {
+        const later = /* @__PURE__ */ __name22(() => {
+          clearTimeout(timeout);
+          func(...args);
+        }, "later");
         clearTimeout(timeout);
-        func(...args);
-      }, "later");
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-    }, "executedFunction"), "executedFunction");
+        timeout = setTimeout(later, wait);
+      }, "executedFunction"), "executedFunction"),
+      "executedFunction"
+    );
   }
   throttle(func, limit) {
     let inThrottle;

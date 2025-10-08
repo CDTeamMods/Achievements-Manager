@@ -1,11 +1,19 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 var __defProp2 = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
-var __commonJS = /* @__PURE__ */ __name((cb, mod) => /* @__PURE__ */ __name(function __require() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-}, "__require"), "__commonJS");
+var __defProp22 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name22 = /* @__PURE__ */ __name2(
+  (target, value) => __defProp22(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __commonJS = /* @__PURE__ */ __name2(
+  (cb, mod) => /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
+    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  }, "__require"), "__require"),
+  "__commonJS"
+);
 var require_config = __commonJS({
   "src/main/modules/config.js"(exports, module) {
     const { ipcMain } = require("electron");
@@ -19,6 +27,9 @@ var require_config = __commonJS({
       }
       static {
         __name2(this, "ConfigManager");
+      }
+      static {
+        __name22(this, "ConfigManager");
       }
       constructor() {
         this.configPath = null;
@@ -225,7 +236,7 @@ var require_config = __commonJS({
        * Obtém todas as chaves de configuração permitidas
        */
       getAllowedSettingKeys() {
-        const flattenKeys = /* @__PURE__ */ __name2((obj, prefix = "") => {
+        const flattenKeys = /* @__PURE__ */ __name22((obj, prefix = "") => {
           const keys = [];
           for (const [key, value] of Object.entries(obj)) {
             const fullKey = prefix ? `${prefix}.${key}` : key;
