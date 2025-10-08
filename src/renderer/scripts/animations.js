@@ -27,7 +27,12 @@ var __name222222 = /* @__PURE__ */ __name22222(
   (target, value) => __defProp222222(target, "name", { value, configurable: true }),
   "__name"
 );
-import Utils from "./utils";
+var __defProp2222222 = Object.defineProperty;
+var __name2222222 = /* @__PURE__ */ __name222222(
+  (target, value) => __defProp2222222(target, "name", { value, configurable: true }),
+  "__name"
+);
+import { StringUtils, DOMUtils, throttle } from "./utils";
 class AnimationEngine {
   static {
     __name(this, "AnimationEngine");
@@ -49,6 +54,9 @@ class AnimationEngine {
   }
   static {
     __name222222(this, "AnimationEngine");
+  }
+  static {
+    __name2222222(this, "AnimationEngine");
   }
   constructor() {
     this.animations = /* @__PURE__ */ new Map();
@@ -131,7 +139,7 @@ class AnimationEngine {
       fill: "forwards",
       ...options
     });
-    const id = Utils.StringUtils.generateId("anim");
+    const id = StringUtils.generateId("anim");
     this.animations.set(id, { animation, element });
     animation.addEventListener("finish", () => {
       this.animations.delete(id);
@@ -307,6 +315,9 @@ class MicroInteractions {
   static {
     __name222222(this, "MicroInteractions");
   }
+  static {
+    __name2222222(this, "MicroInteractions");
+  }
   constructor() {
     this.interactions = /* @__PURE__ */ new Map();
     this.isLiteMode = false;
@@ -349,7 +360,7 @@ class MicroInteractions {
     const size = Math.max(rect.width, rect.height);
     const x = event.clientX - rect.left - size / 2;
     const y = event.clientY - rect.top - size / 2;
-    const ripple = Utils.DOMUtils.createElement("div", {
+    const ripple = DOMUtils.createElement("div", {
       className: "ripple-effect",
       style: `
         position: absolute;
@@ -421,7 +432,7 @@ class MicroInteractions {
   }
   addFocusRing(element) {
     element.classList.add("focus-visible");
-    const ring = Utils.DOMUtils.createElement("div", {
+    const ring = DOMUtils.createElement("div", {
       className: "focus-ring",
       style: `
         position: absolute;
@@ -529,7 +540,7 @@ class MicroInteractions {
   }
   setupParallax() {
     const parallaxElements = document.querySelectorAll(".parallax");
-    const updateParallax = Utils.throttle(() => {
+    const updateParallax = throttle(() => {
       const scrollY = window.pageYOffset;
       parallaxElements.forEach((element) => {
         const speed = element.dataset.parallaxSpeed || 0.5;
@@ -561,6 +572,9 @@ class PageTransitions {
   }
   static {
     __name222222(this, "PageTransitions");
+  }
+  static {
+    __name2222222(this, "PageTransitions");
   }
   constructor() {
     this.isTransitioning = false;
@@ -678,6 +692,9 @@ class LoadingAnimations {
   static {
     __name222222(this, "LoadingAnimations");
   }
+  static {
+    __name2222222(this, "LoadingAnimations");
+  }
   static createSkeleton(container, type = "card") {
     const skeletons = {
       card: `
@@ -719,7 +736,7 @@ class LoadingAnimations {
     container.classList.remove("skeleton-loading");
   }
   static showProgress(container, progress = 0) {
-    const progressBar = container.querySelector(".progress-bar") || Utils.DOMUtils.createElement("div", {
+    const progressBar = container.querySelector(".progress-bar") || DOMUtils.createElement("div", {
       className: "progress-bar",
       innerHTML: `
           <div class="progress-bar__track">

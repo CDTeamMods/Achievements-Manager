@@ -27,6 +27,11 @@ var __name222222 = /* @__PURE__ */ __name22222(
   (target, value) => __defProp222222(target, "name", { value, configurable: true }),
   "__name"
 );
+var __defProp2222222 = Object.defineProperty;
+var __name2222222 = /* @__PURE__ */ __name222222(
+  (target, value) => __defProp2222222(target, "name", { value, configurable: true }),
+  "__name"
+);
 class LazyLoader {
   static {
     __name(this, "LazyLoader");
@@ -48,6 +53,9 @@ class LazyLoader {
   }
   static {
     __name222222(this, "LazyLoader");
+  }
+  static {
+    __name2222222(this, "LazyLoader");
   }
   constructor() {
     this.loadedModules = /* @__PURE__ */ new Map();
@@ -84,35 +92,35 @@ class LazyLoader {
    */
   static getModuleImporter(modulePath) {
     const moduleMap = {
-      "./modules/state.js": /* @__PURE__ */ __name222222(
+      "./modules/state.js": /* @__PURE__ */ __name2222222(
         () => import("./modules/state.js"),
         "./modules/state.js"
       ),
-      "./modules/navigation.js": /* @__PURE__ */ __name222222(
+      "./modules/navigation.js": /* @__PURE__ */ __name2222222(
         () => import("./modules/navigation.js"),
         "./modules/navigation.js"
       ),
-      "./components.js": /* @__PURE__ */ __name222222(
+      "./components.js": /* @__PURE__ */ __name2222222(
         () => import("./components.js"),
         "./components.js"
       ),
-      "./modules/settings.js": /* @__PURE__ */ __name222222(
+      "./modules/settings.js": /* @__PURE__ */ __name2222222(
         () => import("./modules/settings.js"),
         "./modules/settings.js"
       ),
-      "./modules/events.js": /* @__PURE__ */ __name222222(
+      "./modules/events.js": /* @__PURE__ */ __name2222222(
         () => import("./modules/events.js"),
         "./modules/events.js"
       ),
-      "./modules/helpers.js": /* @__PURE__ */ __name222222(
+      "./modules/helpers.js": /* @__PURE__ */ __name2222222(
         () => import("./modules/helpers.js"),
         "./modules/helpers.js"
       ),
-      "./performance.js": /* @__PURE__ */ __name222222(
+      "./performance.js": /* @__PURE__ */ __name2222222(
         () => import("./performance.js"),
         "./performance.js"
       ),
-      "./modules/steam-games.js": /* @__PURE__ */ __name222222(
+      "./modules/steam-games.js": /* @__PURE__ */ __name2222222(
         () => import("./modules/steam-games.js"),
         "./modules/steam-games.js"
       )

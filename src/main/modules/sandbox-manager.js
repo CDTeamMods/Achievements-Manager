@@ -23,19 +23,27 @@ var __name22222 = /* @__PURE__ */ __name2222(
   "__name"
 );
 var __defProp222222 = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name222222 = /* @__PURE__ */ __name22222(
   (target, value) => __defProp222222(target, "name", { value, configurable: true }),
   "__name"
 );
-var __commonJS = /* @__PURE__ */ __name22222(
-  (cb, mod) => /* @__PURE__ */ __name22222(
-    /* @__PURE__ */ __name2222(
-      /* @__PURE__ */ __name222(
-        /* @__PURE__ */ __name22(
-          /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
-            return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-          }, "__require"), "__require"),
+var __defProp2222222 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name2222222 = /* @__PURE__ */ __name222222(
+  (target, value) => __defProp2222222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __commonJS = /* @__PURE__ */ __name222222(
+  (cb, mod) => /* @__PURE__ */ __name222222(
+    /* @__PURE__ */ __name22222(
+      /* @__PURE__ */ __name2222(
+        /* @__PURE__ */ __name222(
+          /* @__PURE__ */ __name22(
+            /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
+              return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+            }, "__require"), "__require"),
+            "__require"
+          ),
           "__require"
         ),
         "__require"
@@ -71,6 +79,9 @@ var require_sandbox_manager = __commonJS({
       }
       static {
         __name222222(this, "SandboxManager");
+      }
+      static {
+        __name2222222(this, "SandboxManager");
       }
       constructor() {
         this.isDev = process.env.NODE_ENV === "development";
@@ -274,7 +285,7 @@ var require_sandbox_manager = __commonJS({
             id: messageId,
             timestamp: Date.now()
           };
-          const responseListener = /* @__PURE__ */ __name222222((response) => {
+          const responseListener = /* @__PURE__ */ __name2222222((response) => {
             if (response.id === messageId) {
               clearTimeout(timeoutId);
               processInfo.process.off("message", responseListener);
@@ -391,6 +402,7 @@ var require_sandbox_manager = __commonJS({
     __name2222(getSandboxManager, "getSandboxManager");
     __name22222(getSandboxManager, "getSandboxManager");
     __name222222(getSandboxManager, "getSandboxManager");
+    __name2222222(getSandboxManager, "getSandboxManager");
     module.exports = {
       SandboxManager,
       getSandboxManager

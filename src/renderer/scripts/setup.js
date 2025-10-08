@@ -27,9 +27,14 @@ var __name222222 = /* @__PURE__ */ __name22222(
   (target, value) => __defProp222222(target, "name", { value, configurable: true }),
   "__name"
 );
+var __defProp2222222 = Object.defineProperty;
+var __name2222222 = /* @__PURE__ */ __name222222(
+  (target, value) => __defProp2222222(target, "name", { value, configurable: true }),
+  "__name"
+);
 import { initI18n, changeLanguage, translatePage } from "./i18n-hot.js";
 import { filterAllowedSettings } from "./config/allowed-settings-keys.js";
-const isDebugEnabled = /* @__PURE__ */ __name222222(() => {
+const isDebugEnabled = /* @__PURE__ */ __name2222222(() => {
   const localStorageDebug = localStorage.getItem("DEBUG_TOOLS");
   if (localStorageDebug === "true") return true;
   if (window.DEBUG_TOOLS === true) return true;
@@ -63,6 +68,9 @@ class SetupWizard {
   }
   static {
     __name222222(this, "SetupWizard");
+  }
+  static {
+    __name2222222(this, "SetupWizard");
   }
   constructor() {
     this.currentStep = 0;

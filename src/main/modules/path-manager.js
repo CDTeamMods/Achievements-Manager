@@ -3,15 +3,23 @@ var __name = (target, value) => __defProp(target, "name", { value, configurable:
 var __defProp2 = Object.defineProperty;
 var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
 var __defProp22 = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name22 = /* @__PURE__ */ __name2(
   (target, value) => __defProp22(target, "name", { value, configurable: true }),
   "__name"
 );
-var __commonJS = /* @__PURE__ */ __name2(
-  (cb, mod) => /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
-    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-  }, "__require"), "__require"),
+var __defProp222 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name222 = /* @__PURE__ */ __name22(
+  (target, value) => __defProp222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __commonJS = /* @__PURE__ */ __name22(
+  (cb, mod) => /* @__PURE__ */ __name22(
+    /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
+      return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+    }, "__require"), "__require"),
+    "__require"
+  ),
   "__commonJS"
 );
 var require_path_manager = __commonJS({
@@ -29,6 +37,9 @@ var require_path_manager = __commonJS({
       }
       static {
         __name22(this, "PathManager");
+      }
+      static {
+        __name222(this, "PathManager");
       }
       constructor() {
         this.isInstalled = false;
@@ -176,6 +187,7 @@ var require_path_manager = __commonJS({
     __name(setupPathManager, "setupPathManager");
     __name2(setupPathManager, "setupPathManager");
     __name22(setupPathManager, "setupPathManager");
+    __name222(setupPathManager, "setupPathManager");
     function getPathManager() {
       if (!pathManager) {
         throw new Error("PathManager n\xE3o foi inicializado. Chame setupPathManager() primeiro.");
@@ -185,6 +197,7 @@ var require_path_manager = __commonJS({
     __name(getPathManager, "getPathManager");
     __name2(getPathManager, "getPathManager");
     __name22(getPathManager, "getPathManager");
+    __name222(getPathManager, "getPathManager");
     module.exports = {
       PathManager,
       setupPathManager,

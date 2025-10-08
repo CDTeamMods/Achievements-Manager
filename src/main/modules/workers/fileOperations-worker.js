@@ -27,6 +27,11 @@ var __name222222 = /* @__PURE__ */ __name22222(
   (target, value) => __defProp222222(target, "name", { value, configurable: true }),
   "__name"
 );
+var __defProp2222222 = Object.defineProperty;
+var __name2222222 = /* @__PURE__ */ __name222222(
+  (target, value) => __defProp2222222(target, "name", { value, configurable: true }),
+  "__name"
+);
 const fs = require("node:fs").promises;
 const path = require("node:path");
 const crypto = require("crypto");
@@ -51,6 +56,9 @@ class FileOperationsWorker {
   }
   static {
     __name222222(this, "FileOperationsWorker");
+  }
+  static {
+    __name2222222(this, "FileOperationsWorker");
   }
   constructor() {
     this.allowedPaths = [];

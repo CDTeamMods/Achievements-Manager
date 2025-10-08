@@ -7,25 +7,34 @@ var __name22 = /* @__PURE__ */ __name2(
   (target, value) => __defProp22(target, "name", { value, configurable: true }),
   "__name"
 );
+var __defProp222 = Object.defineProperty;
+var __name222 = /* @__PURE__ */ __name22(
+  (target, value) => __defProp222(target, "name", { value, configurable: true }),
+  "__name"
+);
 function debounce(func, wait, immediate = false) {
   let timeout;
-  return /* @__PURE__ */ __name22(
-    /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function executedFunction(...args) {
-      const later = /* @__PURE__ */ __name22(() => {
-        timeout = null;
-        if (!immediate) func.apply(this, args);
-      }, "later");
-      const callNow = immediate && !timeout;
-      clearTimeout(timeout);
-      timeout = setTimeout(later, wait);
-      if (callNow) func.apply(this, args);
-    }, "executedFunction"), "executedFunction"),
+  return /* @__PURE__ */ __name222(
+    /* @__PURE__ */ __name22(
+      /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function executedFunction(...args) {
+        const later = /* @__PURE__ */ __name222(() => {
+          timeout = null;
+          if (!immediate) func.apply(this, args);
+        }, "later");
+        const callNow = immediate && !timeout;
+        clearTimeout(timeout);
+        timeout = setTimeout(later, wait);
+        if (callNow) func.apply(this, args);
+      }, "executedFunction"), "executedFunction"),
+      "executedFunction"
+    ),
     "executedFunction"
   );
 }
 __name(debounce, "debounce");
 __name2(debounce, "debounce");
 __name22(debounce, "debounce");
+__name222(debounce, "debounce");
 function throttle(func, limit) {
   let inThrottle;
   return function(...args) {
@@ -39,6 +48,7 @@ function throttle(func, limit) {
 __name(throttle, "throttle");
 __name2(throttle, "throttle");
 __name22(throttle, "throttle");
+__name222(throttle, "throttle");
 const NumberUtils = {
   // Formatar número com separadores
   format(number, locale = "pt-BR") {
@@ -375,7 +385,7 @@ const PerformanceUtils = {
   // Detectar idle state
   onIdle(callback, timeout = 5e3) {
     let timer;
-    const resetTimer = /* @__PURE__ */ __name22(() => {
+    const resetTimer = /* @__PURE__ */ __name222(() => {
       clearTimeout(timer);
       timer = setTimeout(callback, timeout);
     }, "resetTimer");
@@ -465,6 +475,9 @@ class EventEmitter {
   static {
     __name22(this, "EventEmitter");
   }
+  static {
+    __name222(this, "EventEmitter");
+  }
   constructor() {
     this.events = {};
   }
@@ -483,7 +496,7 @@ class EventEmitter {
     this.events[event].forEach((callback) => callback(...args));
   }
   once(event, callback) {
-    const onceCallback = /* @__PURE__ */ __name22((...args) => {
+    const onceCallback = /* @__PURE__ */ __name222((...args) => {
       callback(...args);
       this.off(event, onceCallback);
     }, "onceCallback");

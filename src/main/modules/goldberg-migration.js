@@ -13,17 +13,25 @@ var __name222 = /* @__PURE__ */ __name22(
   "__name"
 );
 var __defProp2222 = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name2222 = /* @__PURE__ */ __name222(
   (target, value) => __defProp2222(target, "name", { value, configurable: true }),
   "__name"
 );
-var __commonJS = /* @__PURE__ */ __name222(
-  (cb, mod) => /* @__PURE__ */ __name222(
-    /* @__PURE__ */ __name22(
-      /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
-        return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-      }, "__require"), "__require"),
+var __defProp22222 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name22222 = /* @__PURE__ */ __name2222(
+  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __commonJS = /* @__PURE__ */ __name2222(
+  (cb, mod) => /* @__PURE__ */ __name2222(
+    /* @__PURE__ */ __name222(
+      /* @__PURE__ */ __name22(
+        /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
+          return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+        }, "__require"), "__require"),
+        "__require"
+      ),
       "__require"
     ),
     "__require"
@@ -52,6 +60,9 @@ var require_goldberg_migration = __commonJS({
       }
       static {
         __name2222(this, "GoldbergMigrationManager");
+      }
+      static {
+        __name22222(this, "GoldbergMigrationManager");
       }
       constructor(crashReporter = null, pathManager = null) {
         this.currentUser = null;
