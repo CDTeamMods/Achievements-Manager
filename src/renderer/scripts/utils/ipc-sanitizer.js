@@ -1,9 +1,14 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+var __defProp2 = Object.defineProperty;
+var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
 import { ALLOWED_SETTINGS_KEYS } from "../config/allowed-settings-keys.js";
 class IPCSanitizer {
   static {
     __name(this, "IPCSanitizer");
+  }
+  static {
+    __name2(this, "IPCSanitizer");
   }
   /**
    * Sanitiza um objeto removendo propriedades que não podem ser clonadas pelo IPC

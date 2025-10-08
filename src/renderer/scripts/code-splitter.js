@@ -7,6 +7,11 @@ var __name22 = /* @__PURE__ */ __name2(
   (target, value) => __defProp22(target, "name", { value, configurable: true }),
   "__name"
 );
+var __defProp222 = Object.defineProperty;
+var __name222 = /* @__PURE__ */ __name22(
+  (target, value) => __defProp222(target, "name", { value, configurable: true }),
+  "__name"
+);
 class CodeSplitter {
   static {
     __name(this, "CodeSplitter");
@@ -16,6 +21,9 @@ class CodeSplitter {
   }
   static {
     __name22(this, "CodeSplitter");
+  }
+  static {
+    __name222(this, "CodeSplitter");
   }
   constructor() {
     this.chunks = /* @__PURE__ */ new Map();

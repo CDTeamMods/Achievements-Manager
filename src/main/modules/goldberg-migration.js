@@ -1,9 +1,11 @@
 var __defProp = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
-var __commonJS = (cb, mod) => function __require() {
+var __defProp2 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+var __commonJS = /* @__PURE__ */ __name((cb, mod) => /* @__PURE__ */ __name(function __require() {
   return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-};
+}, "__require"), "__commonJS");
 var require_goldberg_migration = __commonJS({
   "src/main/modules/goldberg-migration.js"(exports, module) {
     const { ipcMain, dialog } = require("electron");
@@ -14,6 +16,9 @@ var require_goldberg_migration = __commonJS({
     class GoldbergMigrationManager {
       static {
         __name(this, "GoldbergMigrationManager");
+      }
+      static {
+        __name2(this, "GoldbergMigrationManager");
       }
       constructor(crashReporter = null, pathManager = null) {
         this.currentUser = null;
@@ -49,7 +54,9 @@ var require_goldberg_migration = __commonJS({
           this.isInitialized = true;
           const goldbergInfo = await this.checkGoldbergFolder();
           if (goldbergInfo.exists && this.migrationSettings.autoMigration) {
-            this.debugManager.log("\u{1F504} Executando verifica\xE7\xE3o autom\xE1tica na inicializa\xE7\xE3o...");
+            this.debugManager.log(
+              "\u{1F504} Executando verifica\xE7\xE3o autom\xE1tica na inicializa\xE7\xE3o..."
+            );
             setTimeout(() => {
               this.performAutoCheck();
             }, 3e3);
@@ -96,7 +103,10 @@ var require_goldberg_migration = __commonJS({
               }
             }
           } catch (homedirError) {
-            this.debugManager?.warn("\u26A0\uFE0F Extra\xE7\xE3o do homedir falhou:", homedirError.message);
+            this.debugManager?.warn(
+              "\u26A0\uFE0F Extra\xE7\xE3o do homedir falhou:",
+              homedirError.message
+            );
           }
           const alternativeEnvs = ["USERPROFILE", "LOGNAME", "USER_NAME"];
           for (const envVar of alternativeEnvs) {
@@ -114,7 +124,9 @@ var require_goldberg_migration = __commonJS({
               }
             }
           }
-          this.debugManager?.warn("\u26A0\uFE0F N\xE3o foi poss\xEDvel detectar o usu\xE1rio do sistema");
+          this.debugManager?.warn(
+            "\u26A0\uFE0F N\xE3o foi poss\xEDvel detectar o usu\xE1rio do sistema"
+          );
           return "DefaultUser";
         } catch (error) {
           this.debugManager?.error("\u274C Erro ao detectar usu\xE1rio:", error);
@@ -210,7 +222,7 @@ var require_goldberg_migration = __commonJS({
           const stats = await fs.stat(dirPath);
           return stats.mtime.toISOString();
         } catch (error) {
-          return (/* @__PURE__ */ new Date()).toISOString();
+          return /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString();
         }
       }
       /**
@@ -269,11 +281,11 @@ var require_goldberg_migration = __commonJS({
             totalAchievements: 0,
             unlockedCount: 0,
             completionPercentage: 0,
-            lastModified: (/* @__PURE__ */ new Date()).toISOString(),
+            lastModified: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString(),
             version: "1.0.0",
             source: "Goldberg_Migration",
             originalFiles: migratedFiles,
-            migrationDate: (/* @__PURE__ */ new Date()).toISOString()
+            migrationDate: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString()
           };
           for (const file of migratedFiles) {
             const filePath = path.join(destPath, file);
@@ -288,7 +300,9 @@ var require_goldberg_migration = __commonJS({
                 }
               }
             } catch (error) {
-              this.debugManager.log(`\u26A0\uFE0F N\xE3o foi poss\xEDvel processar ${file}: ${error.message}`);
+              this.debugManager.log(
+                `\u26A0\uFE0F N\xE3o foi poss\xEDvel processar ${file}: ${error.message}`
+              );
             }
           }
           if (achievementsData.totalAchievements > 0) {
@@ -298,7 +312,10 @@ var require_goldberg_migration = __commonJS({
           await fs.writeFile(achievementsPath, JSON.stringify(achievementsData, null, 2));
           this.debugManager.log(`\u2705 Arquivo achievements.json criado para jogo ${gameInfo.id}`);
         } catch (error) {
-          this.debugManager.error(`\u274C Erro ao criar achievements.json para ${gameInfo.id}:`, error);
+          this.debugManager.error(
+            `\u274C Erro ao criar achievements.json para ${gameInfo.id}:`,
+            error
+          );
         }
       }
       /**
@@ -352,9 +369,15 @@ var require_goldberg_migration = __commonJS({
           } catch (error) {
             await this.saveMigrationSettings();
           }
-          this.debugManager.log("\u2699\uFE0F Configura\xE7\xF5es de migra\xE7\xE3o carregadas:", this.migrationSettings);
+          this.debugManager.log(
+            "\u2699\uFE0F Configura\xE7\xF5es de migra\xE7\xE3o carregadas:",
+            this.migrationSettings
+          );
         } catch (error) {
-          this.debugManager.error("\u274C Erro ao carregar configura\xE7\xF5es de migra\xE7\xE3o:", error);
+          this.debugManager.error(
+            "\u274C Erro ao carregar configura\xE7\xF5es de migra\xE7\xE3o:",
+            error
+          );
         }
       }
       /**
@@ -368,7 +391,10 @@ var require_goldberg_migration = __commonJS({
           await fs.writeFile(settingsPath, JSON.stringify(this.migrationSettings, null, 2));
           this.debugManager.log("\u{1F4BE} Configura\xE7\xF5es de migra\xE7\xE3o salvas");
         } catch (error) {
-          this.debugManager.error("\u274C Erro ao salvar configura\xE7\xF5es de migra\xE7\xE3o:", error);
+          this.debugManager.error(
+            "\u274C Erro ao salvar configura\xE7\xF5es de migra\xE7\xE3o:",
+            error
+          );
         }
       }
       /**
@@ -378,7 +404,10 @@ var require_goldberg_migration = __commonJS({
         try {
           this.migrationSettings = { ...this.migrationSettings, ...newSettings };
           await this.saveMigrationSettings();
-          this.debugManager.log("\u2699\uFE0F Configura\xE7\xF5es de migra\xE7\xE3o atualizadas:", this.migrationSettings);
+          this.debugManager.log(
+            "\u2699\uFE0F Configura\xE7\xF5es de migra\xE7\xE3o atualizadas:",
+            this.migrationSettings
+          );
           return { success: true };
         } catch (error) {
           this.debugManager.error("\u274C Erro ao atualizar configura\xE7\xF5es:", error);
@@ -393,7 +422,9 @@ var require_goldberg_migration = __commonJS({
           this.debugManager.log("\u{1F50D} Executando verifica\xE7\xE3o autom\xE1tica...");
           const goldbergInfo = await this.checkGoldbergFolder();
           if (!goldbergInfo.exists || goldbergInfo.gamesCount === 0) {
-            this.debugManager.log("\u{1F4ED} Nenhum jogo encontrado na verifica\xE7\xE3o autom\xE1tica");
+            this.debugManager.log(
+              "\u{1F4ED} Nenhum jogo encontrado na verifica\xE7\xE3o autom\xE1tica"
+            );
             return;
           }
           const hasNewGames = await this.hasNewOrModifiedGames(goldbergInfo.games);
@@ -409,7 +440,9 @@ var require_goldberg_migration = __commonJS({
               try {
                 structuredClone(goldbergInfo);
                 globalThis.mainWindow.webContents.send("goldberg-migration-dialog", goldbergInfo);
-                this.debugManager.log("\u{1F4E4} Evento goldberg-migration-dialog enviado com sucesso");
+                this.debugManager.log(
+                  "\u{1F4E4} Evento goldberg-migration-dialog enviado com sucesso"
+                );
               } catch (cloneError) {
                 this.debugManager.error(
                   "\u274C Erro de clonagem em goldberg-migration-dialog:",
@@ -432,7 +465,9 @@ var require_goldberg_migration = __commonJS({
                 try {
                   structuredClone(result);
                   globalThis.mainWindow.webContents.send("goldberg-migration-completed", result);
-                  this.debugManager.log("\u{1F4E4} Evento goldberg-migration-completed enviado com sucesso");
+                  this.debugManager.log(
+                    "\u{1F4E4} Evento goldberg-migration-completed enviado com sucesso"
+                  );
                 } catch (cloneError) {
                   this.debugManager.error(
                     "\u274C Erro de clonagem em goldberg-migration-completed:",
@@ -452,7 +487,7 @@ var require_goldberg_migration = __commonJS({
               this.debugManager.error("\u274C Erro na migra\xE7\xE3o autom\xE1tica:", result.error);
             }
           }
-          this.migrationSettings.lastCheck = (/* @__PURE__ */ new Date()).toISOString();
+          this.migrationSettings.lastCheck = /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString();
           await this.saveMigrationSettings();
         } catch (error) {
           this.debugManager.error("\u274C Erro na verifica\xE7\xE3o autom\xE1tica:", error);
@@ -473,7 +508,9 @@ var require_goldberg_migration = __commonJS({
           for (const game of games) {
             const gameModified = new Date(game.lastModified);
             if (gameModified > lastCheckDate) {
-              this.debugManager.log(`\u{1F195} Jogo modificado encontrado: ${game.name} (${game.id})`);
+              this.debugManager.log(
+                `\u{1F195} Jogo modificado encontrado: ${game.name} (${game.id})`
+              );
               return true;
             }
             const gsePath = path.join(this.gseSavesPath, game.id);
@@ -528,19 +565,26 @@ var require_goldberg_migration = __commonJS({
         });
         ipcMain.handle("goldberg:setSetting", async (event, key, value) => {
           try {
-            this.debugManager.log(`\u{1F527} Tentando salvar configura\xE7\xE3o: ${key} = ${value}`);
+            this.debugManager.log(
+              `\u{1F527} Tentando salvar configura\xE7\xE3o: ${key} = ${value}`
+            );
             if (!key || key.trim() === "") {
               throw new Error("Chave da configura\xE7\xE3o n\xE3o pode estar vazia");
             }
             if (!this.migrationSettings) {
-              this.debugManager.log("\u26A0\uFE0F migrationSettings n\xE3o existe, inicializando...");
+              this.debugManager.log(
+                "\u26A0\uFE0F migrationSettings n\xE3o existe, inicializando..."
+              );
               this.migrationSettings = {
                 autoMigration: false,
                 showDialog: true,
                 lastCheck: null
               };
             }
-            this.debugManager.log("\u{1F4CB} Estado atual das configura\xE7\xF5es:", this.migrationSettings);
+            this.debugManager.log(
+              "\u{1F4CB} Estado atual das configura\xE7\xF5es:",
+              this.migrationSettings
+            );
             this.migrationSettings[key] = value;
             this.debugManager.log(`\u2705 Configura\xE7\xE3o ${key} atualizada para: ${value}`);
             await this.saveMigrationSettings();
@@ -558,7 +602,7 @@ var require_goldberg_migration = __commonJS({
         ipcMain.handle("goldberg:checkMigration", async () => {
           try {
             const goldbergInfo = await this.checkGoldbergFolder();
-            this.migrationSettings.lastCheck = (/* @__PURE__ */ new Date()).toISOString();
+            this.migrationSettings.lastCheck = /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString();
             await this.saveMigrationSettings();
             return {
               hasGames: goldbergInfo.exists && goldbergInfo.gamesCount > 0,
@@ -580,4 +624,7 @@ var require_goldberg_migration = __commonJS({
     module.exports = { GoldbergMigrationManager };
   }
 });
-export default require_goldberg_migration();
+var goldberg_migration_default = require_goldberg_migration();
+export {
+  goldberg_migration_default as default
+};

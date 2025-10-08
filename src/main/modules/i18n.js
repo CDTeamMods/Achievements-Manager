@@ -3,15 +3,23 @@ var __name = (target, value) => __defProp(target, "name", { value, configurable:
 var __defProp2 = Object.defineProperty;
 var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
 var __defProp22 = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name22 = /* @__PURE__ */ __name2(
   (target, value) => __defProp22(target, "name", { value, configurable: true }),
   "__name"
 );
-var __commonJS = /* @__PURE__ */ __name2(
-  (cb, mod) => /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
-    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-  }, "__require"), "__require"),
+var __defProp222 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name222 = /* @__PURE__ */ __name22(
+  (target, value) => __defProp222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __commonJS = /* @__PURE__ */ __name22(
+  (cb, mod) => /* @__PURE__ */ __name22(
+    /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
+      return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+    }, "__require"), "__require"),
+    "__require"
+  ),
   "__commonJS"
 );
 var require_i18n = __commonJS({
@@ -28,6 +36,9 @@ var require_i18n = __commonJS({
       }
       static {
         __name22(this, "I18nManager");
+      }
+      static {
+        __name222(this, "I18nManager");
       }
       constructor(pathManager = null, debugManager = null) {
         this.pathManager = pathManager;
@@ -416,7 +427,7 @@ var require_i18n = __commonJS({
         return this.interpolate(translation, params);
       }
       getTranslation(key) {
-        const getNestedValue = /* @__PURE__ */ __name22((obj, path2) => {
+        const getNestedValue = /* @__PURE__ */ __name222((obj, path2) => {
           return path2.split(".").reduce((current, prop) => {
             return current && current[prop] !== void 0 ? current[prop] : void 0;
           }, obj);
@@ -539,6 +550,7 @@ var require_i18n = __commonJS({
     __name(setupI18n, "setupI18n");
     __name2(setupI18n, "setupI18n");
     __name22(setupI18n, "setupI18n");
+    __name222(setupI18n, "setupI18n");
     module.exports = { I18nManager, setupI18n };
     module.exports.default = module.exports;
   }

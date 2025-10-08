@@ -7,6 +7,11 @@ var __name22 = /* @__PURE__ */ __name2(
   (target, value) => __defProp22(target, "name", { value, configurable: true }),
   "__name"
 );
+var __defProp222 = Object.defineProperty;
+var __name222 = /* @__PURE__ */ __name22(
+  (target, value) => __defProp222(target, "name", { value, configurable: true }),
+  "__name"
+);
 import { EventEmitter } from "./utils.js";
 class Component extends EventEmitter {
   static {
@@ -17,6 +22,9 @@ class Component extends EventEmitter {
   }
   static {
     __name22(this, "Component");
+  }
+  static {
+    __name222(this, "Component");
   }
   constructor(element, options = {}) {
     super();
@@ -62,6 +70,9 @@ class Toast extends Component {
   }
   static {
     __name22(this, "Toast");
+  }
+  static {
+    __name222(this, "Toast");
   }
   get defaultOptions() {
     return {
@@ -160,6 +171,9 @@ class Modal extends Component {
   }
   static {
     __name22(this, "Modal");
+  }
+  static {
+    __name222(this, "Modal");
   }
   get defaultOptions() {
     return {
@@ -277,6 +291,9 @@ class Loading extends Component {
   static {
     __name22(this, "Loading");
   }
+  static {
+    __name222(this, "Loading");
+  }
   get defaultOptions() {
     return {
       type: "spinner",
@@ -342,6 +359,9 @@ class ProgressBar extends Component {
   static {
     __name22(this, "ProgressBar");
   }
+  static {
+    __name222(this, "ProgressBar");
+  }
   get defaultOptions() {
     return {
       value: 0,
@@ -350,7 +370,7 @@ class ProgressBar extends Component {
       striped: false,
       color: "primary",
       showLabel: true,
-      labelFormat: /* @__PURE__ */ __name22(
+      labelFormat: /* @__PURE__ */ __name222(
         (value, max) => `${Math.round(value / max * 100)}%`,
         "labelFormat"
       )
@@ -402,6 +422,9 @@ class Dropdown extends Component {
   }
   static {
     __name22(this, "Dropdown");
+  }
+  static {
+    __name222(this, "Dropdown");
   }
   get defaultOptions() {
     return {
@@ -536,6 +559,9 @@ class Tabs extends Component {
   static {
     __name22(this, "Tabs");
   }
+  static {
+    __name222(this, "Tabs");
+  }
   get defaultOptions() {
     return {
       activeTab: 0,
@@ -634,6 +660,9 @@ class Tooltip extends Component {
   }
   static {
     __name22(this, "Tooltip");
+  }
+  static {
+    __name222(this, "Tooltip");
   }
   get defaultOptions() {
     return {
@@ -747,6 +776,9 @@ class ComponentFactory {
   static {
     __name22(this, "ComponentFactory");
   }
+  static {
+    __name222(this, "ComponentFactory");
+  }
   static components = /* @__PURE__ */ new Map([
     ["toast", Toast],
     ["modal", Modal],
@@ -815,6 +847,9 @@ class ComponentManager {
   }
   static {
     __name22(this, "ComponentManager");
+  }
+  static {
+    __name222(this, "ComponentManager");
   }
   constructor() {
     this.components = /* @__PURE__ */ new Map();

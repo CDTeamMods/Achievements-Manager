@@ -7,6 +7,11 @@ var __name22 = /* @__PURE__ */ __name2(
   (target, value) => __defProp22(target, "name", { value, configurable: true }),
   "__name"
 );
+var __defProp222 = Object.defineProperty;
+var __name222 = /* @__PURE__ */ __name22(
+  (target, value) => __defProp222(target, "name", { value, configurable: true }),
+  "__name"
+);
 class AnimationEngine {
   static {
     __name(this, "AnimationEngine");
@@ -16,6 +21,9 @@ class AnimationEngine {
   }
   static {
     __name22(this, "AnimationEngine");
+  }
+  static {
+    __name222(this, "AnimationEngine");
   }
   constructor() {
     this.animations = /* @__PURE__ */ new Map();
@@ -262,6 +270,9 @@ class MicroInteractions {
   static {
     __name22(this, "MicroInteractions");
   }
+  static {
+    __name222(this, "MicroInteractions");
+  }
   constructor() {
     this.interactions = /* @__PURE__ */ new Map();
     this.isLiteMode = false;
@@ -506,6 +517,9 @@ class PageTransitions {
   static {
     __name22(this, "PageTransitions");
   }
+  static {
+    __name222(this, "PageTransitions");
+  }
   constructor() {
     this.isTransitioning = false;
     this.currentPage = null;
@@ -613,6 +627,9 @@ class LoadingAnimations {
   }
   static {
     __name22(this, "LoadingAnimations");
+  }
+  static {
+    __name222(this, "LoadingAnimations");
   }
   static createSkeleton(container, type = "card") {
     const skeletons = {
