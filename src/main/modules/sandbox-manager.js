@@ -1,410 +1,351 @@
-/**
- * 📦 Sandbox Manager
- * Gerencia isolamento de processos e configurações de sandbox
- */
-
-const { app, utilityProcess } = require('electron');
-const path = require('path');
-
-class SandboxManager {
-  constructor() {
-    this.isDev = process.env.NODE_ENV === 'development';
-    this.sandboxedProcesses = new Map();
-    this.processPool = new Map();
-    
-    this.initializeSandbox();
-  }
-
-  /**
-   * Inicializa configurações de sandbox
-   */
-  initializeSandbox() {
-    this.setupProcessIsolation();
-    this.setupResourceLimits();
-    this.setupProcessMonitoring();
-  }
-
-  /**
-   * Configura isolamento de processos
-   */
-  setupProcessIsolation() {
-    // Configurações de isolamento por tipo de processo
-    this.isolationConfig = {
-      fileOperations: {
-        sandbox: true,
-        allowedPaths: [
-          app.getPath('userData'),
-          app.getPath('documents'),
-          app.getPath('downloads')
-        ],
-        maxMemory: 128 * 1024 * 1024, // 128MB
-        maxCPU: 50 // 50% CPU
-      },
-      steamIntegration: {
-        sandbox: false, // Precisa de acesso ao sistema
-        allowedPaths: [
-          app.getPath('userData'),
-          'C:\\Program Files (x86)\\Steam',
-          'C:\\Program Files\\Steam'
-        ],
-        maxMemory: 256 * 1024 * 1024, // 256MB
-        maxCPU: 30
-      },
-      gameProcessing: {
-        sandbox: true,
-        allowedPaths: [
-          app.getPath('userData')
-        ],
-        maxMemory: 512 * 1024 * 1024, // 512MB
-        maxCPU: 70
-      },
-      networkOperations: {
-        sandbox: true,
-        allowedDomains: [
-          'api.steampowered.com',
-          'steamcommunity.com',
-          'github.com'
-        ],
-        maxMemory: 64 * 1024 * 1024, // 64MB
-        maxCPU: 20
+var __defProp = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+var __commonJS = (cb, mod) => function __require() {
+  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+};
+var require_sandbox_manager = __commonJS({
+  "src/main/modules/sandbox-manager.js"(exports, module) {
+    const { app, utilityProcess } = require("electron");
+    const path = require("path");
+    class SandboxManager {
+      static {
+        __name(this, "SandboxManager");
       }
-    };
-  }
-
-  /**
-   * Configura limites de recursos
-   */
-  setupResourceLimits() {
-    this.resourceLimits = {
-      maxProcesses: 5,
-      maxMemoryPerProcess: 512 * 1024 * 1024, // 512MB
-      maxCPUPerProcess: 80, // 80%
-      processTimeout: 30000, // 30 segundos
-      idleTimeout: 60000 // 1 minuto
-    };
-  }
-
-  /**
-   * Configura monitoramento de processos
-   */
-  setupProcessMonitoring() {
-    this.processMetrics = {
-      created: 0,
-      destroyed: 0,
-      active: 0,
-      errors: 0,
-      memoryUsage: 0,
-      cpuUsage: 0
-    };
-
-    // Monitor de recursos a cada 5 segundos
-    setInterval(() => {
-      this.monitorProcessResources();
-    }, 5000);
-  }
-
-  /**
-   * Cria um processo sandboxed para operações específicas
-   */
-  async createSandboxedProcess(type, options = {}) {
-    try {
-      const config = this.isolationConfig[type];
-      if (!config) {
-        throw new Error(`Tipo de processo não suportado: ${type}`);
+      constructor() {
+        this.isDev = process.env.NODE_ENV === "development";
+        this.sandboxedProcesses = /* @__PURE__ */ new Map();
+        this.processPool = /* @__PURE__ */ new Map();
+        this.initializeSandbox();
       }
-
-      // Verificar limites de processos
-      if (this.sandboxedProcesses.size >= this.resourceLimits.maxProcesses) {
-        await this.cleanupIdleProcesses();
+      /**
+       * Inicializa configurações de sandbox
+       */
+      initializeSandbox() {
+        this.setupProcessIsolation();
+        this.setupResourceLimits();
+        this.setupProcessMonitoring();
       }
-
-      const processId = `${type}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-      
-      const processOptions = {
-        serviceName: `achievements-manager-${type}`,
-        modulePath: path.join(__dirname, 'workers', `${type}-worker.js`),
-        allowLoadingUnsignedLibraries: false,
-        options: {
-          ...options,
-          processId,
-          config
+      /**
+       * Configura isolamento de processos
+       */
+      setupProcessIsolation() {
+        this.isolationConfig = {
+          fileOperations: {
+            sandbox: true,
+            allowedPaths: [app.getPath("userData"), app.getPath("documents"), app.getPath("downloads")],
+            maxMemory: 128 * 1024 * 1024,
+            // 128MB
+            maxCPU: 50
+            // 50% CPU
+          },
+          steamIntegration: {
+            sandbox: false,
+            // Precisa de acesso ao sistema
+            allowedPaths: [
+              app.getPath("userData"),
+              "C:\\Program Files (x86)\\Steam",
+              "C:\\Program Files\\Steam"
+            ],
+            maxMemory: 256 * 1024 * 1024,
+            // 256MB
+            maxCPU: 30
+          },
+          gameProcessing: {
+            sandbox: true,
+            allowedPaths: [app.getPath("userData")],
+            maxMemory: 512 * 1024 * 1024,
+            // 512MB
+            maxCPU: 70
+          },
+          networkOperations: {
+            sandbox: true,
+            allowedDomains: ["api.steampowered.com", "steamcommunity.com", "github.com"],
+            maxMemory: 64 * 1024 * 1024,
+            // 64MB
+            maxCPU: 20
+          }
+        };
+      }
+      /**
+       * Configura limites de recursos
+       */
+      setupResourceLimits() {
+        this.resourceLimits = {
+          maxProcesses: 5,
+          maxMemoryPerProcess: 512 * 1024 * 1024,
+          // 512MB
+          maxCPUPerProcess: 80,
+          // 80%
+          processTimeout: 3e4,
+          // 30 segundos
+          idleTimeout: 6e4
+          // 1 minuto
+        };
+      }
+      /**
+       * Configura monitoramento de processos
+       */
+      setupProcessMonitoring() {
+        this.processMetrics = {
+          created: 0,
+          destroyed: 0,
+          active: 0,
+          errors: 0,
+          memoryUsage: 0,
+          cpuUsage: 0
+        };
+        setInterval(() => {
+          this.monitorProcessResources();
+        }, 5e3);
+      }
+      /**
+       * Cria um processo sandboxed para operações específicas
+       */
+      async createSandboxedProcess(type, options = {}) {
+        try {
+          const config = this.isolationConfig[type];
+          if (!config) {
+            throw new Error(`Tipo de processo n\xE3o suportado: ${type}`);
+          }
+          if (this.sandboxedProcesses.size >= this.resourceLimits.maxProcesses) {
+            await this.cleanupIdleProcesses();
+          }
+          const processId = `${type}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+          const processOptions = {
+            serviceName: `achievements-manager-${type}`,
+            modulePath: path.join(__dirname, "workers", `${type}-worker.js`),
+            allowLoadingUnsignedLibraries: false,
+            options: {
+              ...options,
+              processId,
+              config
+            }
+          };
+          const process2 = utilityProcess.fork(processOptions.modulePath, [], {
+            serviceName: processOptions.serviceName,
+            allowLoadingUnsignedLibraries: processOptions.allowLoadingUnsignedLibraries,
+            stdio: "pipe"
+          });
+          const processInfo = {
+            id: processId,
+            type,
+            process: process2,
+            config,
+            createdAt: Date.now(),
+            lastActivity: Date.now(),
+            memoryUsage: 0,
+            cpuUsage: 0,
+            messageCount: 0
+          };
+          this.sandboxedProcesses.set(processId, processInfo);
+          this.processMetrics.created++;
+          this.processMetrics.active++;
+          this.setupProcessEvents(processInfo);
+          console.log(`\u{1F4E6} Processo sandboxed criado: ${processId} (${type})`);
+          return processId;
+        } catch (error) {
+          console.error(`\u274C Erro ao criar processo sandboxed: ${error.message}`);
+          this.processMetrics.errors++;
+          throw error;
         }
-      };
-
-      // Criar processo utilitário
-      const process = utilityProcess.fork(
-        processOptions.modulePath,
-        [],
-        {
-          serviceName: processOptions.serviceName,
-          allowLoadingUnsignedLibraries: processOptions.allowLoadingUnsignedLibraries,
-          stdio: 'pipe'
+      }
+      /**
+       * Configura eventos de um processo
+       */
+      setupProcessEvents(processInfo) {
+        const { process: process2, id, type } = processInfo;
+        process2.on("message", (message) => {
+          processInfo.lastActivity = Date.now();
+          processInfo.messageCount++;
+          this.handleProcessMessage(id, message);
+        });
+        process2.on("error", (error) => {
+          console.error(`\u274C Erro no processo ${id}: ${error.message}`);
+          this.processMetrics.errors++;
+          this.destroyProcess(id);
+        });
+        process2.on("exit", (code) => {
+          console.log(`\u{1F4E6} Processo ${id} finalizado com c\xF3digo: ${code}`);
+          this.sandboxedProcesses.delete(id);
+          this.processMetrics.active--;
+          this.processMetrics.destroyed++;
+        });
+        setTimeout(() => {
+          if (this.sandboxedProcesses.has(id)) {
+            const timeSinceActivity = Date.now() - processInfo.lastActivity;
+            if (timeSinceActivity > this.resourceLimits.idleTimeout) {
+              console.log(`\u23F0 Processo ${id} inativo, finalizando...`);
+              this.destroyProcess(id);
+            }
+          }
+        }, this.resourceLimits.processTimeout);
+      }
+      /**
+       * Manipula mensagens de processos
+       */
+      handleProcessMessage(processId, message) {
+        const processInfo = this.sandboxedProcesses.get(processId);
+        if (!processInfo) return;
+        switch (message.type) {
+          case "resource-usage":
+            processInfo.memoryUsage = message.data.memory;
+            processInfo.cpuUsage = message.data.cpu;
+            break;
+          case "error":
+            console.error(`\u274C Erro reportado pelo processo ${processId}: ${message.data}`);
+            this.processMetrics.errors++;
+            break;
+          case "ready":
+            console.log(`\u2705 Processo ${processId} pronto`);
+            break;
+          default:
+            console.log(`\u{1F4E6} Mensagem do processo ${processId}:`, message);
         }
-      );
-
-      // Configurar processo
-      const processInfo = {
-        id: processId,
-        type,
-        process,
-        config,
-        createdAt: Date.now(),
-        lastActivity: Date.now(),
-        memoryUsage: 0,
-        cpuUsage: 0,
-        messageCount: 0
-      };
-
-      this.sandboxedProcesses.set(processId, processInfo);
-      this.processMetrics.created++;
-      this.processMetrics.active++;
-
-      // Configurar eventos do processo
-      this.setupProcessEvents(processInfo);
-
-      console.log(`📦 Processo sandboxed criado: ${processId} (${type})`);
-      return processId;
-
-    } catch (error) {
-      console.error(`❌ Erro ao criar processo sandboxed: ${error.message}`);
-      this.processMetrics.errors++;
-      throw error;
-    }
-  }
-
-  /**
-   * Configura eventos de um processo
-   */
-  setupProcessEvents(processInfo) {
-    const { process, id, type } = processInfo;
-
-    // Evento de mensagem
-    process.on('message', (message) => {
-      processInfo.lastActivity = Date.now();
-      processInfo.messageCount++;
-      this.handleProcessMessage(id, message);
-    });
-
-    // Evento de erro
-    process.on('error', (error) => {
-      console.error(`❌ Erro no processo ${id}: ${error.message}`);
-      this.processMetrics.errors++;
-      this.destroyProcess(id);
-    });
-
-    // Evento de saída
-    process.on('exit', (code) => {
-      console.log(`📦 Processo ${id} finalizado com código: ${code}`);
-      this.sandboxedProcesses.delete(id);
-      this.processMetrics.active--;
-      this.processMetrics.destroyed++;
-    });
-
-    // Configurar timeout
-    setTimeout(() => {
-      if (this.sandboxedProcesses.has(id)) {
-        const timeSinceActivity = Date.now() - processInfo.lastActivity;
-        if (timeSinceActivity > this.resourceLimits.idleTimeout) {
-          console.log(`⏰ Processo ${id} inativo, finalizando...`);
+      }
+      /**
+       * Envia mensagem para um processo específico
+       */
+      async sendMessageToProcess(processId, message) {
+        const processInfo = this.sandboxedProcesses.get(processId);
+        if (!processInfo) {
+          throw new Error(`Processo n\xE3o encontrado: ${processId}`);
+        }
+        return new Promise((resolve, reject) => {
+          const messageId = Date.now().toString();
+          const timeoutId = setTimeout(() => {
+            reject(new Error(`Timeout na mensagem para processo ${processId}`));
+          }, 1e4);
+          const messageWithId = {
+            ...message,
+            id: messageId,
+            timestamp: Date.now()
+          };
+          const responseListener = /* @__PURE__ */ __name((response) => {
+            if (response.id === messageId) {
+              clearTimeout(timeoutId);
+              processInfo.process.off("message", responseListener);
+              resolve(response.data);
+            }
+          }, "responseListener");
+          processInfo.process.on("message", responseListener);
+          processInfo.process.postMessage(messageWithId);
+        });
+      }
+      /**
+       * Destrói um processo específico
+       */
+      destroyProcess(processId) {
+        const processInfo = this.sandboxedProcesses.get(processId);
+        if (!processInfo) return;
+        try {
+          processInfo.process.kill();
+          this.sandboxedProcesses.delete(processId);
+          this.processMetrics.active--;
+          this.processMetrics.destroyed++;
+          console.log(`\u{1F5D1}\uFE0F Processo ${processId} destru\xEDdo`);
+        } catch (error) {
+          console.error(`\u274C Erro ao destruir processo ${processId}: ${error.message}`);
+        }
+      }
+      /**
+       * Limpa processos inativos
+       */
+      async cleanupIdleProcesses() {
+        const now = Date.now();
+        const processesToCleanup = [];
+        for (const [id, processInfo] of this.sandboxedProcesses) {
+          const timeSinceActivity = now - processInfo.lastActivity;
+          if (timeSinceActivity > this.resourceLimits.idleTimeout) {
+            processesToCleanup.push(id);
+          }
+        }
+        for (const id of processesToCleanup) {
           this.destroyProcess(id);
         }
+        console.log(`\u{1F9F9} Limpeza conclu\xEDda: ${processesToCleanup.length} processos removidos`);
       }
-    }, this.resourceLimits.processTimeout);
-  }
-
-  /**
-   * Manipula mensagens de processos
-   */
-  handleProcessMessage(processId, message) {
-    const processInfo = this.sandboxedProcesses.get(processId);
-    if (!processInfo) return;
-
-    switch (message.type) {
-      case 'resource-usage':
-        processInfo.memoryUsage = message.data.memory;
-        processInfo.cpuUsage = message.data.cpu;
-        break;
-      
-      case 'error':
-        console.error(`❌ Erro reportado pelo processo ${processId}: ${message.data}`);
-        this.processMetrics.errors++;
-        break;
-      
-      case 'ready':
-        console.log(`✅ Processo ${processId} pronto`);
-        break;
-      
-      default:
-        console.log(`📦 Mensagem do processo ${processId}:`, message);
-    }
-  }
-
-  /**
-   * Envia mensagem para um processo específico
-   */
-  async sendMessageToProcess(processId, message) {
-    const processInfo = this.sandboxedProcesses.get(processId);
-    if (!processInfo) {
-      throw new Error(`Processo não encontrado: ${processId}`);
-    }
-
-    return new Promise((resolve, reject) => {
-      const messageId = Date.now().toString();
-      const timeoutId = setTimeout(() => {
-        reject(new Error(`Timeout na mensagem para processo ${processId}`));
-      }, 10000);
-
-      const messageWithId = {
-        ...message,
-        id: messageId,
-        timestamp: Date.now()
-      };
-
-      // Listener para resposta
-      const responseListener = (response) => {
-        if (response.id === messageId) {
-          clearTimeout(timeoutId);
-          processInfo.process.off('message', responseListener);
-          resolve(response.data);
+      /**
+       * Monitora recursos dos processos
+       */
+      monitorProcessResources() {
+        let totalMemory = 0;
+        let totalCPU = 0;
+        for (const [id, processInfo] of this.sandboxedProcesses) {
+          totalMemory += processInfo.memoryUsage;
+          totalCPU += processInfo.cpuUsage;
+          if (processInfo.memoryUsage > processInfo.config.maxMemory) {
+            console.warn(`\u26A0\uFE0F Processo ${id} excedeu limite de mem\xF3ria`);
+            this.destroyProcess(id);
+          }
+          if (processInfo.cpuUsage > processInfo.config.maxCPU) {
+            console.warn(`\u26A0\uFE0F Processo ${id} excedeu limite de CPU`);
+            this.destroyProcess(id);
+          }
         }
-      };
-
-      processInfo.process.on('message', responseListener);
-      processInfo.process.postMessage(messageWithId);
-    });
-  }
-
-  /**
-   * Destrói um processo específico
-   */
-  destroyProcess(processId) {
-    const processInfo = this.sandboxedProcesses.get(processId);
-    if (!processInfo) return;
-
-    try {
-      processInfo.process.kill();
-      this.sandboxedProcesses.delete(processId);
-      this.processMetrics.active--;
-      this.processMetrics.destroyed++;
-      
-      console.log(`🗑️ Processo ${processId} destruído`);
-    } catch (error) {
-      console.error(`❌ Erro ao destruir processo ${processId}: ${error.message}`);
-    }
-  }
-
-  /**
-   * Limpa processos inativos
-   */
-  async cleanupIdleProcesses() {
-    const now = Date.now();
-    const processesToCleanup = [];
-
-    for (const [id, processInfo] of this.sandboxedProcesses) {
-      const timeSinceActivity = now - processInfo.lastActivity;
-      if (timeSinceActivity > this.resourceLimits.idleTimeout) {
-        processesToCleanup.push(id);
+        this.processMetrics.memoryUsage = totalMemory;
+        this.processMetrics.cpuUsage = totalCPU;
+      }
+      /**
+       * Retorna estatísticas dos processos
+       */
+      getProcessStats() {
+        return {
+          ...this.processMetrics,
+          activeProcesses: Array.from(this.sandboxedProcesses.values()).map((p) => ({
+            id: p.id,
+            type: p.type,
+            createdAt: p.createdAt,
+            lastActivity: p.lastActivity,
+            memoryUsage: p.memoryUsage,
+            cpuUsage: p.cpuUsage,
+            messageCount: p.messageCount
+          }))
+        };
+      }
+      /**
+       * Configura sandbox para janela principal
+       */
+      getMainWindowSandboxConfig() {
+        return {
+          sandbox: false,
+          // Mantido false para compatibilidade
+          contextIsolation: true,
+          nodeIntegration: false,
+          enableRemoteModule: false,
+          webSecurity: true,
+          // Sempre habilitado para segurança
+          allowRunningInsecureContent: false,
+          experimentalFeatures: false,
+          plugins: false,
+          navigateOnDragDrop: false
+        };
+      }
+      /**
+       * Finaliza todos os processos
+       */
+      async shutdown() {
+        console.log("\u{1F4E6} Finalizando todos os processos sandboxed...");
+        const processIds = Array.from(this.sandboxedProcesses.keys());
+        for (const id of processIds) {
+          this.destroyProcess(id);
+        }
+        await new Promise((resolve) => setTimeout(resolve, 1e3));
+        console.log("\u2705 Todos os processos sandboxed finalizados");
       }
     }
-
-    for (const id of processesToCleanup) {
-      this.destroyProcess(id);
-    }
-
-    console.log(`🧹 Limpeza concluída: ${processesToCleanup.length} processos removidos`);
-  }
-
-  /**
-   * Monitora recursos dos processos
-   */
-  monitorProcessResources() {
-    let totalMemory = 0;
-    let totalCPU = 0;
-
-    for (const [id, processInfo] of this.sandboxedProcesses) {
-      totalMemory += processInfo.memoryUsage;
-      totalCPU += processInfo.cpuUsage;
-
-      // Verificar limites por processo
-      if (processInfo.memoryUsage > processInfo.config.maxMemory) {
-        console.warn(`⚠️ Processo ${id} excedeu limite de memória`);
-        this.destroyProcess(id);
+    let sandboxManager = null;
+    function getSandboxManager() {
+      if (!sandboxManager) {
+        sandboxManager = new SandboxManager();
       }
-
-      if (processInfo.cpuUsage > processInfo.config.maxCPU) {
-        console.warn(`⚠️ Processo ${id} excedeu limite de CPU`);
-        this.destroyProcess(id);
-      }
+      return sandboxManager;
     }
-
-    this.processMetrics.memoryUsage = totalMemory;
-    this.processMetrics.cpuUsage = totalCPU;
-  }
-
-  /**
-   * Retorna estatísticas dos processos
-   */
-  getProcessStats() {
-    return {
-      ...this.processMetrics,
-      activeProcesses: Array.from(this.sandboxedProcesses.values()).map(p => ({
-        id: p.id,
-        type: p.type,
-        createdAt: p.createdAt,
-        lastActivity: p.lastActivity,
-        memoryUsage: p.memoryUsage,
-        cpuUsage: p.cpuUsage,
-        messageCount: p.messageCount
-      }))
+    __name(getSandboxManager, "getSandboxManager");
+    module.exports = {
+      SandboxManager,
+      getSandboxManager
     };
   }
-
-  /**
-   * Configura sandbox para janela principal
-   */
-  getMainWindowSandboxConfig() {
-    return {
-      sandbox: false, // Mantido false para compatibilidade
-      contextIsolation: true,
-      nodeIntegration: false,
-      enableRemoteModule: false,
-      webSecurity: true, // Sempre habilitado para segurança
-      allowRunningInsecureContent: false,
-      experimentalFeatures: false,
-      plugins: false,
-      navigateOnDragDrop: false
-    };
-  }
-
-  /**
-   * Finaliza todos os processos
-   */
-  async shutdown() {
-    console.log('📦 Finalizando todos os processos sandboxed...');
-    
-    const processIds = Array.from(this.sandboxedProcesses.keys());
-    for (const id of processIds) {
-      this.destroyProcess(id);
-    }
-
-    // Aguardar finalização
-    await new Promise(resolve => setTimeout(resolve, 1000));
-    
-    console.log('✅ Todos os processos sandboxed finalizados');
-  }
-}
-
-// Instância singleton
-let sandboxManager = null;
-
-function getSandboxManager() {
-  if (!sandboxManager) {
-    sandboxManager = new SandboxManager();
-  }
-  return sandboxManager;
-}
-
-module.exports = {
-  SandboxManager,
-  getSandboxManager
-};
+});
+export default require_sandbox_manager();

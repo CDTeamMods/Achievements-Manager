@@ -1,215 +1,166 @@
-// Módulo de Navegação e Gerenciamento de Páginas
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 class NavigationManager {
+  static {
+    __name(this, "NavigationManager");
+  }
   constructor(app) {
     this.app = app;
-    this.currentPage = null; // Inicializar como null para permitir primeira navegação
-    // Flag para ocultar o cartão de status da Steam nas Configurações (deixar somente o botão Connect)
+    this.currentPage = null;
     this.hideSteamStatus = false;
   }
-
   async navigateTo(page, tabName = null) {
-    // Forçar carregamento se for a primeira navegação ou se a página for diferente
     const shouldLoad = this.currentPage !== page || this.currentPage === null || tabName;
-    
     if (!shouldLoad) {
       return;
     }
-
-    // Atualizar navegação ativa
-    document.querySelectorAll('.nav-item').forEach(item => {
-      item.classList.remove('active');
+    document.querySelectorAll(".nav-item").forEach((item) => {
+      item.classList.remove("active");
     });
-
     const activeNavItem = document.querySelector(`.nav-item[href="#${page}"]`);
     if (activeNavItem) {
-      activeNavItem.classList.add('active');
+      activeNavItem.classList.add("active");
     }
-
-    // Atualizar título da página
-    const pageTitle = document.getElementById('pageTitle');
+    const pageTitle = document.getElementById("pageTitle");
     if (pageTitle) {
       pageTitle.textContent = await this.getPageTitle(page);
     }
-
-    // Carregar conteúdo da página
-    const contentBody = document.getElementById('contentBody');
+    const contentBody = document.getElementById("contentBody");
     if (contentBody) {
-      // Mostrar loading apenas se não for a primeira carga da dashboard
       if (this.currentPage !== null) {
         contentBody.innerHTML = '<div class="loading" data-i18n="common.loading">Carregando...</div>';
       }
-
       try {
         await this.loadPageContent(page);
       } catch (error) {
-        // Log removido para evitar dependência circular com DebugManager
         contentBody.innerHTML = `
           <div class="error-state">
             <i class="fas fa-exclamation-triangle"></i>
-            <h3 data-i18n="errors.pageLoad">Erro ao carregar página</h3>
-            <p data-i18n="errors.pageLoadMessage">Não foi possível carregar o conteúdo da página.</p>
+            <h3 data-i18n="errors.pageLoad">Erro ao carregar p\xE1gina</h3>
+            <p data-i18n="errors.pageLoadMessage">N\xE3o foi poss\xEDvel carregar o conte\xFAdo da p\xE1gina.</p>
             <button class="btn btn-primary" onclick="app.modules.navigation.navigateTo('${page}')">
               <i class="fas fa-redo"></i> Tentar Novamente
             </button>
           </div>
         `;
-        
-        // Aplicar traduções mesmo no caso de erro
-        if (window.translatePage && typeof window.translatePage === 'function') {
+        if (window.translatePage && typeof window.translatePage === "function") {
           await window.translatePage();
         } else if (this.app && this.app.translatePage) {
           await this.app.translatePage();
         }
       }
     }
-
     this.currentPage = page;
-
-    // Se foi especificada uma tab, ativá-la após um pequeno delay para garantir que o DOM está pronto
-    if (tabName && page === 'configuracoes') {
+    if (tabName && page === "configuracoes") {
       setTimeout(() => {
         this.switchTab(tabName);
       }, 100);
     }
   }
-
   async getPageTitle(page) {
     const titles = {
-      dashboard: 'nav.dashboard',
-      statistics: 'nav.statistics',
-      backup: 'nav.backup',
-      settings: 'nav.settings',
+      dashboard: "nav.dashboard",
+      statistics: "nav.statistics",
+      backup: "nav.backup",
+      settings: "nav.settings"
     };
-    const titleKey = titles[page] || 'nav.dashboard';
-
-    // Usar o sistema de tradução se disponível
-    if (window.t && typeof window.t === 'function') {
+    const titleKey = titles[page] || "nav.dashboard";
+    if (window.t && typeof window.t === "function") {
       return await window.t(titleKey);
     }
-
-    // Fallback para valores padrão
     const fallbacks = {
-      dashboard: 'Dashboard',
-      statistics: 'Estatísticas',
-      backup: 'Backup',
-      configuracoes: 'Configurações',
+      dashboard: "Dashboard",
+      statistics: "Estat\xEDsticas",
+      backup: "Backup",
+      configuracoes: "Configura\xE7\xF5es"
     };
-    return fallbacks[page] || 'Página';
+    return fallbacks[page] || "P\xE1gina";
   }
-
   async loadPageContent(page) {
     switch (page) {
-      case 'dashboard':
+      case "dashboard":
         await this.loadDashboard();
         break;
-      case 'statistics':
+      case "statistics":
         await this.loadStatistics();
         break;
-      case 'backup':
+      case "backup":
         await this.loadBackup();
         break;
-      case 'configuracoes':
+      case "configuracoes":
         await this.loadConfiguracoes();
         break;
       default:
-        throw new Error(`Página não encontrada: ${page}`);
+        throw new Error(`P\xE1gina n\xE3o encontrada: ${page}`);
     }
   }
-
   async loadDashboard() {
-    const contentBody = document.getElementById('contentBody');
-
+    const contentBody = document.getElementById("contentBody");
     try {
-      // Carregar dados do dashboard
       const [gamesData, achievementsData, statsData, steamConn] = await Promise.all([
-        this.app.isElectronAPIAvailable('games')
-          ? this.app.safeElectronAPICall('games.getAll')
-          : [],
-        this.app.isElectronAPIAvailable('achievements')
-          ? this.app.safeElectronAPICall('achievements.getStats')
-          : {},
-        this.app.isElectronAPIAvailable('performance')
-          ? this.app.safeElectronAPICall('performance.getMetrics')
-          : {},
-        this.app.isElectronAPIAvailable('steam')
-          ? this.app.safeElectronAPICall('steam.checkConnection')
-          : { success: false, connected: false },
+        this.app.isElectronAPIAvailable("games") ? this.app.safeElectronAPICall("games.getAll") : [],
+        this.app.isElectronAPIAvailable("achievements") ? this.app.safeElectronAPICall("achievements.getStats") : {},
+        this.app.isElectronAPIAvailable("performance") ? this.app.safeElectronAPICall("performance.getMetrics") : {},
+        this.app.isElectronAPIAvailable("steam") ? this.app.safeElectronAPICall("steam.checkConnection") : { success: false, connected: false }
       ]);
-
-      // Renderizar dashboard
-      const dashboardHTML = await this.renderDashboard(gamesData, achievementsData, statsData, steamConn);
-
+      const dashboardHTML = await this.renderDashboard(
+        gamesData,
+        achievementsData,
+        statsData,
+        steamConn
+      );
       contentBody.innerHTML = dashboardHTML;
-
-      // Aplicar traduções aos elementos da dashboard
-      if (window.translatePage && typeof window.translatePage === 'function') {
+      if (window.translatePage && typeof window.translatePage === "function") {
         await window.translatePage();
       } else if (this.app && this.app.translatePage) {
         await this.app.translatePage();
       }
-
-      // Configurar event listeners específicos do dashboard
       this.setupDashboardEvents();
-
-      // Auto-carregar jogos da Steam se já houver credenciais válidas
       await this.autoLoadSteamGamesIfConfigured();
     } catch (error) {
       contentBody.innerHTML = `
         <div class="error-state">
           <i class="fas fa-exclamation-triangle"></i>
           <h3 data-i18n="dashboard.error.title">Erro ao carregar dashboard</h3>
-          <p data-i18n="dashboard.error.message">Não foi possível carregar os dados do dashboard.</p>
+          <p data-i18n="dashboard.error.message">N\xE3o foi poss\xEDvel carregar os dados do dashboard.</p>
           <p>Erro: ${error.message}</p>
         </div>
       `;
-
-      // Aplicar traduções mesmo no caso de erro
-      if (window.translatePage && typeof window.translatePage === 'function') {
+      if (window.translatePage && typeof window.translatePage === "function") {
         await window.translatePage();
       } else if (this.app && this.app.translatePage) {
         await this.app.translatePage();
       }
     }
   }
-
   /**
    * Carrega automaticamente os jogos da Steam ao abrir a Dashboard
    * quando a Steam API já está configurada e conectada
    */
   async autoLoadSteamGamesIfConfigured() {
     try {
-      // Garantir que estamos na Dashboard e que o container existe
-      const gamesContainer = document.getElementById('steam-games-container');
+      const gamesContainer = document.getElementById("steam-games-container");
       if (!gamesContainer) return;
-
-      // Verificar disponibilidade do gerenciador de jogos
       const manager = window.steamGamesManager;
-      if (!manager || typeof manager.loadSteamGames !== 'function') return;
-
-      // Verificar credenciais e conexão com a Steam
-      if (this.app.isElectronAPIAvailable('steam')) {
-        const credentials = await this.app.safeElectronAPICall('steam.getCredentials');
+      if (!manager || typeof manager.loadSteamGames !== "function") return;
+      if (this.app.isElectronAPIAvailable("steam")) {
+        const credentials = await this.app.safeElectronAPICall("steam.getCredentials");
         if (credentials?.success && credentials.apiKey) {
-          const connection = await this.app.safeElectronAPICall('steam.checkConnection');
+          const connection = await this.app.safeElectronAPICall("steam.checkConnection");
           if (connection?.success && connection.connected) {
-            // Carregar jogos automaticamente (evitar duplicar se já carregando)
             await manager.loadSteamGames();
           }
         }
       }
     } catch (error) {
-      // Silenciar erros para não interferir na experiência da Dashboard
     }
   }
-
   async renderDashboard(games, achievements, stats, steamConn = { connected: false }) {
     const totalGames = games?.length || 0;
     const totalAchievements = achievements?.total || 0;
     const unlockedAchievements = achievements?.unlocked || 0;
-    const completionRate =
-      totalAchievements > 0 ? ((unlockedAchievements / totalAchievements) * 100).toFixed(1) : 0;
+    const completionRate = totalAchievements > 0 ? (unlockedAchievements / totalAchievements * 100).toFixed(1) : 0;
     const isSteamConnected = !!(steamConn && steamConn.success && steamConn.connected);
-
     return `
       <div class="dashboard-container">
         <div class="stats-grid">
@@ -248,18 +199,14 @@ class NavigationManager {
         <div class="dashboard-separator"></div>
 
         <div class="dashboard-content">
-          <!-- Seção Steam Games -->
+          <!-- Se\xE7\xE3o Steam Games -->
           <div class="steam-section">
             <div class="section-header">
               <h3><i class="fab fa-steam"></i> <span data-i18n="dashboard.steamGames">Biblioteca Steam</span></h3>
               <div class="section-actions">
-                ${
-                  isSteamConnected
-                    ? ''
-                    : `<button class="btn btn-secondary btn-sm" onclick="window.steamGamesManager?.loadSteamGames()" title="Carregar jogos Steam">
+                ${isSteamConnected ? "" : `<button class="btn btn-secondary btn-sm" onclick="window.steamGamesManager?.loadSteamGames()" title="Carregar jogos Steam">
                          <i class="fas fa-refresh"></i> <span data-i18n="dashboard.loadSteam">Carregar Jogos</span>
-                       </button>`
-                }
+                       </button>`}
               </div>
             </div>
             <div id="steam-games-container">
@@ -268,7 +215,7 @@ class NavigationManager {
                   <i class="fab fa-steam"></i>
                 </div>
                 <h4 data-i18n="dashboard.steam.connect">Conecte sua conta Steam</h4>
-                <p data-i18n="dashboard.steam.description">Configure sua Steam API Key nas configurações para ver seus jogos automaticamente</p>
+                <p data-i18n="dashboard.steam.description">Configure sua Steam API Key nas configura\xE7\xF5es para ver seus jogos automaticamente</p>
                 <button class="btn btn-primary" onclick="navigationManager.showPage('settings', 'steam')">
                   <i class="fas fa-plug"></i> <span data-i18n="dashboard.steam.configureNow">Configurar Agora</span>
                 </button>
@@ -279,47 +226,31 @@ class NavigationManager {
         </div>
       </div>
     `;
-
-    // Aplicar traduções aos elementos da página de backup
     if (this.app.modules.helpers && this.app.modules.helpers.translatePage) {
       await this.app.modules.helpers.translatePage();
     }
-
-    // Inicializar os event listeners e configurações específicas
     this.setupSettingEventListeners();
     this.setupSteamSettings();
     this.setupGoldbergSettings();
   }
-
   setupDashboardEvents() {
-    // Event listeners específicos do dashboard
-    const gameCards = document.querySelectorAll('.game-card');
-    gameCards.forEach(card => {
-      card.addEventListener('click', () => {
+    const gameCards = document.querySelectorAll(".game-card");
+    gameCards.forEach((card) => {
+      card.addEventListener("click", () => {
         const gameId = card.dataset.gameId;
         this.openGameDetails(gameId);
       });
     });
   }
-
   async loadStatistics() {
-    const contentBody = document.getElementById('contentBody');
-
+    const contentBody = document.getElementById("contentBody");
     try {
-      // Carregar dados de estatísticas
-      const gamesData = this.app.isElectronAPIAvailable('games')
-        ? await this.app.safeElectronAPICall('games.getAll')
-        : [];
-      const achievementsData = this.app.isElectronAPIAvailable('achievements')
-        ? await this.app.safeElectronAPICall('achievements.getStats')
-        : {};
-
+      const gamesData = this.app.isElectronAPIAvailable("games") ? await this.app.safeElectronAPICall("games.getAll") : [];
+      const achievementsData = this.app.isElectronAPIAvailable("achievements") ? await this.app.safeElectronAPICall("achievements.getStats") : {};
       const totalGames = gamesData?.length || 0;
       const totalAchievements = achievementsData?.total || 0;
       const unlockedAchievements = achievementsData?.unlocked || 0;
-      const completionRate =
-        totalAchievements > 0 ? ((unlockedAchievements / totalAchievements) * 100).toFixed(1) : 0;
-
+      const completionRate = totalAchievements > 0 ? (unlockedAchievements / totalAchievements * 100).toFixed(1) : 0;
       contentBody.innerHTML = `
         <div class="statistics-container">
           <div class="page-header">
@@ -363,9 +294,9 @@ class NavigationManager {
               <div class="stat-content">
                 <h3>${completionRate}%</h3>
                 <p data-i18n="statistics.completionRate">Completion Rate</p>
-                <div class="stat-trend ${completionRate > 50 ? 'positive' : 'neutral'}">
-                  <i class="fas fa-${completionRate > 50 ? 'arrow-up' : 'minus'}"></i>
-                  <span data-i18n="statistics.trend.${completionRate > 50 ? 'excellent' : 'keepGoing'}">${completionRate > 50 ? 'Excellent!' : 'Keep going!'}</span>
+                <div class="stat-trend ${completionRate > 50 ? "positive" : "neutral"}">
+                  <i class="fas fa-${completionRate > 50 ? "arrow-up" : "minus"}"></i>
+                  <span data-i18n="statistics.trend.${completionRate > 50 ? "excellent" : "keepGoing"}">${completionRate > 50 ? "Excellent!" : "Keep going!"}</span>
                 </div>
               </div>
             </div>
@@ -390,13 +321,10 @@ class NavigationManager {
           </div>
         </div>
       `;
-
-      // Aplicar traduções aos elementos da página de estatísticas
       if (this.app.modules.helpers && this.app.modules.helpers.translatePage) {
         await this.app.modules.helpers.translatePage();
       }
     } catch (error) {
-      // Log removido para evitar dependência circular com DebugManager
       contentBody.innerHTML = `
         <div class="error-state">
           <i class="fas fa-exclamation-triangle"></i>
@@ -407,17 +335,13 @@ class NavigationManager {
           </button>
         </div>
       `;
-
-      // Aplicar traduções mesmo em caso de erro
       if (this.app.modules.helpers && this.app.modules.helpers.translatePage) {
         await this.app.modules.helpers.translatePage();
       }
     }
   }
-
   async loadBackup() {
-    const contentBody = document.getElementById('contentBody');
-
+    const contentBody = document.getElementById("contentBody");
     contentBody.innerHTML = `
       <div class="backup-container">
         <!-- Header Principal -->
@@ -443,7 +367,7 @@ class NavigationManager {
           </div>
         </div>
 
-        <!-- Grid de Ações Principais -->
+        <!-- Grid de A\xE7\xF5es Principais -->
         <div class="backup-grid">
           <!-- Card Criar Backup -->
           <div class="backup-card create-backup">
@@ -497,20 +421,15 @@ class NavigationManager {
         </div>
       </div>
     `;
-
-    // Aplicar traduções aos elementos da página de backup
     if (this.app.modules.helpers && this.app.modules.helpers.translatePage) {
       await this.app.modules.helpers.translatePage();
     }
   }
-
   async loadConfiguracoes() {
-    const contentBody = document.getElementById('contentBody');
-
+    const contentBody = document.getElementById("contentBody");
     if (!contentBody) {
       return;
     }
-
     contentBody.innerHTML = `
       <div class="settings-page-container">
         <div class="page-header">
@@ -518,7 +437,7 @@ class NavigationManager {
           <p data-i18n="settings.description">Customize your Achievements Manager experience</p>
         </div>
         
-        <!-- Guias de Configurações -->
+        <!-- Guias de Configura\xE7\xF5es -->
         <div class="settings-tabs">
           <div class="tab-nav">
             <button class="tab-btn active" data-tab="personalization">
@@ -531,12 +450,12 @@ class NavigationManager {
               <i class="fas fa-cloud"></i> API
             </button>
             <button class="tab-btn" data-tab="goldberg">
-              <i class="fas fa-exchange-alt"></i> <span data-i18n="settings.goldberg">Conversão Goldberg</span>
+              <i class="fas fa-exchange-alt"></i> <span data-i18n="settings.goldberg">Convers\xE3o Goldberg</span>
             </button>
           </div>
           
           <div class="tab-content">
-            <!-- Guia Personalização -->
+            <!-- Guia Personaliza\xE7\xE3o -->
             <div class="tab-pane active" id="personalization">
               <div class="settings-section">
                 <h3><i class="fas fa-palette"></i> <span data-i18n="settings.appearance">Appearance</span></h3>
@@ -551,7 +470,7 @@ class NavigationManager {
                 <div class="toggle-group">
                   <div>
                     <label data-i18n="settings.customization.liteMode">Modo Lite</label>
-                    <div class="form-text" data-i18n="settings.customization.liteModeDescription">Desativa animações para melhor performance</div>
+                    <div class="form-text" data-i18n="settings.customization.liteModeDescription">Desativa anima\xE7\xF5es para melhor performance</div>
                   </div>
                   <label class="toggle-switch">
                     <input type="checkbox" id="liteModeToggle">
@@ -575,8 +494,8 @@ class NavigationManager {
                 <div class="form-group">
                   <label data-i18n="settings.language.interface">Idioma da Interface</label>
                   <select class="form-control language-dropdown" id="languageSelect">
-                    <option value="pt-BR">🇧🇷 Português (Brasil)</option>
-                    <option value="en">🇺🇸 English (United States)</option>
+                    <option value="pt-BR">\u{1F1E7}\u{1F1F7} Portugu\xEAs (Brasil)</option>
+                    <option value="en">\u{1F1FA}\u{1F1F8} English (United States)</option>
                   </select>
                 </div>
               </div>
@@ -608,7 +527,7 @@ class NavigationManager {
                 </div>
                 <div class="toggle-group">
                   <div>
-                    <label data-i18n="settings.performance.autoSync">Sincronização Automática</label>
+                    <label data-i18n="settings.performance.autoSync">Sincroniza\xE7\xE3o Autom\xE1tica</label>
                     <div class="form-text" data-i18n="settings.performance.autoSync.description">Sincroniza dados automaticamente</div>
                   </div>
                   <label class="toggle-switch">
@@ -631,9 +550,9 @@ class NavigationManager {
             <!-- Guia API -->
             <div class="tab-pane" id="api">
               <div class="settings-section">
-                <h3><i class="fas fa-cloud"></i> <span data-i18n="settings.api.title">Configurações de API</span></h3>
+                <h3><i class="fas fa-cloud"></i> <span data-i18n="settings.api.title">Configura\xE7\xF5es de API</span></h3>
                 
-                <!-- Seleção da fonte de API -->
+                <!-- Sele\xE7\xE3o da fonte de API -->
                 <div class="form-group">
                   <label data-i18n="settings.api.source">Fonte da API</label>
                   <select class="form-control select" id="apiSourceSelect">
@@ -641,11 +560,11 @@ class NavigationManager {
                     <option value="hydra" data-i18n="settings.api.source.hydra">Hydra API (Em breve)</option>
                   </select>
                   <div class="form-text" data-i18n="settings.api.source.description">
-                    Escolha a fonte de dados para obter informações dos jogos e conquistas
+                    Escolha a fonte de dados para obter informa\xE7\xF5es dos jogos e conquistas
                   </div>
                 </div>
 
-                <!-- Configurações da Steam API -->
+                <!-- Configura\xE7\xF5es da Steam API -->
                 <div class="steam-api-section" id="steamApiSection">
                   <h4><i class="fab fa-steam"></i> <span data-i18n="settings.api.steam.title">Steam Web API</span></h4>
                   
@@ -673,7 +592,7 @@ class NavigationManager {
 
 
 
-                  <!-- Botões de ação Steam -->
+                  <!-- Bot\xF5es de a\xE7\xE3o Steam -->
                   <div class="form-group">
                     <div class="d-flex gap-2">
                       <button type="button" class="btn btn-primary" id="steamConnectBtn">
@@ -685,19 +604,19 @@ class NavigationManager {
                     </div>
                   </div>
 
-                  <!-- Informações sobre pastas padrão do Steam -->
+                  <!-- Informa\xE7\xF5es sobre pastas padr\xE3o do Steam -->
                   <div class="steam-paths-info" id="steamPathsInfo" style="display: none;">
-                    <h5><i class="fas fa-folder"></i> <span data-i18n="settings.api.steam.paths.title">Pastas de Localização Padrão</span></h5>
+                    <h5><i class="fas fa-folder"></i> <span data-i18n="settings.api.steam.paths.title">Pastas de Localiza\xE7\xE3o Padr\xE3o</span></h5>
                     <div class="paths-list" id="steamPathsList">
-                      <!-- Será preenchido dinamicamente -->
+                      <!-- Ser\xE1 preenchido dinamicamente -->
                     </div>
                     
-                    <!-- Seletor de diretório personalizado -->
+                    <!-- Seletor de diret\xF3rio personalizado -->
                     <div class="form-group mt-3">
-                      <label data-i18n="settings.api.steam.customPath">Diretório Personalizado do Steam</label>
+                      <label data-i18n="settings.api.steam.customPath">Diret\xF3rio Personalizado do Steam</label>
                       <div class="input-group">
                         <input type="text" class="form-control" id="steamCustomPathInput" 
-                               placeholder="Selecione o diretório do Steam..." 
+                               placeholder="Selecione o diret\xF3rio do Steam..." 
                                data-i18n-placeholder="settings.api.steam.customPath.placeholder" readonly>
                         <button type="button" class="btn btn-outline-primary" id="selectSteamDirBtn" onclick="window.app?.navigation?.selectSteamDirectory()">
                           <i class="fas fa-folder-open"></i>
@@ -706,29 +625,29 @@ class NavigationManager {
                       </div>
                       <div class="form-text">
                         <span data-i18n="settings.api.steam.customPath.description">
-                          Se o Steam estiver instalado em um local diferente, selecione o diretório manualmente
+                          Se o Steam estiver instalado em um local diferente, selecione o diret\xF3rio manualmente
                         </span>
                       </div>
                     </div>
                   </div>
 
-                  <!-- Status da conexão -->
+                  <!-- Status da conex\xE3o -->
                   <div class="steam-status-card" id="steamStatusCard">
                     <div class="status-header">
                       <div class="status-icon" id="steamStatusIcon">
                         <i class="fas fa-question-circle"></i>
                       </div>
                       <div class="status-info">
-                        <h4 id="steamStatusTitle" data-i18n="settings.api.steam.status.notTested">Não testado</h4>
+                        <h4 id="steamStatusTitle" data-i18n="settings.api.steam.status.notTested">N\xE3o testado</h4>
                         <p id="steamStatusDescription" data-i18n="settings.api.steam.status.notTested.description">
-                          Configure suas credenciais e teste a conexão
+                          Configure suas credenciais e teste a conex\xE3o
                         </p>
                       </div>
                     </div>
                     <div class="status-actions">
                       <button class="btn btn-primary" id="testSteamConnectionBtn" onclick="window.app?.navigation?.testSteamConnection()">
                         <i class="fas fa-plug"></i>
-                        <span data-i18n="settings.api.steam.testConnection">Testar Conexão</span>
+                        <span data-i18n="settings.api.steam.testConnection">Testar Conex\xE3o</span>
                       </button>
                     </div>
                   </div>
@@ -746,15 +665,15 @@ class NavigationManager {
               </div>
             </div>
 
-            <!-- Guia Conversão Goldberg -->
+            <!-- Guia Convers\xE3o Goldberg -->
             <div class="tab-pane" id="goldberg">
               <div class="settings-section">
-                <h3><i class="fas fa-exchange-alt"></i> <span data-i18n="settings.goldberg.title">Conversão Goldberg Emu</span></h3>
+                <h3><i class="fas fa-exchange-alt"></i> <span data-i18n="settings.goldberg.title">Convers\xE3o Goldberg Emu</span></h3>
                 <p class="section-description" data-i18n="settings.goldberg.description">
-                  Converta conquistas da versão antiga do Goldberg SteamEmu Saves para o formato GSE Saves moderno
+                  Converta conquistas da vers\xE3o antiga do Goldberg SteamEmu Saves para o formato GSE Saves moderno
                 </p>
                 
-                <!-- Status da conversão -->
+                <!-- Status da convers\xE3o -->
                 <div class="goldberg-status-card" id="goldbergStatusCard">
                   <div class="status-header">
                     <div class="status-icon" id="goldbergStatusIcon">
@@ -766,15 +685,15 @@ class NavigationManager {
                     </div>
                   </div>
                   <div class="status-details" id="goldbergStatusDetails" style="display: none;">
-                    <!-- Detalhes serão preenchidos dinamicamente -->
+                    <!-- Detalhes ser\xE3o preenchidos dinamicamente -->
                   </div>
                 </div>
 
-                <!-- Configurações de migração -->
+                <!-- Configura\xE7\xF5es de migra\xE7\xE3o -->
                 <div class="goldberg-settings">
                   <div class="toggle-group">
                     <div>
-                      <label data-i18n="settings.goldberg.autoMigration">Migração Automática</label>
+                      <label data-i18n="settings.goldberg.autoMigration">Migra\xE7\xE3o Autom\xE1tica</label>
                       <div class="form-text" data-i18n="settings.goldberg.autoMigration.description">
                         Converta automaticamente quando novos jogos forem detectados
                       </div>
@@ -787,9 +706,9 @@ class NavigationManager {
                   
                   <div class="toggle-group">
                     <div>
-                      <label data-i18n="settings.goldberg.showDialog">Mostrar Diálogo</label>
+                      <label data-i18n="settings.goldberg.showDialog">Mostrar Di\xE1logo</label>
                       <div class="form-text" data-i18n="settings.goldberg.showDialog.description">
-                        Exibir confirmação antes de converter
+                        Exibir confirma\xE7\xE3o antes de converter
                       </div>
                     </div>
                     <label class="toggle-switch">
@@ -799,7 +718,7 @@ class NavigationManager {
                   </div>
                 </div>
 
-                <!-- Ações de migração -->
+                <!-- A\xE7\xF5es de migra\xE7\xE3o -->
                 <div class="goldberg-actions">
                   <button class="btn btn-primary" id="goldbergCheckBtn">
                     <i class="fas fa-search"></i> 
@@ -811,7 +730,7 @@ class NavigationManager {
                   </button>
                 </div>
 
-                <!-- Informações adicionais -->
+                <!-- Informa\xE7\xF5es adicionais -->
                 <div class="goldberg-info">
                   <div class="info-item">
                     <i class="fas fa-info-circle"></i>
@@ -833,590 +752,427 @@ class NavigationManager {
         
         <div class="settings-actions">
           <button class="btn btn-primary" id="saveSettingsBtn" onclick="app.modules.navigation.saveCurrentSettings()" disabled>
-            <i class="fas fa-save"></i> <span data-i18n="common.save">Salvar Configurações</span>
+            <i class="fas fa-save"></i> <span data-i18n="common.save">Salvar Configura\xE7\xF5es</span>
           </button>
           <button class="btn btn-secondary" id="cancelSettingsBtn" onclick="app.modules.navigation.cancelSettingsChanges()" disabled>
             <i class="fas fa-times"></i> <span data-i18n="common.cancel">Cancelar</span>
           </button>
           <button class="btn btn-outline" onclick="app.modules.navigation.resetSettings()">
-            <i class="fas fa-undo"></i> <span data-i18n="common.reset">Restaurar Padrões</span>
+            <i class="fas fa-undo"></i> <span data-i18n="common.reset">Restaurar Padr\xF5es</span>
           </button>
         </div>
         
         <div class="settings-status" id="settingsStatus" style="display: none;">
           <i class="fas fa-exclamation-circle"></i>
-          <span data-i18n="settings.status.unsaved">Você tem alterações não salvas</span>
+          <span data-i18n="settings.status.unsaved">Voc\xEA tem altera\xE7\xF5es n\xE3o salvas</span>
         </div>
       </div>
     `;
-
-    // Carregar valores atuais das configurações
     this.loadCurrentSettings();
-
-    // Configurar event listeners para detectar mudanças
     this.setupSettingsChangeDetection();
-
-    // Aplicar traduções aos elementos da página de configurações
     if (this.app.modules.helpers && this.app.modules.helpers.translatePage) {
       await this.app.modules.helpers.translatePage();
     }
-
-    // Configurar navegação das guias com delay para garantir que o DOM esteja pronto
     setTimeout(() => {
       this.setupTabNavigation();
       this.setupGoldbergSettings();
-      // Inicializar configurações da Steam (preencher API Key automaticamente quando disponível)
       this.setupSteamSettings();
     }, 100);
   }
-
   loadCurrentSettings() {
     try {
-      // Verificar se o settings manager existe
       if (!this.app.modules.settings) {
         return;
       }
-
-      // Carregar configurações do settings manager
       const settings = this.app.modules.settings.getAll();
-
-      // Armazenar configurações originais para comparação
       this.originalSettings = { ...settings };
       this.pendingSettings = { ...settings };
-
-      // Aplicar valores aos elementos - Guia Personalização
-      const themeSelect = document.getElementById('themeSelect');
-      const languageSelect = document.getElementById('languageSelect');
-      const liteModeToggle = document.getElementById('liteModeToggle');
-      const compactModeToggle = document.getElementById('compactModeToggle');
-
-      // Aplicar valores aos elementos - Guia Performance
-      const virtualScrollToggle = document.getElementById('virtualScrollToggle');
-      const showTooltipsToggle = document.getElementById('showTooltipsToggle');
-      const autoSyncToggle = document.getElementById('autoSyncToggle');
-      const cacheSizeSelect = document.getElementById('cacheSizeSelect');
-
-      // Aplicar valores aos elementos - Guia API
-      const apiSourceSelect = document.getElementById('apiSourceSelect');
-      const steamApiKeyInput = document.getElementById('steamApiKeyInput');
-      // Personalização
-      if (themeSelect) themeSelect.value = settings.theme || 'dark';
-      if (languageSelect) languageSelect.value = settings.language || 'en';
+      const themeSelect = document.getElementById("themeSelect");
+      const languageSelect = document.getElementById("languageSelect");
+      const liteModeToggle = document.getElementById("liteModeToggle");
+      const compactModeToggle = document.getElementById("compactModeToggle");
+      const virtualScrollToggle = document.getElementById("virtualScrollToggle");
+      const showTooltipsToggle = document.getElementById("showTooltipsToggle");
+      const autoSyncToggle = document.getElementById("autoSyncToggle");
+      const cacheSizeSelect = document.getElementById("cacheSizeSelect");
+      const apiSourceSelect = document.getElementById("apiSourceSelect");
+      const steamApiKeyInput = document.getElementById("steamApiKeyInput");
+      if (themeSelect) themeSelect.value = settings.theme || "dark";
+      if (languageSelect) languageSelect.value = settings.language || "en";
       if (liteModeToggle) liteModeToggle.checked = settings.liteMode || false;
       if (compactModeToggle) compactModeToggle.checked = settings.compactMode || false;
-
-      // Performance
       if (virtualScrollToggle) virtualScrollToggle.checked = settings.virtualScrolling !== false;
       if (showTooltipsToggle) showTooltipsToggle.checked = settings.showTooltips !== false;
       if (autoSyncToggle) autoSyncToggle.checked = settings.autoSync !== false;
-      if (cacheSizeSelect) cacheSizeSelect.value = settings.cacheSize || '100';
-
-      // API
-      if (apiSourceSelect) apiSourceSelect.value = settings.apiSource || 'steam';
-
-      // Configurar visibilidade dos campos de API
-      this.handleApiSourceChange(settings.apiSource || 'steam');
+      if (cacheSizeSelect) cacheSizeSelect.value = settings.cacheSize || "100";
+      if (apiSourceSelect) apiSourceSelect.value = settings.apiSource || "steam";
+      this.handleApiSourceChange(settings.apiSource || "steam");
     } catch (error) {
-      // Silently handle error
     }
   }
-
   setupSettingsChangeDetection() {
     try {
-      // Event listeners para detectar mudanças (sem aplicar)
       const elements = [
         // Personalização
-        'themeSelect',
-        'languageSelect',
-        'liteModeToggle',
-        'compactModeToggle',
+        "themeSelect",
+        "languageSelect",
+        "liteModeToggle",
+        "compactModeToggle",
         // Performance
-        'virtualScrollToggle',
-        'showTooltipsToggle',
-        'autoSyncToggle',
-        'cacheSizeSelect',
+        "virtualScrollToggle",
+        "showTooltipsToggle",
+        "autoSyncToggle",
+        "cacheSizeSelect",
         // API
-        'apiSourceSelect',
-        'steamApiKeyInput',
+        "apiSourceSelect",
+        "steamApiKeyInput"
       ];
-
-      elements.forEach(elementId => {
+      elements.forEach((elementId) => {
         const element = document.getElementById(elementId);
         if (element) {
-          const eventTypes =
-            element.type === 'checkbox' ? ['change'] : ['change', 'input', 'keyup'];
-
-          eventTypes.forEach(eventType => {
+          const eventTypes = element.type === "checkbox" ? ["change"] : ["change", "input", "keyup"];
+          eventTypes.forEach((eventType) => {
             element.addEventListener(eventType, () => {
-              // Manipular mudança da fonte de API
-              if (elementId === 'apiSourceSelect') {
+              if (elementId === "apiSourceSelect") {
                 this.handleApiSourceChange(element.value);
               }
-
               this.updatePendingSettings();
               this.checkForChanges();
             });
           });
         }
       });
-
-      // Event listener especial para o botão de toggle da Steam API Key
-      const togglePasswordBtn = document.getElementById('toggleApiKeyBtn');
+      const togglePasswordBtn = document.getElementById("toggleApiKeyBtn");
       if (togglePasswordBtn) {
-        togglePasswordBtn.addEventListener('click', () => {
+        togglePasswordBtn.addEventListener("click", () => {
           this.toggleSteamApiKeyVisibility();
         });
       }
     } catch (error) {
-      // Silently handle error
     }
   }
-
   updatePendingSettings() {
     try {
-      // Atualizar configurações pendentes com valores atuais dos elementos
-
-      // Personalização
-      const themeSelect = document.getElementById('themeSelect');
-      const languageSelect = document.getElementById('languageSelect');
-      const liteModeToggle = document.getElementById('liteModeToggle');
-      const compactModeToggle = document.getElementById('compactModeToggle');
-
-      // Performance
-      const virtualScrollToggle = document.getElementById('virtualScrollToggle');
-      const showTooltipsToggle = document.getElementById('showTooltipsToggle');
-      const autoSyncToggle = document.getElementById('autoSyncToggle');
-      const cacheSizeSelect = document.getElementById('cacheSizeSelect');
-
-      // API
-      const apiSourceSelect = document.getElementById('apiSourceSelect');
-      const steamApiKeyInput = document.getElementById('steamApiKeyInput');
-
-      // Atualizar valores - Personalização
+      const themeSelect = document.getElementById("themeSelect");
+      const languageSelect = document.getElementById("languageSelect");
+      const liteModeToggle = document.getElementById("liteModeToggle");
+      const compactModeToggle = document.getElementById("compactModeToggle");
+      const virtualScrollToggle = document.getElementById("virtualScrollToggle");
+      const showTooltipsToggle = document.getElementById("showTooltipsToggle");
+      const autoSyncToggle = document.getElementById("autoSyncToggle");
+      const cacheSizeSelect = document.getElementById("cacheSizeSelect");
+      const apiSourceSelect = document.getElementById("apiSourceSelect");
+      const steamApiKeyInput = document.getElementById("steamApiKeyInput");
       if (themeSelect) this.pendingSettings.theme = themeSelect.value;
       if (languageSelect) {
         this.pendingSettings.language = languageSelect.value;
       }
       if (liteModeToggle) this.pendingSettings.liteMode = liteModeToggle.checked;
       if (compactModeToggle) this.pendingSettings.compactMode = compactModeToggle.checked;
-
-      // Atualizar valores - Performance
       if (virtualScrollToggle) this.pendingSettings.virtualScrolling = virtualScrollToggle.checked;
       if (showTooltipsToggle) this.pendingSettings.showTooltips = showTooltipsToggle.checked;
       if (autoSyncToggle) this.pendingSettings.autoSync = autoSyncToggle.checked;
       if (cacheSizeSelect) this.pendingSettings.cacheSize = cacheSizeSelect.value;
-
-      // Atualizar valores - API
       if (apiSourceSelect) this.pendingSettings.apiSource = apiSourceSelect.value;
     } catch (error) {
-      // Silently handle error
     }
   }
-
   handleApiSourceChange(apiSource) {
     try {
-      const steamApiSection = document.getElementById('steamApiSection');
-      const steamPathsInfo = document.getElementById('steamPathsInfo');
-      const hydraApiMessage = document.getElementById('hydraApiMessage');
-
-      if (apiSource === 'steam') {
-        if (steamApiSection) steamApiSection.style.display = 'block';
+      const steamApiSection = document.getElementById("steamApiSection");
+      const steamPathsInfo = document.getElementById("steamPathsInfo");
+      const hydraApiMessage = document.getElementById("hydraApiMessage");
+      if (apiSource === "steam") {
+        if (steamApiSection) steamApiSection.style.display = "block";
         if (steamPathsInfo) {
-          steamPathsInfo.style.display = 'block';
+          steamPathsInfo.style.display = "block";
           this.loadSteamPaths();
         }
-        if (hydraApiMessage) hydraApiMessage.style.display = 'none';
-      } else if (apiSource === 'hydra') {
-        if (steamApiSection) steamApiSection.style.display = 'none';
-        if (steamPathsInfo) steamPathsInfo.style.display = 'none';
-        if (hydraApiMessage) hydraApiMessage.style.display = 'block';
+        if (hydraApiMessage) hydraApiMessage.style.display = "none";
+      } else if (apiSource === "hydra") {
+        if (steamApiSection) steamApiSection.style.display = "none";
+        if (steamPathsInfo) steamPathsInfo.style.display = "none";
+        if (hydraApiMessage) hydraApiMessage.style.display = "block";
       }
     } catch (error) {
-      // Silently handle error
     }
   }
-
   async loadSteamPaths() {
     try {
-      // Carregar pastas padrão do Steam
-      const defaultPaths = await window.electronAPI.invoke('steam.getSteamDefaultPaths');
-      const defaultPathsList = document.getElementById('steamDefaultPathsList');
-
+      const defaultPaths = await window.electronAPI.invoke("steam.getSteamDefaultPaths");
+      const defaultPathsList = document.getElementById("steamDefaultPathsList");
       if (defaultPathsList && defaultPaths) {
-        defaultPathsList.innerHTML = defaultPaths
-          .map(path => `<li class="steam-path-item">📁 ${path}</li>`)
-          .join('');
+        defaultPathsList.innerHTML = defaultPaths.map((path) => `<li class="steam-path-item">\u{1F4C1} ${path}</li>`).join("");
       }
-
-      // Detectar diretório atual do Steam
-      const currentDirectory = await window.electronAPI.invoke('steam.detectCurrentSteamDirectory');
-      const steamPathInput = document.getElementById('steamPathInput');
-
+      const currentDirectory = await window.electronAPI.invoke("steam.detectCurrentSteamDirectory");
+      const steamPathInput = document.getElementById("steamPathInput");
       if (steamPathInput && currentDirectory) {
         steamPathInput.value = currentDirectory;
       }
     } catch (error) {
-      
     }
   }
-
   async selectSteamDirectory() {
     try {
-      const result = await window.electronAPI.invoke('fs:showOpenDialog', {
-        properties: ['openDirectory'],
-        title: 'Selecionar Diretório do Steam',
+      const result = await window.electronAPI.invoke("fs:showOpenDialog", {
+        properties: ["openDirectory"],
+        title: "Selecionar Diret\xF3rio do Steam"
       });
-
       if (result && !result.canceled && result.filePaths.length > 0) {
-        const steamPathInput = document.getElementById('steamPathInput');
+        const steamPathInput = document.getElementById("steamPathInput");
         if (steamPathInput) {
           steamPathInput.value = result.filePaths[0];
-          // Aqui você pode adicionar lógica para salvar o caminho personalizado
         }
       }
     } catch (error) {
-      
     }
   }
-
   async testSteamConnection() {
     try {
-      const testBtn = document.getElementById('testSteamConnectionBtn');
-      const statusCard = document.getElementById('steamStatusCard');
-      const statusIcon = document.getElementById('steamStatusIcon');
-      const statusTitle = document.getElementById('steamStatusTitle');
-      const statusDescription = document.getElementById('steamStatusDescription');
-      const apiKeyInput = document.getElementById('steamApiKeyInput');
-
+      const testBtn = document.getElementById("testSteamConnectionBtn");
+      const statusCard = document.getElementById("steamStatusCard");
+      const statusIcon = document.getElementById("steamStatusIcon");
+      const statusTitle = document.getElementById("steamStatusTitle");
+      const statusDescription = document.getElementById("steamStatusDescription");
+      const apiKeyInput = document.getElementById("steamApiKeyInput");
       if (!testBtn || !statusCard || !apiKeyInput) return;
-
-      // Desabilitar botão e mostrar loading
       testBtn.disabled = true;
       const originalBtnContent = testBtn.innerHTML;
       testBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span>Testando...</span>';
-
-      // Atualizar status visual
-      statusCard.className = 'steam-status-card status-testing';
+      statusCard.className = "steam-status-card status-testing";
       statusIcon.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-      statusTitle.textContent = 'Testando...';
-      statusDescription.textContent = 'Verificando conexão e descobrindo Steam ID...';
-
+      statusTitle.textContent = "Testando...";
+      statusDescription.textContent = "Verificando conex\xE3o e descobrindo Steam ID...";
       const apiKey = apiKeyInput.value.trim();
-
       if (!apiKey) {
-        statusCard.className = 'steam-status-card status-error';
+        statusCard.className = "steam-status-card status-error";
         statusIcon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
-        statusTitle.textContent = 'Erro';
-        statusDescription.textContent = 'Por favor, preencha a API Key';
+        statusTitle.textContent = "Erro";
+        statusDescription.textContent = "Por favor, preencha a API Key";
         return;
       }
-
-      // Testar conexão via IPC (Steam ID será descoberto automaticamente)
       const result = await window.electronAPI.steam.setCredentials(apiKey);
-
       if (result.success) {
-        statusCard.className = 'steam-status-card status-connected';
+        statusCard.className = "steam-status-card status-connected";
         statusIcon.innerHTML = '<i class="fab fa-steam"></i>';
-
         if (result.autoDiscovered) {
-          // Steam ID descoberto automaticamente
-          statusTitle.textContent = 'Conectado';
-          statusDescription.textContent = `Steam ID descoberto automaticamente - ${result.data?.personaname || 'Usuário Steam'}`;
+          statusTitle.textContent = "Conectado";
+          statusDescription.textContent = `Steam ID descoberto automaticamente - ${result.data?.personaname || "Usu\xE1rio Steam"}`;
         } else {
-          // Conexão bem-sucedida sem descoberta automática
-          statusTitle.textContent = 'API Key Válida';
-          statusDescription.textContent = `Usuário: ${result.data?.personaname || 'N/A'}`;
+          statusTitle.textContent = "API Key V\xE1lida";
+          statusDescription.textContent = `Usu\xE1rio: ${result.data?.personaname || "N/A"}`;
         }
       } else {
-        statusCard.className = 'steam-status-card status-error';
+        statusCard.className = "steam-status-card status-error";
         statusIcon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
-
-        const isTimeout =
-          typeof result.error === 'string' &&
-          (result.error.toLowerCase().includes('timeout') || result.error.includes('ECONNABORTED'));
-
+        const isTimeout = typeof result.error === "string" && (result.error.toLowerCase().includes("timeout") || result.error.includes("ECONNABORTED"));
         if (isTimeout) {
-          // i18n: timeout amigável
-          statusTitle.setAttribute('data-i18n', 'settings.api.steam.status.timeout');
+          statusTitle.setAttribute("data-i18n", "settings.api.steam.status.timeout");
           statusTitle.textContent = await this.app.t(
-            'settings.api.steam.status.timeout',
-            'Tempo de conexão esgotado'
+            "settings.api.steam.status.timeout",
+            "Tempo de conex\xE3o esgotado"
           );
           statusDescription.setAttribute(
-            'data-i18n',
-            'settings.api.steam.status.timeout.description'
+            "data-i18n",
+            "settings.api.steam.status.timeout.description"
           );
           statusDescription.textContent = await this.app.t(
-            'settings.api.steam.status.timeout.description',
-            'A Steam API não respondeu dentro do tempo esperado. Verifique sua rede e tente novamente.'
+            "settings.api.steam.status.timeout.description",
+            "A Steam API n\xE3o respondeu dentro do tempo esperado. Verifique sua rede e tente novamente."
           );
-
-          // Notificação de aviso
           this.app.modules.helpers.showNotification(
-            await this.app.t(
-              'settings.api.steam.status.timeout',
-              'Tempo de conexão esgotado'
-            ),
-            'warning',
-            5000
+            await this.app.t("settings.api.steam.status.timeout", "Tempo de conex\xE3o esgotado"),
+            "warning",
+            5e3
           );
         } else {
-          // i18n: erro genérico de conexão
-          statusTitle.setAttribute('data-i18n', 'settings.api.steam.status.error');
+          statusTitle.setAttribute("data-i18n", "settings.api.steam.status.error");
           statusTitle.textContent = await this.app.t(
-            'settings.api.steam.status.error',
-            'Erro na verificação'
+            "settings.api.steam.status.error",
+            "Erro na verifica\xE7\xE3o"
           );
           statusDescription.setAttribute(
-            'data-i18n',
-            'settings.api.steam.status.error.description'
+            "data-i18n",
+            "settings.api.steam.status.error.description"
           );
-          const looksLikeKey = (s) => typeof s === 'string' && s.includes('.') && !s.includes(' ');
-
-          let errorMessage = result.error ||
-            (await this.app.t(
-              'settings.api.steam.status.error.description',
-              'Ocorreu um erro ao verificar a conexão Steam'
-            ));
+          const looksLikeKey = /* @__PURE__ */ __name((s) => typeof s === "string" && s.includes(".") && !s.includes(" "), "looksLikeKey");
+          let errorMessage = result.error || await this.app.t(
+            "settings.api.steam.status.error.description",
+            "Ocorreu um erro ao verificar a conex\xE3o Steam"
+          );
           if (result.suggestion) {
             errorMessage += ` - ${result.suggestion}`;
           }
-
-          // Se a mensagem parecer uma chave i18n literal, não mostrar descrição
           if (looksLikeKey(errorMessage)) {
-            statusDescription.style.display = 'none';
-            statusDescription.textContent = '';
+            statusDescription.style.display = "none";
+            statusDescription.textContent = "";
           } else {
-            statusDescription.style.display = 'block';
+            statusDescription.style.display = "block";
             statusDescription.textContent = errorMessage;
           }
         }
       }
     } catch (error) {
-
-      const statusCard = document.getElementById('steamStatusCard');
-      const statusIcon = document.getElementById('steamStatusIcon');
-      const statusTitle = document.getElementById('steamStatusTitle');
-      const statusDescription = document.getElementById('steamStatusDescription');
-
+      const statusCard = document.getElementById("steamStatusCard");
+      const statusIcon = document.getElementById("steamStatusIcon");
+      const statusTitle = document.getElementById("steamStatusTitle");
+      const statusDescription = document.getElementById("steamStatusDescription");
       if (statusCard) {
-        statusCard.className = 'steam-status-card status-error';
+        statusCard.className = "steam-status-card status-error";
         statusIcon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
-
-        const isTimeout =
-          (error?.code === 'ECONNABORTED') ||
-          (typeof error?.message === 'string' && error.message.toLowerCase().includes('timeout'));
-
+        const isTimeout = error?.code === "ECONNABORTED" || typeof error?.message === "string" && error.message.toLowerCase().includes("timeout");
         if (isTimeout) {
-          statusTitle.setAttribute('data-i18n', 'settings.api.steam.status.timeout');
+          statusTitle.setAttribute("data-i18n", "settings.api.steam.status.timeout");
           statusTitle.textContent = await this.app.t(
-            'settings.api.steam.status.timeout',
-            'Tempo de conexão esgotado'
+            "settings.api.steam.status.timeout",
+            "Tempo de conex\xE3o esgotado"
           );
           statusDescription.setAttribute(
-            'data-i18n',
-            'settings.api.steam.status.timeout.description'
+            "data-i18n",
+            "settings.api.steam.status.timeout.description"
           );
           statusDescription.textContent = await this.app.t(
-            'settings.api.steam.status.timeout.description',
-            'A Steam API não respondeu dentro do tempo esperado. Verifique sua rede e tente novamente.'
+            "settings.api.steam.status.timeout.description",
+            "A Steam API n\xE3o respondeu dentro do tempo esperado. Verifique sua rede e tente novamente."
           );
-
           this.app.modules.helpers.showNotification(
-            await this.app.t(
-              'settings.api.steam.status.timeout',
-              'Tempo de conexão esgotado'
-            ),
-            'warning',
-            5000
+            await this.app.t("settings.api.steam.status.timeout", "Tempo de conex\xE3o esgotado"),
+            "warning",
+            5e3
           );
         } else {
-          statusTitle.setAttribute('data-i18n', 'settings.api.steam.status.error');
+          statusTitle.setAttribute("data-i18n", "settings.api.steam.status.error");
           statusTitle.textContent = await this.app.t(
-            'settings.api.steam.status.error',
-            'Erro na verificação'
+            "settings.api.steam.status.error",
+            "Erro na verifica\xE7\xE3o"
           );
           statusDescription.setAttribute(
-            'data-i18n',
-            'settings.api.steam.status.error.description'
+            "data-i18n",
+            "settings.api.steam.status.error.description"
           );
           statusDescription.textContent = await this.app.t(
-            'settings.api.steam.status.error.description',
-            'Ocorreu um erro ao verificar a conexão Steam'
+            "settings.api.steam.status.error.description",
+            "Ocorreu um erro ao verificar a conex\xE3o Steam"
           );
         }
       }
     } finally {
-      const testBtn = document.getElementById('testSteamConnectionBtn');
+      const testBtn = document.getElementById("testSteamConnectionBtn");
       if (testBtn) {
         testBtn.disabled = false;
-        testBtn.innerHTML =
-          '<i class="fas fa-plug"></i> <span data-i18n="settings.api.steam.testConnection">Testar Conexão</span>';
+        testBtn.innerHTML = '<i class="fas fa-plug"></i> <span data-i18n="settings.api.steam.testConnection">Testar Conex\xE3o</span>';
       }
     }
   }
-
   checkForChanges() {
     try {
-      // Verificar se há mudanças não salvas
-      const hasChanges =
-        JSON.stringify(this.originalSettings) !== JSON.stringify(this.pendingSettings);
-
-      // Atualizar interface
-      const saveBtn = document.getElementById('saveSettingsBtn');
-      const cancelBtn = document.getElementById('cancelSettingsBtn');
-      const statusDiv = document.getElementById('settingsStatus');
-
+      const hasChanges = JSON.stringify(this.originalSettings) !== JSON.stringify(this.pendingSettings);
+      const saveBtn = document.getElementById("saveSettingsBtn");
+      const cancelBtn = document.getElementById("cancelSettingsBtn");
+      const statusDiv = document.getElementById("settingsStatus");
       if (saveBtn) saveBtn.disabled = !hasChanges;
       if (cancelBtn) cancelBtn.disabled = !hasChanges;
-      if (statusDiv) statusDiv.style.display = hasChanges ? 'flex' : 'none';
+      if (statusDiv) statusDiv.style.display = hasChanges ? "flex" : "none";
     } catch (error) {
-      
     }
   }
-
   async saveCurrentSettings() {
     try {
-      // Atualizar configurações pendentes antes de verificar mudanças
       this.updatePendingSettings();
-
-      // Verificar se houve mudança de idioma
-      const languageChanged =
-        this.pendingSettings.language &&
-        this.pendingSettings.language !== this.originalSettings.language;
-
-      // Verificar se API Key da Steam mudou e salvar credenciais
-      const steamApiKeyInput = document.getElementById('steamApiKeyInput');
+      const languageChanged = this.pendingSettings.language && this.pendingSettings.language !== this.originalSettings.language;
+      const steamApiKeyInput = document.getElementById("steamApiKeyInput");
       if (steamApiKeyInput) {
         const newApiKey = steamApiKeyInput.value.trim();
-        const originalApiKey = this.originalSettings.steamApiKey || '';
-        if (newApiKey && newApiKey !== originalApiKey && this.app.isElectronAPIAvailable('steam')) {
-          // Chamar backend para salvar no cache (Steam ID será descoberto automaticamente)
-          await this.app.safeElectronAPICall('steam.setCredentials', newApiKey);
-          // Também manter no pendingSettings para que seja persistido em caso de uso futuro
+        const originalApiKey = this.originalSettings.steamApiKey || "";
+        if (newApiKey && newApiKey !== originalApiKey && this.app.isElectronAPIAvailable("steam")) {
+          await this.app.safeElectronAPICall("steam.setCredentials", newApiKey);
           this.pendingSettings.steamApiKey = newApiKey;
         }
       }
-
-      // Salvar todas as configurações pendentes
       for (const [key, value] of Object.entries(this.pendingSettings)) {
         await this.app.modules.settings.set(key, value);
       }
-
-      // Atualizar configurações originais
       this.originalSettings = { ...this.pendingSettings };
-
-      // Atualizar interface
       this.checkForChanges();
-
-      // Se houve mudança de idioma, mostrar diálogo de reinicialização
       if (languageChanged) {
         await this.showRestartDialog();
       } else {
-        // Mostrar notificação de sucesso normal
         this.app.modules.helpers.showNotification(
-          this.app.t('settings.notifications.saved', 'Configurações salvas com sucesso!'),
-          'success'
+          this.app.t("settings.notifications.saved", "Configura\xE7\xF5es salvas com sucesso!"),
+          "success"
         );
       }
     } catch (error) {
-      
       this.app.modules.helpers.showNotification(
-        await this.app.t('settings.notifications.saveError', 'Erro ao salvar configurações'),
-        'error'
+        await this.app.t("settings.notifications.saveError", "Erro ao salvar configura\xE7\xF5es"),
+        "error"
       );
     }
   }
-
   async handleSteamApiKeyChange() {
     try {
-      // Verificar se estamos na página steam-games
-      const currentPage = document.querySelector('.page.active')?.id;
-
-      if (currentPage === 'steam-games') {
-
-        // Mostrar feedback visual
+      const currentPage = document.querySelector(".page.active")?.id;
+      if (currentPage === "steam-games") {
         this.app.modules.helpers.showNotification(
-          await this.app.t('steam.notifications.loadingLibrary', 'Carregando biblioteca Steam...'),
-          'info'
+          await this.app.t("steam.notifications.loadingLibrary", "Carregando biblioteca Steam..."),
+          "info"
         );
-
-        // Aguardar um momento para a configuração ser processada
         setTimeout(async () => {
           try {
             await this.loadSteamGames();
-
           } catch (error) {
-            
             this.app.modules.helpers.showNotification(
               await this.app.t(
-                'steam.notifications.loadError',
-                'Erro ao carregar biblioteca Steam'
+                "steam.notifications.loadError",
+                "Erro ao carregar biblioteca Steam"
               ),
-              'error'
+              "error"
             );
           }
         }, 1500);
       } else {
-
       }
     } catch (error) {
-      
     }
   }
-
   cancelSettingsChanges() {
     try {
-      // Restaurar valores originais
       this.pendingSettings = { ...this.originalSettings };
-
-      // Atualizar elementos da interface
-      const themeSelect = document.getElementById('themeSelect');
-      const languageSelect = document.getElementById('languageSelect');
-      const liteModeToggle = document.getElementById('liteModeToggle');
-      const virtualScrollToggle = document.getElementById('virtualScrollToggle');
+      const themeSelect = document.getElementById("themeSelect");
+      const languageSelect = document.getElementById("languageSelect");
+      const liteModeToggle = document.getElementById("liteModeToggle");
+      const virtualScrollToggle = document.getElementById("virtualScrollToggle");
       const achievementNotificationsToggle = document.getElementById(
-        'achievementNotificationsToggle'
+        "achievementNotificationsToggle"
       );
-      const notificationSoundsToggle = document.getElementById('notificationSoundsToggle');
-
-      if (themeSelect) themeSelect.value = this.originalSettings.theme || 'dark';
-      if (languageSelect) languageSelect.value = this.originalSettings.language || 'en';
+      const notificationSoundsToggle = document.getElementById("notificationSoundsToggle");
+      if (themeSelect) themeSelect.value = this.originalSettings.theme || "dark";
+      if (languageSelect) languageSelect.value = this.originalSettings.language || "en";
       if (liteModeToggle) liteModeToggle.checked = this.originalSettings.liteMode || false;
       if (virtualScrollToggle)
         virtualScrollToggle.checked = this.originalSettings.virtualScrolling !== false;
       if (achievementNotificationsToggle)
-        achievementNotificationsToggle.checked =
-          this.originalSettings.achievementNotifications !== false;
+        achievementNotificationsToggle.checked = this.originalSettings.achievementNotifications !== false;
       if (notificationSoundsToggle)
         notificationSoundsToggle.checked = this.originalSettings.notificationSounds !== false;
-
-      // Atualizar interface
       this.checkForChanges();
-
-      // Mostrar notificação
-      this.app.modules.helpers.showNotification('Alterações canceladas', 'info');
+      this.app.modules.helpers.showNotification("Altera\xE7\xF5es canceladas", "info");
     } catch (error) {
-      
     }
   }
-
   async resetSettings() {
     try {
-      // Obter traduções
-      const titleText = await this.app.t('settings.reset.dialog.title', 'Restaurar Configurações');
+      const titleText = await this.app.t("settings.reset.dialog.title", "Restaurar Configura\xE7\xF5es");
       const subtitleText = await this.app.t(
-        'settings.reset.dialog.subtitle',
-        'Esta ação irá redefinir todas as suas preferências'
+        "settings.reset.dialog.subtitle",
+        "Esta a\xE7\xE3o ir\xE1 redefinir todas as suas prefer\xEAncias"
       );
       const messageText = await this.app.t(
-        'settings.reset.dialog.message',
-        'Tem certeza que deseja restaurar todas as configurações para os valores padrão? Todas as suas personalizações serão perdidas.'
+        "settings.reset.dialog.message",
+        "Tem certeza que deseja restaurar todas as configura\xE7\xF5es para os valores padr\xE3o? Todas as suas personaliza\xE7\xF5es ser\xE3o perdidas."
       );
-      const cancelText = await this.app.t('settings.reset.dialog.cancel', 'Cancelar');
-      const confirmText = await this.app.t('settings.reset.dialog.confirm', 'Restaurar');
-
-      // Criar conteúdo do modal de confirmação
+      const cancelText = await this.app.t("settings.reset.dialog.cancel", "Cancelar");
+      const confirmText = await this.app.t("settings.reset.dialog.confirm", "Restaurar");
       const modalContent = `
         <div class="text-center">
           <div class="mb-4">
@@ -1432,8 +1188,6 @@ class NavigationManager {
           </div>
         </div>
       `;
-
-      // Criar ações do modal
       const modalActions = `
         <button type="button" class="btn btn-secondary" onclick="app.closeModal('resetSettingsDialog')">
           <i class="fas fa-times"></i> ${cancelText}
@@ -1442,229 +1196,164 @@ class NavigationManager {
           <i class="fas fa-undo"></i> ${confirmText}
         </button>
       `;
-
-      // Criar HTML do modal
       const modalHtml = this.app.createModal(
-        'resetSettingsDialog',
+        "resetSettingsDialog",
         titleText,
         modalContent,
         modalActions
       );
-
-      // Adicionar modal ao DOM se não existir
-      if (!document.getElementById('resetSettingsDialog')) {
-        document.body.insertAdjacentHTML('beforeend', modalHtml);
+      if (!document.getElementById("resetSettingsDialog")) {
+        document.body.insertAdjacentHTML("beforeend", modalHtml);
       }
-
-      // Abrir modal
-      this.app.openModal('resetSettingsDialog');
+      this.app.openModal("resetSettingsDialog");
     } catch (error) {
-      
       this.app.modules.helpers.showNotification(
-        await this.app.t('settings.reset.dialog.error', 'Erro ao abrir diálogo de confirmação'),
-        'error'
+        await this.app.t("settings.reset.dialog.error", "Erro ao abrir di\xE1logo de confirma\xE7\xE3o"),
+        "error"
       );
     }
   }
-
   async confirmResetSettings() {
     try {
-      // Fechar modal
-      this.app.closeModal('resetSettingsDialog');
-
-      // Resetar configurações
+      this.app.closeModal("resetSettingsDialog");
       await this.app.modules.settings.reset();
-
-      // Recarregar página de configurações
       this.loadConfiguracoes();
-
-      // Mostrar notificação
       this.app.modules.helpers.showNotification(
         await this.app.t(
-          'settings.notifications.restored',
-          'Configurações restauradas para os padrões'
+          "settings.notifications.restored",
+          "Configura\xE7\xF5es restauradas para os padr\xF5es"
         ),
-        'success'
+        "success"
       );
     } catch (error) {
-      
       this.app.modules.helpers.showNotification(
-        await this.app.t('settings.notifications.restoreError', 'Erro ao resetar configurações'),
-        'error'
+        await this.app.t("settings.notifications.restoreError", "Erro ao resetar configura\xE7\xF5es"),
+        "error"
       );
     }
   }
-
   openGameDetails(gameId) {
-    // Implementar abertura dos detalhes do jogo
   }
-
   refreshCurrentPage() {
     this.navigateTo(this.currentPage);
   }
-
   // Configurar navegação das guias
   setupTabNavigation() {
-    // Aguardar para garantir que o DOM esteja pronto
     setTimeout(() => {
       try {
-        const tabButtons = document.querySelectorAll('.tab-btn');
-
+        const tabButtons = document.querySelectorAll(".tab-btn");
         if (tabButtons.length === 0) {
           setTimeout(() => this.setupTabNavigation(), 200);
           return;
         }
-
-        // Configurar event listeners
-        tabButtons.forEach(button => {
-          const dataTab = button.getAttribute('data-tab');
-
-          // Remover listeners antigos
+        tabButtons.forEach((button) => {
+          const dataTab = button.getAttribute("data-tab");
           button.replaceWith(button.cloneNode(true));
         });
-
-        // Reselecionar após clonagem
-        const newButtons = document.querySelectorAll('.tab-btn');
-        newButtons.forEach(button => {
-          const dataTab = button.getAttribute('data-tab');
-
-          button.addEventListener('click', e => {
+        const newButtons = document.querySelectorAll(".tab-btn");
+        newButtons.forEach((button) => {
+          const dataTab = button.getAttribute("data-tab");
+          button.addEventListener("click", (e) => {
             e.preventDefault();
             e.stopPropagation();
             this.switchTab(dataTab);
           });
         });
-
-        // Ativar primeira guia por padrão
         setTimeout(() => {
-          this.switchTab('personalization');
+          this.switchTab("personalization");
         }, 50);
       } catch (error) {
-        
       }
     }, 150);
   }
-
   // Alternar entre guias
   switchTab(tabId) {
     try {
-      // Encontrar todos os elementos
-      const allButtons = document.querySelectorAll('.tab-btn');
-      const allPanes = document.querySelectorAll('.tab-pane');
+      const allButtons = document.querySelectorAll(".tab-btn");
+      const allPanes = document.querySelectorAll(".tab-pane");
       const activeButton = document.querySelector(`[data-tab="${tabId}"]`);
       const activePane = document.getElementById(tabId);
-
       if (!activeButton || !activePane) {
-
         return;
       }
-
-      // Remover classe active de todos
-      allButtons.forEach(btn => btn.classList.remove('active'));
-      allPanes.forEach(pane => {
-        pane.classList.remove('active');
-        pane.style.display = 'none';
+      allButtons.forEach((btn) => btn.classList.remove("active"));
+      allPanes.forEach((pane) => {
+        pane.classList.remove("active");
+        pane.style.display = "none";
       });
-
-      // Adicionar classe active aos elementos corretos
-      activeButton.classList.add('active');
-      activePane.classList.add('active');
-      activePane.style.display = 'block';
-
-      // Forçar reflow para garantir que as mudanças sejam aplicadas
+      activeButton.classList.add("active");
+      activePane.classList.add("active");
+      activePane.style.display = "block";
       activePane.offsetHeight;
-
-      // Quando a guia API é ativada, inicializar as configurações da Steam
-      if (tabId === 'api') {
-        // Garante que o preenchimento automático da API Key e status sejam atualizados
+      if (tabId === "api") {
         this.setupSteamSettings();
       }
     } catch (error) {
-      
     }
   }
-
   // Manipular mudança da fonte de API
   handleApiSourceChange(source) {
     try {
-      const steamApiSection = document.getElementById('steamApiSection');
-      const hydraApiMessage = document.getElementById('hydraApiMessage');
-
-      if (source === 'steam') {
-        if (steamApiSection) steamApiSection.style.display = 'block';
-        if (hydraApiMessage) hydraApiMessage.style.display = 'none';
-      } else if (source === 'hydra') {
-        if (steamApiSection) steamApiSection.style.display = 'none';
-        if (hydraApiMessage) hydraApiMessage.style.display = 'block';
+      const steamApiSection = document.getElementById("steamApiSection");
+      const hydraApiMessage = document.getElementById("hydraApiMessage");
+      if (source === "steam") {
+        if (steamApiSection) steamApiSection.style.display = "block";
+        if (hydraApiMessage) hydraApiMessage.style.display = "none";
+      } else if (source === "hydra") {
+        if (steamApiSection) steamApiSection.style.display = "none";
+        if (hydraApiMessage) hydraApiMessage.style.display = "block";
       }
     } catch (error) {
-      
     }
   }
-
   // Alternar visibilidade da Steam API Key
   toggleSteamApiKeyVisibility() {
     try {
-      const input = document.getElementById('steamApiKeyInput');
-      const icon = document.querySelector('#toggleApiKeyBtn i');
-
+      const input = document.getElementById("steamApiKeyInput");
+      const icon = document.querySelector("#toggleApiKeyBtn i");
       if (input && icon) {
-        if (input.type === 'password') {
-          input.type = 'text';
-          icon.className = 'fas fa-eye-slash';
+        if (input.type === "password") {
+          input.type = "text";
+          icon.className = "fas fa-eye-slash";
         } else {
-          input.type = 'password';
-          icon.className = 'fas fa-eye';
+          input.type = "password";
+          icon.className = "fas fa-eye";
         }
       }
     } catch (error) {
-      
     }
   }
-
   // Configurar funcionalidades da Steam API
   async setupSteamSettings() {
     try {
-      // Verificar se estamos na guia correta
-      if (!document.getElementById('steamStatusCard')) {
-        return; // Não está na página de configurações Steam
+      if (!document.getElementById("steamStatusCard")) {
+        return;
       }
-
-      // Carregar configurações iniciais
       await this.loadSteamSettings();
-
-      // Ocultar cartão de status e botões extras, deixando apenas o botão Connect
       this.hideSteamStatus = true;
-      const statusCard = document.getElementById('steamStatusCard');
-      const statusDetails = document.getElementById('steamStatusDetails');
-      const syncSettings = document.getElementById('steamSyncSettings');
-      const testBtn = document.getElementById('steamTestBtn');
-      const disconnectBtn = document.getElementById('steamDisconnectBtn');
-      const connectBtn = document.getElementById('steamConnectBtn');
-
-      if (statusCard) statusCard.style.display = 'none';
-      if (statusDetails) statusDetails.style.display = 'none';
-      if (syncSettings) syncSettings.style.display = 'none';
-      if (testBtn) testBtn.style.display = 'none';
-      if (disconnectBtn) disconnectBtn.style.display = 'none';
-      if (connectBtn) connectBtn.style.display = 'inline-block';
-
-      // Configurar event listeners
+      const statusCard = document.getElementById("steamStatusCard");
+      const statusDetails = document.getElementById("steamStatusDetails");
+      const syncSettings = document.getElementById("steamSyncSettings");
+      const testBtn = document.getElementById("steamTestBtn");
+      const disconnectBtn = document.getElementById("steamDisconnectBtn");
+      const connectBtn = document.getElementById("steamConnectBtn");
+      if (statusCard) statusCard.style.display = "none";
+      if (statusDetails) statusDetails.style.display = "none";
+      if (syncSettings) syncSettings.style.display = "none";
+      if (testBtn) testBtn.style.display = "none";
+      if (disconnectBtn) disconnectBtn.style.display = "none";
+      if (connectBtn) connectBtn.style.display = "inline-block";
       this.setupSteamEventListeners();
     } catch (error) {
-      
     }
   }
-
   async loadSteamSettings() {
     try {
-      if (this.app.isElectronAPIAvailable('steam')) {
-        const credentials = await this.app.safeElectronAPICall('steam.getCredentials');
-
+      if (this.app.isElectronAPIAvailable("steam")) {
+        const credentials = await this.app.safeElectronAPICall("steam.getCredentials");
         if (credentials && credentials.success) {
-          const apiKeyInput = document.getElementById('steamApiKeyInput');
-          const steamIdInput = document.getElementById('steamIdInput');
-
+          const apiKeyInput = document.getElementById("steamApiKeyInput");
+          const steamIdInput = document.getElementById("steamIdInput");
           if (apiKeyInput && credentials.apiKey) {
             apiKeyInput.value = credentials.apiKey;
           }
@@ -1674,805 +1363,623 @@ class NavigationManager {
         }
       }
     } catch (error) {
-      
     }
   }
-
   async checkSteamConnection() {
     try {
-      // Se a UI deve ocultar o status, garantir que elementos estejam escondidos e sair
       if (this.hideSteamStatus) {
-        const statusCard = document.getElementById('steamStatusCard');
-        const statusDetails = document.getElementById('steamStatusDetails');
-        const syncSettings = document.getElementById('steamSyncSettings');
-        const testBtn = document.getElementById('steamTestBtn');
-        const disconnectBtn = document.getElementById('steamDisconnectBtn');
-
-        if (statusCard) statusCard.style.display = 'none';
-        if (statusDetails) statusDetails.style.display = 'none';
-        if (syncSettings) syncSettings.style.display = 'none';
-        if (testBtn) testBtn.style.display = 'none';
-        if (disconnectBtn) disconnectBtn.style.display = 'none';
+        const statusCard2 = document.getElementById("steamStatusCard");
+        const statusDetails2 = document.getElementById("steamStatusDetails");
+        const syncSettings2 = document.getElementById("steamSyncSettings");
+        const testBtn2 = document.getElementById("steamTestBtn");
+        const disconnectBtn2 = document.getElementById("steamDisconnectBtn");
+        if (statusCard2) statusCard2.style.display = "none";
+        if (statusDetails2) statusDetails2.style.display = "none";
+        if (syncSettings2) syncSettings2.style.display = "none";
+        if (testBtn2) testBtn2.style.display = "none";
+        if (disconnectBtn2) disconnectBtn2.style.display = "none";
         return;
       }
-      const statusCard = document.getElementById('steamStatusCard');
-      const statusIcon = document.getElementById('steamStatusIcon');
-      const statusTitle = document.getElementById('steamStatusTitle');
-      const statusDescription = document.getElementById('steamStatusDescription');
-      const statusDetails = document.getElementById('steamStatusDetails');
-      const syncSettings = document.getElementById('steamSyncSettings');
-      const testBtn = document.getElementById('steamTestBtn');
-      const disconnectBtn = document.getElementById('steamDisconnectBtn');
-
+      const statusCard = document.getElementById("steamStatusCard");
+      const statusIcon = document.getElementById("steamStatusIcon");
+      const statusTitle = document.getElementById("steamStatusTitle");
+      const statusDescription = document.getElementById("steamStatusDescription");
+      const statusDetails = document.getElementById("steamStatusDetails");
+      const syncSettings = document.getElementById("steamSyncSettings");
+      const testBtn = document.getElementById("steamTestBtn");
+      const disconnectBtn = document.getElementById("steamDisconnectBtn");
       if (!statusCard) return;
-
-      // Mostrar status de verificação
       statusIcon.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-      statusTitle.textContent = 'Verificando...';
-      statusDescription.textContent = 'Testando conexão com Steam';
-
-      if (this.app.isElectronAPIAvailable('steam')) {
-        const connection = await this.app.safeElectronAPICall('steam.checkConnection');
-
+      statusTitle.textContent = "Verificando...";
+      statusDescription.textContent = "Testando conex\xE3o com Steam";
+      if (this.app.isElectronAPIAvailable("steam")) {
+        const connection = await this.app.safeElectronAPICall("steam.checkConnection");
         if (connection.success && connection.connected) {
-          // Conectado com sucesso
-          statusCard.className = 'steam-status-card status-connected';
+          statusCard.className = "steam-status-card status-connected";
           statusIcon.innerHTML = '<i class="fab fa-steam"></i>';
-          statusTitle.textContent = 'Conectado';
-          statusDescription.textContent = `Conectado como ${connection.userInfo?.username || 'Usuário Steam'}`;
-
-          // Mostrar detalhes
+          statusTitle.textContent = "Conectado";
+          statusDescription.textContent = `Conectado como ${connection.userInfo?.username || "Usu\xE1rio Steam"}`;
           if (connection.userInfo) {
-            statusDetails.style.display = 'block';
+            statusDetails.style.display = "block";
             statusDetails.innerHTML = `
               <div class="detail-item">
-                <span class="detail-label">Usuário:</span>
+                <span class="detail-label">Usu\xE1rio:</span>
                 <span class="detail-value">${connection.userInfo.username}</span>
               </div>
               <div class="detail-item">
                 <span class="detail-label">Perfil:</span>
                 <span class="detail-value">
-                  <a href="${connection.userInfo.profileUrl || '#'}" target="_blank" class="external-link">
+                  <a href="${connection.userInfo.profileUrl || "#"}" target="_blank" class="external-link">
                     Ver Perfil Steam
                   </a>
                 </span>
               </div>
             `;
           }
-
-          // Mostrar configurações de sincronização
-          if (syncSettings) syncSettings.style.display = 'block';
-          if (testBtn) testBtn.style.display = 'inline-block';
-          if (disconnectBtn) disconnectBtn.style.display = 'inline-block';
+          if (syncSettings) syncSettings.style.display = "block";
+          if (testBtn) testBtn.style.display = "inline-block";
+          if (disconnectBtn) disconnectBtn.style.display = "inline-block";
         } else {
-          // Não conectado ou erro
-          const isTimeout =
-            typeof connection.error === 'string' &&
-            (connection.error.toLowerCase().includes('timeout') || connection.error.includes('ECONNABORTED'));
-
+          const isTimeout = typeof connection.error === "string" && (connection.error.toLowerCase().includes("timeout") || connection.error.includes("ECONNABORTED"));
           if (isTimeout) {
-            statusCard.className = 'steam-status-card status-error';
+            statusCard.className = "steam-status-card status-error";
             statusIcon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
-
-            statusTitle.setAttribute('data-i18n', 'settings.api.steam.status.timeout');
+            statusTitle.setAttribute("data-i18n", "settings.api.steam.status.timeout");
             statusTitle.textContent = await this.app.t(
-              'settings.api.steam.status.timeout',
-              'Tempo de conexão esgotado'
+              "settings.api.steam.status.timeout",
+              "Tempo de conex\xE3o esgotado"
             );
             statusDescription.setAttribute(
-              'data-i18n',
-              'settings.api.steam.status.timeout.description'
+              "data-i18n",
+              "settings.api.steam.status.timeout.description"
             );
             statusDescription.textContent = await this.app.t(
-              'settings.api.steam.status.timeout.description',
-              'A Steam API não respondeu dentro do tempo esperado. Verifique sua rede e tente novamente.'
+              "settings.api.steam.status.timeout.description",
+              "A Steam API n\xE3o respondeu dentro do tempo esperado. Verifique sua rede e tente novamente."
             );
-            statusDetails.style.display = 'none';
-
-            // Permitir tentar novamente
-            if (syncSettings) syncSettings.style.display = 'none';
-            if (testBtn) testBtn.style.display = 'inline-block';
-            if (disconnectBtn) disconnectBtn.style.display = 'none';
-
-            // Notificação de aviso
+            statusDetails.style.display = "none";
+            if (syncSettings) syncSettings.style.display = "none";
+            if (testBtn) testBtn.style.display = "inline-block";
+            if (disconnectBtn) disconnectBtn.style.display = "none";
             this.app.modules.helpers.showNotification(
-              await this.app.t(
-                'settings.api.steam.status.timeout',
-                'Tempo de conexão esgotado'
-              ),
-              'warning',
-              5000
+              await this.app.t("settings.api.steam.status.timeout", "Tempo de conex\xE3o esgotado"),
+              "warning",
+              5e3
             );
           } else {
-            statusCard.className = 'steam-status-card status-disconnected';
+            statusCard.className = "steam-status-card status-disconnected";
             statusIcon.innerHTML = '<i class="fab fa-steam"></i>';
-            // i18n: título e descrição de desconexão
-            statusTitle.setAttribute('data-i18n', 'settings.api.steam.status.disconnected');
+            statusTitle.setAttribute("data-i18n", "settings.api.steam.status.disconnected");
             statusTitle.textContent = await this.app.t(
-              'settings.api.steam.status.disconnected',
-              'Desconectado'
+              "settings.api.steam.status.disconnected",
+              "Desconectado"
             );
             statusDescription.setAttribute(
-              'data-i18n',
-              'settings.api.steam.status.disconnected.description'
+              "data-i18n",
+              "settings.api.steam.status.disconnected.description"
             );
-            const looksLikeKey = (s) => typeof s === 'string' && s.includes('.') && !s.includes(' ');
-            let descText = connection.error ||
-              (await this.app.t(
-                'settings.api.steam.status.disconnected.description',
-                'Configure suas credenciais para conectar'
-              ));
-
-            // Se for uma chave i18n literal, tentar traduzir; se continuar literal, ocultar
+            const looksLikeKey = /* @__PURE__ */ __name((s) => typeof s === "string" && s.includes(".") && !s.includes(" "), "looksLikeKey");
+            let descText = connection.error || await this.app.t(
+              "settings.api.steam.status.disconnected.description",
+              "Configure suas credenciais para conectar"
+            );
             if (looksLikeKey(descText)) {
-              const translated = await this.app.t(descText, '');
+              const translated = await this.app.t(descText, "");
               if (!translated || translated === descText) {
-                statusDescription.style.display = 'none';
-                statusDescription.textContent = '';
+                statusDescription.style.display = "none";
+                statusDescription.textContent = "";
               } else {
-                statusDescription.style.display = 'block';
+                statusDescription.style.display = "block";
                 statusDescription.textContent = translated;
               }
             } else {
-              statusDescription.style.display = 'block';
+              statusDescription.style.display = "block";
               statusDescription.textContent = descText;
             }
-            statusDetails.style.display = 'none';
-
-            // Ocultar configurações avançadas
-            if (syncSettings) syncSettings.style.display = 'none';
-            if (testBtn) testBtn.style.display = 'none';
-            if (disconnectBtn) disconnectBtn.style.display = 'none';
+            statusDetails.style.display = "none";
+            if (syncSettings) syncSettings.style.display = "none";
+            if (testBtn) testBtn.style.display = "none";
+            if (disconnectBtn) disconnectBtn.style.display = "none";
           }
         }
       } else {
-        // API não disponível
-        statusCard.className = 'steam-status-card status-error';
+        statusCard.className = "steam-status-card status-error";
         statusIcon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
-        // i18n: indisponível
-        statusTitle.setAttribute('data-i18n', 'settings.api.steam.status.unavailable');
+        statusTitle.setAttribute("data-i18n", "settings.api.steam.status.unavailable");
         statusTitle.textContent = await this.app.t(
-          'settings.api.steam.status.unavailable',
-          'Sistema não disponível'
+          "settings.api.steam.status.unavailable",
+          "Sistema n\xE3o dispon\xEDvel"
         );
         statusDescription.setAttribute(
-          'data-i18n',
-          'settings.api.steam.status.unavailable.description'
+          "data-i18n",
+          "settings.api.steam.status.unavailable.description"
         );
         statusDescription.textContent = await this.app.t(
-          'settings.api.steam.status.unavailable.description',
-          'Funcionalidade disponível apenas no aplicativo desktop'
+          "settings.api.steam.status.unavailable.description",
+          "Funcionalidade dispon\xEDvel apenas no aplicativo desktop"
         );
-        statusDetails.style.display = 'none';
-        if (syncSettings) syncSettings.style.display = 'none';
-        if (testBtn) testBtn.style.display = 'none';
-        if (disconnectBtn) disconnectBtn.style.display = 'none';
+        statusDetails.style.display = "none";
+        if (syncSettings) syncSettings.style.display = "none";
+        if (testBtn) testBtn.style.display = "none";
+        if (disconnectBtn) disconnectBtn.style.display = "none";
       }
     } catch (error) {
-
-      const statusCard = document.getElementById('steamStatusCard');
-      const statusIcon = document.getElementById('steamStatusIcon');
-      const statusTitle = document.getElementById('steamStatusTitle');
-      const statusDescription = document.getElementById('steamStatusDescription');
-
+      const statusCard = document.getElementById("steamStatusCard");
+      const statusIcon = document.getElementById("steamStatusIcon");
+      const statusTitle = document.getElementById("steamStatusTitle");
+      const statusDescription = document.getElementById("steamStatusDescription");
       if (statusCard) {
-        statusCard.className = 'steam-status-card status-error';
+        statusCard.className = "steam-status-card status-error";
         statusIcon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
-        statusTitle.setAttribute('data-i18n', 'settings.api.steam.status.error');
+        statusTitle.setAttribute("data-i18n", "settings.api.steam.status.error");
         statusTitle.textContent = await this.app.t(
-          'settings.api.steam.status.error',
-          'Erro na verificação'
+          "settings.api.steam.status.error",
+          "Erro na verifica\xE7\xE3o"
         );
-        statusDescription.setAttribute(
-          'data-i18n',
-          'settings.api.steam.status.error.description'
-        );
+        statusDescription.setAttribute("data-i18n", "settings.api.steam.status.error.description");
         statusDescription.textContent = await this.app.t(
-          'settings.api.steam.status.error.description',
-          'Ocorreu um erro ao verificar a conexão Steam'
+          "settings.api.steam.status.error.description",
+          "Ocorreu um erro ao verificar a conex\xE3o Steam"
         );
       }
     }
   }
-
   setupSteamEventListeners() {
-    // Botão de conectar/salvar
-    const connectBtn = document.getElementById('steamConnectBtn');
+    const connectBtn = document.getElementById("steamConnectBtn");
     if (connectBtn) {
-      connectBtn.addEventListener('click', async () => {
+      connectBtn.addEventListener("click", async () => {
         await this.connectToSteam();
       });
     }
-
-    // Botão de testar conexão
-    const testBtn = document.getElementById('steamTestBtn');
+    const testBtn = document.getElementById("steamTestBtn");
     if (testBtn) {
-      testBtn.addEventListener('click', async () => {
+      testBtn.addEventListener("click", async () => {
         await this.checkSteamConnection();
       });
     }
-
-    // Botão de desconectar
-    const disconnectBtn = document.getElementById('steamDisconnectBtn');
+    const disconnectBtn = document.getElementById("steamDisconnectBtn");
     if (disconnectBtn) {
-      disconnectBtn.addEventListener('click', async () => {
+      disconnectBtn.addEventListener("click", async () => {
         await this.disconnectFromSteam();
       });
     }
-
-    // Toggle para mostrar/ocultar API key
-    const toggleApiKeyBtn = document.getElementById('toggleSteamApiKeyBtn');
-    const apiKeyInput = document.getElementById('steamApiKeyInput');
+    const toggleApiKeyBtn = document.getElementById("toggleSteamApiKeyBtn");
+    const apiKeyInput = document.getElementById("steamApiKeyInput");
     if (toggleApiKeyBtn && apiKeyInput) {
-      toggleApiKeyBtn.addEventListener('click', () => {
-        const isPassword = apiKeyInput.type === 'password';
-        apiKeyInput.type = isPassword ? 'text' : 'password';
-        toggleApiKeyBtn.innerHTML = isPassword
-          ? '<i class="fas fa-eye-slash"></i>'
-          : '<i class="fas fa-eye"></i>';
+      toggleApiKeyBtn.addEventListener("click", () => {
+        const isPassword = apiKeyInput.type === "password";
+        apiKeyInput.type = isPassword ? "text" : "password";
+        toggleApiKeyBtn.innerHTML = isPassword ? '<i class="fas fa-eye-slash"></i>' : '<i class="fas fa-eye"></i>';
       });
     }
-
-    // Botão de encontrar Steam ID
-    const findSteamIdBtn = document.getElementById('findSteamIdBtn');
+    const findSteamIdBtn = document.getElementById("findSteamIdBtn");
     if (findSteamIdBtn) {
-      findSteamIdBtn.addEventListener('click', () => {
-        window.open('https://steamid.io/', '_blank');
+      findSteamIdBtn.addEventListener("click", () => {
+        window.open("https://steamid.io/", "_blank");
       });
     }
-
-    // Botão de obter Steam ID automaticamente
-    const getSteamIdBtn = document.getElementById('getSteamIdBtn');
+    const getSteamIdBtn = document.getElementById("getSteamIdBtn");
     if (getSteamIdBtn) {
-      getSteamIdBtn.addEventListener('click', async () => {
+      getSteamIdBtn.addEventListener("click", async () => {
         await this.discoverSteamIdAutomatically();
       });
     }
-
-    // Botão de selecionar diretório Steam
-    const selectSteamDirBtn = document.getElementById('selectSteamDirBtn');
+    const selectSteamDirBtn = document.getElementById("selectSteamDirBtn");
     if (selectSteamDirBtn) {
-      selectSteamDirBtn.addEventListener('click', async () => {
+      selectSteamDirBtn.addEventListener("click", async () => {
         await this.selectSteamDirectory();
       });
     }
   }
-
   async connectToSteam() {
     try {
-      const connectBtn = document.getElementById('steamConnectBtn');
-      const apiKeyInput = document.getElementById('steamApiKeyInput');
-
+      const connectBtn = document.getElementById("steamConnectBtn");
+      const apiKeyInput = document.getElementById("steamApiKeyInput");
       if (!apiKeyInput) {
-        this.app.showError('Campo de API Key não encontrado');
+        this.app.showError("Campo de API Key n\xE3o encontrado");
         return;
       }
-
       const apiKey = apiKeyInput.value.trim();
-
       if (!apiKey) {
-        this.app.showError('Por favor, preencha a API Key');
+        this.app.showError("Por favor, preencha a API Key");
         return;
       }
-
-      // Desabilitar botão e mostrar progresso
       if (connectBtn) {
         connectBtn.disabled = true;
         connectBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Conectando...';
       }
-
-      if (this.app.isElectronAPIAvailable('steam')) {
-        const result = await this.app.safeElectronAPICall('steam.setCredentials', apiKey);
-
+      if (this.app.isElectronAPIAvailable("steam")) {
+        const result = await this.app.safeElectronAPICall("steam.setCredentials", apiKey);
         if (result.success) {
-          this.app.showSuccess('Conexão Steam configurada com sucesso!');
-
-          // Atualizar status
+          this.app.showSuccess("Conex\xE3o Steam configurada com sucesso!");
           await this.checkSteamConnection();
-
-          // Carregar jogos automaticamente se habilitado
           setTimeout(() => {
             this.loadSteamGames();
-          }, 1000);
+          }, 1e3);
         } else {
-          this.app.showError(`Erro na conexão: ${result.error || 'Erro desconhecido'}`);
+          this.app.showError(`Erro na conex\xE3o: ${result.error || "Erro desconhecido"}`);
         }
       }
     } catch (error) {
-      this.app.showError('Erro ao configurar conexão Steam');
+      this.app.showError("Erro ao configurar conex\xE3o Steam");
     } finally {
-      // Restaurar botão
-      const connectBtn = document.getElementById('steamConnectBtn');
+      const connectBtn = document.getElementById("steamConnectBtn");
       if (connectBtn) {
         connectBtn.disabled = false;
-        connectBtn.innerHTML =
-          '<i class="fas fa-plug"></i> <span data-i18n="settings.steam.connect">Conectar</span>';
+        connectBtn.innerHTML = '<i class="fas fa-plug"></i> <span data-i18n="settings.steam.connect">Conectar</span>';
       }
     }
   }
-
   async discoverSteamIdAutomatically() {
     try {
-      const apiKeyInput = document.getElementById('steamApiKeyInput');
-      const steamIdInput = document.getElementById('steamIdInput');
-      const getSteamIdBtn = document.getElementById('getSteamIdBtn');
-
+      const apiKeyInput = document.getElementById("steamApiKeyInput");
+      const steamIdInput = document.getElementById("steamIdInput");
+      const getSteamIdBtn = document.getElementById("getSteamIdBtn");
       if (!apiKeyInput) {
-        this.app.showError('Campo de API Key não encontrado');
+        this.app.showError("Campo de API Key n\xE3o encontrado");
         return;
       }
-
       const apiKey = apiKeyInput.value.trim();
       if (!apiKey) {
-        this.app.showError('Por favor, preencha a API Key primeiro');
+        this.app.showError("Por favor, preencha a API Key primeiro");
         return;
       }
-
-      // Desabilitar botão e mostrar progresso
       if (getSteamIdBtn) {
         getSteamIdBtn.disabled = true;
         getSteamIdBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> <span data-i18n="settings.api.steam.authenticating">Descobrindo...</span>';
       }
-
-      if (this.app.isElectronAPIAvailable('steam')) {
-        const result = await this.app.safeElectronAPICall('steam.discoverSteamId', apiKey);
-
+      if (this.app.isElectronAPIAvailable("steam")) {
+        const result = await this.app.safeElectronAPICall("steam.discoverSteamId", apiKey);
         if (result.success && result.steamId) {
-          // Preencher o campo Steam ID
           if (steamIdInput) {
             steamIdInput.value = result.steamId;
           }
-          
           this.app.showSuccess(`Steam ID descoberto com sucesso: ${result.steamId}`);
         } else {
-          this.app.showError(`Não foi possível descobrir o Steam ID: ${result.error || 'Erro desconhecido'}`);
+          this.app.showError(
+            `N\xE3o foi poss\xEDvel descobrir o Steam ID: ${result.error || "Erro desconhecido"}`
+          );
         }
       }
     } catch (error) {
-      console.error('Erro ao descobrir Steam ID:', error);
-      this.app.showError('Erro ao descobrir Steam ID automaticamente');
+      console.error("Erro ao descobrir Steam ID:", error);
+      this.app.showError("Erro ao descobrir Steam ID automaticamente");
     } finally {
-      // Restaurar botão
-      const getSteamIdBtn = document.getElementById('getSteamIdBtn');
+      const getSteamIdBtn = document.getElementById("getSteamIdBtn");
       if (getSteamIdBtn) {
         getSteamIdBtn.disabled = false;
         getSteamIdBtn.innerHTML = '<i class="fas fa-magic"></i> <span data-i18n="settings.api.steam.getSteamId">Obter Steam ID Automaticamente</span>';
       }
     }
   }
-
   async disconnectFromSteam() {
     try {
-      // Limpar credenciais
-      const apiKeyInput = document.getElementById('steamApiKeyInput');
-      const steamIdInput = document.getElementById('steamIdInput');
-
-      if (apiKeyInput) apiKeyInput.value = '';
-      if (steamIdInput) steamIdInput.value = '';
-
-      // Atualizar status
+      const apiKeyInput = document.getElementById("steamApiKeyInput");
+      const steamIdInput = document.getElementById("steamIdInput");
+      if (apiKeyInput) apiKeyInput.value = "";
+      if (steamIdInput) steamIdInput.value = "";
       await this.checkSteamConnection();
-
       this.app.showSuccess(
         await this.app.t(
-          'settings.api.steam.status.disconnected.success',
-          'Desconectado da Steam API'
+          "settings.api.steam.status.disconnected.success",
+          "Desconectado da Steam API"
         )
       );
     } catch (error) {
-      
       this.app.showError(
-        await this.app.t(
-          'settings.api.steam.status.error.description',
-          'Erro ao desconectar'
-        )
+        await this.app.t("settings.api.steam.status.error.description", "Erro ao desconectar")
       );
     }
   }
-
   async loadSteamGames() {
     try {
-      if (this.app.isElectronAPIAvailable('steam')) {
-        const gamesResult = await this.app.safeElectronAPICall('steam.getUserGames', {
-          installedOnly: true,
+      if (this.app.isElectronAPIAvailable("steam")) {
+        const gamesResult = await this.app.safeElectronAPICall("steam.getUserGames", {
+          installedOnly: true
         });
-
         if (gamesResult.success) {
-          // Aqui podemos atualizar a dashboard com os jogos
-          // Por enquanto, apenas notificar
           if (gamesResult.totalGames > 0) {
             this.app.showSuccess(
-              `${gamesResult.totalGames} jogos instalados carregados da Steam! Vá para Dashboard para visualizá-los.`
+              `${gamesResult.totalGames} jogos instalados carregados da Steam! V\xE1 para Dashboard para visualiz\xE1-los.`
             );
           } else {
-            this.app.showInfo('Nenhum jogo Steam instalado encontrado');
+            this.app.showInfo("Nenhum jogo Steam instalado encontrado");
           }
         } else {
-          
         }
       }
     } catch (error) {
-      
     }
   }
-
   async clearSteamCache() {
     try {
-      if (this.app.isElectronAPIAvailable('steam')) {
-        const result = await this.app.safeElectronAPICall('steam.clearCache');
-
+      if (this.app.isElectronAPIAvailable("steam")) {
+        const result = await this.app.safeElectronAPICall("steam.clearCache");
         if (result.success) {
-          // Mostrar notificação de sucesso
-          this.app.showSuccess('Cache Steam limpo com sucesso! 🧹');
-
-          // Recarregar jogos se estiver na página Steam
+          this.app.showSuccess("Cache Steam limpo com sucesso! \u{1F9F9}");
           if (window.app?.steamGames) {
             await window.app.steamGames.loadSteamGames();
           }
         } else {
-          this.app.showError('Erro ao limpar cache Steam');
+          this.app.showError("Erro ao limpar cache Steam");
         }
       } else {
-        this.app.showWarning('Funcionalidade de cache não disponível');
+        this.app.showWarning("Funcionalidade de cache n\xE3o dispon\xEDvel");
       }
     } catch (error) {
-      
-      this.app.showError('Erro ao limpar cache Steam');
+      this.app.showError("Erro ao limpar cache Steam");
     }
   }
-
   // Configurar funcionalidades do Goldberg
   async setupGoldbergSettings() {
     try {
-      // Verificar se estamos na guia correta
-      if (!document.getElementById('goldbergStatusCard')) {
-        return; // Não está na página de configurações
+      if (!document.getElementById("goldbergStatusCard")) {
+        return;
       }
-
-      // Carregar configurações iniciais
       await this.loadGoldbergSettings();
-
-      // Verificar status inicial
       await this.checkGoldbergStatus();
-
-      // Configurar event listeners
       this.setupGoldbergEventListeners();
     } catch (error) {
-      
     }
   }
-
   async loadGoldbergSettings() {
     try {
-      if (this.app.isElectronAPIAvailable('goldberg')) {
-        const settings = await this.app.safeElectronAPICall('goldberg.getSettings');
-
+      if (this.app.isElectronAPIAvailable("goldberg")) {
+        const settings = await this.app.safeElectronAPICall("goldberg.getSettings");
         if (settings) {
-          const autoMigrationToggle = document.getElementById('goldbergAutoMigrationToggle');
-          const showDialogToggle = document.getElementById('goldbergShowDialogToggle');
-
+          const autoMigrationToggle = document.getElementById("goldbergAutoMigrationToggle");
+          const showDialogToggle = document.getElementById("goldbergShowDialogToggle");
           if (autoMigrationToggle) autoMigrationToggle.checked = settings.autoMigration || false;
           if (showDialogToggle) showDialogToggle.checked = settings.showDialog !== false;
         }
       }
     } catch (error) {
-      
     }
   }
-
   async checkGoldbergStatus() {
     try {
-      const statusCard = document.getElementById('goldbergStatusCard');
-      const statusIcon = document.getElementById('goldbergStatusIcon');
-      const statusTitle = document.getElementById('goldbergStatusTitle');
-      const statusDescription = document.getElementById('goldbergStatusDescription');
-      const statusDetails = document.getElementById('goldbergStatusDetails');
-      const migrateBtn = document.getElementById('goldbergMigrateBtn');
-
+      const statusCard = document.getElementById("goldbergStatusCard");
+      const statusIcon = document.getElementById("goldbergStatusIcon");
+      const statusTitle = document.getElementById("goldbergStatusTitle");
+      const statusDescription = document.getElementById("goldbergStatusDescription");
+      const statusDetails = document.getElementById("goldbergStatusDetails");
+      const migrateBtn = document.getElementById("goldbergMigrateBtn");
       if (!statusCard) return;
-
-      // Mostrar status de verificação
       statusIcon.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-      statusTitle.textContent = 'Verificando...';
-      statusDescription.textContent = 'Procurando por arquivos Goldberg';
-
-      if (this.app.isElectronAPIAvailable('goldberg')) {
-        const goldbergInfo = await this.app.safeElectronAPICall('goldberg.checkFolder');
-
+      statusTitle.textContent = "Verificando...";
+      statusDescription.textContent = "Procurando por arquivos Goldberg";
+      if (this.app.isElectronAPIAvailable("goldberg")) {
+        const goldbergInfo = await this.app.safeElectronAPICall("goldberg.checkFolder");
         if (goldbergInfo.exists && goldbergInfo.gamesCount > 0) {
-          // Jogos encontrados
-          statusCard.className = 'goldberg-status-card status-found';
+          statusCard.className = "goldberg-status-card status-found";
           statusIcon.innerHTML = '<i class="fas fa-check-circle"></i>';
           statusTitle.textContent = `${goldbergInfo.gamesCount} jogo(s) encontrado(s)`;
-          statusDescription.textContent = 'Jogos disponíveis para conversão';
-
-          // Mostrar detalhes
-          statusDetails.style.display = 'block';
-          // Determinar status do usuário
-          const userStatus = goldbergInfo.currentUser || 'Não detectado';
-          const userClass = goldbergInfo.currentUser ? 'user-detected' : 'user-not-detected';
-
-          // Determinar status da pasta
-          const pathStatus = goldbergInfo.path || 'Não encontrada';
-          const pathClass = goldbergInfo.path ? 'path-found' : 'path-not-found';
-
+          statusDescription.textContent = "Jogos dispon\xEDveis para convers\xE3o";
+          statusDetails.style.display = "block";
+          const userStatus = goldbergInfo.currentUser || "N\xE3o detectado";
+          const userClass = goldbergInfo.currentUser ? "user-detected" : "user-not-detected";
+          const pathStatus = goldbergInfo.path || "N\xE3o encontrada";
+          const pathClass = goldbergInfo.path ? "path-found" : "path-not-found";
           statusDetails.innerHTML = `
             <div class="detail-item">
-              <span class="detail-label">Usuário:</span>
+              <span class="detail-label">Usu\xE1rio:</span>
               <span class="detail-value ${userClass}">${userStatus}</span>
             </div>
             <div class="detail-item">
               <span class="detail-label">Pasta:</span>
               <span class="detail-value ${pathClass}">${pathStatus}</span>
             </div>
-            ${
-              !goldbergInfo.currentUser
-                ? `
+            ${!goldbergInfo.currentUser ? `
             <div class="detail-item warning-item">
-              <span class="detail-label" data-i18n="goldberg.warning.userNotDetected.label">⚠️ Aviso:</span>
-              <span class="detail-value" data-i18n="goldberg.warning.userNotDetected.description">Usuário não detectado automaticamente. Verifique as permissões do sistema.</span>
+              <span class="detail-label" data-i18n="goldberg.warning.userNotDetected.label">\u26A0\uFE0F Aviso:</span>
+              <span class="detail-value" data-i18n="goldberg.warning.userNotDetected.description">Usu\xE1rio n\xE3o detectado automaticamente. Verifique as permiss\xF5es do sistema.</span>
             </div>
-            `
-                : ''
-            }
+            ` : ""}
           `;
-
-          // Mostrar botão de migração
-          if (migrateBtn) migrateBtn.style.display = 'inline-block';
+          if (migrateBtn) migrateBtn.style.display = "inline-block";
         } else if (goldbergInfo.exists) {
-          // Pasta existe mas sem jogos
-          statusCard.className = 'goldberg-status-card status-empty';
+          statusCard.className = "goldberg-status-card status-empty";
           statusIcon.innerHTML = '<i class="fas fa-exclamation-circle"></i>';
-          statusTitle.setAttribute('data-i18n', 'goldberg.status.empty');
-          statusTitle.textContent = await this.app.t('goldberg.status.empty', 'Pasta Goldberg vazia');
-          statusDescription.setAttribute('data-i18n', 'goldberg.status.empty.description');
-          statusDescription.textContent = await this.app.t(
-            'goldberg.status.empty.description',
-            'A pasta existe mas não contém jogos para converter'
+          statusTitle.setAttribute("data-i18n", "goldberg.status.empty");
+          statusTitle.textContent = await this.app.t(
+            "goldberg.status.empty",
+            "Pasta Goldberg vazia"
           );
-          statusDetails.style.display = 'none';
-          if (migrateBtn) migrateBtn.style.display = 'none';
+          statusDescription.setAttribute("data-i18n", "goldberg.status.empty.description");
+          statusDescription.textContent = await this.app.t(
+            "goldberg.status.empty.description",
+            "A pasta existe mas n\xE3o cont\xE9m jogos para converter"
+          );
+          statusDetails.style.display = "none";
+          if (migrateBtn) migrateBtn.style.display = "none";
         } else {
-          // Pasta não encontrada
-          statusCard.className = 'goldberg-status-card status-not-found';
+          statusCard.className = "goldberg-status-card status-not-found";
           statusIcon.innerHTML = '<i class="fas fa-times-circle"></i>';
-          statusTitle.setAttribute('data-i18n', 'goldberg.status.notFound');
-          statusTitle.textContent = await this.app.t('goldberg.status.notFound', 'Goldberg não encontrado');
-          statusDescription.setAttribute('data-i18n', 'goldberg.status.notFound.description');
-          statusDescription.textContent = await this.app.t(
-            'goldberg.status.notFound.description',
-            'Nenhuma instalação Goldberg SteamEmu Saves detectada'
+          statusTitle.setAttribute("data-i18n", "goldberg.status.notFound");
+          statusTitle.textContent = await this.app.t(
+            "goldberg.status.notFound",
+            "Goldberg n\xE3o encontrado"
           );
-          statusDetails.style.display = 'none';
-          if (migrateBtn) migrateBtn.style.display = 'none';
+          statusDescription.setAttribute("data-i18n", "goldberg.status.notFound.description");
+          statusDescription.textContent = await this.app.t(
+            "goldberg.status.notFound.description",
+            "Nenhuma instala\xE7\xE3o Goldberg SteamEmu Saves detectada"
+          );
+          statusDetails.style.display = "none";
+          if (migrateBtn) migrateBtn.style.display = "none";
         }
       } else {
-        // API não disponível
-        statusCard.className = 'goldberg-status-card status-error';
+        statusCard.className = "goldberg-status-card status-error";
         statusIcon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
-        statusTitle.setAttribute('data-i18n', 'goldberg.status.unavailable');
-        statusTitle.textContent = await this.app.t('goldberg.status.unavailable', 'Sistema não disponível');
-        statusDescription.setAttribute('data-i18n', 'goldberg.status.unavailable.description');
-        statusDescription.textContent = await this.app.t(
-          'goldberg.status.unavailable.description',
-          'Funcionalidade disponível apenas no aplicativo desktop'
+        statusTitle.setAttribute("data-i18n", "goldberg.status.unavailable");
+        statusTitle.textContent = await this.app.t(
+          "goldberg.status.unavailable",
+          "Sistema n\xE3o dispon\xEDvel"
         );
-        statusDetails.style.display = 'none';
-        if (migrateBtn) migrateBtn.style.display = 'none';
+        statusDescription.setAttribute("data-i18n", "goldberg.status.unavailable.description");
+        statusDescription.textContent = await this.app.t(
+          "goldberg.status.unavailable.description",
+          "Funcionalidade dispon\xEDvel apenas no aplicativo desktop"
+        );
+        statusDetails.style.display = "none";
+        if (migrateBtn) migrateBtn.style.display = "none";
       }
     } catch (error) {
-
-      const statusCard = document.getElementById('goldbergStatusCard');
-      const statusIcon = document.getElementById('goldbergStatusIcon');
-      const statusTitle = document.getElementById('goldbergStatusTitle');
-      const statusDescription = document.getElementById('goldbergStatusDescription');
-
+      const statusCard = document.getElementById("goldbergStatusCard");
+      const statusIcon = document.getElementById("goldbergStatusIcon");
+      const statusTitle = document.getElementById("goldbergStatusTitle");
+      const statusDescription = document.getElementById("goldbergStatusDescription");
       if (statusCard) {
-        statusCard.className = 'goldberg-status-card status-error';
+        statusCard.className = "goldberg-status-card status-error";
         statusIcon.innerHTML = '<i class="fas fa-exclamation-triangle"></i>';
-        statusTitle.setAttribute('data-i18n', 'goldberg.status.error');
-        statusTitle.textContent = await this.app.t('goldberg.status.error', 'Erro na verificação');
-        statusDescription.setAttribute('data-i18n', 'goldberg.status.error.description');
+        statusTitle.setAttribute("data-i18n", "goldberg.status.error");
+        statusTitle.textContent = await this.app.t("goldberg.status.error", "Erro na verifica\xE7\xE3o");
+        statusDescription.setAttribute("data-i18n", "goldberg.status.error.description");
         statusDescription.textContent = await this.app.t(
-          'goldberg.status.error.description',
-          'Ocorreu um erro ao verificar os arquivos Goldberg'
+          "goldberg.status.error.description",
+          "Ocorreu um erro ao verificar os arquivos Goldberg"
         );
       }
     }
   }
-
   setupGoldbergEventListeners() {
-    // Botão de verificação
-    const checkBtn = document.getElementById('goldbergCheckBtn');
+    const checkBtn = document.getElementById("goldbergCheckBtn");
     if (checkBtn) {
-      checkBtn.addEventListener('click', async () => {
+      checkBtn.addEventListener("click", async () => {
         await this.checkGoldbergStatus();
       });
     }
-
-    // Botão de migração
-    const migrateBtn = document.getElementById('goldbergMigrateBtn');
+    const migrateBtn = document.getElementById("goldbergMigrateBtn");
     if (migrateBtn) {
-      migrateBtn.addEventListener('click', async () => {
+      migrateBtn.addEventListener("click", async () => {
         await this.migrateAllGoldbergGames();
       });
     }
-
-    // Configurações
-    const autoMigrationToggle = document.getElementById('goldbergAutoMigrationToggle');
-    const showDialogToggle = document.getElementById('goldbergShowDialogToggle');
-
+    const autoMigrationToggle = document.getElementById("goldbergAutoMigrationToggle");
+    const showDialogToggle = document.getElementById("goldbergShowDialogToggle");
     if (autoMigrationToggle) {
-      autoMigrationToggle.addEventListener('change', async () => {
-        await this.updateGoldbergSetting('autoMigration', autoMigrationToggle.checked);
+      autoMigrationToggle.addEventListener("change", async () => {
+        await this.updateGoldbergSetting("autoMigration", autoMigrationToggle.checked);
       });
     }
-
     if (showDialogToggle) {
-      showDialogToggle.addEventListener('change', async () => {
-        await this.updateGoldbergSetting('showDialog', showDialogToggle.checked);
+      showDialogToggle.addEventListener("change", async () => {
+        await this.updateGoldbergSetting("showDialog", showDialogToggle.checked);
       });
     }
   }
-
   async updateGoldbergSetting(key, value) {
     try {
-      if (this.app.isElectronAPIAvailable('goldberg')) {
-        const result = await this.app.safeElectronAPICall('goldberg.setSetting', key, value);
-
+      if (this.app.isElectronAPIAvailable("goldberg")) {
+        const result = await this.app.safeElectronAPICall("goldberg.setSetting", key, value);
         if (result.success) {
-          // Configuração atualizada com sucesso
         } else {
-          
-          this.app.showError(`Erro ao salvar configuração: ${result.error}`);
+          this.app.showError(`Erro ao salvar configura\xE7\xE3o: ${result.error}`);
         }
       }
     } catch (error) {
-      
-      this.app.showError('Erro ao salvar configuração');
+      this.app.showError("Erro ao salvar configura\xE7\xE3o");
     }
   }
-
   async migrateAllGoldbergGames() {
     try {
-      const migrateBtn = document.getElementById('goldbergMigrateBtn');
-
+      const migrateBtn = document.getElementById("goldbergMigrateBtn");
       if (migrateBtn) {
-        // Desabilitar botão e mostrar progresso
         migrateBtn.disabled = true;
-        migrateBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${await this.app.t('steam.conversion.converting', 'Convertendo...')}`;
+        migrateBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${await this.app.t("steam.conversion.converting", "Convertendo...")}`;
       }
-
-      if (this.app.isElectronAPIAvailable('goldberg')) {
-        const result = await this.app.safeElectronAPICall('goldberg.migrateAll');
-
+      if (this.app.isElectronAPIAvailable("goldberg")) {
+        const result = await this.app.safeElectronAPICall("goldberg.migrateAll");
         if (result.success) {
           this.app.showSuccess(
-            await this.app.t('goldberg.migration.completed', 'Migração concluída') +
-              `: ${result.successCount} / ${result.totalGames}`
+            await this.app.t("goldberg.migration.completed", "Migra\xE7\xE3o conclu\xEDda") + `: ${result.successCount} / ${result.totalGames}`
           );
-
-          // Atualizar status
           await this.checkGoldbergStatus();
         } else {
           this.app.showError(
-            await this.app.t('goldberg.migration.error', 'Erro na migração') +
-              (result.error ? `: ${result.error}` : '')
+            await this.app.t("goldberg.migration.error", "Erro na migra\xE7\xE3o") + (result.error ? `: ${result.error}` : "")
           );
         }
       }
     } catch (error) {
-      
-      this.app.showError(await this.app.t('goldberg.migration.error', 'Erro na migração'));
+      this.app.showError(await this.app.t("goldberg.migration.error", "Erro na migra\xE7\xE3o"));
     } finally {
-      // Restaurar botão
-      const migrateBtn = document.getElementById('goldbergMigrateBtn');
+      const migrateBtn = document.getElementById("goldbergMigrateBtn");
       if (migrateBtn) {
         migrateBtn.disabled = false;
-        migrateBtn.innerHTML =
-          '<i class="fas fa-play"></i> <span data-i18n="settings.goldberg.migrateAll">Converter Todos</span>';
+        migrateBtn.innerHTML = '<i class="fas fa-play"></i> <span data-i18n="settings.goldberg.migrateAll">Converter Todos</span>';
       }
     }
   }
-
   // Método de navegação global
   async showPage(page, tabName = null) {
     await this.navigateTo(page, tabName);
   }
-
   // Mostrar dialog "Em breve"
   async restartApplication() {
     try {
-      // Mostrar notificação de reinicialização
       this.app.modules.helpers.showNotification(
-        await this.app.t('settings.restart.restarting', 'Reiniciando aplicativo...'),
-        'info'
+        await this.app.t("settings.restart.restarting", "Reiniciando aplicativo..."),
+        "info"
       );
-
-      // Aguardar um momento para a notificação aparecer
-      await new Promise(resolve => setTimeout(resolve, 1000));
-
-      // Chamar função de reinicialização do processo principal
+      await new Promise((resolve) => setTimeout(resolve, 1e3));
       if (window.electronAPI && window.electronAPI.system) {
         await window.electronAPI.system.restart();
       } else {
-        // Fallback para desenvolvimento web
         window.location.reload();
       }
     } catch (error) {
-      
       this.app.modules.helpers.showNotification(
-        await this.app.t('settings.restart.error', 'Erro ao reiniciar aplicativo'),
-        'error'
+        await this.app.t("settings.restart.error", "Erro ao reiniciar aplicativo"),
+        "error"
       );
     }
   }
-
   async showRestartDialog() {
     try {
-      // Detectar se está em modo desenvolvimento
       let isDevelopmentMode = false;
       try {
-        if (window.electronAPI && typeof window.electronAPI.isDevelopmentMode === 'function') {
+        if (window.electronAPI && typeof window.electronAPI.isDevelopmentMode === "function") {
           isDevelopmentMode = await window.electronAPI.isDevelopmentMode();
         } else {
-
-          isDevelopmentMode = window.env?.NODE_ENV === 'development';
+          isDevelopmentMode = window.env?.NODE_ENV === "development";
         }
       } catch (error) {
-
-        isDevelopmentMode = window.env?.NODE_ENV === 'development';
+        isDevelopmentMode = window.env?.NODE_ENV === "development";
       }
-
-      // Detectar se é versão portable ou instalada com fallback
       let isInstalled = false;
       try {
-        if (window.electronAPI && typeof window.electronAPI.isInstalledVersion === 'function') {
+        if (window.electronAPI && typeof window.electronAPI.isInstalledVersion === "function") {
           isInstalled = await window.electronAPI.isInstalledVersion();
         } else {
-
           isInstalled = false;
         }
       } catch (error) {
-
-        isInstalled = false; // Fallback para portable
+        isInstalled = false;
       }
-
-      // Obter traduções baseadas no tipo de instalação
       const restartTitle = await this.app.t(
-        'settings.restart.modal.title',
-        'Reinicialização Necessária'
+        "settings.restart.modal.title",
+        "Reinicializa\xE7\xE3o Necess\xE1ria"
       );
-      const restartMessage = isInstalled
-        ? await this.app.t(
-            'settings.restart.modal.messageInstalled',
-            'Para aplicar as mudanças, o aplicativo será reiniciado automaticamente.'
-          )
-        : await this.app.t(
-            'settings.restart.modal.message',
-            'Para aplicar as mudanças, o aplicativo será finalizado. Você precisará abri-lo novamente manualmente.'
-          );
-      const restartConfirm = isInstalled
-        ? await this.app.t('settings.restart.modal.confirmInstalled', 'Reiniciar Agora')
-        : await this.app.t('settings.restart.modal.confirm', 'Finalizar Agora');
-      const restartCancel = await this.app.t('settings.restart.modal.cancel', 'Cancelar');
-
-      // Detectar tema atual
-      const isDarkTheme =
-        document.documentElement.getAttribute('data-theme') === 'dark' ||
-        document.body.classList.contains('dark-theme') ||
-        window.matchMedia('(prefers-color-scheme: dark)').matches;
-
-      // Criar o overlay do modal
-      const overlay = document.createElement('div');
-      overlay.className = 'modal-overlay restart-modal-overlay';
+      const restartMessage = isInstalled ? await this.app.t(
+        "settings.restart.modal.messageInstalled",
+        "Para aplicar as mudan\xE7as, o aplicativo ser\xE1 reiniciado automaticamente."
+      ) : await this.app.t(
+        "settings.restart.modal.message",
+        "Para aplicar as mudan\xE7as, o aplicativo ser\xE1 finalizado. Voc\xEA precisar\xE1 abri-lo novamente manualmente."
+      );
+      const restartConfirm = isInstalled ? await this.app.t("settings.restart.modal.confirmInstalled", "Reiniciar Agora") : await this.app.t("settings.restart.modal.confirm", "Finalizar Agora");
+      const restartCancel = await this.app.t("settings.restart.modal.cancel", "Cancelar");
+      const isDarkTheme = document.documentElement.getAttribute("data-theme") === "dark" || document.body.classList.contains("dark-theme") || window.matchMedia("(prefers-color-scheme: dark)").matches;
+      const overlay = document.createElement("div");
+      overlay.className = "modal-overlay restart-modal-overlay";
       overlay.style.cssText = `
         position: fixed !important;
         top: 0 !important;
         left: 0 !important;
         width: 100vw !important;
         height: 100vh !important;
-        background: rgba(0, 0, 0, ${isDarkTheme ? '0.8' : '0.6'}) !important;
+        background: rgba(0, 0, 0, ${isDarkTheme ? "0.8" : "0.6"}) !important;
         backdrop-filter: blur(10px) !important;
         z-index: 2500 !important;
         display: flex !important;
@@ -2483,26 +1990,19 @@ class NavigationManager {
         visibility: visible !important;
         opacity: 1 !important;
       `;
-
-      // Criar o modal
-      const modal = document.createElement('div');
-      modal.className = 'restart-modal';
-
-      // Estilos baseados no tema
-      const modalStyles = isDarkTheme
-        ? {
-            background: 'linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%)',
-            border: '1px solid #404040',
-            color: '#ffffff',
-            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.6)',
-          }
-        : {
-            background: 'linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)',
-            border: '1px solid #e0e0e0',
-            color: '#333333',
-            boxShadow: '0 20px 60px rgba(0, 0, 0, 0.2)',
-          };
-
+      const modal = document.createElement("div");
+      modal.className = "restart-modal";
+      const modalStyles = isDarkTheme ? {
+        background: "linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%)",
+        border: "1px solid #404040",
+        color: "#ffffff",
+        boxShadow: "0 20px 60px rgba(0, 0, 0, 0.6)"
+      } : {
+        background: "linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%)",
+        border: "1px solid #e0e0e0",
+        color: "#333333",
+        boxShadow: "0 20px 60px rgba(0, 0, 0, 0.2)"
+      };
       modal.style.cssText = `
         background: ${modalStyles.background} !important;
         border: ${modalStyles.border} !important;
@@ -2521,10 +2021,9 @@ class NavigationManager {
         visibility: visible !important;
         opacity: 1 !important;
       `;
-
       modal.innerHTML = `
         <div class="modal-icon" style="font-size: 4rem; color: var(--accent-color); margin-bottom: 1.5rem;">
-          <i class="fas ${isInstalled ? 'fa-sync-alt' : 'fa-power-off'}"></i>
+          <i class="fas ${isInstalled ? "fa-sync-alt" : "fa-power-off"}"></i>
         </div>
         <h2 style="color: var(--text-primary); margin-bottom: 1rem; font-size: 1.8rem; font-weight: 600;">
           ${restartTitle}
@@ -2545,7 +2044,7 @@ class NavigationManager {
             font-size: 1rem;
             box-shadow: 0 4px 15px rgba(0, 123, 255, 0.3);
           ">
-            <i class="fas ${isInstalled ? 'fa-sync-alt' : 'fa-power-off'}" style="margin-right: 0.5rem;"></i>
+            <i class="fas ${isInstalled ? "fa-sync-alt" : "fa-power-off"}" style="margin-right: 0.5rem;"></i>
             ${restartConfirm}
           </button>
           <button id="restartCancelBtn" class="btn btn-secondary restart-cancel-btn" style="
@@ -2565,9 +2064,7 @@ class NavigationManager {
           </button>
         </div>
       `;
-
-      // Adicionar estilos específicos para temas
-      const style = document.createElement('style');
+      const style = document.createElement("style");
       style.textContent = `
         .restart-modal button:hover {
           transform: translateY(-2px);
@@ -2584,7 +2081,7 @@ class NavigationManager {
           border-color: var(--accent-color) !important;
         }
         
-        /* Estilos específicos para tema escuro */
+        /* Estilos espec\xEDficos para tema escuro */
         [data-theme="dark"] .restart-modal,
         .dark-theme .restart-modal {
           background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%) !important;
@@ -2605,7 +2102,7 @@ class NavigationManager {
           box-shadow: 0 6px 20px rgba(13, 110, 253, 0.5) !important;
         }
         
-        /* Estilos específicos para tema claro */
+        /* Estilos espec\xEDficos para tema claro */
         [data-theme="light"] .restart-modal,
         .light-theme .restart-modal,
         body:not([data-theme]) .restart-modal {
@@ -2615,7 +2112,7 @@ class NavigationManager {
           box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2) !important;
         }
         
-        /* Animações */
+        /* Anima\xE7\xF5es */
         @keyframes fadeIn {
           from { opacity: 0; }
           to { opacity: 1; }
@@ -2633,128 +2130,86 @@ class NavigationManager {
         }
       `;
       document.head.appendChild(style);
-
       overlay.appendChild(modal);
       document.body.appendChild(overlay);
-
-      // Verificar se o modal está realmente visível na tela após um tempo
       setTimeout(async () => {
         const isInDOM = document.body.contains(overlay);
         const overlayRect = overlay.getBoundingClientRect();
         const modalRect = modal.getBoundingClientRect();
         const overlayStyle = window.getComputedStyle(overlay);
         const modalStyle = window.getComputedStyle(modal);
-
-        // Verificação mais rigorosa de visibilidade
-        const isOverlayVisible =
-          overlayStyle.display !== 'none' &&
-          overlayStyle.visibility !== 'hidden' &&
-          overlayStyle.opacity !== '0' &&
-          overlayRect.width > 0 &&
-          overlayRect.height > 0;
-
-        const isModalVisible =
-          modalStyle.display !== 'none' &&
-          modalStyle.visibility !== 'hidden' &&
-          modalStyle.opacity !== '0' &&
-          modalRect.width > 0 &&
-          modalRect.height > 0;
-
-        // Se qualquer verificação falhar, usar fallback
+        const isOverlayVisible = overlayStyle.display !== "none" && overlayStyle.visibility !== "hidden" && overlayStyle.opacity !== "0" && overlayRect.width > 0 && overlayRect.height > 0;
+        const isModalVisible = modalStyle.display !== "none" && modalStyle.visibility !== "hidden" && modalStyle.opacity !== "0" && modalRect.width > 0 && modalRect.height > 0;
         if (!isInDOM || !isOverlayVisible || !isModalVisible) {
           try {
             overlay.remove();
           } catch (e) {
-            // Erro silencioso ao remover overlay
           }
-
-          // Usar fallback nativo
-          const fallbackMessage = isInstalled
-            ? await this.app.t(
-                'settings.restart.modal.messageInstalled',
-                'Para aplicar as mudanças, o aplicativo será reiniciado automaticamente.'
-              )
-            : await this.app.t(
-                'settings.restart.modal.message',
-                'Para aplicar as mudanças, o aplicativo será finalizado. Você precisará abri-lo novamente manualmente.'
-              );
-          const confirmText = isInstalled ? 'Deseja reiniciar agora?' : 'Deseja finalizar agora?';
-          const shouldRestart = window.confirm(fallbackMessage + '\n\n' + confirmText);
-
+          const fallbackMessage = isInstalled ? await this.app.t(
+            "settings.restart.modal.messageInstalled",
+            "Para aplicar as mudan\xE7as, o aplicativo ser\xE1 reiniciado automaticamente."
+          ) : await this.app.t(
+            "settings.restart.modal.message",
+            "Para aplicar as mudan\xE7as, o aplicativo ser\xE1 finalizado. Voc\xEA precisar\xE1 abri-lo novamente manualmente."
+          );
+          const confirmText = isInstalled ? "Deseja reiniciar agora?" : "Deseja finalizar agora?";
+          const shouldRestart = window.confirm(fallbackMessage + "\n\n" + confirmText);
           if (shouldRestart) {
             await this.restartApplication();
           }
           return;
         }
       }, 500);
-
-      // Event listeners para os botões
-      const confirmBtn = modal.querySelector('#restartConfirmBtn');
-      const cancelBtn = modal.querySelector('#restartCancelBtn');
-
-      confirmBtn.addEventListener('click', async () => {
-        // Verificar se está em modo desenvolvimento antes de executar restart
+      const confirmBtn = modal.querySelector("#restartConfirmBtn");
+      const cancelBtn = modal.querySelector("#restartCancelBtn");
+      confirmBtn.addEventListener("click", async () => {
         if (isDevelopmentMode) {
-          // Fechar o modal primeiro
           overlay.remove();
           style.remove();
-
-          // Mostrar alerta informando que não funciona no modo dev
-          const devTitle = await this.app.t('settings.restart.dev.title', 'Modo Desenvolvimento');
+          const devTitle = await this.app.t("settings.restart.dev.title", "Modo Desenvolvimento");
           const devMessage = await this.app.t(
-            'settings.restart.dev.message',
-            'O restart não funciona no modo de desenvolvimento. Para aplicar as mudanças, pare o servidor (Ctrl+C) e execute "yarn dev" novamente.'
+            "settings.restart.dev.message",
+            'O restart n\xE3o funciona no modo de desenvolvimento. Para aplicar as mudan\xE7as, pare o servidor (Ctrl+C) e execute "yarn dev" novamente.'
           );
+          alert(`${devTitle}
 
-          alert(`${devTitle}\n\n${devMessage}`);
+${devMessage}`);
           return;
         }
-
-        // Se não estiver em modo dev, proceder normalmente
         overlay.remove();
         style.remove();
         await this.restartApplication();
       });
-
-      cancelBtn.addEventListener('click', () => {
+      cancelBtn.addEventListener("click", () => {
         overlay.remove();
         style.remove();
       });
-
-      // Fechar ao clicar no overlay
-      overlay.addEventListener('click', e => {
+      overlay.addEventListener("click", (e) => {
         if (e.target === overlay) {
           overlay.remove();
           style.remove();
         }
       });
-
-      // Fechar com ESC
-      const handleEsc = e => {
-        if (e.key === 'Escape') {
+      const handleEsc = /* @__PURE__ */ __name((e) => {
+        if (e.key === "Escape") {
           overlay.remove();
           style.remove();
-          document.removeEventListener('keydown', handleEsc);
+          document.removeEventListener("keydown", handleEsc);
         }
-      };
-      document.addEventListener('keydown', handleEsc);
+      }, "handleEsc");
+      document.addEventListener("keydown", handleEsc);
     } catch (error) {
-      
     }
   }
-
   async showComingSoonDialog(featureName) {
     try {
-      // Obter traduções
-      const comingSoonText = this.app.modules.helpers.t('feature.coming.soon');
-      const featureText = this.app.modules.helpers.t('feature.dialog.default.name');
-      const developmentText = this.app.modules.helpers.t('feature.will.be.launched');
-      const workingText = this.app.modules.helpers.t('feature.working.hard');
-      const understoodText = this.app.modules.helpers.t('feature.dialog.understood');
-
-      // Criar o overlay do modal
-      const overlay = document.createElement('div');
-      overlay.className = 'modal-overlay';
+      const comingSoonText = this.app.modules.helpers.t("feature.coming.soon");
+      const featureText = this.app.modules.helpers.t("feature.dialog.default.name");
+      const developmentText = this.app.modules.helpers.t("feature.will.be.launched");
+      const workingText = this.app.modules.helpers.t("feature.working.hard");
+      const understoodText = this.app.modules.helpers.t("feature.dialog.understood");
+      const overlay = document.createElement("div");
+      overlay.className = "modal-overlay";
       overlay.style.cssText = `
         position: fixed;
         top: 0;
@@ -2769,10 +2224,8 @@ class NavigationManager {
         justify-content: center;
         animation: fadeIn 0.3s ease;
       `;
-
-      // Criar o modal
-      const modal = document.createElement('div');
-      modal.className = 'coming-soon-modal';
+      const modal = document.createElement("div");
+      modal.className = "coming-soon-modal";
       modal.style.cssText = `
         background: linear-gradient(135deg, var(--card-bg) 0%, rgba(255, 255, 255, 0.05) 100%);
         border: 1px solid var(--border-color);
@@ -2786,7 +2239,6 @@ class NavigationManager {
         animation: slideIn 0.3s ease;
         position: relative;
       `;
-
       modal.innerHTML = `
         <div class="modal-icon" style="font-size: 4rem; color: var(--accent-color); margin-bottom: 1.5rem;">
           <i class="fas fa-rocket"></i>
@@ -2820,9 +2272,7 @@ class NavigationManager {
           ${understoodText}
         </button>
       `;
-
-      // Adicionar estilos de animação
-      const style = document.createElement('style');
+      const style = document.createElement("style");
       style.textContent = `
         @keyframes fadeIn {
           from { opacity: 0; }
@@ -2838,37 +2288,27 @@ class NavigationManager {
         }
       `;
       document.head.appendChild(style);
-
       overlay.appendChild(modal);
       document.body.appendChild(overlay);
-
-      // Fechar ao clicar no overlay
-      overlay.addEventListener('click', e => {
+      overlay.addEventListener("click", (e) => {
         if (e.target === overlay) {
           overlay.remove();
           style.remove();
         }
       });
-
-      // Fechar com ESC
-      const handleEsc = e => {
-        if (e.key === 'Escape') {
+      const handleEsc = /* @__PURE__ */ __name((e) => {
+        if (e.key === "Escape") {
           overlay.remove();
           style.remove();
-          document.removeEventListener('keydown', handleEsc);
+          document.removeEventListener("keydown", handleEsc);
         }
-      };
-      document.addEventListener('keydown', handleEsc);
+      }, "handleEsc");
+      document.addEventListener("keydown", handleEsc);
     } catch (error) {
-      
     }
   }
 }
-
-// Exportar para uso global
-
-// Exportar a classe NavigationManager
-export { NavigationManager };
-
-// Disponibilizar globalmente para compatibilidade
 window.NavigationManager = NavigationManager;
+export {
+  NavigationManager
+};
