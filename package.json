@@ -22,7 +22,7 @@
     "yarn": ">= 1.22.22"
   },
   "scripts": {
-    "precommit": "yarm format && yarn precommit:clearinfo",
+    "precommit": "yarn format && yarn precommit:clearinfo",
     "precommit:clearinfo": "node Scripts/strip-comments.mjs",
     "start": "electron-vite .",
     "dev": "cross-env DEBUG_TOOLS=false electron-vite dev --mode development",
