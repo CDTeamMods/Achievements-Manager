@@ -1,11 +1,19 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 var __defProp2 = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
-var __commonJS = /* @__PURE__ */ __name((cb, mod) => /* @__PURE__ */ __name(function __require() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-}, "__require"), "__commonJS");
+var __defProp22 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name22 = /* @__PURE__ */ __name2(
+  (target, value) => __defProp22(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __commonJS = /* @__PURE__ */ __name2(
+  (cb, mod) => /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
+    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  }, "__require"), "__require"),
+  "__commonJS"
+);
 var require_security_manager = __commonJS({
   "src/main/modules/security-manager.js"(exports, module) {
     const { app } = require("electron");
@@ -15,6 +23,9 @@ var require_security_manager = __commonJS({
       }
       static {
         __name2(this, "SecurityManager");
+      }
+      static {
+        __name22(this, "SecurityManager");
       }
       constructor() {
         this.isDev = process.env.NODE_ENV === "development";
@@ -306,6 +317,7 @@ var require_security_manager = __commonJS({
     }
     __name(getSecurityManager, "getSecurityManager");
     __name2(getSecurityManager, "getSecurityManager");
+    __name22(getSecurityManager, "getSecurityManager");
     module.exports = {
       SecurityManager,
       getSecurityManager

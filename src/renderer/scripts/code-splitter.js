@@ -2,12 +2,20 @@ var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 var __defProp2 = Object.defineProperty;
 var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+var __defProp22 = Object.defineProperty;
+var __name22 = /* @__PURE__ */ __name2(
+  (target, value) => __defProp22(target, "name", { value, configurable: true }),
+  "__name"
+);
 class CodeSplitter {
   static {
     __name(this, "CodeSplitter");
   }
   static {
     __name2(this, "CodeSplitter");
+  }
+  static {
+    __name22(this, "CodeSplitter");
   }
   constructor() {
     this.chunks = /* @__PURE__ */ new Map();

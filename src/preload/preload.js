@@ -107,7 +107,7 @@ function sanitizeArgs(args) {
         return arg.map(item => {
           if (typeof item === 'object' && item !== null) {
             try {
-              return JSON.parse(JSON.stringify(item));
+              return structuredClone(item);
             } catch {
               return { __sanitized: true, __type: typeof item };
             }
@@ -248,7 +248,7 @@ function debugInvoke(channel, ...args) {
             return arg;
           }
           try {
-            return JSON.parse(JSON.stringify(arg));
+            return structuredClone(arg);
           } catch {
             return { __sanitized: true, __type: typeof arg };
           }
@@ -534,12 +534,9 @@ const electronAPI = {
             // Para objetos, usar uma abordagem mais conservadora
             if (typeof arg === 'object') {
               try {
-                // Primeiro, tentar JSON.parse/stringify como teste básico
-                const jsonTest = JSON.parse(JSON.stringify(arg));
-
-                // Se passou no teste JSON, tentar structuredClone
-                structuredClone(jsonTest);
-                return jsonTest;
+                // Tentar clone direto; se falhar, sanitizar
+                const cloned = structuredClone(arg);
+                return cloned;
               } catch (e) {
                 console.warn(
                   `[PRELOAD] Objeto não serializável filtrado no canal '${channel}':`,
@@ -629,12 +626,9 @@ const electronAPI = {
             // Para objetos, usar uma abordagem mais conservadora
             if (typeof arg === 'object') {
               try {
-                // Primeiro, tentar JSON.parse/stringify como teste básico
-                const jsonTest = JSON.parse(JSON.stringify(arg));
-
-                // Se passou no teste JSON, tentar structuredClone
-                structuredClone(jsonTest);
-                return jsonTest;
+                // Tentar clone direto; se falhar, sanitizar
+                const cloned = structuredClone(arg);
+                return cloned;
               } catch (e) {
                 console.warn(
                   `[PRELOAD] Objeto não serializável filtrado no canal '${channel}':`,

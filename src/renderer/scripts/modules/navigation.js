@@ -2,12 +2,20 @@ var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 var __defProp2 = Object.defineProperty;
 var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+var __defProp22 = Object.defineProperty;
+var __name22 = /* @__PURE__ */ __name2(
+  (target, value) => __defProp22(target, "name", { value, configurable: true }),
+  "__name"
+);
 class NavigationManager {
   static {
     __name(this, "NavigationManager");
   }
   static {
     __name2(this, "NavigationManager");
+  }
+  static {
+    __name22(this, "NavigationManager");
   }
   constructor(app) {
     this.app = app;
@@ -1000,7 +1008,7 @@ class NavigationManager {
             "data-i18n",
             "settings.api.steam.status.error.description"
           );
-          const looksLikeKey = /* @__PURE__ */ __name2(
+          const looksLikeKey = /* @__PURE__ */ __name22(
             (s) => typeof s === "string" && s.includes(".") && !s.includes(" "),
             "looksLikeKey"
           );
@@ -1475,7 +1483,7 @@ class NavigationManager {
               "data-i18n",
               "settings.api.steam.status.disconnected.description"
             );
-            const looksLikeKey = /* @__PURE__ */ __name2(
+            const looksLikeKey = /* @__PURE__ */ __name22(
               (s) => typeof s === "string" && s.includes(".") && !s.includes(" "),
               "looksLikeKey"
             );
@@ -2213,7 +2221,7 @@ ${devMessage}`);
           style.remove();
         }
       });
-      const handleEsc = /* @__PURE__ */ __name2((e) => {
+      const handleEsc = /* @__PURE__ */ __name22((e) => {
         if (e.key === "Escape") {
           overlay.remove();
           style.remove();
@@ -2319,7 +2327,7 @@ ${devMessage}`);
           style.remove();
         }
       });
-      const handleEsc = /* @__PURE__ */ __name2((e) => {
+      const handleEsc = /* @__PURE__ */ __name22((e) => {
         if (e.key === "Escape") {
           overlay.remove();
           style.remove();

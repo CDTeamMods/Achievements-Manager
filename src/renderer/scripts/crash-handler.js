@@ -2,6 +2,11 @@ var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 var __defProp2 = Object.defineProperty;
 var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+var __defProp22 = Object.defineProperty;
+var __name22 = /* @__PURE__ */ __name2(
+  (target, value) => __defProp22(target, "name", { value, configurable: true }),
+  "__name"
+);
 class CrashHandler {
   static {
     __name(this, "CrashHandler");
@@ -9,23 +14,26 @@ class CrashHandler {
   static {
     __name2(this, "CrashHandler");
   }
+  static {
+    __name22(this, "CrashHandler");
+  }
   constructor() {
     this.isReporting = false;
     if (typeof getDebugManager === "function") {
       this.debug = getDebugManager();
     } else {
       this.debug = {
-        ipc: /* @__PURE__ */ __name2(() => {
+        ipc: /* @__PURE__ */ __name22(() => {
         }, "ipc"),
-        crash: /* @__PURE__ */ __name2(() => {
+        crash: /* @__PURE__ */ __name22(() => {
         }, "crash"),
-        error: /* @__PURE__ */ __name2(() => {
+        error: /* @__PURE__ */ __name22(() => {
         }, "error"),
-        info: /* @__PURE__ */ __name2(() => {
+        info: /* @__PURE__ */ __name22(() => {
         }, "info"),
-        warn: /* @__PURE__ */ __name2(() => {
+        warn: /* @__PURE__ */ __name22(() => {
         }, "warn"),
-        sanitize: /* @__PURE__ */ __name2(() => {
+        sanitize: /* @__PURE__ */ __name22(() => {
         }, "sanitize")
       };
     }

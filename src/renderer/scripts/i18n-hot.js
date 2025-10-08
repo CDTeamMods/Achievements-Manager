@@ -2,6 +2,11 @@ var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 var __defProp2 = Object.defineProperty;
 var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+var __defProp22 = Object.defineProperty;
+var __name22 = /* @__PURE__ */ __name2(
+  (target, value) => __defProp22(target, "name", { value, configurable: true }),
+  "__name"
+);
 import ptBRTranslations from "../locales/pt-BR.json";
 import enTranslations from "../locales/en.json";
 let translations = ptBRTranslations;
@@ -21,6 +26,7 @@ function loadTranslations(language) {
 }
 __name(loadTranslations, "loadTranslations");
 __name2(loadTranslations, "loadTranslations");
+__name22(loadTranslations, "loadTranslations");
 async function initI18n(language = "en") {
   try {
     currentLanguage = language;
@@ -35,6 +41,7 @@ async function initI18n(language = "en") {
 }
 __name(initI18n, "initI18n");
 __name2(initI18n, "initI18n");
+__name22(initI18n, "initI18n");
 async function changeLanguage(language) {
   if (!language || typeof language !== "string") {
     return;
@@ -46,6 +53,7 @@ async function changeLanguage(language) {
 }
 __name(changeLanguage, "changeLanguage");
 __name2(changeLanguage, "changeLanguage");
+__name22(changeLanguage, "changeLanguage");
 async function syncLanguageWithBackend(language) {
   try {
     if (!language || typeof language !== "string") {
@@ -62,8 +70,9 @@ async function syncLanguageWithBackend(language) {
 }
 __name(syncLanguageWithBackend, "syncLanguageWithBackend");
 __name2(syncLanguageWithBackend, "syncLanguageWithBackend");
+__name22(syncLanguageWithBackend, "syncLanguageWithBackend");
 function t(key, params = {}) {
-  const getNestedValue = /* @__PURE__ */ __name2((obj, path) => {
+  const getNestedValue = /* @__PURE__ */ __name22((obj, path) => {
     return path.split(".").reduce((current, prop) => {
       return current && current[prop] !== void 0 ? current[prop] : void 0;
     }, obj);
@@ -87,6 +96,7 @@ function t(key, params = {}) {
 }
 __name(t, "t");
 __name2(t, "t");
+__name22(t, "t");
 function translatePage() {
   const elements = document.querySelectorAll("[data-i18n]");
   elements.forEach((element, index) => {
@@ -101,6 +111,7 @@ function translatePage() {
 }
 __name(translatePage, "translatePage");
 __name2(translatePage, "translatePage");
+__name22(translatePage, "translatePage");
 async function reloadTranslations() {
   translationCache.clear();
   translations = await loadTranslations(currentLanguage);
@@ -108,6 +119,7 @@ async function reloadTranslations() {
 }
 __name(reloadTranslations, "reloadTranslations");
 __name2(reloadTranslations, "reloadTranslations");
+__name22(reloadTranslations, "reloadTranslations");
 async function reloadCurrentTranslations() {
   if (!import.meta.env?.DEV) return;
   try {
@@ -119,6 +131,7 @@ async function reloadCurrentTranslations() {
 }
 __name(reloadCurrentTranslations, "reloadCurrentTranslations");
 __name2(reloadCurrentTranslations, "reloadCurrentTranslations");
+__name22(reloadCurrentTranslations, "reloadCurrentTranslations");
 if (import.meta.hot) {
   import.meta.hot.accept(["../locales/pt-BR.json", "../locales/en.json"], (newModules) => {
     if (newModules) {

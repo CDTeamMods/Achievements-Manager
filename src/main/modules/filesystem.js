@@ -1,11 +1,19 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 var __defProp2 = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
-var __commonJS = /* @__PURE__ */ __name((cb, mod) => /* @__PURE__ */ __name(function __require() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-}, "__require"), "__commonJS");
+var __defProp22 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name22 = /* @__PURE__ */ __name2(
+  (target, value) => __defProp22(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __commonJS = /* @__PURE__ */ __name2(
+  (cb, mod) => /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
+    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  }, "__require"), "__require"),
+  "__commonJS"
+);
 var require_filesystem = __commonJS({
   "src/main/modules/filesystem.js"(exports, module) {
     const { ipcMain, dialog } = require("electron");
@@ -19,6 +27,9 @@ var require_filesystem = __commonJS({
       }
       static {
         __name2(this, "FilesystemManager");
+      }
+      static {
+        __name22(this, "FilesystemManager");
       }
       constructor(pathManager, crashReporter = null, configManager = null) {
         this.pathManager = pathManager;
@@ -446,7 +457,7 @@ var require_filesystem = __commonJS({
       // Backup operations
       async createBackup(name) {
         try {
-          const timestamp = /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString().replace(/[:.]/g, "-");
+          const timestamp = /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString().replaceAll(":", "-").replaceAll(".", "-");
           const backupId = `${timestamp}_${name || "manual"}`;
           const backupDir = path.join(this.backupsPath, backupId);
           await fs.mkdir(backupDir, { recursive: true });
@@ -534,7 +545,7 @@ var require_filesystem = __commonJS({
       // Import/Export
       async exportData(options = {}) {
         try {
-          const timestamp = /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString().replace(/[:.]/g, "-");
+          const timestamp = /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString().replaceAll(":", "-").replaceAll(".", "-");
           const exportName = options.name || `achievements_export_${timestamp}`;
           const exportPath = path.join(this.dataPath, "exports", `${exportName}.json`);
           await this.ensureDirectoryExists(path.dirname(exportPath));
@@ -791,18 +802,15 @@ var require_filesystem = __commonJS({
         try {
           fsSync.watch(this.dataPath, watchOptions, (eventType, filename) => {
             if (filename && !filename.includes("temp") && !filename.includes("cache")) {
-              if (global.mainWindow && !global.mainWindow.isDestroyed()) {
+              if (globalThis.mainWindow && !globalThis.mainWindow.isDestroyed()) {
                 try {
-                  const fileChangeData = JSON.parse(
-                    JSON.stringify({
-                      type: String(eventType || "unknown"),
-                      filename: String(filename || ""),
-                      timestamp: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString()
-                    })
-                  );
+                  const fileChangeData = structuredClone({
+                    type: String(eventType || "unknown"),
+                    filename: String(filename || ""),
+                    timestamp: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString()
+                  });
                   try {
-                    structuredClone(fileChangeData);
-                    global.mainWindow.webContents.send("file-changed", fileChangeData);
+                    globalThis.mainWindow.webContents.send("file-changed", fileChangeData);
                   } catch (cloneError) {
                     console.error(
                       "\u{1F4C1} [FILESYSTEM] \u274C ERRO DE CLONAGEM em file-changed:",
@@ -833,6 +841,7 @@ var require_filesystem = __commonJS({
     }
     __name(setupFileSystem, "setupFileSystem");
     __name2(setupFileSystem, "setupFileSystem");
+    __name22(setupFileSystem, "setupFileSystem");
     module.exports = { FilesystemManager, setupFileSystem };
   }
 });

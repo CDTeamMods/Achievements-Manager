@@ -1,11 +1,19 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 var __defProp2 = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
-var __commonJS = /* @__PURE__ */ __name((cb, mod) => /* @__PURE__ */ __name(function __require() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-}, "__require"), "__commonJS");
+var __defProp22 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name22 = /* @__PURE__ */ __name2(
+  (target, value) => __defProp22(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __commonJS = /* @__PURE__ */ __name2(
+  (cb, mod) => /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
+    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  }, "__require"), "__require"),
+  "__commonJS"
+);
 var require_main = __commonJS({
   "src/main/main.js"(exports, module) {
     const { setupUTF8Encoding, setupConsoleUTF8 } = require("./utils/encoding");
@@ -87,7 +95,7 @@ var require_main = __commonJS({
     });
     process.on("unhandledRejection", (reason, promise) => {
       if (reason && reason.message && reason.message.includes("could not be cloned")) {
-        if (debugManager && debugManager.isEnabled()) {
+        if (debugManager?.isEnabled()) {
           debugManager.ipc(
             "PROMISE REJECTION - ERRO DE CLONAGEM:",
             reason,
@@ -99,7 +107,7 @@ var require_main = __commonJS({
     });
     process.on("warning", (warning) => {
       if (warning.message && (warning.message.includes("could not be cloned") || warning.message.includes("IpcRendererInternal") || warning.message.includes("structuredClone"))) {
-        if (debugManager && debugManager.isEnabled()) {
+        if (debugManager?.isEnabled()) {
           debugManager.ipc(
             "WARNING IPC DETECTADO:",
             warning.name,
@@ -128,6 +136,7 @@ var require_main = __commonJS({
     }
     __name(isInstalledVersion, "isInstalledVersion");
     __name2(isInstalledVersion, "isInstalledVersion");
+    __name22(isInstalledVersion, "isInstalledVersion");
     let store = null;
     let mainWindow;
     let splashWindow;
@@ -174,6 +183,7 @@ var require_main = __commonJS({
     }
     __name(createSplashWindow, "createSplashWindow");
     __name2(createSplashWindow, "createSplashWindow");
+    __name22(createSplashWindow, "createSplashWindow");
     function createMainWindow() {
       const bounds = windowBoundsCache;
       const preloadPath = path.join(__dirname, "../preload/preload.js");
@@ -213,8 +223,6 @@ var require_main = __commonJS({
         console.error("PRELOAD ERROR:", error.message);
         console.error("PRELOAD PATH:", preloadPath2);
       });
-      mainWindow.webContents.on("dom-ready", () => {
-      });
       mainWindow.webContents.on("context-menu", () => {
       });
       if (isDev) {
@@ -230,14 +238,16 @@ var require_main = __commonJS({
       securityManager.setupSecurityHeaders(mainWindow.webContents);
       securityManager.setupURLValidation(mainWindow.webContents);
       setupWindowEvents();
-      mainWindow.once("ready-to-show", () => {
+      const closeSplashIfPresent = /* @__PURE__ */ __name22(() => {
         if (splashWindow && !splashWindow.isDestroyed()) {
           splashWindow.close();
           splashWindow = null;
         }
+      }, "closeSplashIfPresent");
+      const boostWindowFocus = /* @__PURE__ */ __name22(() => {
+        if (!mainWindow || mainWindow.isDestroyed()) return;
         mainWindow.show();
         setTimeout(() => {
-          const bounds2 = mainWindow.getBounds();
           mainWindow.focus();
           mainWindow.moveTop();
           mainWindow.setAlwaysOnTop(true);
@@ -245,13 +255,16 @@ var require_main = __commonJS({
             mainWindow.setAlwaysOnTop(false);
           }, 1e3);
         }, 500);
-        if (isDev) {
-          mainWindow.webContents.openDevTools({ mode: "detach" });
-        }
-      });
-      mainWindow.webContents.on(
-        "did-fail-load",
+      }, "boostWindowFocus");
+      const handleDidFailLoad = /* @__PURE__ */ __name22(
         (event, errorCode, errorDescription, validatedURL) => {
+          if (isDev && validatedURL && validatedURL.includes("localhost:3000")) {
+            debugManager.warn(
+              "\u26A0\uFE0F Servidor de desenvolvimento n\xE3o dispon\xEDvel, usando arquivo est\xE1tico"
+            );
+            mainWindow.loadFile(path.join(__dirname, "../renderer/index.html"));
+            return;
+          }
           console.error(
             "Falha ao carregar:",
             errorCode,
@@ -260,12 +273,29 @@ var require_main = __commonJS({
             "- URL:",
             validatedURL
           );
-        }
+        },
+        "handleDidFailLoad"
       );
-      mainWindow.webContents.on("did-finish-load", () => {
+      const handleDidFinishLoad = /* @__PURE__ */ __name22(() => {
+        if (!isDev) return;
+        debugManager.log("\u2705 P\xE1gina carregada com sucesso");
+      }, "handleDidFinishLoad");
+      const ensureLiteModeCSS = /* @__PURE__ */ __name22(() => {
+        if (!store.get("liteMode")) return;
+        mainWindow.webContents.insertCSS(`
+        * {
+          animation-duration: 0s !important;
+          transition-duration: 0s !important;
+        }
+      `);
+      }, "ensureLiteModeCSS");
+      mainWindow.once("ready-to-show", () => {
+        closeSplashIfPresent();
+        boostWindowFocus();
+        if (isDev) mainWindow.webContents.openDevTools({ mode: "detach" });
       });
-      mainWindow.webContents.on("dom-ready", () => {
-      });
+      mainWindow.webContents.on("did-fail-load", handleDidFailLoad);
+      mainWindow.webContents.on("did-finish-load", handleDidFinishLoad);
       mainWindow.on("enter-full-screen", () => {
         if (isDev) {
           mainWindow.webContents.executeJavaScript(`
@@ -298,37 +328,13 @@ var require_main = __commonJS({
       `);
         }
       });
-      if (isDev) {
-        mainWindow.webContents.on(
-          "did-fail-load",
-          (event, errorCode, errorDescription, validatedURL) => {
-            if (validatedURL.includes("localhost:3000")) {
-              debugManager.warn(
-                "\u26A0\uFE0F Servidor de desenvolvimento n\xE3o dispon\xEDvel, usando arquivo est\xE1tico"
-              );
-              mainWindow.loadFile(path.join(__dirname, "../renderer/index.html"));
-            }
-          }
-        );
-        mainWindow.webContents.on("did-finish-load", () => {
-          debugManager.log("\u2705 P\xE1gina carregada com sucesso");
-        });
-      }
-      mainWindow.webContents.on("dom-ready", () => {
-        if (store.get("liteMode")) {
-          mainWindow.webContents.insertCSS(`
-        * {
-          animation-duration: 0s !important;
-          transition-duration: 0s !important;
-        }
-      `);
-        }
-      });
+      mainWindow.webContents.on("dom-ready", ensureLiteModeCSS);
     }
     __name(createMainWindow, "createMainWindow");
     __name2(createMainWindow, "createMainWindow");
+    __name22(createMainWindow, "createMainWindow");
     function setupWindowEvents() {
-      const saveBoundsIfNormal = /* @__PURE__ */ __name2(() => {
+      const saveBoundsIfNormal = /* @__PURE__ */ __name22(() => {
         if (!mainWindow || mainWindow.isDestroyed()) return;
         const isNormalState = !mainWindow.isMaximized() && !mainWindow.isMinimized() && !mainWindow.isFullScreen();
         if (isNormalState) {
@@ -371,6 +377,7 @@ var require_main = __commonJS({
     }
     __name(setupWindowEvents, "setupWindowEvents");
     __name2(setupWindowEvents, "setupWindowEvents");
+    __name22(setupWindowEvents, "setupWindowEvents");
     function setupSystemTheme() {
       const theme = store.get("theme", "auto");
       if (theme === "auto") {
@@ -444,6 +451,7 @@ var require_main = __commonJS({
     }
     __name(setupSystemTheme, "setupSystemTheme");
     __name2(setupSystemTheme, "setupSystemTheme");
+    __name22(setupSystemTheme, "setupSystemTheme");
     function setupAutoStart() {
       ipcMain.handle("set-auto-start", (event, enabled) => {
         try {
@@ -479,6 +487,7 @@ var require_main = __commonJS({
     }
     __name(setupAutoStart, "setupAutoStart");
     __name2(setupAutoStart, "setupAutoStart");
+    __name22(setupAutoStart, "setupAutoStart");
     function createTray() {
       try {
         const iconPath = path.join(__dirname, "../../assets/icons/icon.ico");
@@ -486,7 +495,7 @@ var require_main = __commonJS({
         const contextMenu = Menu.buildFromTemplate([
           {
             label: "Mostrar Achievements Manager",
-            click: /* @__PURE__ */ __name2(() => {
+            click: /* @__PURE__ */ __name22(() => {
               if (mainWindow) {
                 mainWindow.show();
                 mainWindow.focus();
@@ -495,7 +504,7 @@ var require_main = __commonJS({
           },
           {
             label: "Sair",
-            click: /* @__PURE__ */ __name2(() => {
+            click: /* @__PURE__ */ __name22(() => {
               app.isQuiting = true;
               app.quit();
             }, "click")
@@ -517,6 +526,7 @@ var require_main = __commonJS({
     }
     __name(createTray, "createTray");
     __name2(createTray, "createTray");
+    __name22(createTray, "createTray");
     function setupMinimizeToTray() {
       ipcMain.handle("set-minimize-to-tray", (event, enabled) => {
         try {
@@ -551,6 +561,7 @@ var require_main = __commonJS({
     }
     __name(setupMinimizeToTray, "setupMinimizeToTray");
     __name2(setupMinimizeToTray, "setupMinimizeToTray");
+    __name22(setupMinimizeToTray, "setupMinimizeToTray");
     function protectCriticalSettings(store2, pathManager) {
       try {
         if (!pathManager || pathManager.isInstalledVersion()) {
@@ -598,10 +609,9 @@ var require_main = __commonJS({
     }
     __name(protectCriticalSettings, "protectCriticalSettings");
     __name2(protectCriticalSettings, "protectCriticalSettings");
+    __name22(protectCriticalSettings, "protectCriticalSettings");
     async function initializeApp() {
       try {
-        const securityManager = getSecurityManager();
-        const sandboxManager = getSandboxManager();
         const pathManager = await setupPathManager();
         const isInstalled = pathManager.isInstalledVersion();
         const Store2 = (await import("electron-store")).default;
@@ -654,15 +664,15 @@ var require_main = __commonJS({
         const filesystemManager = await setupFileSystem(
           store,
           pathManager,
-          global.crashReporter,
+          globalThis.crashReporter,
           configManager
         );
         await setupWindowManager(ipcMain, store);
-        performanceManager = await setupPerformance(store);
+        await setupPerformance(store);
         const gseSavesManager = new GSESavesManager(pathManager, debugManager);
         await gseSavesManager.initialize();
         const goldbergMigrationManager = new GoldbergMigrationManager(
-          global.crashReporter,
+          globalThis.crashReporter,
           pathManager
         );
         await goldbergMigrationManager.initialize();
@@ -671,11 +681,11 @@ var require_main = __commonJS({
           configManager,
           debugManager
         );
-        global.steamIntegrationManager = steamIntegration;
-        const steamLocalGames = new SteamLocalGamesManager(debugManager, global.crashReporter);
-        global.steamLocalGamesManager = steamLocalGames;
-        gamesManager = setupGames(configManager, global.crashReporter);
-        achievementsManager = setupAchievements(configManager, global.crashReporter);
+        globalThis.steamIntegrationManager = steamIntegration;
+        const steamLocalGames = new SteamLocalGamesManager(debugManager, globalThis.crashReporter);
+        globalThis.steamLocalGamesManager = steamLocalGames;
+        setupGames(configManager, globalThis.crashReporter);
+        setupAchievements(configManager, globalThis.crashReporter);
         setupSystemTheme();
         setupAutoStart();
         setupMinimizeToTray();
@@ -699,6 +709,7 @@ var require_main = __commonJS({
     }
     __name(initializeApp, "initializeApp");
     __name2(initializeApp, "initializeApp");
+    __name22(initializeApp, "initializeApp");
     app.whenReady().then(async () => {
       try {
         await initializeApp();
@@ -746,8 +757,8 @@ var require_main = __commonJS({
         shell.openExternal(navigationUrl);
       });
       contents.once("dom-ready", () => {
-        if (isDev) {
-          contents.executeJavaScript(`
+        if (!isDev) return;
+        contents.executeJavaScript(`
         const originalError = console.error;
         console.error = function(...args) {
           const message = args.join(' ');
@@ -759,7 +770,6 @@ var require_main = __commonJS({
           originalError.apply(console, args);
         };
       `);
-        }
       });
     });
     ipcMain.handle("debug:log", (event, ...args) => {

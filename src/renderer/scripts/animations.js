@@ -2,12 +2,20 @@ var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 var __defProp2 = Object.defineProperty;
 var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+var __defProp22 = Object.defineProperty;
+var __name22 = /* @__PURE__ */ __name2(
+  (target, value) => __defProp22(target, "name", { value, configurable: true }),
+  "__name"
+);
 class AnimationEngine {
   static {
     __name(this, "AnimationEngine");
   }
   static {
     __name2(this, "AnimationEngine");
+  }
+  static {
+    __name22(this, "AnimationEngine");
   }
   constructor() {
     this.animations = /* @__PURE__ */ new Map();
@@ -251,6 +259,9 @@ class MicroInteractions {
   static {
     __name2(this, "MicroInteractions");
   }
+  static {
+    __name22(this, "MicroInteractions");
+  }
   constructor() {
     this.interactions = /* @__PURE__ */ new Map();
     this.isLiteMode = false;
@@ -492,6 +503,9 @@ class PageTransitions {
   static {
     __name2(this, "PageTransitions");
   }
+  static {
+    __name22(this, "PageTransitions");
+  }
   constructor() {
     this.isTransitioning = false;
     this.currentPage = null;
@@ -596,6 +610,9 @@ class LoadingAnimations {
   }
   static {
     __name2(this, "LoadingAnimations");
+  }
+  static {
+    __name22(this, "LoadingAnimations");
   }
   static createSkeleton(container, type = "card") {
     const skeletons = {

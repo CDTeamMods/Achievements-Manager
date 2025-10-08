@@ -1,9 +1,8 @@
-import { resolve } from 'node:path'
-import { defineConfig, externalizeDepsPlugin } from 'electron-vite'
-import { loadEnv } from 'vite'
+import { resolve } from 'node:path';
+import { defineConfig, externalizeDepsPlugin } from 'electron-vite';
 
 export default defineConfig(({ command, mode }) => {
-  const isProduction = mode === 'production'
+  const isProduction = mode === 'production';
 
   return {
     main: {
@@ -12,7 +11,7 @@ export default defineConfig(({ command, mode }) => {
         outDir: 'dist/main',
         lib: {
           entry: 'src/main/main.js',
-          formats: ['cjs']
+          formats: ['cjs'],
         },
         rollupOptions: {
           external: [
@@ -28,10 +27,10 @@ export default defineConfig(({ command, mode }) => {
             'buffer',
             'url',
             'querystring',
-            'electron-store'
+            'electron-store',
           ],
           input: {
-            main: 'src/main/main.js'
+            main: 'src/main/main.js',
           },
           output: {
             format: 'cjs',
@@ -41,31 +40,31 @@ export default defineConfig(({ command, mode }) => {
             manualChunks: undefined,
             // Preservar estrutura de diretórios
             preserveModules: false,
-            preserveModulesRoot: 'src/main'
-          }
+            preserveModulesRoot: 'src/main',
+          },
         },
         minify: false,
         sourcemap: !isProduction,
         commonjsOptions: {
           include: [/node_modules/, /src/],
-          transformMixedEsModules: true
+          transformMixedEsModules: true,
         },
         // Otimizações de performance para o processo principal
         target: 'node18',
         reportCompressedSize: false,
         chunkSizeWarningLimit: 2000,
         // Preservar estrutura de módulos
-        preserveEntrySignatures: 'strict'
+        preserveEntrySignatures: 'strict',
       },
       resolve: {
         alias: {
           '@main': resolve('src/main'),
           '@modules': resolve('src/main/modules'),
-          '@utils': resolve('src/main/utils')
+          '@utils': resolve('src/main/utils'),
         },
         // Garantir que caminhos relativos funcionem em produção
-        preserveSymlinks: false
-      }
+        preserveSymlinks: false,
+      },
     },
     preload: {
       plugins: [externalizeDepsPlugin()],
@@ -73,20 +72,20 @@ export default defineConfig(({ command, mode }) => {
         outDir: 'dist/preload',
         lib: {
           entry: 'src/preload/preload.js',
-          formats: ['cjs']
+          formats: ['cjs'],
         },
         rollupOptions: {
           external: ['electron'],
           output: {
-            entryFileNames: '[name].js'
-          }
+            entryFileNames: '[name].js',
+          },
         },
         minify: isProduction ? 'esbuild' : false,
         sourcemap: !isProduction,
         // Otimizações específicas para preload
         target: 'node18',
-        reportCompressedSize: false
-       }
+        reportCompressedSize: false,
+      },
     },
     renderer: {
       root: 'src/renderer',
@@ -101,23 +100,23 @@ export default defineConfig(({ command, mode }) => {
               }
               next();
             });
-          }
-        }
+          },
+        },
       ],
       build: {
         outDir: 'dist/renderer',
         rollupOptions: {
           input: {
             main: resolve('src/renderer/index.html'),
-            splash: resolve('src/renderer/splash.html')
+            splash: resolve('src/renderer/splash.html'),
           },
           output: {
             format: 'es',
             entryFileNames: '[name].js',
             chunkFileNames: '[name]-[hash].js',
-            assetFileNames: '[name]-[hash].[ext]'
+            assetFileNames: '[name]-[hash].[ext]',
           },
-          preserveEntrySignatures: 'strict'
+          preserveEntrySignatures: 'strict',
         },
         minify: isProduction ? 'esbuild' : false,
         sourcemap: !isProduction,
@@ -128,38 +127,40 @@ export default defineConfig(({ command, mode }) => {
         reportCompressedSize: false,
         // Otimizações de performance
         cssCodeSplit: true,
-        emptyOutDir: true
+        emptyOutDir: true,
       },
-      esbuild: isProduction ? {
-        target: 'esnext',
-        format: 'esm',
-        platform: 'browser',
-        legalComments: 'none',
-        keepNames: true
-      } : false,
+      esbuild: isProduction
+        ? {
+            target: 'esnext',
+            format: 'esm',
+            platform: 'browser',
+            legalComments: 'none',
+            keepNames: true,
+          }
+        : false,
       rollupOptions: {
         external: [],
         output: {
           format: 'es',
           entryFileNames: '[name].js',
-          chunkFileNames: '[name].js'
-        }
+          chunkFileNames: '[name].js',
+        },
       },
       resolve: {
         alias: {
           '@renderer': resolve('src/renderer'),
           '@shared': resolve('src/shared'),
-          '@': resolve('src/renderer')
-        }
+          '@': resolve('src/renderer'),
+        },
       },
       css: {
         postcss: './postcss.config.js',
         devSourcemap: !isProduction,
         preprocessorOptions: {
           scss: {
-            additionalData: `@import "@/styles/variables.scss";`
-          }
-        }
+            additionalData: `@import "@/styles/variables.scss";`,
+          },
+        },
       },
       optimizeDeps: {
         include: [
@@ -167,13 +168,13 @@ export default defineConfig(({ command, mode }) => {
         ],
         exclude: [
           // Excluir dependências que não devem ser pré-bundled
-          'electron'
+          'electron',
         ],
         noDiscovery: !isProduction,
         force: false, // Cache de dependências otimizadas
         esbuildOptions: {
-          target: 'esnext'
-        }
+          target: 'esnext',
+        },
       },
       // Configurações de cache para melhor performance
       cacheDir: 'node_modules/.vite',
@@ -183,17 +184,17 @@ export default defineConfig(({ command, mode }) => {
         cors: true,
         hmr: {
           port: 3002,
-          host: 'localhost'
+          host: 'localhost',
         },
         middlewareMode: false,
         fs: {
-          strict: false
-        }
+          strict: false,
+        },
       },
       define: {
         __DEV__: !isProduction,
-        __VERSION__: JSON.stringify(process.env.npm_package_version || '1.0.0')
-      }
-    }
-  }
-})
+        __VERSION__: JSON.stringify(process.env.npm_package_version || '1.0.0'),
+      },
+    },
+  };
+});

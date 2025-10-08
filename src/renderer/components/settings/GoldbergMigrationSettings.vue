@@ -359,9 +359,9 @@ export default {
         this.isLoading = true;
         
         // Sanitizar configurações antes de enviar via IPC
-        const sanitizedSettings = window.IPCSanitizer ? 
-          window.IPCSanitizer.sanitize(this.settings) : 
-          JSON.parse(JSON.stringify(this.settings));
+        const sanitizedSettings = window.IPCSanitizer 
+          ? window.IPCSanitizer.sanitize(this.settings) 
+          : (() => { try { return structuredClone(this.settings); } catch { return { ...this.settings }; } })();
         const result = await window.electronAPI.goldberg.updateSettings(sanitizedSettings);
         
         if (result.success) {

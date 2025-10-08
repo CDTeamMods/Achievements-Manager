@@ -1,11 +1,19 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 var __defProp2 = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
-var __commonJS = /* @__PURE__ */ __name((cb, mod) => /* @__PURE__ */ __name(function __require() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-}, "__require"), "__commonJS");
+var __defProp22 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name22 = /* @__PURE__ */ __name2(
+  (target, value) => __defProp22(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __commonJS = /* @__PURE__ */ __name2(
+  (cb, mod) => /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
+    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  }, "__require"), "__require"),
+  "__commonJS"
+);
 var require_default_config = __commonJS({
   "src/main/modules/default-config.js"(exports, module) {
     const fs = require("node:fs").promises;
@@ -17,6 +25,9 @@ var require_default_config = __commonJS({
       }
       static {
         __name2(this, "DefaultConfigManager");
+      }
+      static {
+        __name22(this, "DefaultConfigManager");
       }
       constructor(pathManager = null, crashReporter = null) {
         this.pathManager = pathManager;
@@ -212,11 +223,13 @@ var require_default_config = __commonJS({
     }
     __name(setupDefaultConfig, "setupDefaultConfig");
     __name2(setupDefaultConfig, "setupDefaultConfig");
+    __name22(setupDefaultConfig, "setupDefaultConfig");
     function getDefaultConfigManager() {
       return defaultConfigManager;
     }
     __name(getDefaultConfigManager, "getDefaultConfigManager");
     __name2(getDefaultConfigManager, "getDefaultConfigManager");
+    __name22(getDefaultConfigManager, "getDefaultConfigManager");
     module.exports = {
       DefaultConfigManager,
       setupDefaultConfig,

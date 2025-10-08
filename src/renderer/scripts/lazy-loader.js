@@ -2,12 +2,20 @@ var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 var __defProp2 = Object.defineProperty;
 var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+var __defProp22 = Object.defineProperty;
+var __name22 = /* @__PURE__ */ __name2(
+  (target, value) => __defProp22(target, "name", { value, configurable: true }),
+  "__name"
+);
 class LazyLoader {
   static {
     __name(this, "LazyLoader");
   }
   static {
     __name2(this, "LazyLoader");
+  }
+  static {
+    __name22(this, "LazyLoader");
   }
   constructor() {
     this.loadedModules = /* @__PURE__ */ new Map();
@@ -44,32 +52,35 @@ class LazyLoader {
    */
   static getModuleImporter(modulePath) {
     const moduleMap = {
-      "./modules/state.js": /* @__PURE__ */ __name2(
+      "./modules/state.js": /* @__PURE__ */ __name22(
         () => import("./modules/state.js"),
         "./modules/state.js"
       ),
-      "./modules/navigation.js": /* @__PURE__ */ __name2(
+      "./modules/navigation.js": /* @__PURE__ */ __name22(
         () => import("./modules/navigation.js"),
         "./modules/navigation.js"
       ),
-      "./components.js": /* @__PURE__ */ __name2(() => import("./components.js"), "./components.js"),
-      "./modules/settings.js": /* @__PURE__ */ __name2(
+      "./components.js": /* @__PURE__ */ __name22(
+        () => import("./components.js"),
+        "./components.js"
+      ),
+      "./modules/settings.js": /* @__PURE__ */ __name22(
         () => import("./modules/settings.js"),
         "./modules/settings.js"
       ),
-      "./modules/events.js": /* @__PURE__ */ __name2(
+      "./modules/events.js": /* @__PURE__ */ __name22(
         () => import("./modules/events.js"),
         "./modules/events.js"
       ),
-      "./modules/helpers.js": /* @__PURE__ */ __name2(
+      "./modules/helpers.js": /* @__PURE__ */ __name22(
         () => import("./modules/helpers.js"),
         "./modules/helpers.js"
       ),
-      "./performance.js": /* @__PURE__ */ __name2(
+      "./performance.js": /* @__PURE__ */ __name22(
         () => import("./performance.js"),
         "./performance.js"
       ),
-      "./modules/steam-games.js": /* @__PURE__ */ __name2(
+      "./modules/steam-games.js": /* @__PURE__ */ __name22(
         () => import("./modules/steam-games.js"),
         "./modules/steam-games.js"
       )

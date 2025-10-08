@@ -2,9 +2,14 @@ var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 var __defProp2 = Object.defineProperty;
 var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+var __defProp22 = Object.defineProperty;
+var __name22 = /* @__PURE__ */ __name2(
+  (target, value) => __defProp22(target, "name", { value, configurable: true }),
+  "__name"
+);
 import { initI18n, changeLanguage, t, translatePage } from "./i18n-hot.js";
 import { filterAllowedSettings } from "./config/allowed-settings-keys.js";
-const isDebugEnabled = /* @__PURE__ */ __name2(() => {
+const isDebugEnabled = /* @__PURE__ */ __name22(() => {
   try {
     const localStorageDebug = localStorage.getItem("DEBUG_TOOLS");
     if (localStorageDebug === "true") return true;
@@ -30,6 +35,9 @@ class SetupWizard {
   }
   static {
     __name2(this, "SetupWizard");
+  }
+  static {
+    __name22(this, "SetupWizard");
   }
   constructor() {
     this.currentStep = 0;

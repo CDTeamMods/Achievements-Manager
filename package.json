@@ -22,8 +22,6 @@
     "yarn": ">= 1.22.22"
   },
   "scripts": {
-    "precommit": "yarn format && yarn precommit:clearinfo",
-    "precommit:clearinfo": "node Scripts/strip-comments.mjs",
     "start": "electron-vite .",
     "dev": "cross-env DEBUG_TOOLS=false electron-vite dev --mode development",
     "dev:debug": "cross-env DEBUG_TOOLS=true electron-vite dev --mode development",
@@ -34,12 +32,14 @@
     "clean": "rimraf dist release",
     "clean:all": "rimraf dist node_modules yarn.lock && yarn install",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
-    "lint:fix": "eslint src --ext .js,.jsx,.ts,.tsx --fix",
+    "lint:fix": "eslint src --ext .mjs,.js,.jsx,.ts,.tsx --fix",
     "format": "yarn format:write",
-    "format:write": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css}\"",
-    "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css}\"",
+    "format:write": "prettier --write \"src/**/*.{mjs,js,jsx,ts,tsx,json,css}\"",
+    "format:check": "prettier --check \"src/**/*.{mjs,js,jsx,ts,tsx,json,css}\"",
     "lint-staged": "lint-staged",
-    "prepare": "husky"
+    "prepare": "husky",
+    "precommit": "yarn format && yarn precommit:clearinfo",
+    "precommit:clearinfo": "node Scripts/strip-comments.mjs"
   },
   "dependencies": {
     "axios": "^1.12.2",
@@ -115,7 +115,7 @@
     }
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
+    "*.{mjs, js,jsx,ts,tsx}": [
       "eslint --fix",
       "prettier --write"
     ],
