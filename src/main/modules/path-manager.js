@@ -91,9 +91,9 @@ class PathManager {
     } else {
       if (this.isDevelopment) {
         // Modo desenvolvimento: usar pasta do projeto
-        this.userDataPath = path.join(__dirname, '..', '..', '..');
-        this.dataPath = path.join(__dirname, '..', '..', 'data');
-        this.cachePath = path.join(__dirname, '..', '..', 'data', 'cache');
+        this.userDataPath = path.join(__dirname, '..', '..');
+        this.dataPath = path.join(__dirname, '..', '..', 'src', 'data');
+        this.cachePath = path.join(__dirname, '..', '..', 'src', 'data', 'cache');
       } else {
         // Modo portable: usar pasta do executável
         const execDir = path.dirname(process.execPath);
@@ -155,16 +155,9 @@ class PathManager {
     return {
       data: this.dataPath,
       userData: this.userDataPath,
-      backups: path.join(this.dataPath, 'backups'),
       cache: this.cachePath,
       logs: path.join(this.dataPath, 'logs'),
-      games: path.join(this.dataPath, 'games'),
-      achievements: path.join(this.dataPath, 'achievements'),
       settings: path.join(this.dataPath, 'settings'),
-      exports: path.join(this.dataPath, 'exports'),
-      imports: path.join(this.dataPath, 'imports'),
-      temp: path.join(this.dataPath, 'temp'),
-      gseSaves: path.join(this.dataPath, 'GSE Saves'),
     };
   }
 

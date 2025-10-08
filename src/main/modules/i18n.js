@@ -16,7 +16,7 @@ class I18nManager {
     if (app.isPackaged) {
       this.translationsPath = path.join(process.resourcesPath, 'app.asar.unpacked', 'locales');
     } else {
-      this.translationsPath = path.join(__dirname, '..', '..', 'locales');
+      this.translationsPath = path.join(__dirname, '..', '..', 'src', 'renderer', 'locales');
     }
 
     this.init();
@@ -545,8 +545,14 @@ class I18nManager {
   }
 
   async setLanguage(language) {
+    // Validar se o language é válido
+    if (!language || typeof language !== 'string') {
+      console.warn(`[MAIN] Idioma inválido fornecido: ${language}`);
+      return false;
+    }
+
     if (!this.translations.has(language)) {
-      console.warn(`Language ${language} not available`);
+      console.warn(`[MAIN] Idioma ${language} não disponível. Idiomas disponíveis: ${Array.from(this.translations.keys()).join(', ')}`);
       return false;
     }
 

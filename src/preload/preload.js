@@ -1,5 +1,10 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
+// Log imediato para verificar se o preload está sendo executado
+console.log('🔧 [PRELOAD] Preload script iniciado!');
+console.log('🔧 [PRELOAD] contextBridge disponível:', typeof contextBridge);
+console.log('🔧 [PRELOAD] ipcRenderer disponível:', typeof ipcRenderer);
+
 // Função para logs de debug detalhados (só funciona quando DEBUG_TOOLS = true)
 function debugLog(operation, channel, args = null, result = null, error = null) {
   // Só executar se DEBUG_TOOLS estiver habilitado
@@ -713,7 +718,6 @@ if (process.env.NODE_ENV === 'development') {
 
 // Testes de debug (apenas em desenvolvimento)
 if (process.env.NODE_ENV === 'development') {
-  console.log('🔧 Preload script finalizado com sucesso');
   console.log('🔧 Testando setGoldbergSetting:', typeof electronAPI.setGoldbergSetting);
   console.log('🔧 Testando goldberg.setSetting:', typeof electronAPI.goldberg?.setSetting);
 }

@@ -30,7 +30,7 @@ body {
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 1000;
+  z-index: 380;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -60,7 +60,7 @@ body {
   display: flex !important;
   justify-content: center !important;
   align-items: center !important;
-  z-index: 99999 !important;
+  z-index: 400 !important;
   transition: opacity 0.3s ease !important;
 }
 
@@ -179,7 +179,7 @@ body {
   display: flex !important;
   align-items: center !important;
   justify-content: center !important;
-  z-index: 1000 !important;
+  z-index: 390 !important;
 }
 
 #addGameModal .modal-content {
@@ -279,7 +279,7 @@ body {
   position: fixed;
   top: 1rem;
   right: 1rem;
-  z-index: 1100;
+  z-index: 230;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -895,7 +895,7 @@ body {
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    z-index: 999999999 !important;
+    z-index: 410 !important;
     opacity: 1 !important;
     visibility: visible !important;
     margin: 0 !important;
@@ -923,7 +923,7 @@ body {
     position: relative !important;
     margin: auto !important;
     flex-shrink: 0 !important;
-    z-index: 999999999 !important;
+    z-index: 420 !important;
   }
 
   @keyframes slideInDialog {
@@ -2287,7 +2287,7 @@ input:checked + .slider:before {
   border-radius: 8px;
   color: white;
   font-weight: 500;
-  z-index: 10000;
+  z-index: 240;
   transform: translateX(100%);
   transition: transform 0.3s ease;
   max-width: 300px;

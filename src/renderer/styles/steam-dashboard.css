@@ -561,6 +561,122 @@
   background: rgba(255, 255, 255, 0.3);
 }
 
+/* ===== Aprimoramentos de layout para o diálogo de conquistas ===== */
+/* Resumo das conquistas */
+.achievements-summary {
+  background: var(--bg-secondary, #2a2a2a);
+  border: 1px solid var(--border-color, #404040);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+.summary-stats {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 16px;
+  align-items: center;
+}
+
+.stat-circle {
+  width: 96px;
+  height: 96px;
+}
+
+.circle-progress {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: conic-gradient(#22c55e var(--progress, 0%), rgba(255, 255, 255, 0.08) 0);
+  display: grid;
+  place-items: center;
+  box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.25), inset 0 0 0 6px var(--bg-secondary, #2a2a2a);
+}
+
+.circle-progress::after {
+  content: "";
+  position: absolute;
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--bg-secondary, #2a2a2a);
+}
+
+.circle-progress span {
+  position: absolute;
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-primary, #ffffff);
+}
+
+.stat-details h4 {
+  color: var(--text-primary, #ffffff);
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 6px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.stat-details p {
+  color: var(--text-secondary, #a0a0a0);
+  margin: 0;
+  font-size: 14px;
+}
+
+/* Estatísticas usadas no diálogo de conversão */
+.achievement-stats {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.stat-item {
+  background: var(--bg-tertiary, #1a1a1a);
+  border: 1px solid var(--border-color, #404040);
+  border-radius: 10px;
+  padding: 10px 12px;
+  min-width: 110px;
+  text-align: center;
+}
+
+.stat-number {
+  display: block;
+  color: var(--text-primary, #ffffff);
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.stat-label {
+  color: var(--text-secondary, #a0a0a0);
+  font-size: 12px;
+}
+
+/* Refinos no cabeçalho do diálogo */
+.achievements-dialog .dialog-header {
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0.015));
+  backdrop-filter: blur(6px);
+}
+
+/* Linha-clamp para descrição e chips alinhados */
+.achievements-dialog .achievement-details p {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.achievements-dialog .earned-date {
+  display: inline-flex;
+}
+
+.achievements-dialog .achievement-details .earned-date + .achievement-rarity {
+  margin-left: 8px;
+}
+
 /* Item de conquista */
 .achievement-item {
   display: flex;
@@ -690,7 +806,7 @@
   color: var(--text-primary, #ffffff);
   font-size: 18px;
   font-weight: 600;
-  margin: 0 0 12px 0;
+  margin: 0 0 0 0;
   line-height: 1.4;
   display: flex;
   align-items: center;
@@ -932,7 +1048,7 @@
 
   .achievement-details h4 {
     font-size: 16px;
-    margin: 0 0 10px 0;
+    margin: 0 0 6px 0;
     gap: 8px;
   }
 

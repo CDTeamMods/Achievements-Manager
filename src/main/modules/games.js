@@ -86,12 +86,8 @@ class GamesManager {
   }
 
   async initializeSteamAPI() {
-    const config = this.configManager.get();
-    const steamApiKey = config.steamApiKey;
-    if (steamApiKey) {
-      this.apiKey = steamApiKey;
-      this.isInitialized = true;
-    }
+    // Steam API será inicializada via SteamIntegrationManager
+    // Não carregamos mais steamApiKey do config
   }
 
   async setSteamApiKey(apiKey) {
@@ -107,7 +103,6 @@ class GamesManager {
       });
 
       // Se chegou até aqui, a API key é válida
-      this.configManager.set('steamApiKey', apiKey);
       this.configManager.set('apiProvider', 'steam');
 
       this.apiKey = apiKey;
@@ -283,7 +278,6 @@ class GamesManager {
       this.isInitialized = true;
 
       // Salvar configuração
-      await this.configManager.set('steamApiKey', apiKey);
       await this.configManager.set('api.source', 'steam');
 
       this.debugManager.log('✅ Steam API configurada com sucesso');

@@ -15,7 +15,6 @@ class SteamIntegrationManager {
     });
     this.apiKey = null;
     this.steamId = null;
-    this.isConnected = false;
 
     // Sistema de cache
     this.cache = new Map();
@@ -138,19 +137,21 @@ class SteamIntegrationManager {
   }
 
   // Métodos para cache de conexão Steam
-  async getConnectionCachePath() {
+  /**
+   * Obtém o caminho do arquivo de cache de credenciais Steam
+   */
+  async getCredentialsCachePath() {
     if (!this.pathManager) {
-      return path.join(process.cwd(), 'src', 'data', 'cache', 'steam-connection.json');
+      return path.join(process.cwd(), '..', '..', 'data', 'cache', 'steam_access.json');
     }
 
-    // Usar o novo sistema de cache dinâmico
     const cachePath = this.pathManager.getCachePath();
-    return path.join(cachePath, 'steam-connection.json');
+    return path.join(cachePath, 'steam_access.json');
   }
 
-  async setConnectionStatus(connected, apiKey = null, steamId = null) {
+  async setConnectionStatus(apiKey = null, steamId = null, connected = true) {
     try {
-      const cachePath = await this.getConnectionCachePath();
+      const cachePath = await this.getCredentialsCachePath();
 
       // Ler dados existentes se o arquivo existir
       let existingData = {};
@@ -163,9 +164,6 @@ class SteamIntegrationManager {
       }
 
       const cacheData = {
-        connected: connected,
-        lastUpdated: new Date().toISOString(),
-        sessionId: connected ? Date.now().toString() : null,
         apiKey: apiKey !== null ? apiKey : existingData.apiKey || '',
         steamId: steamId !== null ? steamId : existingData.steamId || '',
       };
@@ -196,7 +194,7 @@ class SteamIntegrationManager {
 
   async getConnectionStatus() {
     try {
-      const cachePath = await this.getConnectionCachePath();
+      const cachePath = await this.getCredentialsCachePath();
 
       // Verificar se o arquivo existe
       try {
@@ -234,7 +232,7 @@ class SteamIntegrationManager {
 
   async clearConnectionCache() {
     try {
-      const cachePath = await this.getConnectionCachePath();
+      const cachePath = await this.getCredentialsCachePath();
       await fs.unlink(cachePath);
       this.isConnected = false;
 
@@ -246,6 +244,108 @@ class SteamIntegrationManager {
       if (error.code !== 'ENOENT' && this.debugManager) {
         this.debugManager.error('steam', `Erro ao limpar cache de conexão: ${error.message}`);
       }
+    }
+  }
+
+  /**
+   * Salvar credenciais Steam na nova estrutura organizada por tipo/modo
+   */
+  async saveCredentials(apiKey, steamId = null) {
+    try {
+      const credentialsPath = await this.getCredentialsCachePath();
+      const credentialsData = {
+        apiKey: apiKey || '',
+        steamId: steamId || '',
+        connected: true,
+        lastUpdated: new Date().toISOString(),
+        sessionId: Date.now().toString(),
+      };
+
+      // Garantir que o diretório existe
+      const dir = path.dirname(credentialsPath);
+      await fs.mkdir(dir, { recursive: true });
+
+      // Salvar credenciais
+      await fs.writeFile(credentialsPath, JSON.stringify(credentialsData, null, 2), 'utf8');
+
+      if (this.debugManager) {
+        this.debugManager.log('steam', `✅ Credenciais salvas em: ${credentialsPath}`);
+      }
+
+      return true;
+    } catch (error) {
+      if (this.debugManager) {
+        this.debugManager.error('steam', `❌ Erro ao salvar credenciais Steam: ${error.message}`);
+      }
+      return false;
+    }
+  }
+
+  /**
+   * Carregar credenciais Steam da nova estrutura organizada por tipo/modo
+   */
+  async loadCredentials() {
+    try {
+      const credentialsPath = await this.getCredentialsCachePath();
+      const data = await fs.readFile(credentialsPath, 'utf8');
+      const credentialsData = JSON.parse(data);
+
+      return {
+        success: true,
+        apiKey: credentialsData.apiKey || '',
+        steamId: credentialsData.steamId || '',
+        connected: credentialsData.connected || false,
+        lastUpdated: credentialsData.lastUpdated,
+        sessionId: credentialsData.sessionId,
+      };
+    } catch (error) {
+      if (error.code === 'ENOENT') {
+        // Arquivo não existe, retornar dados vazios
+        return {
+          success: true,
+          apiKey: '',
+          steamId: '',
+          connected: false,
+          lastUpdated: null,
+          sessionId: null,
+        };
+      }
+
+      if (this.debugManager) {
+        this.debugManager.error('steam', `❌ Erro ao carregar credenciais Steam: ${error.message}`);
+      }
+
+      return {
+        success: false,
+        error: error.message,
+        apiKey: '',
+        steamId: '',
+        connected: false,
+      };
+    }
+  }
+
+  /**
+   * Limpar credenciais Steam da nova estrutura
+   */
+  async clearCredentials() {
+    try {
+      const credentialsPath = await this.getCredentialsCachePath();
+      await fs.unlink(credentialsPath);
+      
+      if (this.debugManager) {
+        this.debugManager.log('steam', '✅ Credenciais Steam limpas');
+      }
+      
+      return true;
+    } catch (error) {
+      if (error.code !== 'ENOENT') {
+        if (this.debugManager) {
+          this.debugManager.error('steam', `❌ Erro ao limpar credenciais Steam: ${error.message}`);
+        }
+        return false;
+      }
+      return true; // Arquivo não existe, consideramos como sucesso
     }
   }
 
@@ -330,54 +430,44 @@ class SteamIntegrationManager {
    */
   async setCredentials(apiKey, steamId = null) {
     try {
+      // Atualizar propriedades internas
       this.apiKey = apiKey;
-
-      // Testar conexão (que agora inclui descoberta automática)
-      const connectionTest = await this.testConnection(apiKey, steamId);
-
-      if (connectionTest.success) {
-        // Se Steam ID foi descoberto automaticamente, usar o descoberto
-        const finalSteamId = connectionTest.autoDiscovered ? connectionTest.data.steamid : steamId;
-
-        // Salvar credenciais apenas no cache
-        await this.setConnectionStatus(true, apiKey, finalSteamId);
-
-        // Atualizar estado interno
-        this.steamId = finalSteamId;
-        this.isConnected = true;
-
-        if (this.debugManager) {
-          this.debugManager.log(
-            'steam',
-            `Credenciais Steam salvas no cache - API Key: Definida, Steam ID: ${finalSteamId || 'Não definido'}`
-          );
-        }
-
-        return {
-          success: true,
-          message: connectionTest.autoDiscovered
-            ? `Credenciais configuradas com sucesso! Steam ID descoberto automaticamente: ${connectionTest.data.personaname}`
-            : 'Credenciais configuradas com sucesso!',
-          data: connectionTest.data,
-          autoDiscovered: connectionTest.autoDiscovered,
-        };
-      } else {
-        // Limpar cache de conexão em caso de falha
-        await this.setConnectionStatus(false);
-        this.isConnected = false;
-
-        return {
-          success: false,
-          error: connectionTest.error,
-          suggestion: connectionTest.suggestion,
-        };
+      if (steamId) {
+        this.steamId = steamId;
       }
+
+      // Se Steam ID não fornecido, tentar descobrir automaticamente
+      let finalSteamId = steamId;
+      if (!finalSteamId) {
+        try {
+          const discovery = await this.discoverSteamId(apiKey);
+          if (discovery.success) {
+            finalSteamId = discovery.steamId;
+          }
+        } catch (_) {
+          // Ignorar falha na descoberta automática
+        }
+      }
+
+      // Salvar credenciais incluindo Steam ID quando disponível
+      await this.saveCredentials(apiKey, finalSteamId);
+
+      // Atualizar estado interno
+      this.isConnected = true;
+
+      if (this.debugManager) {
+        this.debugManager.log(
+          'steam',
+          `Credenciais Steam salvas no cache - API Key: Definida, Steam ID: ${steamId || 'Não fornecido'}`
+        );
+      }
+
+      return {
+        success: true,
+        message: 'Credenciais configuradas com sucesso!',
+      };
     } catch (error) {
       console.error('❌ Erro ao definir credenciais Steam:', error);
-
-      // Limpar cache de conexão em caso de erro
-      await this.setConnectionStatus(false);
-      this.isConnected = false;
 
       return {
         success: false,
@@ -391,6 +481,14 @@ class SteamIntegrationManager {
    */
   async getCredentials() {
     try {
+      // Tentar carregar da nova estrutura primeiro
+      const newCredentials = await this.loadCredentials();
+      
+      if (newCredentials.success && newCredentials.apiKey) {
+        return newCredentials;
+      }
+
+      // Fallback para estrutura antiga se nova não existir
       const cacheData = await this.getConnectionStatus();
 
       return {

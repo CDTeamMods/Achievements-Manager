@@ -1,0 +1,270 @@
+/* 
+ * Otimizações para Modo Lite
+ * Remove ou reduz drasticamente efeitos pesados quando liteMode está ativo
+ */
+
+/* ===== DESABILITAR BACKDROP-FILTER ===== */
+[data-lite-mode="true"] *,
+[data-lite-mode="true"] *::before,
+[data-lite-mode="true"] *::after {
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ===== SIMPLIFICAR BOX-SHADOWS ===== */
+/* Remove sombras complexas e mantém apenas sombras básicas */
+[data-lite-mode="true"] * {
+  box-shadow: none !important;
+}
+
+/* Sombras básicas para elementos que realmente precisam de definição visual */
+[data-lite-mode="true"] .card,
+[data-lite-mode="true"] .modal,
+[data-lite-mode="true"] .dropdown,
+[data-lite-mode="true"] .tooltip,
+[data-lite-mode="true"] .notification {
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-lite-mode="true"] .elevated {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ===== DESABILITAR TRANSFORMS E ANIMAÇÕES ===== */
+/* Transform consolidado na seção de performance */
+
+/* Manter apenas transforms essenciais para funcionalidade */
+[data-lite-mode="true"] .modal-content {
+  transform: translateY(-50%) translateX(-50%) !important;
+}
+
+[data-lite-mode="true"] .dropdown-content {
+  transform: translateY(0) !important;
+}
+
+/* ===== DESABILITAR GRADIENTES ANIMADOS ===== */
+[data-lite-mode="true"] .gradient-animated,
+[data-lite-mode="true"] .shimmer,
+[data-lite-mode="true"] .gradient-shift {
+  background: var(--bg-secondary) !important;
+  background-image: none !important;
+}
+
+/* ===== SIMPLIFICAR EFEITOS DE HOVER ===== */
+[data-lite-mode="true"] *:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Hover básico apenas para feedback visual essencial */
+[data-lite-mode="true"] button:hover,
+[data-lite-mode="true"] .btn:hover,
+[data-lite-mode="true"] .clickable:hover {
+  opacity: 0.8 !important;
+}
+
+/* ===== DESABILITAR HOVERS DOS DROPDOWNS ===== */
+[data-lite-mode="true"] .dropdown:hover,
+[data-lite-mode="true"] .theme-dropdown:hover,
+[data-lite-mode="true"] .language-dropdown:hover,
+[data-lite-mode="true"] .form-control.language-dropdown:hover,
+[data-lite-mode="true"] select:hover,
+[data-lite-mode="true"] .dropdown-toggle:hover {
+  transform: none !important;
+  box-shadow: none !important;
+  background: var(--bg-secondary) !important;
+  border-color: var(--border-color) !important;
+}
+
+[data-lite-mode="true"] .theme-dropdown:hover::before,
+[data-lite-mode="true"] .theme-dropdown:hover::after,
+[data-lite-mode="true"] .language-dropdown:hover::before,
+[data-lite-mode="true"] .language-dropdown:hover::after,
+[data-lite-mode="true"] .form-control.language-dropdown:hover::before,
+[data-lite-mode="true"] .form-control.language-dropdown:hover::after {
+  opacity: 0 !important;
+  transform: none !important;
+}
+
+[data-lite-mode="true"] .input-group:hover .input-icon.fa-globe,
+[data-lite-mode="true"] .input-icon.fa-globe.hovered {
+  color: var(--text-secondary) !important;
+  transform: none !important;
+}
+
+/* ===== SIMPLIFICAR EFEITOS DE LOADING COMPLEXOS (MANTER SPINNER ATIVO) ===== */
+[data-lite-mode="true"] .skeleton,
+[data-lite-mode="true"] .shimmer-loading {
+  background: var(--bg-tertiary) !important;
+  background-image: none !important;
+}
+
+/* Manter loading spinner ativo mas simplificar visual */
+[data-lite-mode="true"] .loading-spinner {
+  background-image: none !important;
+  /* Manter animação de rotação ativa */
+}
+
+/* ===== OTIMIZAR SPLASH SCREEN ===== */
+[data-lite-mode="true"] .splash-container {
+  background: var(--bg-primary) !important;
+  background-image: none !important;
+}
+
+[data-lite-mode="true"] .splash-container::before,
+[data-lite-mode="true"] .splash-container::after {
+  display: none !important;
+}
+
+/* Elementos de loading removidos */
+
+/* ===== DESABILITAR EFEITOS DE PARTÍCULAS ===== */
+[data-lite-mode="true"] .particles,
+[data-lite-mode="true"] .floating-particles,
+[data-lite-mode="true"] .background-effects {
+  display: none !important;
+}
+
+/* ===== SIMPLIFICAR PROGRESS BARS ===== */
+[data-lite-mode="true"] .progress-bar {
+  background: var(--bg-tertiary) !important;
+  box-shadow: none !important;
+}
+
+[data-lite-mode="true"] .progress-fill {
+  background: var(--primary-color) !important;
+  background-image: none !important;
+  box-shadow: none !important;
+}
+
+/* ===== DESABILITAR GLOW EFFECTS ===== */
+[data-lite-mode="true"] .glow,
+[data-lite-mode="true"] .neon,
+[data-lite-mode="true"] .glowing {
+  box-shadow: none !important;
+  text-shadow: none !important;
+  filter: none !important;
+}
+
+/* ===== SIMPLIFICAR BORDERS ===== */
+[data-lite-mode="true"] * {
+  border-image: none !important;
+}
+
+/* ===== DESABILITAR FILTERS ===== */
+[data-lite-mode="true"] * {
+  filter: none !important;
+  -webkit-filter: none !important;
+}
+
+/* ===== OTIMIZAR MODAIS E OVERLAYS ===== */
+[data-lite-mode="true"] .modal-backdrop,
+[data-lite-mode="true"] .overlay {
+  background: rgba(0, 0, 0, 0.5) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* ===== DESABILITAR RIPPLE EFFECTS ===== */
+[data-lite-mode="true"] .ripple::before,
+[data-lite-mode="true"] .ripple::after,
+[data-lite-mode="true"] .ripple-effect::before,
+[data-lite-mode="true"] .ripple-effect::after {
+  display: none !important;
+}
+
+/* ===== SIMPLIFICAR FOCUS STATES ===== */
+[data-lite-mode="true"] *:focus {
+  outline: 2px solid var(--primary-color) !important;
+  outline-offset: 2px !important;
+  box-shadow: none !important;
+}
+
+[data-lite-mode="true"] .focus-ring:focus::after {
+  display: none !important;
+}
+
+/* ===== DESABILITAR SCROLL EFFECTS ===== */
+[data-lite-mode="true"] .parallax,
+[data-lite-mode="true"] .scroll-reveal {
+  transform: none !important;
+  opacity: 1 !important;
+}
+
+/* ===== OTIMIZAR PERFORMANCE ===== */
+[data-lite-mode="true"] * {
+  will-change: auto !important;
+  backface-visibility: visible !important;
+  perspective: none !important;
+  /* Consolidado: transform já definido globalmente */
+  transform: none !important;
+}
+
+/* ===== DESABILITAR EFEITOS ESPECÍFICOS DO STEAM ===== */
+[data-lite-mode="true"] .steam-card:hover,
+[data-lite-mode="true"] .achievement-card:hover,
+[data-lite-mode="true"] .game-card:hover {
+  transform: none !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ===== SIMPLIFICAR NOTIFICAÇÕES ===== */
+[data-lite-mode="true"] .notification {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ===== DESABILITAR EFEITOS DE SETTINGS ===== */
+[data-lite-mode="true"] .settings-card,
+[data-lite-mode="true"] .settings-section {
+  background: var(--bg-secondary) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* ===== OTIMIZAR TOGGLES E SWITCHES ===== */
+[data-lite-mode="true"] .toggle-switch,
+[data-lite-mode="true"] .switch {
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-lite-mode="true"] .toggle-switch::before,
+[data-lite-mode="true"] .switch::before {
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* ===== SIMPLIFICAR DASHBOARD ===== */
+[data-lite-mode="true"] .dashboard-card,
+[data-lite-mode="true"] .stats-card {
+  background: var(--bg-secondary) !important;
+  border: 1px solid var(--border-color) !important;
+  box-shadow: none !important;
+}
+
+/* ===== PERFORMANCE HINTS ===== */
+[data-lite-mode="true"] {
+  /* Força o navegador a usar renderização mais simples */
+  image-rendering: auto !important;
+  text-rendering: auto !important;
+}
+
+/* ===== MEDIA QUERIES PARA DISPOSITIVOS MAIS FRACOS ===== */
+@media (max-width: 768px) {
+  [data-lite-mode="true"] * {
+    /* Em dispositivos móveis, força ainda mais simplificação */
+    background-attachment: scroll !important;
+    background-size: auto !important;
+  }
+}
+
+/* ===== FALLBACKS PARA NAVEGADORES ANTIGOS ===== */
+@supports not (backdrop-filter: blur(10px)) {
+  [data-lite-mode="true"] .glass-effect {
+    background: var(--bg-secondary) !important;
+    border: 1px solid var(--border-color) !important;
+  }
+}

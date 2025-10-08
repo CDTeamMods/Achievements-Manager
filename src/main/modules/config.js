@@ -17,12 +17,10 @@ class ConfigManager {
       liteMode: false,
       virtualScrolling: true,
       autoStartWindows: false,
-      minimizeToTray: false,
       isInstalledVersion: false,
 
       // Configurações de API
       apiSource: 'steam',
-      steamApiKey: '',
 
       // Configurações de performance
       performance: {
@@ -30,14 +28,6 @@ class ConfigManager {
         showTooltips: true,
         autoSync: true,
         cacheSize: 100,
-      },
-
-      // Configurações de janela
-      windowBounds: {
-        width: 1200,
-        height: 800,
-        x: undefined,
-        y: undefined,
       },
 
       // Configurações individuais (para compatibilidade)

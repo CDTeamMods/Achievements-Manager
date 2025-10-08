@@ -16,8 +16,6 @@ class FilesystemManager {
     this.dataPath = pathManager.getDataPath();
     this.cachePath = paths.cache;
     this.logsPath = paths.logs;
-    this.backupsPath = paths.backups;
-    this.tempPath = paths.temp;
   }
 
   async init() {
@@ -67,8 +65,6 @@ class FilesystemManager {
       path.join(this.dataPath, 'settings'),
       this.cachePath,
       this.logsPath,
-      this.backupsPath,
-      this.tempPath,
     ];
 
     for (const dir of essentialDirectories) {
@@ -88,28 +84,6 @@ class FilesystemManager {
   /**
    * Cria pastas específicas apenas quando necessário
    */
-  async ensureDataDirectories() {
-    const dataDirectories = [
-      path.join(this.dataPath, 'achievements'),
-      path.join(this.dataPath, 'games'),
-      path.join(this.dataPath, 'exports'),
-      path.join(this.dataPath, 'imports'),
-    ];
-
-    for (const dir of dataDirectories) {
-      try {
-        await fs.mkdir(dir, { recursive: true });
-        this.debug.log(`📁 Pasta de dados criada: ${path.relative(this.dataPath, dir)}`);
-      } catch (error) {
-        this.debug.error(`❌ Erro ao criar pasta de dados ${dir}:`, error);
-        await this.reportFilesystemError('ensureDataDirectories', error, { directory: dir });
-        throw error;
-      }
-    }
-
-    return true;
-  }
-
   setupIPC() {
     // File operations
     ipcMain.handle('fs:readFile', async (event, filePath, encoding = 'utf8') => {
@@ -498,8 +472,16 @@ class FilesystemManager {
   async loadSettings() {
     try {
       const filePath = path.join('settings', 'app.json');
+      const safePath = this.getSafePath(filePath);
+      
+      this.debug.info('🔍 LoadSettings Debug Info:');
+      this.debug.info(`📁 DataPath: ${this.dataPath}`);
+      this.debug.info(`📄 FilePath: ${filePath}`);
+      this.debug.info(`🛡️ SafePath: ${safePath}`);
+      this.debug.info(`📋 File exists check: ${await this.exists(filePath)}`);
 
       if (!(await this.exists(filePath))) {
+        this.debug.warn('⚠️ app.json não encontrado, retornando configurações padrão');
         // Return default settings
         return {
           language: 'pt-BR',
@@ -510,10 +492,18 @@ class FilesystemManager {
         };
       }
 
+      this.debug.info('✅ app.json encontrado, carregando...');
       const data = await this.readFile(filePath);
-      return JSON.parse(data);
+      const parsedData = JSON.parse(data);
+      this.debug.info('📊 Configurações carregadas:', parsedData);
+      return parsedData;
     } catch (error) {
-      this.debug.error('Error loading settings:', error);
+      this.debug.error('❌ Error loading settings:', error);
+      this.debug.error('❌ Error details:', {
+        message: error.message,
+        stack: error.stack,
+        dataPath: this.dataPath
+      });
       throw error;
     }
   }

@@ -20,8 +20,9 @@
   <link rel="stylesheet" href="styles/steam.css">
   <link rel="stylesheet" href="styles/steam-dashboard.css">
   <link rel="stylesheet" href="styles/pages.css">
-  
-  <!-- Fontes -->
+    <link rel="stylesheet" href="styles/lite-mode-optimizations.css">
+
+    <!-- Fonts -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap">
   
@@ -31,24 +32,12 @@
   <!-- Favicon -->
   <link rel="icon" href="../assets/icons/icon.png" type="image/png">
   
-  <!-- CSP temporariamente removida para teste -->
   <!-- CSP para segurança -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; script-src 'self' 'unsafe-inline' 'unsafe-eval'; object-src 'none';"> -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' devtools:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com devtools:; font-src 'self' https://fonts.gstatic.com https://fonts.googleapis.com https://cdnjs.cloudflare.com; img-src 'self' data: https:; script-src 'self' 'unsafe-inline'; object-src 'none'; connect-src 'self' ws://localhost:* http://localhost:* https://fonts.googleapis.com https://fonts.gstatic.com https://cdnjs.cloudflare.com;">
 </head>
 <body>
-  <!-- Loading Screen -->
-  <div id="loadingScreen" class="loading-screen">
-    <div class="loading-content">
-      <div class="loading-logo">
-        <i class="fas fa-trophy"></i>
-      </div>
-      <div class="loading-spinner-container">
-        <div class="loading-spinner-icon">
-          <i class="fas fa-spinner fa-spin"></i>
-        </div>
-      </div>
-    </div>
-  </div>
+  
+
 
   <!-- Setup Wizard -->
   <div id="setupWizard" class="setup-wizard hidden">
@@ -81,7 +70,7 @@
           </div>
         </div>
         <div class="setup-actions">
-          <button class="btn btn-primary setup-next" onclick="window.setupWizard?.nextStep()">
+          <button class="btn btn-primary setup-next">
             <span data-i18n="common.next">Próximo</span> <i class="fas fa-arrow-right"></i>
           </button>
         </div>
@@ -125,10 +114,10 @@
           </div>
         </div>
         <div class="setup-actions">
-          <button class="btn btn-secondary" onclick="window.setupWizard?.prevStep()">
+          <button class="btn btn-secondary setup-prev">
               <i class="fas fa-arrow-left"></i> <span data-i18n="common.previous">Anterior</span>
           </button>
-          <button class="btn btn-primary setup-next" onclick="window.setupWizard?.nextStep()">
+          <button class="btn btn-primary setup-next">
             <span data-i18n="common.next">Próximo</span> <i class="fas fa-arrow-right"></i>
           </button>
         </div>
@@ -170,10 +159,10 @@
           </div>
         </div>
         <div class="setup-actions">
-          <button class="btn btn-secondary" onclick="window.setupWizard?.prevStep()">
+          <button class="btn btn-secondary setup-prev">
               <i class="fas fa-arrow-left"></i> <span data-i18n="common.previous">Anterior</span>
             </button>
-            <button class="btn btn-primary setup-next" onclick="window.setupWizard?.nextStep()">
+            <button class="btn btn-primary setup-next">
             <span data-i18n="common.next">Próximo</span> <i class="fas fa-arrow-right"></i>
           </button>
         </div>
@@ -202,10 +191,10 @@
           </div>
         </div>
         <div class="setup-actions">
-          <button class="btn btn-secondary" onclick="window.setupWizard?.prevStep()">
+          <button class="btn btn-secondary setup-prev">
               <i class="fas fa-arrow-left"></i> <span data-i18n="common.previous">Anterior</span>
             </button>
-            <button class="btn btn-primary" onclick="window.setupWizard?.finishSetup()">
+            <button class="btn btn-primary setup-finish">
             <span data-i18n="common.finish">Começar</span> <i class="fas fa-rocket"></i>
           </button>
         </div>
@@ -306,15 +295,14 @@
   <script type="module" src="scripts/i18n-hot.js"></script>
   <!-- Configuração centralizada será carregada via imports -->
   <script type="module" src="scripts/utils.js"></script>
-  <script type="module" src="scripts/components.js"></script>
-  <script type="module" src="scripts/performance.js"></script>
-  <script type="module" src="scripts/utils/debug-manager.js"></script>
+  
+  <!-- Utilitários críticos -->
   <script type="module" src="scripts/utils/ipc-sanitizer.js"></script>
+  
+  <!-- Inicialização -->
   <script type="module" src="scripts/crash-handler.js"></script>
   <script type="module" src="scripts/setup.js"></script>
   <script type="module" src="scripts/app.js"></script>
-  <!--
-  <script type="module" src="scripts/modules/steam-games.js"></script> -->
 
 
 </body>

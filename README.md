@@ -4,12 +4,12 @@
 
 ### 📌 Progresso de Construção do Script
 
-- [x] Sistema inicial
-- [x] Implementação com a Steam API
-- [ ] Implementação com o Hydra API
-- [ ] Implementação de conversão das conquistas Steam para GSE (Goldberg SteamEmu)
-- [ ] Implementação de Perfil personalizavel
-- [ ] Implementação de salvamento em Nuvem
+- 🟩 Sistema inicial
+- 🟩 Implementação com a Steam API
+- 🟥 Implementação com o Hydra API
+- 🟥 Implementação de conversão das conquistas Steam para GSE (Goldberg SteamEmu)
+- 🟥 Implementação de Perfil personalizavel
+- 🟥 Implementação de salvamento em Nuvem
 
 **Última atualização:** Outubro 2025
 

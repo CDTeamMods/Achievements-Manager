@@ -22,20 +22,42 @@ process.on('warning', warning => {
 
 const { app, BrowserWindow, ipcMain, shell, dialog, nativeTheme, Tray, Menu } = require('electron');
 
-// Configurar argumentos do Chromium para melhor experiência (após importar app)
+// Configurar argumentos do Chromium para melhor experiência e performance
 app.commandLine.appendSwitch(
   '--disable-features',
-  'AutofillServerCommunication,AutofillCrowdsourcing,AutofillAssistant'
+  'AutofillServerCommunication,AutofillCrowdsourcing,AutofillAssistant,TranslateUI,MediaRouter,OutOfBlinkCors'
 );
+
+// Otimizações de performance
+app.commandLine.appendSwitch('--disable-background-timer-throttling');
+app.commandLine.appendSwitch('--disable-backgrounding-occluded-windows');
+app.commandLine.appendSwitch('--disable-renderer-backgrounding');
+app.commandLine.appendSwitch('--disable-field-trial-config');
+app.commandLine.appendSwitch('--disable-ipc-flooding-protection');
+
+// Otimizações de memória
+app.commandLine.appendSwitch('--memory-pressure-off');
+app.commandLine.appendSwitch('--max_old_space_size=4096');
+
+// Otimizações de GPU (se disponível)
+app.commandLine.appendSwitch('--enable-gpu-rasterization');
+app.commandLine.appendSwitch('--enable-zero-copy');
+
+// Desabilitar verificação MIME rigorosa para evitar erros do DevTools
+app.commandLine.appendSwitch('--disable-strict-mixed-content-checking');
+app.commandLine.appendSwitch('--allow-file-access-from-files');
 
 // Configurar logging do Electron
 if (process.env.NODE_ENV !== 'development') {
   app.commandLine.appendSwitch('--disable-logging');
+  app.commandLine.appendSwitch('--disable-dev-shm-usage');
 }
 const path = require('path');
 const Store = require('electron-store');
 const fs = require('fs').promises;
 const os = require('os');
+
+// Função writeDebugLog removida - debug.log não é mais gerado automaticamente
 
 // Importar DebugManager primeiro
 const { getDebugManager } = require('./modules/debug-manager');
@@ -47,6 +69,8 @@ const { setupFileSystem } = require('./modules/filesystem');
 const { setupWindowManager } = require('./modules/window-manager');
 const { setupPerformance } = require('./modules/performance');
 const { setupCrashReporter } = require('./modules/crash-reporter');
+const { getSecurityManager } = require('./modules/security-manager');
+const { getSandboxManager } = require('./modules/sandbox-manager');
 const { GSESavesManager } = require('./modules/gse-saves');
 const ConfigManager = require('./modules/config');
 const { GoldbergMigrationManager } = require('./modules/goldberg-migration');
@@ -96,14 +120,6 @@ process.on('warning', warning => {
   }
 });
 
-// Função para interceptar webContents.send (será chamada após app ready)
-function setupWebContentsInterceptor() {
-  debugManager.log(
-    '[DEBUG] Interceptador de webContents será configurado via web-contents-created'
-  );
-  // A interceptação agora é feita no evento web-contents-created
-}
-
 // Configurações globais
 const isDev = process.env.NODE_ENV === 'development';
 
@@ -145,6 +161,15 @@ let mainWindow;
 let splashWindow;
 let tray = null;
 
+// Cache interno (em memória) para tamanho/posição da janela
+// Não persiste em arquivo físico
+let windowBoundsCache = {
+  width: 1200,
+  height: 800,
+  x: undefined,
+  y: undefined,
+};
+
 // Instâncias dos módulos para cleanup
 let performanceManager = null;
 let gamesManager = null;
@@ -170,9 +195,23 @@ function createSplashWindow() {
 
   // Obter configuração do modo lite
   const liteMode = store.get('liteMode', false);
-  const splashUrl = `file://${path.join(__dirname, '../renderer/splash.html')}?liteMode=${liteMode}`;
-
-  splashWindow.loadURL(splashUrl);
+  
+  // Carregar splash screen
+  if (isDev) {
+    // Em desenvolvimento, carregar do servidor Vite
+    const splashUrl = `http://localhost:3000/splash.html?liteMode=${liteMode}`;
+    splashWindow.loadURL(splashUrl).catch(err => {
+      debugManager.error('❌ Erro ao carregar splash do servidor de desenvolvimento:', err);
+      debugManager.log('🔄 Tentando carregar arquivo estático como fallback...');
+      // Fallback para arquivo estático se o servidor não estiver disponível
+      const fallbackUrl = `file://${path.join(__dirname, '../renderer/splash.html')}?liteMode=${liteMode}`;
+      splashWindow.loadURL(fallbackUrl);
+    });
+  } else {
+    // Em produção, carregar arquivo estático
+    const splashUrl = `file://${path.join(__dirname, '../renderer/splash.html')}?liteMode=${liteMode}`;
+    splashWindow.loadURL(splashUrl);
+  }
 
   splashWindow.on('closed', () => {
     splashWindow = null;
@@ -183,22 +222,32 @@ function createSplashWindow() {
  * Cria a janela principal com configurações otimizadas
  */
 function createMainWindow() {
-  const bounds = store.get('windowBounds');
+  // Usar somente cache interno em memória
+  const bounds = windowBoundsCache;
 
   const preloadPath = path.join(__dirname, '../preload/preload.js');
-  debugManager.log('🔧 Caminho do preload:', preloadPath);
-  debugManager.log('🔧 Preload existe:', require('fs').existsSync(preloadPath));
+  
+  // Verificar caminhos alternativos
+  const alternativePaths = [
+    path.join(__dirname, '../preload/preload.js'),
+    path.join(__dirname, '../../preload/preload.js'),
+    path.join(__dirname, 'preload/preload.js'),
+    path.join(process.resourcesPath, 'app.asar', 'dist', 'preload', 'preload.js'),
+    path.join(process.resourcesPath, 'app.asar', 'preload', 'preload.js')
+  ];
+  
+  // Caminhos alternativos verificados (debug log removido)
 
+  // Obter configurações de segurança otimizadas
+  const securityManager = getSecurityManager();
+  const sandboxManager = getSandboxManager();
+  
   mainWindow = new BrowserWindow({
     ...bounds,
     webPreferences: {
-      nodeIntegration: false,
-      contextIsolation: true,
-      enableRemoteModule: false,
-      preload: preloadPath,
-      webSecurity: true,
-      sandbox: false,
-      devTools: isDev,
+      ...securityManager.getSecureWebPreferences(preloadPath),
+      ...sandboxManager.getMainWindowSandboxConfig(),
+      devTools: isDev // Desabilitar DevTools em produção
     },
     frame: false,
     resizable: true,
@@ -211,35 +260,89 @@ function createMainWindow() {
     }),
   });
 
+  // Configuração do preload concluída (debug logs removidos)
+  
+  // Capturar erros do preload
+  mainWindow.webContents.on('preload-error', (event, preloadPath, error) => {
+    console.error('PRELOAD ERROR:', error.message);
+    console.error('PRELOAD PATH:', preloadPath);
+  });
+
+  // Verificar quando o preload é carregado
+  mainWindow.webContents.on('dom-ready', () => {
+    // DOM pronto (debug log removido)
+  });
+
+  // Verificar se o contexto foi criado
+  mainWindow.webContents.on('context-menu', () => {
+    // Menu de contexto ativado (debug log removido)
+  });
+
+
+
   // Carregar a aplicação
   if (isDev) {
     // Em desenvolvimento, carregar do servidor Vite para hot reload
     mainWindow.loadURL('http://localhost:3000').catch(err => {
-      debugManager.error('❌ Erro ao carregar servidor de desenvolvimento:', err);
-      debugManager.log('🔄 Tentando carregar arquivo estático como fallback...');
+      console.error('Erro ao carregar servidor de desenvolvimento:', err.message);
+      const htmlPath = path.join(__dirname, '../renderer/index.html');
       // Fallback para arquivo estático se o servidor não estiver disponível
-      mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
+      mainWindow.loadFile(htmlPath);
     });
   } else {
     // Em produção, carregar arquivo estático
-    mainWindow.loadFile(path.join(__dirname, '../renderer/index.html'));
+    const htmlPath = path.join(__dirname, '../renderer/index.html');
+    mainWindow.loadFile(htmlPath);
   }
 
+  // Configurar eventos de segurança
+  securityManager.setupSecurityHeaders(mainWindow.webContents);
+  securityManager.setupURLValidation(mainWindow.webContents);
+  
   // Configurar eventos da janela
   setupWindowEvents();
 
   // Mostrar janela quando estiver pronta
   mainWindow.once('ready-to-show', () => {
+    // Evento ready-to-show disparado (debug log removido)
     if (splashWindow && !splashWindow.isDestroyed()) {
       splashWindow.close();
       splashWindow = null;
     }
     mainWindow.show();
 
+    // Verificar propriedades da janela após mostrar
+    setTimeout(() => {
+      // Verificação de propriedades da janela (debug logs removidos)
+      const bounds = mainWindow.getBounds();
+      
+      // Forçar foco e trazer para frente
+      mainWindow.focus();
+      mainWindow.moveTop();
+      mainWindow.setAlwaysOnTop(true);
+      setTimeout(() => {
+        mainWindow.setAlwaysOnTop(false);
+        // Janela configurada para ficar visível (debug log removido)
+      }, 1000);
+    }, 500);
+
     // Focar na janela
     if (isDev) {
       mainWindow.webContents.openDevTools({ mode: 'detach' });
     }
+  });
+
+  // Eventos de carregamento (debug logs removidos)
+  mainWindow.webContents.on('did-fail-load', (event, errorCode, errorDescription, validatedURL) => {
+    console.error('Falha ao carregar:', errorCode, '-', errorDescription, '- URL:', validatedURL);
+  });
+
+  mainWindow.webContents.on('did-finish-load', () => {
+    // Carregamento concluído com sucesso (debug log removido)
+  });
+
+  mainWindow.webContents.on('dom-ready', () => {
+    // DOM pronto (debug log removido)
   });
 
   // Ocultar barra do DevTools em tela cheia (modo desenvolvimento)
@@ -318,14 +421,23 @@ function createMainWindow() {
  * Configura eventos da janela principal
  */
 function setupWindowEvents() {
-  // Salvar posição e tamanho da janela
-  mainWindow.on('resize', () => {
-    store.set('windowBounds', mainWindow.getBounds());
-  });
+  // Salvar posição e tamanho da janela apenas quando em estado normal (não maximizada/minimizada/tela cheia)
+  const saveBoundsIfNormal = () => {
+    if (!mainWindow || mainWindow.isDestroyed()) return;
+    const isNormalState =
+      !mainWindow.isMaximized() && !mainWindow.isMinimized() && !mainWindow.isFullScreen();
+    if (isNormalState) {
+      const bounds = mainWindow.getBounds();
+      // Atualizar apenas o cache interno (não salvar em arquivo)
+      windowBoundsCache = bounds;
+    }
+  };
 
-  mainWindow.on('move', () => {
-    store.set('windowBounds', mainWindow.getBounds());
-  });
+  // Eventos que podem alterar posição/tamanho
+  mainWindow.on('resize', saveBoundsIfNormal);
+  mainWindow.on('move', saveBoundsIfNormal);
+  // Ao sair do estado maximizado, salvar o tamanho/posição restaurados
+  mainWindow.on('unmaximize', saveBoundsIfNormal);
 
   // Evento de fechar janela
   mainWindow.on('close', event => {
@@ -656,7 +768,9 @@ function protectCriticalSettings(store, pathManager) {
  */
 async function initializeApp() {
   try {
-    debugManager.info('🚀 Initializing Achievements Manager...');
+    // Inicializar gerenciadores de segurança primeiro
+    const securityManager = getSecurityManager();
+    const sandboxManager = getSandboxManager();
 
     // Inicializar Path Manager primeiro
     const pathManager = await setupPathManager();
@@ -668,21 +782,26 @@ async function initializeApp() {
     // Definir o caminho correto para o arquivo de configurações
     const settingsPath = isInstalled
       ? pathManager.getUserDataPath() // Versão instalada: usar AppData
-      : pathManager.getPaths().settings; // Modo dev: usar src/data/settings
+      : pathManager.getPaths().settings; // Modo dev: usar src/data/settings;
 
     store = new Store({
       name: 'app', // Define o nome do arquivo como app.json
       cwd: settingsPath, // Usar o caminho correto baseado no tipo de instalação
       defaults: {
-        setupComplete: false, // IMPORTANTE: Para detectar primeiro uso
-        windowBounds: { width: 1024, height: 768 },
-        theme: 'auto',
-        language: 'en',
-        liteMode: false,
-        apiSource: 'steam',
-        isInstalledVersion: isInstalled,
+        // Configurações básicas
+        setupComplete: false,
+        language: 'pt-BR',
+        theme: 'dark',
+        liteMode: true,
+        virtualScrolling: true,
         autoStartWindows: false,
         minimizeToTray: false,
+        isInstalledVersion: isInstalled,
+
+        // Configurações de API
+        apiSource: 'steam',
+
+        // Configurações de performance
         performance: {
           enableVirtualScrolling: true,
           enableLazyLoading: true,
@@ -690,9 +809,24 @@ async function initializeApp() {
           autoSync: true,
           cacheSize: 100,
         },
+
+        // Configurações de janela
+        // Removido armazenamento físico de windowBounds; agora em cache interno
+
+        // Configurações individuais (para compatibilidade)
+        showTooltips: true,
+        autoSync: true,
+        cacheSize: "100",
+
+        // Configurações de sistema
+        crashReports: true,
+
+        // Cache
+        cache: {
+          images: {}
+        }
       },
     });
-
     // Proteger configurações críticas em modo portable
     protectCriticalSettings(store, pathManager);
 
@@ -716,8 +850,11 @@ async function initializeApp() {
       global.crashReporter,
       configManager
     );
+    
     await setupWindowManager(ipcMain, store);
+    
     performanceManager = await setupPerformance(store);
+    
     const gseSavesManager = new GSESavesManager(pathManager, debugManager);
     await gseSavesManager.initialize();
 
@@ -731,12 +868,10 @@ async function initializeApp() {
     // Inicializar Steam Integration Manager
     const steamIntegration = new SteamIntegrationManager(pathManager, configManager, debugManager);
     global.steamIntegrationManager = steamIntegration; // Tornar disponível globalmente
-    debugManager.info('✅ Steam Integration Manager inicializado');
 
     // Inicializar Steam Local Games Manager
     const steamLocalGames = new SteamLocalGamesManager(debugManager, global.crashReporter);
     global.steamLocalGamesManager = steamLocalGames; // Tornar disponível globalmente
-    debugManager.info('✅ Steam Local Games Manager inicializado');
 
     // Inicializar Games Manager
     gamesManager = setupGames(configManager, global.crashReporter);
@@ -770,8 +905,6 @@ async function initializeApp() {
       createMainWindow();
     }, 1500);
   } catch (error) {
-    debugManager.error('❌ Erro na inicialização:', error);
-
     // Mostrar dialog de erro
     dialog.showErrorBox(
       'Erro de Inicialização',
@@ -783,7 +916,13 @@ async function initializeApp() {
 }
 
 // Eventos do Electron
-app.whenReady().then(initializeApp);
+app.whenReady().then(async () => {
+  try {
+    await initializeApp();
+  } catch (error) {
+    app.quit();
+  }
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
@@ -818,6 +957,16 @@ app.on('before-quit', async event => {
       debugManager.log('🧹 Limpando splash window...');
       splashWindow.close();
       splashWindow = null;
+    }
+
+    // Cleanup dos processos sandbox
+    try {
+      debugManager.log('🧹 Finalizando processos sandbox...');
+      const sandboxManager = getSandboxManager();
+      await sandboxManager.shutdown();
+      debugManager.log('✅ Processos sandbox finalizados');
+    } catch (error) {
+      debugManager.error('❌ Erro ao finalizar processos sandbox:', error);
     }
 
     debugManager.log('✅ Cleanup concluído com sucesso!');
@@ -918,6 +1067,8 @@ ipcMain.handle('system:close', () => {
   const focusedWindow = BrowserWindow.getFocusedWindow();
   if (focusedWindow) focusedWindow.close();
 });
+
+// Handlers window:* são configurados em src/main/modules/window-manager.js via setupWindowManager(ipcMain, store).
 
 // Handler para verificar se é versão instalada
 ipcMain.handle('system:isInstalledVersion', () => {

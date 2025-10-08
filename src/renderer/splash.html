@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title data-i18n="splash.title">Achievements Manager - Carregando</title>
   
+  <!-- CSP para segurança -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; font-src 'self'; img-src 'self' data:; script-src 'self' 'unsafe-inline'; object-src 'none'; connect-src 'self';">
+  
   <!-- Sistema de internacionalização será carregado dinamicamente -->
   <style>
     * {
@@ -394,12 +397,11 @@
       <div class="logo">🏆</div>
     </div>
     
-    <h1 class="title" data-i18n="splash.title">Achievements Manager</h1>
-    <p class="subtitle" data-i18n="splash.subtitle">Gerenciador de Conquistas para Jogos</p>
-    <div class="version" data-i18n="splash.version">v0.0.1-beta</div>
+    <h1 class="title">Achievements Manager</h1>
+    <p class="subtitle">Gerenciador de Conquistas para Jogos</p>
+    <div class="version">v0.0.1-beta</div>
     
     <div class="loading-section">
-      <div class="loading-text" id="loadingText" data-i18n="splash.loading.modules">Carregando módulos...</div>
       <div class="loading-progress">
         <div class="loading-progress-bar" id="progressBar"></div>
       </div>
@@ -501,7 +503,6 @@
     // Simular carregamento com progresso e fases traduzidas
     function simulateLoading() {
       const progressBar = document.getElementById('progressBar');
-      const loadingText = document.getElementById('loadingText');
       
       let progress = 0;
       let currentPhase = 0;
@@ -529,21 +530,6 @@
         if (newPhase !== -1 && newPhase !== currentPhase) {
           currentPhase = newPhase;
           const phaseKey = loadingPhases[currentPhase];
-          
-          // Atualizar texto de carregamento com tradução
-          if (window.t) {
-            loadingText.textContent = window.t(phaseKey);
-          }
-        }
-        
-        if (progress >= 100) {
-          setTimeout(() => {
-            // Aqui seria onde o Electron carregaria a janela principal
-            if (window.t) {
-              loadingText.textContent = window.t('splash.loading.complete');
-            }
-          }, 500);
-          return;
         }
         
         // Próxima atualização
@@ -583,9 +569,6 @@
       try {
         // Aplicar modo lite primeiro, antes de criar elementos
         applyLiteModeIfNeeded();
-        
-        // Inicializar sistema de internacionalização
-        await initializeI18n();
         
         // Criar elementos visuais
         createParticles();

@@ -122,6 +122,7 @@ dist
 # Stores VSCode versions used for testing VSCode extensions
 .vscode-test
 .vscode
+.trae
 
 # yarn v2
 .yarn/cache
@@ -239,5 +240,4 @@ examples/
 
 **/*tmp*
 **/*temp*
-Indexes
-Scripts
+Indexes/

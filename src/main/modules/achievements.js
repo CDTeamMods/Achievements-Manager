@@ -88,9 +88,6 @@ class AchievementsManager {
 
   async initialize() {
     try {
-      // Carregar API key salva, se houver
-      const steamApiKey = await this.configManager.get('steamApiKey');
-      if (steamApiKey) this.apiKey = steamApiKey;
       this.isInitialized = true;
       this.debugManager.log('✅ AchievementsManager inicializado com sucesso');
     } catch (error) {
@@ -293,8 +290,7 @@ class AchievementsManager {
         params: { key: apiKey, steamids: testId },
       });
 
-      // Salvar API key nas configurações
-      await this.configManager.set('steamApiKey', apiKey);
+      // Configurar fonte da API
       await this.configManager.set('apiSource', 'steam');
 
       this.apiKey = apiKey;

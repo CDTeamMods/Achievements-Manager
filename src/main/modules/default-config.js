@@ -18,20 +18,48 @@ class DefaultConfigManager {
    */
   getDefaultAppConfig() {
     return {
+      // Configurações básicas
       setupComplete: false,
-      language: 'en',
-      theme: 'auto',
+      language: 'pt-BR',
+      theme: 'dark',
       liteMode: true,
       virtualScrolling: true,
-      showTooltips: true,
-      notifications: {
-        enabled: true,
-        sound: true,
-        position: 'bottom-right',
+      autoStartWindows: false,
+      minimizeToTray: false,
+      isInstalledVersion: false,
+
+      // Configurações de API
+      apiSource: 'steam',
+
+      // Configurações de performance
+      performance: {
+        enableVirtualScrolling: true,
+        enableLazyLoading: true,
+        showTooltips: true,
+        autoSync: true,
+        cacheSize: 100,
       },
 
-      autoUpdate: true,
+      // Configurações de janela
+      windowBounds: {
+        width: 1200,
+        height: 800,
+        x: undefined,
+        y: undefined,
+      },
+
+      // Configurações individuais (para compatibilidade)
+      showTooltips: true,
+      autoSync: true,
+      cacheSize: "100",
+
+      // Configurações de sistema
       crashReports: true,
+
+      // Cache
+      cache: {
+        images: {}
+      }
     };
   }
 

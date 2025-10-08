@@ -2,7 +2,7 @@
   "name": "achievements-manager",
   "version": "0.0.1-beta",
   "main": "dist/main/main.js",
-  "description": "Gerenciador moderno de conquistas para jogos com suporte a múltiplas plataformas",
+  "description": "Achievement Manager - Modern game achievements manager with multi-platform support",
   "author": {
     "name": "CDTeamMods",
     "email": "contato@cdteam.xyz",
@@ -22,7 +22,8 @@
     "yarn": ">= 1.22.22"
   },
   "scripts": {
-    "publish:public": "node scripts/strip-and-commit.mjs \"chore: strip comments (public)\"",
+    "precommit": "yarm format && yarn precommit:clearinfo",
+    "precommit:clearinfo": "node Scripts/strip-comments.mjs",
     "start": "electron-vite .",
     "dev": "cross-env DEBUG_TOOLS=false electron-vite dev --mode development",
     "dev:debug": "cross-env DEBUG_TOOLS=true electron-vite dev --mode development",
@@ -30,12 +31,11 @@
     "build:win": "electron-vite build && electron-builder --win",
     "preview": "electron-vite preview",
     "postinstall": "electron-builder install-app-deps",
-    "clear": "babel src --out-dir src_dist",
-    "clean": "rimraf dist",
+    "clean": "rimraf dist release",
     "clean:all": "rimraf dist node_modules yarn.lock && yarn install",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
     "lint:fix": "eslint src --ext .js,.jsx,.ts,.tsx --fix",
-    "format": "yarn format:write && yarn clear",
+    "format": "yarn format:write",
     "format:write": "prettier --write \"src/**/*.{js,jsx,ts,tsx,json,css}\"",
     "format:check": "prettier --check \"src/**/*.{js,jsx,ts,tsx,json,css}\"",
     "lint-staged": "lint-staged",
@@ -46,9 +46,6 @@
     "electron-store": "^11.0.0"
   },
   "devDependencies": {
-    "@babel/cli": "^7.28.3",
-    "@babel/core": "^7.28.4",
-    "@babel/preset-env": "^7.28.3",
     "@eslint/js": "^9.36.0",
     "@types/node": "^24.6.2",
     "autoprefixer": "^10.4.21",
@@ -106,6 +103,9 @@
       ],
       "icon": "assets/icons/icon.ico",
       "requestedExecutionLevel": "asInvoker"
+    },
+    "portable": {
+      "artifactName": "${productName} ${version} Portable.${ext}"
     },
     "nsis": {
       "oneClick": false,

@@ -595,27 +595,10 @@
 [data-lite-mode="true"] *::after {
   animation: none !important;
   transition: none !important;
-  transform: none !important;
   animation-duration: 0s !important;
   transition-duration: 0s !important;
   animation-delay: 0s !important;
   transition-delay: 0s !important;
-}
-
-/* Desabilita hovers específicos */
-[data-lite-mode="true"] .hover-lift:hover,
-[data-lite-mode="true"] .hover-scale:hover,
-[data-lite-mode="true"] .hover-rotate:hover,
-[data-lite-mode="true"] .click-scale:active {
-  transform: none !important;
-}
-
-[data-lite-mode="true"] .hover-lift:hover {
-  box-shadow: none !important;
-}
-
-[data-lite-mode="true"] .hover-glow:hover {
-  box-shadow: none !important;
 }
 
 /* Desabilita classes de animação específicas */
@@ -639,16 +622,9 @@
   transform: none !important;
 }
 
-/* Desabilita animações de loading e skeleton no modo lite */
-[data-lite-mode="true"] .loading-spinner,
+/* Manter animações de loading essenciais no modo lite, mas simplificar skeleton e shimmer */
 [data-lite-mode="true"] .skeleton-loading,
 [data-lite-mode="true"] .shimmer-effect {
-  animation: none !important;
-}
-
-/* Desabilita animações de progresso no modo lite */
-[data-lite-mode="true"] .progress-bar,
-[data-lite-mode="true"] .progress-indicator {
   animation: none !important;
 }
 
@@ -659,16 +635,7 @@
   opacity: 0 !important;
 }
 
-/* Desabilita animações específicas da splash screen */
-[data-lite-mode="true"] .splash-container,
-[data-lite-mode="true"] .loading-content,
-[data-lite-mode="true"] .loading-logo,
-[data-lite-mode="true"] .loading-text,
-[data-lite-mode="true"] .loading-progress {
-  animation: none !important;
-  opacity: 1 !important;
-  transform: none !important;
-}
+/* Splash screen já otimizado no lite-mode-optimizations.css */
 
 /* Desabilita gradientes animados */
 [data-lite-mode="true"] body::after,

@@ -1,18 +1,4 @@
 {
-  "splash": {
-    "title": "Achievements Manager",
-    "subtitle": "Game Achievements Manager",
-    "version": "v0.0.1-beta",
-    "loading": {
-      "modules": "Loading modules...",
-      "initializing": "Initializing system...",
-      "apis": "Connecting APIs...",
-      "interface": "Preparing interface...",
-      "settings": "Loading settings...",
-      "complete": "Loading complete!",
-      "components": "Loading components..."
-    }
-  },
   "common": {
     "loading": "Loading...",
     "error": "Error",
@@ -85,6 +71,7 @@
     }
   },
   "errors": {
+    "gameInfoLoadError": "Failed to load game information",
     "pageLoad": "Error loading page",
     "pageLoadMessage": "An error occurred while loading the page content.",
     "unknownError": "An unknown error occurred",
@@ -127,6 +114,7 @@
       "locked": "Locked",
       "earned": "Earned",
       "earnedOn": "Earned on",
+      "globalProgressWarning": "⚠️ Progress based on global data",
       "notEarned": "Not earned",
       "loadError": "Error loading achievements"
     },
@@ -374,7 +362,16 @@
         "authenticating": "Authenticating...",
         "status": {
           "notTested": "Not tested",
-          "notTested.description": "Configure your credentials and test the connection"
+          "notTested.description": "Configure your credentials and test the connection",
+          "disconnected": "Disconnected",
+          "disconnected.description": "Configure your credentials to connect",
+          "unavailable": "System unavailable",
+          "unavailable.description": "Feature available only on the desktop application",
+          "error": "Verification error",
+          "error.description": "An error occurred while verifying the Steam connection",
+          "timeout": "Connection timed out",
+          "timeout.description": "Steam API did not respond within the expected time. Check your network and try again.",
+          "disconnected.success": "Disconnected from Steam API"
         }
       }
     },
@@ -384,12 +381,14 @@
     "saved": "Settings saved successfully!",
     "reset": "Settings reset successfully!",
     "restart": {
-      "title": "Restart Required",
-      "message": "To apply language changes, the application needs to be restarted.",
-      "confirm": "Restart Now",
-      "cancel": "Cancel",
-      "restarting": "Restarting application...",
-      "error": "Error restarting application"
+      "modal": {
+        "title": "Restart Required",
+        "message": "To apply language changes, the application needs to be restarted.",
+        "confirm": "Restart Now",
+        "cancel": "Cancel",
+        "restarting": "Restarting application...",
+        "error": "Error restarting application"
+      }
     }
   },
   "goldberg": {
@@ -399,7 +398,19 @@
       "checking": "Checking Goldberg files...",
       "found": "Goldberg detected",
       "notFound": "Goldberg not found",
-      "error": "Verification error"
+      "notFound.description": "No Goldberg SteamEmu Saves installation detected",
+      "empty": "Empty Goldberg folder",
+      "empty.description": "The folder exists but does not contain games to convert",
+      "unavailable": "System unavailable",
+      "unavailable.description": "Feature available only on the desktop application",
+      "error": "Verification error",
+      "error.description": "An error occurred while verifying Goldberg files"
+    },
+    "warning": {
+      "userNotDetected": {
+        "label": "⚠️ Warning:",
+        "description": "User not detected automatically. Check system permissions."
+      }
     },
     "settings": {
       "autoMigration": "Auto Migration",

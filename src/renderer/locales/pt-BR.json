@@ -1,18 +1,4 @@
 {
-  "splash": {
-    "title": "Achievements Manager",
-    "subtitle": "Gerenciador de Conquistas para Jogos",
-    "version": "v0.0.1-beta",
-    "loading": {
-      "modules": "Carregando módulos...",
-      "initializing": "Inicializando sistema...",
-      "apis": "Conectando APIs...",
-      "interface": "Preparando interface...",
-      "settings": "Carregando configurações...",
-      "complete": "Carregamento concluído!",
-      "components": "Carregando componentes..."
-    }
-  },
   "common": {
     "loading": "Carregando...",
     "error": "Erro",
@@ -85,6 +71,7 @@
     }
   },
   "errors": {
+    "gameInfoLoadError": "Erro ao carregar informações do jogo",
     "pageLoad": "Erro ao carregar página",
     "pageLoadMessage": "Ocorreu um erro ao carregar o conteúdo da página.",
     "unknownError": "Ocorreu um erro desconhecido",
@@ -127,6 +114,7 @@
       "locked": "Bloqueadas",
       "earned": "Conquistada",
       "earnedOn": "Conquistada em",
+      "globalProgressWarning": "⚠️ Progresso baseado em dados globais",
       "notEarned": "Não conquistada",
       "loadError": "Erro ao carregar conquistas"
     },
@@ -380,7 +368,16 @@
         "authenticating": "Autenticando...",
         "status": {
           "notTested": "Não testado",
-          "notTested.description": "Configure suas credenciais e teste a conexão"
+          "notTested.description": "Configure suas credenciais e teste a conexão",
+          "disconnected": "Desconectado",
+          "disconnected.description": "Configure suas credenciais para conectar",
+          "unavailable": "Sistema não disponível",
+          "unavailable.description": "Funcionalidade disponível apenas no aplicativo desktop",
+          "error": "Erro na verificação",
+          "error.description": "Ocorreu um erro ao verificar a conexão Steam",
+          "timeout": "Tempo de conexão esgotado",
+          "timeout.description": "A Steam API não respondeu dentro do tempo esperado. Verifique sua rede e tente novamente.",
+          "disconnected.success": "Desconectado da Steam API"
         }
       }
     },
@@ -390,12 +387,14 @@
     "saved": "Configurações salvas com sucesso!",
     "reset": "Configurações restauradas com sucesso!",
     "restart": {
-      "title": "Reinicialização Necessária",
-      "message": "Para aplicar as mudanças de idioma, o aplicativo precisa ser reiniciado.",
-      "confirm": "Reiniciar Agora",
-      "cancel": "Cancelar",
-      "restarting": "Reiniciando aplicativo...",
-      "error": "Erro ao reiniciar aplicativo"
+      "modal": {
+        "title": "Reinicialização Necessária",
+        "message": "Para aplicar as mudanças de idioma, o aplicativo precisa ser reiniciado.",
+        "confirm": "Reiniciar Agora",
+        "cancel": "Cancelar",
+        "restarting": "Reiniciando aplicativo...",
+        "error": "Erro ao reiniciar aplicativo"
+      }
     }
   },
   "goldberg": {
@@ -405,7 +404,19 @@
       "checking": "Verificando arquivos Goldberg...",
       "found": "Goldberg detectado",
       "notFound": "Goldberg não encontrado",
-      "error": "Erro na verificação"
+      "notFound.description": "Nenhuma instalação Goldberg SteamEmu Saves detectada",
+      "empty": "Pasta Goldberg vazia",
+      "empty.description": "A pasta existe mas não contém jogos para converter",
+      "unavailable": "Sistema não disponível",
+      "unavailable.description": "Funcionalidade disponível apenas no aplicativo desktop",
+      "error": "Erro na verificação",
+      "error.description": "Ocorreu um erro ao verificar os arquivos Goldberg"
+    },
+    "warning": {
+      "userNotDetected": {
+        "label": "⚠️ Aviso:",
+        "description": "Usuário não detectado automaticamente. Verifique as permissões do sistema."
+      }
     },
     "settings": {
       "autoMigration": "Migração Automática",
