@@ -2,6 +2,11 @@ var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 var __defProp2 = Object.defineProperty;
 var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+var __defProp22 = Object.defineProperty;
+var __name22 = /* @__PURE__ */ __name2(
+  (target, value) => __defProp22(target, "name", { value, configurable: true }),
+  "__name"
+);
 const { contextBridge, ipcRenderer } = require("electron");
 function analyzeObject(obj, path = "root") {
   const analysis = {
@@ -34,6 +39,7 @@ function analyzeObject(obj, path = "root") {
 }
 __name(analyzeObject, "analyzeObject");
 __name2(analyzeObject, "analyzeObject");
+__name22(analyzeObject, "analyzeObject");
 function sanitizeArgs(args) {
   if (!Array.isArray(args)) return args;
   return args.map((arg, index) => {
@@ -105,6 +111,7 @@ function sanitizeArgs(args) {
 }
 __name(sanitizeArgs, "sanitizeArgs");
 __name2(sanitizeArgs, "sanitizeArgs");
+__name22(sanitizeArgs, "sanitizeArgs");
 function isDebugToolsEnabled() {
   if (process.env.DEBUG_TOOLS === "true") return true;
   if (process.env.DEBUG_TOOLS === "false") return false;
@@ -118,6 +125,7 @@ function isDebugToolsEnabled() {
 }
 __name(isDebugToolsEnabled, "isDebugToolsEnabled");
 __name2(isDebugToolsEnabled, "isDebugToolsEnabled");
+__name22(isDebugToolsEnabled, "isDebugToolsEnabled");
 function simpleInvoke(channel, ...args) {
   return ipcRenderer.invoke(channel, ...args).catch((error) => {
     if (error.message && (error.message.includes("could not be cloned") || error.message.includes("IpcRendererInternal.send") || error.message.includes("An object could not be cloned"))) {
@@ -128,6 +136,7 @@ function simpleInvoke(channel, ...args) {
 }
 __name(simpleInvoke, "simpleInvoke");
 __name2(simpleInvoke, "simpleInvoke");
+__name22(simpleInvoke, "simpleInvoke");
 function debugInvoke(channel, ...args) {
   if (!isDebugToolsEnabled()) {
     return simpleInvoke(channel, ...args);
@@ -176,6 +185,7 @@ function debugInvoke(channel, ...args) {
 }
 __name(debugInvoke, "debugInvoke");
 __name2(debugInvoke, "debugInvoke");
+__name22(debugInvoke, "debugInvoke");
 const electronAPI = {
   // Configurações
   config: {
@@ -341,7 +351,7 @@ const electronAPI = {
   closeWindow: debugInvoke("window:close"),
   isMaximized: debugInvoke("window:isMaximized"),
   // Eventos
-  on: /* @__PURE__ */ __name2((channel, callback) => {
+  on: /* @__PURE__ */ __name22((channel, callback) => {
     const validChannels = [
       "game-added",
       "game-updated",
@@ -361,7 +371,7 @@ const electronAPI = {
       "goldberg-migration-completed"
     ];
     if (validChannels.includes(channel)) {
-      const safeCallback = /* @__PURE__ */ __name2((event, ...args) => {
+      const safeCallback = /* @__PURE__ */ __name22((event, ...args) => {
         try {
           const safeArgs = args.map((arg) => {
             if (arg === null || arg === void 0 || typeof arg === "string" || typeof arg === "number" || typeof arg === "boolean") {
@@ -394,10 +404,10 @@ const electronAPI = {
       ipcRenderer.on(channel, safeCallback);
     }
   }, "on"),
-  off: /* @__PURE__ */ __name2((channel, callback) => {
+  off: /* @__PURE__ */ __name22((channel, callback) => {
     ipcRenderer.removeListener(channel, callback);
   }, "off"),
-  once: /* @__PURE__ */ __name2((channel, callback) => {
+  once: /* @__PURE__ */ __name22((channel, callback) => {
     const validChannels = [
       "game-added",
       "game-updated",
@@ -412,7 +422,7 @@ const electronAPI = {
       "theme-changed"
     ];
     if (validChannels.includes(channel)) {
-      const safeCallback = /* @__PURE__ */ __name2((event, ...args) => {
+      const safeCallback = /* @__PURE__ */ __name22((event, ...args) => {
         try {
           const safeArgs = args.map((arg) => {
             if (arg === null || arg === void 0 || typeof arg === "string" || typeof arg === "number" || typeof arg === "boolean") {

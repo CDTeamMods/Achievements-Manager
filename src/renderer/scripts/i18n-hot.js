@@ -42,6 +42,11 @@ var __name222222222 = /* @__PURE__ */ __name22222222(
   (target, value) => __defProp222222222(target, "name", { value, configurable: true }),
   "__name"
 );
+var __defProp2222222222 = Object.defineProperty;
+var __name2222222222 = /* @__PURE__ */ __name222222222(
+  (target, value) => __defProp2222222222(target, "name", { value, configurable: true }),
+  "__name"
+);
 import ptBRTranslations from "../locales/pt-BR.json";
 import enTranslations from "../locales/en.json";
 let translations = ptBRTranslations;
@@ -69,6 +74,7 @@ __name222222(loadTranslations, "loadTranslations");
 __name2222222(loadTranslations, "loadTranslations");
 __name22222222(loadTranslations, "loadTranslations");
 __name222222222(loadTranslations, "loadTranslations");
+__name2222222222(loadTranslations, "loadTranslations");
 async function initI18n(language = "en") {
   currentLanguage = language;
   translations = await loadTranslations(language);
@@ -88,6 +94,7 @@ __name222222(initI18n, "initI18n");
 __name2222222(initI18n, "initI18n");
 __name22222222(initI18n, "initI18n");
 __name222222222(initI18n, "initI18n");
+__name2222222222(initI18n, "initI18n");
 async function changeLanguage(language) {
   if (!language || typeof language !== "string") {
     return;
@@ -107,6 +114,7 @@ __name222222(changeLanguage, "changeLanguage");
 __name2222222(changeLanguage, "changeLanguage");
 __name22222222(changeLanguage, "changeLanguage");
 __name222222222(changeLanguage, "changeLanguage");
+__name2222222222(changeLanguage, "changeLanguage");
 async function syncLanguageWithBackend(language) {
   if (!language || typeof language !== "string") {
     return false;
@@ -127,8 +135,9 @@ __name222222(syncLanguageWithBackend, "syncLanguageWithBackend");
 __name2222222(syncLanguageWithBackend, "syncLanguageWithBackend");
 __name22222222(syncLanguageWithBackend, "syncLanguageWithBackend");
 __name222222222(syncLanguageWithBackend, "syncLanguageWithBackend");
+__name2222222222(syncLanguageWithBackend, "syncLanguageWithBackend");
 function t(key, params = {}) {
-  const getNestedValue = /* @__PURE__ */ __name222222222((obj, path) => {
+  const getNestedValue = /* @__PURE__ */ __name2222222222((obj, path) => {
     return path.split(".").reduce((current, prop) => {
       return current && current[prop] !== void 0 ? current[prop] : void 0;
     }, obj);
@@ -160,6 +169,7 @@ __name222222(t, "t");
 __name2222222(t, "t");
 __name22222222(t, "t");
 __name222222222(t, "t");
+__name2222222222(t, "t");
 function translatePage() {
   const elements = document.querySelectorAll("[data-i18n]");
   elements.forEach((element) => {
@@ -182,6 +192,7 @@ __name222222(translatePage, "translatePage");
 __name2222222(translatePage, "translatePage");
 __name22222222(translatePage, "translatePage");
 __name222222222(translatePage, "translatePage");
+__name2222222222(translatePage, "translatePage");
 async function reloadTranslations() {
   translationCache.clear();
   translations = await loadTranslations(currentLanguage);
@@ -197,6 +208,7 @@ __name222222(reloadTranslations, "reloadTranslations");
 __name2222222(reloadTranslations, "reloadTranslations");
 __name22222222(reloadTranslations, "reloadTranslations");
 __name222222222(reloadTranslations, "reloadTranslations");
+__name2222222222(reloadTranslations, "reloadTranslations");
 async function reloadCurrentTranslations() {
   if (!import.meta.env?.DEV) return;
   translationCache.clear();
@@ -213,6 +225,7 @@ __name222222(reloadCurrentTranslations, "reloadCurrentTranslations");
 __name2222222(reloadCurrentTranslations, "reloadCurrentTranslations");
 __name22222222(reloadCurrentTranslations, "reloadCurrentTranslations");
 __name222222222(reloadCurrentTranslations, "reloadCurrentTranslations");
+__name2222222222(reloadCurrentTranslations, "reloadCurrentTranslations");
 if (import.meta.hot) {
   import.meta.hot.accept(["../locales/pt-BR.json", "../locales/en.json"], (newModules) => {
     if (newModules) {

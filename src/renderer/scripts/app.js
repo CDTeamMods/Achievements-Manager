@@ -42,6 +42,11 @@ var __name222222222 = /* @__PURE__ */ __name22222222(
   (target, value) => __defProp222222222(target, "name", { value, configurable: true }),
   "__name"
 );
+var __defProp2222222222 = Object.defineProperty;
+var __name2222222222 = /* @__PURE__ */ __name222222222(
+  (target, value) => __defProp2222222222(target, "name", { value, configurable: true }),
+  "__name"
+);
 import { initI18n } from "./i18n-hot.js";
 import { lazyLoader } from "./lazy-loader.js";
 import { codeSplitter } from "./code-splitter.js";
@@ -75,6 +80,9 @@ class AchievementsApp {
   }
   static {
     __name222222222(this, "AchievementsApp");
+  }
+  static {
+    __name2222222222(this, "AchievementsApp");
   }
   constructor() {
     this.isElectron = typeof window !== "undefined" && window.electronAPI;

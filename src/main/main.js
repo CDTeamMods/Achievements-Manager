@@ -2,7 +2,12 @@ var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 var __defProp2 = Object.defineProperty;
 var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
-var require_main = /* @__PURE__ */ __name2(async (module) => {
+var __defProp22 = Object.defineProperty;
+var __name22 = /* @__PURE__ */ __name2(
+  (target, value) => __defProp22(target, "name", { value, configurable: true }),
+  "__name"
+);
+var require_main = /* @__PURE__ */ __name22(async (module) => {
   const { setupUTF8Encoding, setupConsoleUTF8 } = require("./utils/encoding");
   setupUTF8Encoding();
   setupConsoleUTF8();
@@ -114,6 +119,7 @@ var require_main = /* @__PURE__ */ __name2(async (module) => {
   }
   __name(isInstalledVersion, "isInstalledVersion");
   __name2(isInstalledVersion, "isInstalledVersion");
+  __name22(isInstalledVersion, "isInstalledVersion");
   let store = null;
   let mainWindow;
   let splashWindow;
@@ -156,6 +162,7 @@ var require_main = /* @__PURE__ */ __name2(async (module) => {
   }
   __name(createSplashWindow, "createSplashWindow");
   __name2(createSplashWindow, "createSplashWindow");
+  __name22(createSplashWindow, "createSplashWindow");
   function createMainWindow() {
     const bounds = windowBoundsCache;
     const preloadPath = path.join(__dirname, "../preload/preload.js");
@@ -199,13 +206,13 @@ var require_main = /* @__PURE__ */ __name2(async (module) => {
     securityManager.setupSecurityHeaders(mainWindow.webContents);
     securityManager.setupURLValidation(mainWindow.webContents);
     setupWindowEvents();
-    const closeSplashIfPresent = /* @__PURE__ */ __name2(() => {
+    const closeSplashIfPresent = /* @__PURE__ */ __name22(() => {
       if (splashWindow && !splashWindow.isDestroyed()) {
         splashWindow.close();
         splashWindow = null;
       }
     }, "closeSplashIfPresent");
-    const boostWindowFocus = /* @__PURE__ */ __name2(() => {
+    const boostWindowFocus = /* @__PURE__ */ __name22(() => {
       if (!mainWindow || mainWindow.isDestroyed()) return;
       mainWindow.show();
       setTimeout(() => {
@@ -217,7 +224,7 @@ var require_main = /* @__PURE__ */ __name2(async (module) => {
         }, 1e3);
       }, 500);
     }, "boostWindowFocus");
-    const handleDidFailLoad = /* @__PURE__ */ __name2((validatedURL) => {
+    const handleDidFailLoad = /* @__PURE__ */ __name22((validatedURL) => {
       if (isDev && validatedURL && validatedURL.includes("localhost:3000")) {
         debugManager.warn(
           "\u26A0\uFE0F Servidor de desenvolvimento n\xE3o dispon\xEDvel, usando arquivo est\xE1tico"
@@ -226,11 +233,11 @@ var require_main = /* @__PURE__ */ __name2(async (module) => {
         return;
       }
     }, "handleDidFailLoad");
-    const handleDidFinishLoad = /* @__PURE__ */ __name2(() => {
+    const handleDidFinishLoad = /* @__PURE__ */ __name22(() => {
       if (!isDev) return;
       debugManager.log("\u2705 P\xE1gina carregada com sucesso");
     }, "handleDidFinishLoad");
-    const ensureLiteModeCSS = /* @__PURE__ */ __name2(() => {
+    const ensureLiteModeCSS = /* @__PURE__ */ __name22(() => {
       if (!store.get("liteMode")) return;
       mainWindow.webContents.insertCSS(`
         * {
@@ -282,8 +289,9 @@ var require_main = /* @__PURE__ */ __name2(async (module) => {
   }
   __name(createMainWindow, "createMainWindow");
   __name2(createMainWindow, "createMainWindow");
+  __name22(createMainWindow, "createMainWindow");
   function setupWindowEvents() {
-    const saveBoundsIfNormal = /* @__PURE__ */ __name2(() => {
+    const saveBoundsIfNormal = /* @__PURE__ */ __name22(() => {
       if (!mainWindow || mainWindow.isDestroyed()) return;
       const isNormalState = !mainWindow.isMaximized() && !mainWindow.isMinimized() && !mainWindow.isFullScreen();
       if (isNormalState) {
@@ -322,6 +330,7 @@ var require_main = /* @__PURE__ */ __name2(async (module) => {
   }
   __name(setupWindowEvents, "setupWindowEvents");
   __name2(setupWindowEvents, "setupWindowEvents");
+  __name22(setupWindowEvents, "setupWindowEvents");
   function setupSystemTheme() {
     const theme = store.get("theme", "auto");
     if (theme === "auto") {
@@ -395,6 +404,7 @@ var require_main = /* @__PURE__ */ __name2(async (module) => {
   }
   __name(setupSystemTheme, "setupSystemTheme");
   __name2(setupSystemTheme, "setupSystemTheme");
+  __name22(setupSystemTheme, "setupSystemTheme");
   function setupAutoStart() {
     ipcMain.handle("set-auto-start", (_event, enabled) => {
       try {
@@ -430,6 +440,7 @@ var require_main = /* @__PURE__ */ __name2(async (module) => {
   }
   __name(setupAutoStart, "setupAutoStart");
   __name2(setupAutoStart, "setupAutoStart");
+  __name22(setupAutoStart, "setupAutoStart");
   function protectCriticalSettings(store2, pathManager) {
     if (!pathManager || pathManager.isInstalledVersion()) {
       return;
@@ -451,6 +462,7 @@ var require_main = /* @__PURE__ */ __name2(async (module) => {
   }
   __name(protectCriticalSettings, "protectCriticalSettings");
   __name2(protectCriticalSettings, "protectCriticalSettings");
+  __name22(protectCriticalSettings, "protectCriticalSettings");
   async function initializeApp() {
     try {
       const pathManager = await setupPathManager();
@@ -537,6 +549,7 @@ var require_main = /* @__PURE__ */ __name2(async (module) => {
   }
   __name(initializeApp, "initializeApp");
   __name2(initializeApp, "initializeApp");
+  __name22(initializeApp, "initializeApp");
   app.whenReady().then(async () => {
     try {
       await initializeApp();

@@ -18,18 +18,26 @@ var __name2222 = /* @__PURE__ */ __name222(
   "__name"
 );
 var __defProp22222 = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name22222 = /* @__PURE__ */ __name2222(
   (target, value) => __defProp22222(target, "name", { value, configurable: true }),
   "__name"
 );
-var __commonJS = /* @__PURE__ */ __name2222(
-  (cb, mod) => /* @__PURE__ */ __name2222(
-    /* @__PURE__ */ __name222(
-      /* @__PURE__ */ __name22(
-        /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
-          return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-        }, "__require"), "__require"),
+var __defProp222222 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name222222 = /* @__PURE__ */ __name22222(
+  (target, value) => __defProp222222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __commonJS = /* @__PURE__ */ __name22222(
+  (cb, mod) => /* @__PURE__ */ __name22222(
+    /* @__PURE__ */ __name2222(
+      /* @__PURE__ */ __name222(
+        /* @__PURE__ */ __name22(
+          /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
+            return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+          }, "__require"), "__require"),
+          "__require"
+        ),
         "__require"
       ),
       "__require"
@@ -58,6 +66,9 @@ var require_debug_manager = __commonJS({
       }
       static {
         __name22222(this, "DebugManager");
+      }
+      static {
+        __name222222(this, "DebugManager");
       }
       constructor() {
         this.isDebugEnabled = process.env.DEBUG_TOOLS === "true";
@@ -198,6 +209,7 @@ var require_debug_manager = __commonJS({
     __name222(getDebugManager, "getDebugManager");
     __name2222(getDebugManager, "getDebugManager");
     __name22222(getDebugManager, "getDebugManager");
+    __name222222(getDebugManager, "getDebugManager");
     module.exports = { DebugManager, getDebugManager };
   }
 });

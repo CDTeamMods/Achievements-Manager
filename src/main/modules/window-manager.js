@@ -18,18 +18,26 @@ var __name2222 = /* @__PURE__ */ __name222(
   "__name"
 );
 var __defProp22222 = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name22222 = /* @__PURE__ */ __name2222(
   (target, value) => __defProp22222(target, "name", { value, configurable: true }),
   "__name"
 );
-var __commonJS = /* @__PURE__ */ __name2222(
-  (cb, mod) => /* @__PURE__ */ __name2222(
-    /* @__PURE__ */ __name222(
-      /* @__PURE__ */ __name22(
-        /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
-          return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-        }, "__require"), "__require"),
+var __defProp222222 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name222222 = /* @__PURE__ */ __name22222(
+  (target, value) => __defProp222222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __commonJS = /* @__PURE__ */ __name22222(
+  (cb, mod) => /* @__PURE__ */ __name22222(
+    /* @__PURE__ */ __name2222(
+      /* @__PURE__ */ __name222(
+        /* @__PURE__ */ __name22(
+          /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
+            return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+          }, "__require"), "__require"),
+          "__require"
+        ),
         "__require"
       ),
       "__require"
@@ -60,6 +68,9 @@ var require_window_manager = __commonJS({
       static {
         __name22222(this, "WindowManager");
       }
+      static {
+        __name222222(this, "WindowManager");
+      }
       constructor(store) {
         this.store = store;
         this.windows = /* @__PURE__ */ new Map();
@@ -69,7 +80,7 @@ var require_window_manager = __commonJS({
        * Configura handlers IPC para gerenciamento de janelas
        */
       setupIPC(ipcMain) {
-        const getEventWindow = /* @__PURE__ */ __name22222((_event) => {
+        const getEventWindow = /* @__PURE__ */ __name222222((_event) => {
           const winFromSender = BrowserWindow.fromWebContents(_event.sender);
           if (winFromSender) return winFromSender;
           const focused = BrowserWindow.getFocusedWindow();
@@ -217,6 +228,7 @@ var require_window_manager = __commonJS({
     __name222(setupWindowManager, "setupWindowManager");
     __name2222(setupWindowManager, "setupWindowManager");
     __name22222(setupWindowManager, "setupWindowManager");
+    __name222222(setupWindowManager, "setupWindowManager");
     module.exports = { WindowManager, setupWindowManager };
   }
 });

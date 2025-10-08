@@ -3,9 +3,11 @@ name: Build App (Windows)
 on:
   push:
     branches: [ main ]
+  pull_request:
+    branches: [ main ]
 
 permissions:
-  contents: write
+  contents: write  # necessário para criar release
 
 jobs:
   build:
@@ -19,29 +21,30 @@ jobs:
       - name: Instalar Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 22
+          node-version: 20
+          cache: 'yarn'
 
       - name: Instalar dependências
-        run: npm install
+        run: yarn install --frozen-lockfile
 
       - name: Build do projeto (Electron)
-        run: npm run build
+        run: yarn build
 
       - name: Empacotar (electron-builder)
-        run: npm run build:win
+        run: yarn dist
 
-      - name: Upload de artifact
+      - name: Upload de artifact (sempre, inclusive em PR)
         uses: actions/upload-artifact@v4
         with:
           name: electron-build
-          path: |
-            release/win-unpacked/**
-            release/*.exe
-            
+          path: dist/
+
+      # ===== PEGAR VERSÃO DO PACKAGE.JSON =====
       - name: Ler versão do package.json
         id: pkg
         run: echo "version=$(node -p \"require('./package.json').version\")" >> $env:GITHUB_OUTPUT
 
+      # ===== RELEASE: Somente em push =====
       - name: Criar Release no GitHub
         if: ${{ github.event_name == 'push' }}
         uses: softprops/action-gh-release@v2
@@ -49,7 +52,10 @@ jobs:
           tag_name: v${{ steps.pkg.outputs.version }}
           name: Release v${{ steps.pkg.outputs.version }}
           body: |
+            Build automático do Windows para commit ${{ github.sha }}.
             • Versão: v${{ steps.pkg.outputs.version }}
-          draft: true
+            • Branch: ${{ github.ref_name }}
+          draft: false
+          prerelease: false
           files: |
-            dist/*.exe
+            dist/**

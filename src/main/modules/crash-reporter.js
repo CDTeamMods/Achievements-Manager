@@ -18,18 +18,26 @@ var __name2222 = /* @__PURE__ */ __name222(
   "__name"
 );
 var __defProp22222 = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name22222 = /* @__PURE__ */ __name2222(
   (target, value) => __defProp22222(target, "name", { value, configurable: true }),
   "__name"
 );
-var __commonJS = /* @__PURE__ */ __name2222(
-  (cb, mod) => /* @__PURE__ */ __name2222(
-    /* @__PURE__ */ __name222(
-      /* @__PURE__ */ __name22(
-        /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
-          return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-        }, "__require"), "__require"),
+var __defProp222222 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name222222 = /* @__PURE__ */ __name22222(
+  (target, value) => __defProp222222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __commonJS = /* @__PURE__ */ __name22222(
+  (cb, mod) => /* @__PURE__ */ __name22222(
+    /* @__PURE__ */ __name2222(
+      /* @__PURE__ */ __name222(
+        /* @__PURE__ */ __name22(
+          /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
+            return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+          }, "__require"), "__require"),
+          "__require"
+        ),
         "__require"
       ),
       "__require"
@@ -63,6 +71,9 @@ var require_crash_reporter = __commonJS({
       }
       static {
         __name22222(this, "CrashReporter");
+      }
+      static {
+        __name222222(this, "CrashReporter");
       }
       constructor() {
         this.appName = "Achievements Manager";
@@ -171,7 +182,7 @@ var require_crash_reporter = __commonJS({
         });
       }
       sanitizeErrorData(errorData) {
-        const sanitize = /* @__PURE__ */ __name22222(
+        const sanitize = /* @__PURE__ */ __name222222(
           (obj, depth = 0, seen = /* @__PURE__ */ new WeakSet()) => {
             if (depth > 10) return "[Max Depth Reached]";
             if (obj && typeof obj === "object" && seen.has(obj)) {
@@ -493,6 +504,7 @@ var require_crash_reporter = __commonJS({
     __name222(setupCrashReporter, "setupCrashReporter");
     __name2222(setupCrashReporter, "setupCrashReporter");
     __name22222(setupCrashReporter, "setupCrashReporter");
+    __name222222(setupCrashReporter, "setupCrashReporter");
     function reportRendererError(error, context = {}) {
       if (crashReporter) {
         return crashReporter.reportCrash("renderer-error", error, context);
@@ -505,6 +517,7 @@ var require_crash_reporter = __commonJS({
     __name222(reportRendererError, "reportRendererError");
     __name2222(reportRendererError, "reportRendererError");
     __name22222(reportRendererError, "reportRendererError");
+    __name222222(reportRendererError, "reportRendererError");
     module.exports = { CrashReporter, setupCrashReporter, reportRendererError };
   }
 });

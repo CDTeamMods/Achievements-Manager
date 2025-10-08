@@ -42,6 +42,11 @@ var __name222222222 = /* @__PURE__ */ __name22222222(
   (target, value) => __defProp222222222(target, "name", { value, configurable: true }),
   "__name"
 );
+var __defProp2222222222 = Object.defineProperty;
+var __name2222222222 = /* @__PURE__ */ __name222222222(
+  (target, value) => __defProp2222222222(target, "name", { value, configurable: true }),
+  "__name"
+);
 class EventsManager {
   static {
     __name(this, "EventsManager");
@@ -72,6 +77,9 @@ class EventsManager {
   }
   static {
     __name222222222(this, "EventsManager");
+  }
+  static {
+    __name2222222222(this, "EventsManager");
   }
   constructor(app) {
     this.app = app;
@@ -134,7 +142,7 @@ class EventsManager {
       });
     }
     if (maximizeBtn) {
-      const updateMaximizeUI = /* @__PURE__ */ __name222222222(async () => {
+      const updateMaximizeUI = /* @__PURE__ */ __name2222222222(async () => {
         const isMax = await window.electronAPI.isMaximized();
         const icon = maximizeBtn.querySelector("i");
         if (isMax) {
