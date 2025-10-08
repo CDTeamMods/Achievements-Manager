@@ -1,111 +1,53 @@
-const { contextBridge, ipcRenderer } = require('electron');
-
-// Log imediato para verificar se o preload está sendo executado
-console.log('🔧 [PRELOAD] Preload script iniciado!');
-console.log('🔧 [PRELOAD] contextBridge disponível:', typeof contextBridge);
-console.log('🔧 [PRELOAD] ipcRenderer disponível:', typeof ipcRenderer);
-
-// Função para logs de debug detalhados (só funciona quando DEBUG_TOOLS = true)
-function debugLog(operation, channel, args = null, result = null, error = null) {
-  // Só executar se DEBUG_TOOLS estiver habilitado
-  try {
-    if (
-      process.env.DEBUG_TOOLS !== 'true' &&
-      (typeof localStorage === 'undefined' || localStorage.getItem('DEBUG_TOOLS') !== 'true') &&
-      (typeof window === 'undefined' || window.DEBUG_TOOLS !== true)
-    ) {
-      return; // Não fazer nada se debug não estiver habilitado
-    }
-  } catch (e) {
-    return; // Se houver erro na verificação, não fazer debug
-  }
-
-  const timestamp = new Date().toISOString();
-  // Usar ipcRenderer para enviar logs para o main process onde o DebugManager está disponível
-  try {
-    ipcRenderer.invoke('debug:log', `[DEBUG ${timestamp}] ${operation} - Channel: ${channel}`);
-
-    if (args !== null) {
-      ipcRenderer.invoke('debug:log', `[DEBUG ARGS] Tipo: ${typeof args}, Valor:`, args);
-    }
-
-    if (result !== null) {
-      ipcRenderer.invoke('debug:log', `[DEBUG RESULT] Tipo: ${typeof result}, Valor:`, result);
-    }
-
-    if (error) {
-      ipcRenderer.invoke('debug:error', `[DEBUG ERROR] ${error.message}`, error);
-    }
-  } catch (e) {
-    // Fallback para console se IPC falhar
-    console.log(`[DEBUG ${timestamp}] ${operation} - Channel: ${channel}`);
-    if (args !== null) console.log(`[DEBUG ARGS] Tipo: ${typeof args}, Valor:`, args);
-    if (result !== null) console.log(`[DEBUG RESULT] Tipo: ${typeof result}, Valor:`, result);
-    if (error) console.error(`[DEBUG ERROR] ${error.message}`, error);
-  }
-}
-
-// Função para analisar profundamente objetos problemáticos
-function analyzeObject(obj, path = 'root') {
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+var __defProp2 = Object.defineProperty;
+var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+const { contextBridge, ipcRenderer } = require("electron");
+function analyzeObject(obj, path = "root") {
   const analysis = {
     path,
     type: typeof obj,
-    constructor: obj?.constructor?.name || 'unknown',
+    constructor: obj?.constructor?.name || "unknown",
     isCloneable: false,
-    issues: [],
+    issues: []
   };
-
   try {
     structuredClone(obj);
     analysis.isCloneable = true;
   } catch (error) {
     analysis.issues.push(`structuredClone failed: ${error.message}`);
   }
-
-  if (typeof obj === 'object' && obj !== null) {
-    // Verificar propriedades específicas que podem causar problemas
+  if (typeof obj === "object" && obj !== null) {
     for (const [key, value] of Object.entries(obj)) {
-      if (typeof value === 'function') {
+      if (typeof value === "function") {
         analysis.issues.push(`Function property: ${key}`);
       } else if (value instanceof Node) {
         analysis.issues.push(`DOM Node property: ${key}`);
       } else if (value instanceof Window) {
         analysis.issues.push(`Window object property: ${key}`);
-      } else if (
-        value &&
-        typeof value === 'object' &&
-        value.constructor &&
-        ['HTMLElement', 'EventTarget', 'Navigator', 'Location'].includes(value.constructor.name)
-      ) {
+      } else if (value && typeof value === "object" && value.constructor && ["HTMLElement", "EventTarget", "Navigator", "Location"].includes(value.constructor.name)) {
         analysis.issues.push(`Browser API object property: ${key} (${value.constructor.name})`);
       }
     }
   }
-
   return analysis;
 }
-
-// Função para sanitizar argumentos antes do envio IPC
+__name(analyzeObject, "analyzeObject");
+__name2(analyzeObject, "analyzeObject");
 function sanitizeArgs(args) {
   if (!Array.isArray(args)) return args;
-
   return args.map((arg, index) => {
     const argPath = `args[${index}]`;
-
-    if (arg === null || arg === undefined) {
+    if (arg === null || arg === void 0) {
       return arg;
     }
-
-    // Primitivos são seguros
-    if (typeof arg !== 'object') {
+    if (typeof arg !== "object") {
       return arg;
     }
-
-    // Verificar se é um array
     if (Array.isArray(arg)) {
       try {
-        return arg.map(item => {
-          if (typeof item === 'object' && item !== null) {
+        return arg.map((item) => {
+          if (typeof item === "object" && item !== null) {
             try {
               return structuredClone(item);
             } catch {
@@ -118,133 +60,89 @@ function sanitizeArgs(args) {
         return [];
       }
     }
-
-    // Analisar o objeto
     const analysis = analyzeObject(arg, argPath);
-
-    // Se é clonável, manter original
     if (analysis.isCloneable) {
       return arg;
     }
-
-    // Tentar serializar via JSON com tratamento mais robusto
     try {
       const serialized = JSON.parse(
         JSON.stringify(arg, (key, value) => {
-          // Filtrar propriedades problemáticas
-          if (typeof value === 'function') return undefined;
-          if (value instanceof Node) return undefined;
-          if (value instanceof Window) return undefined;
-          if (value instanceof HTMLElement) return undefined;
-          if (value instanceof EventTarget) return undefined;
-
-          // Verificar se é um objeto circular
+          if (typeof value === "function") return void 0;
+          if (value instanceof Node) return void 0;
+          if (value instanceof Window) return void 0;
+          if (value instanceof HTMLElement) return void 0;
+          if (value instanceof EventTarget) return void 0;
           try {
             JSON.stringify(value);
             return value;
           } catch {
-            return undefined;
+            return void 0;
           }
         })
       );
-
-      // Verificar se o objeto serializado é clonável
       try {
         structuredClone(serialized);
         return serialized;
       } catch {
-        // Se ainda não for clonável, criar versão simplificada
         return {
           __sanitized: true,
           __type: analysis.type,
           __constructor: analysis.constructor,
-          __keys: Object.keys(arg).slice(0, 10), // Limitar a 10 chaves
+          __keys: Object.keys(arg).slice(0, 10)
+          // Limitar a 10 chaves
         };
       }
     } catch (jsonError) {
-      // Se falhar completamente, retornar representação mínima segura
       return {
         __sanitized: true,
         __type: analysis.type,
         __constructor: analysis.constructor,
-        __error: 'Object could not be serialized',
-        __message: jsonError.message,
+        __error: "Object could not be serialized",
+        __message: jsonError.message
       };
     }
   });
 }
-
-// Verificar se DEBUG_TOOLS está habilitado
+__name(sanitizeArgs, "sanitizeArgs");
+__name2(sanitizeArgs, "sanitizeArgs");
 function isDebugToolsEnabled() {
-  try {
-    // Verificar process.env primeiro
-    if (process.env.DEBUG_TOOLS === 'true') return true;
-    if (process.env.DEBUG_TOOLS === 'false') return false;
-
-    // Verificar localStorage se disponível
-    if (typeof localStorage !== 'undefined') {
-      const localStorageDebug = localStorage.getItem('DEBUG_TOOLS');
-      if (localStorageDebug === 'true') return true;
-      if (localStorageDebug === 'false') return false;
-    }
-
-    // Verificar variável global
-    if (typeof window !== 'undefined' && window.DEBUG_TOOLS === true) return true;
-
-    return false;
-  } catch (error) {
-    return false;
+  if (process.env.DEBUG_TOOLS === "true") return true;
+  if (process.env.DEBUG_TOOLS === "false") return false;
+  if (typeof localStorage !== "undefined") {
+    const localStorageDebug = localStorage.getItem("DEBUG_TOOLS");
+    if (localStorageDebug === "true") return true;
+    if (localStorageDebug === "false") return false;
   }
+  if (typeof window !== "undefined" && window.DEBUG_TOOLS === true) return true;
+  return false;
 }
-
-// Wrapper para ipcRenderer.invoke - versão simplificada para produção
+__name(isDebugToolsEnabled, "isDebugToolsEnabled");
+__name2(isDebugToolsEnabled, "isDebugToolsEnabled");
 function simpleInvoke(channel, ...args) {
-  return ipcRenderer.invoke(channel, ...args).catch(error => {
-    // Ignorar erros de clonagem silenciosamente em produção
-    if (
-      error.message &&
-      (error.message.includes('could not be cloned') ||
-        error.message.includes('IpcRendererInternal.send') ||
-        error.message.includes('An object could not be cloned'))
-    ) {
+  return ipcRenderer.invoke(channel, ...args).catch((error) => {
+    if (error.message && (error.message.includes("could not be cloned") || error.message.includes("IpcRendererInternal.send") || error.message.includes("An object could not be cloned"))) {
       return null;
     }
     throw error;
   });
 }
-
-// Wrapper para ipcRenderer.invoke com sanitização completa (só para DEBUG_TOOLS = true)
+__name(simpleInvoke, "simpleInvoke");
+__name2(simpleInvoke, "simpleInvoke");
 function debugInvoke(channel, ...args) {
-  // Se DEBUG_TOOLS não estiver habilitado, usar versão simplificada
   if (!isDebugToolsEnabled()) {
     return simpleInvoke(channel, ...args);
   }
-
-  // Versão completa com debug e sanitização
-  return new Promise(async (resolve, reject) => {
+  return new Promise((resolve, reject) => {
     try {
-      // Sanitizar argumentos antes do envio
       const sanitizedArgs = sanitizeArgs(args);
-
-      // Verificar se os argumentos sanitizados são realmente clonáveis
+      let argsToUse = sanitizedArgs;
       try {
-        sanitizedArgs.forEach((arg, index) => {
+        sanitizedArgs.forEach((arg) => {
           structuredClone(arg);
         });
-      } catch (cloneTestError) {
-        // Se falhar na clonagem, tentar uma sanitização mais agressiva
-        try {
-          ipcRenderer.invoke(
-            'debug:warn',
-            `⚠️ Argumento ${index} falhou no teste de clonagem, aplicando sanitização agressiva`
-          );
-        } catch (e) {
-          console.warn(
-            `⚠️ Argumento ${index} falhou no teste de clonagem, aplicando sanitização agressiva`
-          );
-        }
-        const fallbackArgs = args.map(arg => {
-          if (arg === null || arg === undefined || typeof arg !== 'object') {
+      } catch {
+        const fallbackArgs = args.map((arg) => {
+          if (arg === null || arg === void 0 || typeof arg !== "object") {
             return arg;
           }
           try {
@@ -253,507 +151,502 @@ function debugInvoke(channel, ...args) {
             return { __sanitized: true, __type: typeof arg };
           }
         });
-
-        try {
-          const result = await ipcRenderer.invoke(channel, ...fallbackArgs);
-          resolve(result);
-          return;
-        } catch (fallbackError) {
-          reject(
-            new Error(`IPC call failed even with fallback sanitization: ${fallbackError.message}`)
-          );
-          return;
-        }
+        argsToUse = fallbackArgs;
       }
-
-      // Tentar a chamada IPC normal
       try {
-        const result = await ipcRenderer.invoke(channel, ...sanitizedArgs);
+        const result = ipcRenderer.invoke(channel, ...argsToUse);
         resolve(result);
+        return;
       } catch (ipcError) {
-        // Se o erro for relacionado à clonagem, não propagar
-        if (
-          ipcError.message &&
-          (ipcError.message.includes('could not be cloned') ||
-            ipcError.message.includes('IpcRendererInternal.send') ||
-            ipcError.message.includes('An object could not be cloned'))
-        ) {
+        if (ipcError.message && (ipcError.message.includes("could not be cloned") || ipcError.message.includes("IpcRendererInternal.send") || ipcError.message.includes("An object could not be cloned"))) {
           try {
             ipcRenderer.invoke(
-              'debug:warn',
-              `⚠️ Erro de clonagem IPC ignorado para canal ${channel}:`,
+              "debug:warn",
+              `\u26A0\uFE0F Erro de clonagem IPC ignorado para canal ${channel}:`,
               ipcError.message
             );
-          } catch (e) {
-            console.warn(
-              `⚠️ Erro de clonagem IPC ignorado para canal ${channel}:`,
-              ipcError.message
-            );
+          } catch {
           }
-          resolve(null); // Retornar null em vez de rejeitar
-        } else {
-          reject(ipcError);
+          resolve(null);
+          return;
         }
+        reject(ipcError);
       }
     } catch (error) {
       reject(error);
     }
   });
 }
-
-// IPC com logs de debug detalhados
-
-// API segura para o renderer
+__name(debugInvoke, "debugInvoke");
+__name2(debugInvoke, "debugInvoke");
 const electronAPI = {
   // Configurações
   config: {
-    get: key => debugInvoke('config:get', key),
-    set: (key, value) => debugInvoke('config:set', key, value),
-    getAll: () => debugInvoke('config:getAll'),
-    reset: () => debugInvoke('config:reset'),
+    get: /* @__PURE__ */ __name2((key) => debugInvoke("config:get", key), "get"),
+    set: /* @__PURE__ */ __name2((key, value) => debugInvoke("config:set", key, value), "set"),
+    getAll: /* @__PURE__ */ __name2(() => debugInvoke("config:getAll"), "getAll"),
+    reset: /* @__PURE__ */ __name2(() => debugInvoke("config:reset"), "reset")
   },
-
   // Jogos
   games: {
-    getAll: () => debugInvoke('games:getAll'),
-    getById: id => debugInvoke('games:getById', id),
-    add: game => debugInvoke('games:add', game),
-    update: (id, data) => debugInvoke('games:update', id, data),
-    delete: id => debugInvoke('games:delete', id),
-    scan: () => debugInvoke('games:scan'),
-    import: filePath => debugInvoke('games:import', filePath),
-    export: (filePath, gameIds) => debugInvoke('games:export', filePath, gameIds),
+    getAll: /* @__PURE__ */ __name2(() => debugInvoke("games:getAll"), "getAll"),
+    getById: /* @__PURE__ */ __name2((id) => debugInvoke("games:getById", id), "getById"),
+    add: /* @__PURE__ */ __name2((game) => debugInvoke("games:add", game), "add"),
+    update: /* @__PURE__ */ __name2((id, data) => debugInvoke("games:update", id, data), "update"),
+    delete: /* @__PURE__ */ __name2((id) => debugInvoke("games:delete", id), "delete"),
+    scan: /* @__PURE__ */ __name2(() => debugInvoke("games:scan"), "scan"),
+    import: /* @__PURE__ */ __name2((filePath) => debugInvoke("games:import", filePath), "import"),
+    export: /* @__PURE__ */ __name2(
+      (filePath, gameIds) => debugInvoke("games:export", filePath, gameIds),
+      "export"
+    )
   },
-
   // Conquistas
   achievements: {
-    getAll: () => debugInvoke('achievements:getAll'),
-    getByGameId: gameId => debugInvoke('achievements:getByGameId', gameId),
-    getById: id => debugInvoke('achievements:getById', id),
-    add: achievement => debugInvoke('achievements:add', achievement),
-    update: (id, data) => debugInvoke('achievements:update', id, data),
-    delete: id => debugInvoke('achievements:delete', id),
-    unlock: id => debugInvoke('achievements:unlock', id),
-    lock: id => debugInvoke('achievements:lock', id),
-    getStats: () => debugInvoke('achievements:getStats'),
-    sync: gameId => debugInvoke('achievements:sync', gameId),
+    getAll: /* @__PURE__ */ __name2(() => debugInvoke("achievements:getAll"), "getAll"),
+    getByGameId: /* @__PURE__ */ __name2(
+      (gameId) => debugInvoke("achievements:getByGameId", gameId),
+      "getByGameId"
+    ),
+    getById: /* @__PURE__ */ __name2((id) => debugInvoke("achievements:getById", id), "getById"),
+    add: /* @__PURE__ */ __name2((achievement) => debugInvoke("achievements:add", achievement), "add"),
+    update: /* @__PURE__ */ __name2(
+      (id, data) => debugInvoke("achievements:update", id, data),
+      "update"
+    ),
+    delete: /* @__PURE__ */ __name2((id) => debugInvoke("achievements:delete", id), "delete"),
+    unlock: /* @__PURE__ */ __name2((id) => debugInvoke("achievements:unlock", id), "unlock"),
+    lock: /* @__PURE__ */ __name2((id) => debugInvoke("achievements:lock", id), "lock"),
+    getStats: /* @__PURE__ */ __name2(() => debugInvoke("achievements:getStats"), "getStats"),
+    sync: /* @__PURE__ */ __name2((gameId) => debugInvoke("achievements:sync", gameId), "sync")
   },
-
   // API de jogos (Steam e GSE Saves)
   api: {
     steam: {
-      authenticate: () => debugInvoke('api:steam:authenticate'),
-      getGames: () => debugInvoke('api:steam:getGames'),
-      getUserGames: (options = {}) => debugInvoke('steam.getUserGames', options),
-      getAchievements: appId => debugInvoke('api:steam:getAchievements', appId),
-      getUserStats: appId => debugInvoke('api:steam:getUserStats', appId),
-      setCredentials: (apiKey, steamId = null) =>
-        debugInvoke('steam.setCredentials', apiKey, steamId),
-
+      authenticate: /* @__PURE__ */ __name2(
+        () => debugInvoke("api:steam:authenticate"),
+        "authenticate"
+      ),
+      getGames: /* @__PURE__ */ __name2(() => debugInvoke("api:steam:getGames"), "getGames"),
+      getUserGames: /* @__PURE__ */ __name2(
+        (options = {}) => debugInvoke("steam.getUserGames", options),
+        "getUserGames"
+      ),
+      getAchievements: /* @__PURE__ */ __name2(
+        (appId) => debugInvoke("api:steam:getAchievements", appId),
+        "getAchievements"
+      ),
+      getUserStats: /* @__PURE__ */ __name2(
+        (appId) => debugInvoke("api:steam:getUserStats", appId),
+        "getUserStats"
+      ),
+      setCredentials: /* @__PURE__ */ __name2(
+        (apiKey, steamId = null) => debugInvoke("steam.setCredentials", apiKey, steamId),
+        "setCredentials"
+      ),
       // Métodos de cache
-      clearCache: (type = null) => debugInvoke('steam.clearCache', type),
-      getCacheStats: () => debugInvoke('steam.getCacheStats'),
+      clearCache: /* @__PURE__ */ __name2(
+        (type = null) => debugInvoke("steam.clearCache", type),
+        "clearCache"
+      ),
+      getCacheStats: /* @__PURE__ */ __name2(
+        () => debugInvoke("steam.getCacheStats"),
+        "getCacheStats"
+      )
     },
-
     // GSE Saves API
     gseSaves: {
       // Métodos de verificação e detecção
-      detectPaths: () => debugInvoke('gse:detectPaths'),
-      getCurrentUser: () => debugInvoke('gse:getCurrentUser'),
-      getStatus: () => debugInvoke('gse:getStatus'),
-
+      detectPaths: /* @__PURE__ */ __name2(() => debugInvoke("gse:detectPaths"), "detectPaths"),
+      getCurrentUser: /* @__PURE__ */ __name2(
+        () => debugInvoke("gse:getCurrentUser"),
+        "getCurrentUser"
+      ),
+      getStatus: /* @__PURE__ */ __name2(() => debugInvoke("gse:getStatus"), "getStatus"),
       // Métodos de dados
-      getGames: () => debugInvoke('gse:getGames'),
-      getAchievements: gameId => debugInvoke('gse:getAchievements', gameId),
-
+      getGames: /* @__PURE__ */ __name2(() => debugInvoke("gse:getGames"), "getGames"),
+      getAchievements: /* @__PURE__ */ __name2(
+        (gameId) => debugInvoke("gse:getAchievements", gameId),
+        "getAchievements"
+      ),
       // Métodos legados (mantidos para compatibilidade)
-      syncAchievements: gameId => debugInvoke('api:gseSaves:syncAchievements', gameId),
+      syncAchievements: /* @__PURE__ */ __name2(
+        (gameId) => debugInvoke("api:gseSaves:syncAchievements", gameId),
+        "syncAchievements"
+      )
     },
-    request: options => debugInvoke('api:request', options),
-    clearCache: () => debugInvoke('api:clearCache'),
-    getCacheStats: () => debugInvoke('api:getCacheStats'),
+    request: /* @__PURE__ */ __name2((options) => debugInvoke("api:request", options), "request"),
+    clearCache: /* @__PURE__ */ __name2(() => debugInvoke("api:clearCache"), "clearCache"),
+    getCacheStats: /* @__PURE__ */ __name2(() => debugInvoke("api:getCacheStats"), "getCacheStats")
   },
-
   // Sistema de arquivos
   fs: {
-    selectFile: options => debugInvoke('fs:selectFile', options),
-    selectDirectory: options => debugInvoke('fs:selectDirectory', options),
-    saveFile: options => debugInvoke('fs:saveFile', options),
-    readFile: filePath => debugInvoke('fs:readFile', filePath),
-    writeFile: (filePath, data) => debugInvoke('fs:writeFile', filePath, data),
-    exists: path => debugInvoke('fs:exists', path),
-    createBackup: name => debugInvoke('fs:createBackup', name),
-    restoreBackup: backupId => debugInvoke('fs:restoreBackup', backupId),
-    listBackups: () => debugInvoke('fs:listBackups'),
-    deleteBackup: backupId => debugInvoke('fs:deleteBackup', backupId),
-    saveSettings: settings => debugInvoke('fs:saveSettings', settings),
-    loadSettings: () => debugInvoke('fs:loadSettings'),
+    selectFile: /* @__PURE__ */ __name2(
+      (options) => debugInvoke("fs:selectFile", options),
+      "selectFile"
+    ),
+    selectDirectory: /* @__PURE__ */ __name2(
+      (options) => debugInvoke("fs:selectDirectory", options),
+      "selectDirectory"
+    ),
+    saveFile: /* @__PURE__ */ __name2((options) => debugInvoke("fs:saveFile", options), "saveFile"),
+    readFile: /* @__PURE__ */ __name2((filePath) => debugInvoke("fs:readFile", filePath), "readFile"),
+    writeFile: /* @__PURE__ */ __name2(
+      (filePath, data) => debugInvoke("fs:writeFile", filePath, data),
+      "writeFile"
+    ),
+    exists: /* @__PURE__ */ __name2((path) => debugInvoke("fs:exists", path), "exists"),
+    createBackup: /* @__PURE__ */ __name2(
+      (name) => debugInvoke("fs:createBackup", name),
+      "createBackup"
+    ),
+    restoreBackup: /* @__PURE__ */ __name2(
+      (backupId) => debugInvoke("fs:restoreBackup", backupId),
+      "restoreBackup"
+    ),
+    listBackups: /* @__PURE__ */ __name2(() => debugInvoke("fs:listBackups"), "listBackups"),
+    deleteBackup: /* @__PURE__ */ __name2(
+      (backupId) => debugInvoke("fs:deleteBackup", backupId),
+      "deleteBackup"
+    ),
+    saveSettings: /* @__PURE__ */ __name2(
+      (settings) => debugInvoke("fs:saveSettings", settings),
+      "saveSettings"
+    ),
+    loadSettings: /* @__PURE__ */ __name2(() => debugInvoke("fs:loadSettings"), "loadSettings")
   },
-
   // Configurações (alias para compatibilidade)
-  saveSettings: settings => debugInvoke('fs:saveSettings', settings),
-
+  saveSettings: /* @__PURE__ */ __name2(
+    (settings) => debugInvoke("fs:saveSettings", settings),
+    "saveSettings"
+  ),
   // Tema
   theme: {
-    getSystemTheme: () => debugInvoke('theme:getSystemTheme'),
-    setTheme: theme => debugInvoke('set-theme', theme),
-    getTheme: () => debugInvoke('get-theme'),
+    getSystemTheme: /* @__PURE__ */ __name2(
+      () => debugInvoke("theme:getSystemTheme"),
+      "getSystemTheme"
+    ),
+    setTheme: /* @__PURE__ */ __name2((theme) => debugInvoke("set-theme", theme), "setTheme"),
+    getTheme: /* @__PURE__ */ __name2(() => debugInvoke("get-theme"), "getTheme")
   },
-
   // Internacionalização
   i18n: {
-    getLanguage: () => debugInvoke('i18n:getLanguage'),
-    getCurrentLanguage: () => debugInvoke('i18n:getCurrentLanguage'),
-    setLanguage: lang => debugInvoke('i18n:setLanguage', lang),
-    getTranslations: lang => debugInvoke('i18n:getTranslations', lang),
-    getAvailableLanguages: () => debugInvoke('i18n:getAvailableLanguages'),
-    translate: (key, params) => debugInvoke('i18n:translate', key, params),
+    getLanguage: /* @__PURE__ */ __name2(() => debugInvoke("i18n:getLanguage"), "getLanguage"),
+    getCurrentLanguage: /* @__PURE__ */ __name2(
+      () => debugInvoke("i18n:getCurrentLanguage"),
+      "getCurrentLanguage"
+    ),
+    setLanguage: /* @__PURE__ */ __name2(
+      (lang) => debugInvoke("i18n:setLanguage", lang),
+      "setLanguage"
+    ),
+    getTranslations: /* @__PURE__ */ __name2(
+      (lang) => debugInvoke("i18n:getTranslations", lang),
+      "getTranslations"
+    ),
+    getAvailableLanguages: /* @__PURE__ */ __name2(
+      () => debugInvoke("i18n:getAvailableLanguages"),
+      "getAvailableLanguages"
+    ),
+    translate: /* @__PURE__ */ __name2(
+      (key, params) => debugInvoke("i18n:translate", key, params),
+      "translate"
+    )
   },
-
   // Goldberg Migration
   goldberg: {
-    checkFolder: () => debugInvoke('goldberg:checkFolder'),
-    getGames: () => debugInvoke('goldberg:getGames'),
-    migrateGame: gameData => debugInvoke('goldberg:migrateGame', gameData),
-    getSettings: () => debugInvoke('goldberg:getSettings'),
-    setSetting: (key, value) => debugInvoke('goldberg:setSetting', key, value),
-    getLastCheck: () => debugInvoke('goldberg:getLastCheck'),
-    checkMigration: () => debugInvoke('goldberg:checkMigration'),
+    checkFolder: /* @__PURE__ */ __name2(() => debugInvoke("goldberg:checkFolder"), "checkFolder"),
+    getGames: /* @__PURE__ */ __name2(() => debugInvoke("goldberg:getGames"), "getGames"),
+    migrateGame: /* @__PURE__ */ __name2(
+      (gameData) => debugInvoke("goldberg:migrateGame", gameData),
+      "migrateGame"
+    ),
+    getSettings: /* @__PURE__ */ __name2(() => debugInvoke("goldberg:getSettings"), "getSettings"),
+    setSetting: /* @__PURE__ */ __name2(
+      (key, value) => debugInvoke("goldberg:setSetting", key, value),
+      "setSetting"
+    ),
+    getLastCheck: /* @__PURE__ */ __name2(
+      () => debugInvoke("goldberg:getLastCheck"),
+      "getLastCheck"
+    ),
+    checkMigration: /* @__PURE__ */ __name2(
+      () => debugInvoke("goldberg:checkMigration"),
+      "checkMigration"
+    )
   },
-
   // APIs simplificadas para compatibilidade
-  getGoldbergSettings: () => debugInvoke('goldberg:getSettings'),
-  setGoldbergSetting: (key, value) => debugInvoke('goldberg:setSetting', key, value),
-  getGoldbergLastCheck: () => debugInvoke('goldberg:getLastCheck'),
-  checkGoldbergMigration: () => debugInvoke('goldberg:checkMigration'),
-
+  getGoldbergSettings: /* @__PURE__ */ __name2(
+    () => debugInvoke("goldberg:getSettings"),
+    "getGoldbergSettings"
+  ),
+  setGoldbergSetting: /* @__PURE__ */ __name2(
+    (key, value) => debugInvoke("goldberg:setSetting", key, value),
+    "setGoldbergSetting"
+  ),
+  getGoldbergLastCheck: /* @__PURE__ */ __name2(
+    () => debugInvoke("goldberg:getLastCheck"),
+    "getGoldbergLastCheck"
+  ),
+  checkGoldbergMigration: /* @__PURE__ */ __name2(
+    () => debugInvoke("goldberg:checkMigration"),
+    "checkGoldbergMigration"
+  ),
   // Performance
   performance: {
-    getMetrics: () => debugInvoke('performance:getMetrics'),
-    clearCache: () => debugInvoke('performance:clearCache'),
-    optimizeMemory: () => debugInvoke('performance:optimizeMemory'),
-    getSystemResources: () => debugInvoke('performance:getSystemResources'),
+    getMetrics: /* @__PURE__ */ __name2(() => debugInvoke("performance:getMetrics"), "getMetrics"),
+    clearCache: /* @__PURE__ */ __name2(() => debugInvoke("performance:clearCache"), "clearCache"),
+    optimizeMemory: /* @__PURE__ */ __name2(
+      () => debugInvoke("performance:optimizeMemory"),
+      "optimizeMemory"
+    ),
+    getSystemResources: /* @__PURE__ */ __name2(
+      () => debugInvoke("performance:getSystemResources"),
+      "getSystemResources"
+    )
   },
-
   // Crash Reporter
   crashReporter: {
-    reportError: errorData => debugInvoke('crash-reporter:report-error', errorData),
-    getStats: () => debugInvoke('crash-reporter:get-stats'),
-    clearReports: () => debugInvoke('crash-reporter:clear-reports'),
-    getCrashList: () => debugInvoke('crash-reporter:get-crash-list'),
+    reportError: /* @__PURE__ */ __name2(
+      (errorData) => debugInvoke("crash-reporter:report-error", errorData),
+      "reportError"
+    ),
+    getStats: /* @__PURE__ */ __name2(() => debugInvoke("crash-reporter:get-stats"), "getStats"),
+    clearReports: /* @__PURE__ */ __name2(
+      () => debugInvoke("crash-reporter:clear-reports"),
+      "clearReports"
+    ),
+    getCrashList: /* @__PURE__ */ __name2(
+      () => debugInvoke("crash-reporter:get-crash-list"),
+      "getCrashList"
+    )
   },
-
   // API Steam direta
   steam: {
-    authenticate: () => debugInvoke('api:steam:authenticate'),
-    getGames: () => debugInvoke('api:steam:getGames'),
-    getUserGames: (options = {}) => debugInvoke('steam.getUserGames', options),
-    getAchievements: appId => debugInvoke('api:steam:getAchievements', appId),
-    getUserStats: appId => debugInvoke('api:steam:getUserStats', appId),
-    getUserGameAchievements: gameId => debugInvoke('steam.getUserGameAchievements', gameId),
-    setCredentials: (apiKey, steamId = null) =>
-      debugInvoke('steam.setCredentials', apiKey, steamId),
-    getCredentials: () => debugInvoke('steam.getCredentials'),
-    checkConnection: () => debugInvoke('steam.checkConnection'),
-
+    authenticate: /* @__PURE__ */ __name2(
+      () => debugInvoke("api:steam:authenticate"),
+      "authenticate"
+    ),
+    getGames: /* @__PURE__ */ __name2(() => debugInvoke("api:steam:getGames"), "getGames"),
+    getUserGames: /* @__PURE__ */ __name2(
+      (options = {}) => debugInvoke("steam.getUserGames", options),
+      "getUserGames"
+    ),
+    getAchievements: /* @__PURE__ */ __name2(
+      (appId) => debugInvoke("api:steam:getAchievements", appId),
+      "getAchievements"
+    ),
+    getUserStats: /* @__PURE__ */ __name2(
+      (appId) => debugInvoke("api:steam:getUserStats", appId),
+      "getUserStats"
+    ),
+    getUserGameAchievements: /* @__PURE__ */ __name2(
+      (gameId) => debugInvoke("steam.getUserGameAchievements", gameId),
+      "getUserGameAchievements"
+    ),
+    setCredentials: /* @__PURE__ */ __name2(
+      (apiKey, steamId = null) => debugInvoke("steam.setCredentials", apiKey, steamId),
+      "setCredentials"
+    ),
+    getCredentials: /* @__PURE__ */ __name2(
+      () => debugInvoke("steam.getCredentials"),
+      "getCredentials"
+    ),
+    checkConnection: /* @__PURE__ */ __name2(
+      () => debugInvoke("steam.checkConnection"),
+      "checkConnection"
+    ),
     // Métodos de cache
-    clearCache: (type = null) => debugInvoke('steam.clearCache', type),
-    getCacheStats: () => debugInvoke('steam.getCacheStats'),
+    clearCache: /* @__PURE__ */ __name2(
+      (type = null) => debugInvoke("steam.clearCache", type),
+      "clearCache"
+    ),
+    getCacheStats: /* @__PURE__ */ __name2(
+      () => debugInvoke("steam.getCacheStats"),
+      "getCacheStats"
+    )
   },
-
   // Sistema
   system: {
-    getVersion: () => debugInvoke('system:getVersion'),
-    getPlatform: () => debugInvoke('system:getPlatform'),
-    getSystemInfo: () => debugInvoke('system:getSystemInfo'),
-    openExternal: url => debugInvoke('system:openExternal', url),
-    showInFolder: path => debugInvoke('system:showInFolder', path),
-    quit: () => debugInvoke('system:quit'),
-    minimize: () => debugInvoke('system:minimize'),
-    maximize: () => debugInvoke('system:maximize'),
-    unmaximize: () => debugInvoke('system:unmaximize'),
-    isMaximized: () => debugInvoke('system:isMaximized'),
-    close: () => debugInvoke('system:close'),
-    restart: () => debugInvoke('app:restart'),
+    getVersion: /* @__PURE__ */ __name2(() => debugInvoke("system:getVersion"), "getVersion"),
+    getPlatform: /* @__PURE__ */ __name2(() => debugInvoke("system:getPlatform"), "getPlatform"),
+    getSystemInfo: /* @__PURE__ */ __name2(
+      () => debugInvoke("system:getSystemInfo"),
+      "getSystemInfo"
+    ),
+    openExternal: /* @__PURE__ */ __name2(
+      (url) => debugInvoke("system:openExternal", url),
+      "openExternal"
+    ),
+    showInFolder: /* @__PURE__ */ __name2(
+      (path) => debugInvoke("system:showInFolder", path),
+      "showInFolder"
+    ),
+    quit: /* @__PURE__ */ __name2(() => debugInvoke("system:quit"), "quit"),
+    minimize: /* @__PURE__ */ __name2(() => debugInvoke("system:minimize"), "minimize"),
+    maximize: /* @__PURE__ */ __name2(() => debugInvoke("system:maximize"), "maximize"),
+    unmaximize: /* @__PURE__ */ __name2(() => debugInvoke("system:unmaximize"), "unmaximize"),
+    isMaximized: /* @__PURE__ */ __name2(() => debugInvoke("system:isMaximized"), "isMaximized"),
+    close: /* @__PURE__ */ __name2(() => debugInvoke("system:close"), "close"),
+    restart: /* @__PURE__ */ __name2(() => debugInvoke("app:restart"), "restart")
   },
-
   // Configurações e detecção de ambiente
-  isDevelopmentMode: () => debugInvoke('system:isDevelopmentMode'),
-
+  isDevelopmentMode: /* @__PURE__ */ __name2(
+    () => debugInvoke("system:isDevelopmentMode"),
+    "isDevelopmentMode"
+  ),
   // Configurações do sistema (auto-start e tray)
-  isInstalledVersion: () => debugInvoke('system:isInstalledVersion'),
-  setAutoStart: enabled => debugInvoke('system:setAutoStart', enabled),
-  getAutoStart: () => debugInvoke('system:getAutoStart'),
-  setMinimizeToTray: enabled => debugInvoke('system:setMinimizeToTray', enabled),
-  getMinimizeToTray: () => debugInvoke('system:getMinimizeToTray'),
-
+  isInstalledVersion: /* @__PURE__ */ __name2(
+    () => debugInvoke("system:isInstalledVersion"),
+    "isInstalledVersion"
+  ),
+  setAutoStart: /* @__PURE__ */ __name2(
+    (enabled) => debugInvoke("system:setAutoStart", enabled),
+    "setAutoStart"
+  ),
+  getAutoStart: /* @__PURE__ */ __name2(() => debugInvoke("system:getAutoStart"), "getAutoStart"),
+  setMinimizeToTray: /* @__PURE__ */ __name2(
+    (enabled) => debugInvoke("system:setMinimizeToTray", enabled),
+    "setMinimizeToTray"
+  ),
+  getMinimizeToTray: /* @__PURE__ */ __name2(
+    () => debugInvoke("system:getMinimizeToTray"),
+    "getMinimizeToTray"
+  ),
   // Controles de janela
-  minimizeWindow: () => debugInvoke('window:minimize'),
-  maximizeWindow: () => debugInvoke('window:maximize'),
-  closeWindow: () => debugInvoke('window:close'),
-  isMaximized: () => debugInvoke('window:isMaximized'),
-
+  minimizeWindow: /* @__PURE__ */ __name2(() => debugInvoke("window:minimize"), "minimizeWindow"),
+  maximizeWindow: /* @__PURE__ */ __name2(() => debugInvoke("window:maximize"), "maximizeWindow"),
+  closeWindow: /* @__PURE__ */ __name2(() => debugInvoke("window:close"), "closeWindow"),
+  isMaximized: /* @__PURE__ */ __name2(() => debugInvoke("window:isMaximized"), "isMaximized"),
   // Eventos
-  on: (channel, callback) => {
+  on: /* @__PURE__ */ __name2((channel, callback) => {
     const validChannels = [
-      'game-added',
-      'game-updated',
-      'game-deleted',
-      'achievement-unlocked',
-      'achievement-locked',
-      'sync-progress',
-      'sync-complete',
-      'backup-created',
-      'backup-restored',
-      'language-changed',
-      'theme-changed',
-      'theme:systemChanged',
-      'window-focus',
-      'window-blur',
-      'goldberg-migration-dialog',
-      'goldberg-migration-completed',
+      "game-added",
+      "game-updated",
+      "game-deleted",
+      "achievement-unlocked",
+      "achievement-locked",
+      "sync-progress",
+      "sync-complete",
+      "backup-created",
+      "backup-restored",
+      "language-changed",
+      "theme-changed",
+      "theme:systemChanged",
+      "window-focus",
+      "window-blur",
+      "goldberg-migration-dialog",
+      "goldberg-migration-completed"
     ];
-
     if (validChannels.includes(channel)) {
-      // Wrapper mais seguro para filtrar objetos não serializáveis
-      const safeCallback = (event, ...args) => {
+      const safeCallback = /* @__PURE__ */ __name2((event, ...args) => {
         try {
-          // Sanitizar argumentos de forma mais robusta
-          const safeArgs = args.map(arg => {
-            // Tipos primitivos são sempre seguros
-            if (
-              arg === null ||
-              arg === undefined ||
-              typeof arg === 'string' ||
-              typeof arg === 'number' ||
-              typeof arg === 'boolean'
-            ) {
+          const safeArgs = args.map((arg) => {
+            if (arg === null || arg === void 0 || typeof arg === "string" || typeof arg === "number" || typeof arg === "boolean") {
               return arg;
             }
-
-            // Para objetos, usar uma abordagem mais conservadora
-            if (typeof arg === 'object') {
-              try {
-                // Tentar clone direto; se falhar, sanitizar
-                const cloned = structuredClone(arg);
-                return cloned;
-              } catch (e) {
-                console.warn(
-                  `[PRELOAD] Objeto não serializável filtrado no canal '${channel}':`,
-                  e.message
-                );
-                // Retornar uma representação segura do objeto
-                if (Array.isArray(arg)) {
-                  return [];
-                }
-                return {};
-              }
+            if (typeof arg === "object") {
+              const cloned = structuredClone(arg);
+              return cloned;
             }
-
-            // Para outros tipos (functions, symbols, etc.), retornar null
             return null;
           });
-
-          // Chamar o callback original com argumentos seguros
           callback(event, ...safeArgs);
         } catch (error) {
-          try {
-            ipcRenderer.invoke(
-              'debug:error',
-              `[PRELOAD] Erro no callback do canal '${channel}':`,
-              error
-            );
-          } catch (e) {
-            console.error(`[PRELOAD] Erro no callback do canal '${channel}':`, error);
-          }
-          // Em caso de erro, chamar o callback com argumentos vazios
+          ipcRenderer.invoke(
+            "debug:error",
+            `[PRELOAD] Erro no callback do canal '${channel}':`,
+            error
+          );
           try {
             callback(event);
           } catch (fallbackError) {
-            try {
-              ipcRenderer.invoke(
-                'debug:error',
-                `[PRELOAD] Erro no fallback do callback '${channel}':`,
-                fallbackError
-              );
-            } catch (e) {
-              console.error(`[PRELOAD] Erro no fallback do callback '${channel}':`, fallbackError);
-            }
+            ipcRenderer.invoke(
+              "debug:error",
+              `[PRELOAD] Erro no fallback do callback '${channel}':`,
+              fallbackError
+            );
           }
         }
-      };
-
+      }, "safeCallback");
       ipcRenderer.on(channel, safeCallback);
     }
-  },
-
-  off: (channel, callback) => {
+  }, "on"),
+  off: /* @__PURE__ */ __name2((channel, callback) => {
     ipcRenderer.removeListener(channel, callback);
-  },
-
-  once: (channel, callback) => {
+  }, "off"),
+  once: /* @__PURE__ */ __name2((channel, callback) => {
     const validChannels = [
-      'game-added',
-      'game-updated',
-      'game-deleted',
-      'achievement-unlocked',
-      'achievement-locked',
-      'sync-progress',
-      'sync-complete',
-      'backup-created',
-      'backup-restored',
-      'language-changed',
-      'theme-changed',
+      "game-added",
+      "game-updated",
+      "game-deleted",
+      "achievement-unlocked",
+      "achievement-locked",
+      "sync-progress",
+      "sync-complete",
+      "backup-created",
+      "backup-restored",
+      "language-changed",
+      "theme-changed"
     ];
-
     if (validChannels.includes(channel)) {
-      // Wrapper mais seguro para filtrar objetos não serializáveis
-      const safeCallback = (event, ...args) => {
+      const safeCallback = /* @__PURE__ */ __name2((event, ...args) => {
         try {
-          // Sanitizar argumentos de forma mais robusta
-          const safeArgs = args.map(arg => {
-            // Tipos primitivos são sempre seguros
-            if (
-              arg === null ||
-              arg === undefined ||
-              typeof arg === 'string' ||
-              typeof arg === 'number' ||
-              typeof arg === 'boolean'
-            ) {
+          const safeArgs = args.map((arg) => {
+            if (arg === null || arg === void 0 || typeof arg === "string" || typeof arg === "number" || typeof arg === "boolean") {
               return arg;
             }
-
-            // Para objetos, usar uma abordagem mais conservadora
-            if (typeof arg === 'object') {
-              try {
-                // Tentar clone direto; se falhar, sanitizar
-                const cloned = structuredClone(arg);
-                return cloned;
-              } catch (e) {
-                console.warn(
-                  `[PRELOAD] Objeto não serializável filtrado no canal '${channel}':`,
-                  e.message
-                );
-                // Retornar uma representação segura do objeto
-                if (Array.isArray(arg)) {
-                  return [];
-                }
-                return {};
-              }
+            if (typeof arg === "object") {
+              const cloned = structuredClone(arg);
+              return cloned;
             }
-
-            // Para outros tipos (functions, symbols, etc.), retornar null
             return null;
           });
-
-          // Chamar o callback original com argumentos seguros
           callback(event, ...safeArgs);
         } catch (error) {
-          try {
-            ipcRenderer.invoke(
-              'debug:error',
-              `[PRELOAD] Erro no callback do canal '${channel}':`,
-              error
-            );
-          } catch (e) {
-            console.error(`[PRELOAD] Erro no callback do canal '${channel}':`, error);
-          }
-          // Em caso de erro, chamar o callback com argumentos vazios
+          ipcRenderer.invoke(
+            "debug:error",
+            `[PRELOAD] Erro no callback do canal '${channel}':`,
+            error
+          );
           try {
             callback(event);
           } catch (fallbackError) {
-            try {
-              ipcRenderer.invoke(
-                'debug:error',
-                `[PRELOAD] Erro no fallback do callback '${channel}':`,
-                fallbackError
-              );
-            } catch (e) {
-              console.error(`[PRELOAD] Erro no fallback do callback '${channel}':`, fallbackError);
-            }
+            ipcRenderer.invoke(
+              "debug:error",
+              `[PRELOAD] Erro no fallback do callback '${channel}':`,
+              fallbackError
+            );
           }
         }
-      };
-
+      }, "safeCallback");
       ipcRenderer.once(channel, safeCallback);
     }
-  },
+  }, "once")
 };
-
-// Expor API de forma segura
-contextBridge.exposeInMainWorld('electronAPI', electronAPI);
-
-// Informações do ambiente
-// Importar package.json para pegar a versão
-let packageJson;
-try {
-  packageJson = require('../../package.json');
-} catch (error) {
-  packageJson = { version: '0.0.1-beta' };
-}
-
-contextBridge.exposeInMainWorld('env', {
-  NODE_ENV: process.env.NODE_ENV || 'development',
+contextBridge.exposeInMainWorld("electronAPI", electronAPI);
+const packageJson = require("../../package.json");
+contextBridge.exposeInMainWorld("env", {
+  NODE_ENV: process.env.NODE_ENV || "development",
   PLATFORM: process.platform,
   ARCH: process.arch,
-  APP_VERSION: packageJson.version,
+  APP_VERSION: packageJson.version
 });
-
-// Utilitários
-contextBridge.exposeInMainWorld('utils', {
+contextBridge.exposeInMainWorld("utils", {
   isElectron: true,
-  versions: process.versions,
+  versions: process.versions
 });
-
-// Log para debug (apenas em desenvolvimento)
-if (process.env.NODE_ENV === 'development') {
-  // console.log('📦 APIs disponíveis:', Object.keys(electronAPI));
-}
-
-// Testes de debug (apenas em desenvolvimento)
-if (process.env.NODE_ENV === 'development') {
-  console.log('🔧 Testando setGoldbergSetting:', typeof electronAPI.setGoldbergSetting);
-  console.log('🔧 Testando goldberg.setSetting:', typeof electronAPI.goldberg?.setSetting);
-}
-
-// Teste direto no window para debug
-window.preloadTest = 'Preload funcionando!';
+window.preloadTest = "Preload funcionando!";
 window.testAPI = {
-  test: () => 'API funcionando!',
+  test: /* @__PURE__ */ __name2(() => "API funcionando!", "test")
 };
-
-// Handler global para promises rejeitadas (especialmente erros de IPC)
-process.on('unhandledRejection', (reason, promise) => {
-  // Ignorar erros específicos de clonagem IPC
-  if (
-    reason &&
-    reason.message &&
-    (reason.message.includes('could not be cloned') ||
-      reason.message.includes('IpcRendererInternal.send') ||
-      reason.message.includes('An object could not be cloned'))
-  ) {
-    console.warn('⚠️ Promise rejeitada por erro de clonagem IPC (ignorado):', reason.message);
+process.on("unhandledRejection", (reason) => {
+  if (reason && reason.message && (reason.message.includes("could not be cloned") || reason.message.includes("IpcRendererInternal.send") || reason.message.includes("An object could not be cloned"))) {
     return;
   }
-
-  // Para outros erros, apenas logar sem quebrar a aplicação
-  console.error('❌ Promise rejeitada não tratada:', reason);
 });
-
-// Handler para erros não capturados
-process.on('uncaughtException', error => {
-  // Ignorar erros específicos de clonagem IPC
-  if (
-    error &&
-    error.message &&
-    (error.message.includes('could not be cloned') ||
-      error.message.includes('IpcRendererInternal.send') ||
-      error.message.includes('An object could not be cloned'))
-  ) {
-    console.warn('⚠️ Exceção não capturada por erro de clonagem IPC (ignorado):', error.message);
+process.on("uncaughtException", (error) => {
+  if (error && error.message && (error.message.includes("could not be cloned") || error.message.includes("IpcRendererInternal.send") || error.message.includes("An object could not be cloned"))) {
     return;
   }
-
-  // Para outros erros, logar e continuar
-  console.error('❌ Exceção não capturada:', error);
 });

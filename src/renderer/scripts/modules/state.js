@@ -1,57 +1,52 @@
-// State Manager - Gerenciamento de Estado Global
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+var __defProp2 = Object.defineProperty;
+var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
 class StateManager {
+  static {
+    __name(this, "StateManager");
+  }
+  static {
+    __name2(this, "StateManager");
+  }
   constructor() {
-    this.state = new Map();
-    this.listeners = new Map();
+    this.state = /* @__PURE__ */ new Map();
+    this.listeners = /* @__PURE__ */ new Map();
     this.init();
   }
-
-  init() {}
-
+  init() {
+  }
   setState(key, value) {
     const oldValue = this.state.get(key);
     this.state.set(key, value);
-
-    // Notificar listeners
     if (this.listeners.has(key)) {
-      this.listeners.get(key).forEach(callback => {
-        try {
-          callback(value, oldValue);
-        } catch (error) {
-          // Log removido para evitar dependência circular com DebugManager
-        }
+      this.listeners.get(key).forEach((callback) => {
+        callback(value, oldValue);
       });
     }
   }
-
   getState(key) {
     return this.state.get(key);
   }
-
   getAllState() {
     return Object.fromEntries(this.state);
   }
-
   subscribe(key, callback) {
     if (!this.listeners.has(key)) {
-      this.listeners.set(key, new Set());
+      this.listeners.set(key, /* @__PURE__ */ new Set());
     }
     this.listeners.get(key).add(callback);
-
-    // Retornar função para unsubscribe
     return () => {
       if (this.listeners.has(key)) {
         this.listeners.get(key).delete(callback);
       }
     };
   }
-
   unsubscribe(key, callback) {
     if (this.listeners.has(key)) {
       this.listeners.get(key).delete(callback);
     }
   }
-
   clearState(key) {
     if (key) {
       this.state.delete(key);
@@ -61,39 +56,25 @@ class StateManager {
       this.listeners.clear();
     }
   }
-
   // Persistir estado no localStorage
   saveToStorage(key) {
-    try {
-      const value = this.getState(key);
-      if (value !== undefined) {
-        localStorage.setItem(`achievements-${key}`, JSON.stringify(value));
-      }
-    } catch (error) {
-      // Log removido para evitar dependência circular com DebugManager
+    const value = this.getState(key);
+    if (value !== void 0) {
+      localStorage.setItem(`achievements-${key}`, JSON.stringify(value));
     }
   }
-
   // Carregar estado do localStorage
   loadFromStorage(key) {
-    try {
-      const stored = localStorage.getItem(`achievements-${key}`);
-      if (stored) {
-        const value = JSON.parse(stored);
-        this.setState(key, value);
-        return value;
-      }
-    } catch (error) {
-      // Log removido para evitar dependência circular com DebugManager
+    const stored = localStorage.getItem(`achievements-${key}`);
+    if (stored) {
+      const value = JSON.parse(stored);
+      this.setState(key, value);
+      return value;
     }
     return null;
   }
 }
-
-// Exportar para uso global
-
-// Exportar a classe StateManager
-export { StateManager };
-
-// Disponibilizar globalmente para compatibilidade
 window.StateManager = StateManager;
+export {
+  StateManager
+};

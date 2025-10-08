@@ -12,26 +12,29 @@ var __name222 = /* @__PURE__ */ __name22(
   (target, value) => __defProp222(target, "name", { value, configurable: true }),
   "__name"
 );
-import { initI18n, changeLanguage, t, translatePage } from "./i18n-hot.js";
+var __defProp2222 = Object.defineProperty;
+var __name2222 = /* @__PURE__ */ __name222(
+  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp22222 = Object.defineProperty;
+var __name22222 = /* @__PURE__ */ __name2222(
+  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
+  "__name"
+);
+import { initI18n, changeLanguage, translatePage } from "./i18n-hot.js";
 import { filterAllowedSettings } from "./config/allowed-settings-keys.js";
-const isDebugEnabled = /* @__PURE__ */ __name222(() => {
-  try {
-    const localStorageDebug = localStorage.getItem("DEBUG_TOOLS");
-    if (localStorageDebug === "true") return true;
-    if (window.DEBUG_TOOLS === true) return true;
-    if (typeof process !== "undefined" && process.env && process.env.DEBUG_TOOLS === "true")
-      return true;
-    return false;
-  } catch (error) {
-    return false;
-  }
+const isDebugEnabled = /* @__PURE__ */ __name22222(() => {
+  const localStorageDebug = localStorage.getItem("DEBUG_TOOLS");
+  if (localStorageDebug === "true") return true;
+  if (window.DEBUG_TOOLS === true) return true;
+  if (typeof process !== "undefined" && process.env && process.env.DEBUG_TOOLS === "true")
+    return true;
 }, "isDebugEnabled");
 let debugManagerPromise = null;
 if (isDebugEnabled()) {
-  debugManagerPromise = import("./utils/debug-manager.js").then((module) => {
+  debugManagerPromise = import("./utils/debug-manager.js").then(() => {
     return window.getDebugManager();
-  }).catch((error) => {
-    return null;
   });
 }
 class SetupWizard {
@@ -47,6 +50,12 @@ class SetupWizard {
   static {
     __name222(this, "SetupWizard");
   }
+  static {
+    __name2222(this, "SetupWizard");
+  }
+  static {
+    __name22222(this, "SetupWizard");
+  }
   constructor() {
     this.currentStep = 0;
     this.steps = ["welcome", "language", "theme", "performance", "complete"];
@@ -54,40 +63,28 @@ class SetupWizard {
     this.init();
   }
   async init() {
-    try {
-      await this.initI18nSystem();
-      this.setupEventListeners();
-      this.updateNavigationButtons();
-      await this.translatePage();
-      this.showStep(this.currentStep);
-    } catch (error) {
-    }
+    await this.initI18nSystem();
+    this.setupEventListeners();
+    this.updateNavigationButtons();
+    await this.translatePage();
+    this.showStep(this.currentStep);
   }
   async initI18nSystem() {
-    try {
-      let currentLanguage = "pt-BR";
-      if (window.electronAPI && window.electronAPI.i18n) {
-        try {
-          currentLanguage = await window.electronAPI.i18n.getCurrentLanguage() || "pt-BR";
-        } catch (error) {
-        }
+    let currentLanguage = "pt-BR";
+    if (window.electronAPI && window.electronAPI.i18n) {
+      currentLanguage = await window.electronAPI.i18n.getCurrentLanguage() || "pt-BR";
+    } else {
+      const browserLanguage = navigator.language || navigator.userLanguage;
+      if (browserLanguage.startsWith("pt")) {
+        currentLanguage = "pt-BR";
       } else {
-        const browserLanguage = navigator.language || navigator.userLanguage;
-        if (browserLanguage.startsWith("pt")) {
-          currentLanguage = "pt-BR";
-        } else {
-          currentLanguage = "en";
-        }
+        currentLanguage = "en";
       }
-      await initI18n(currentLanguage);
-    } catch (error) {
     }
+    await initI18n(currentLanguage);
   }
   async translatePage() {
-    try {
-      await translatePage();
-    } catch (error) {
-    }
+    await translatePage();
   }
   setupEventListeners() {
     document.addEventListener("click", (e) => {
@@ -118,8 +115,7 @@ class SetupWizard {
         this.updateSetupData("virtualScrolling", e.target.checked);
       }
       if (e.target.id === "setupLanguageSelect") {
-        this.setLanguage(e.target.value).catch((error) => {
-        });
+        this.setLanguage(e.target.value);
         this.updateNavigationButtons();
       }
     });
@@ -219,83 +215,77 @@ class SetupWizard {
     return filterAllowedSettings(settings);
   }
   async finishSetup() {
-    try {
-      const liteModeToggle = document.getElementById("setupLiteModeToggle");
-      const virtualScrollToggle = document.getElementById("setupVirtualScrollToggle");
-      const languageSelect = document.getElementById("setupLanguageSelect");
-      if (liteModeToggle) {
-        this.setupData.liteMode = liteModeToggle.checked;
-        debugManagerPromise?.then(
-          (debugManager) => debugManager?.log("\u{1F50B} Modo Lite capturado:", liteModeToggle.checked)
-        );
-      }
-      if (virtualScrollToggle) {
-        this.setupData.virtualScrolling = virtualScrollToggle.checked;
-        debugManagerPromise?.then(
-          (debugManager) => debugManager?.log("\u{1F4DC} Virtual Scrolling capturado:", virtualScrollToggle.checked)
-        );
-      }
-      if (languageSelect) {
-        this.setupData.language = languageSelect.value;
-        debugManagerPromise?.then(
-          (debugManager) => debugManager?.log("\u{1F30D} Idioma capturado:", languageSelect.value)
-        );
-      }
-      const settings = {
-        setupComplete: true,
-        language: this.setupData.language || "en",
-        theme: this.setupData.theme || "dark",
-        liteMode: this.setupData.liteMode || false,
-        virtualScrolling: this.setupData.virtualScrolling !== false,
-        animations: this.setupData.liteMode ? "disabled" : "enabled",
-        compactMode: false,
-        showTooltips: true,
-        notifications: {
-          enabled: true,
-          achievements: true
-        },
-        autoSync: true,
-        syncInterval: 15,
-        cacheSize: 100,
-        ...this.setupData
-      };
+    const liteModeToggle = document.getElementById("setupLiteModeToggle");
+    const virtualScrollToggle = document.getElementById("setupVirtualScrollToggle");
+    const languageSelect = document.getElementById("setupLanguageSelect");
+    if (liteModeToggle) {
+      this.setupData.liteMode = liteModeToggle.checked;
       debugManagerPromise?.then(
-        (debugManager) => debugManager?.log("\u{1F4BE} Configura\xE7\xF5es finais a serem salvas:", settings)
+        (debugManager) => debugManager?.log("\u{1F50B} Modo Lite capturado:", liteModeToggle.checked)
       );
-      if (window.electronAPI && window.electronAPI.fs) {
-        const sanitizedSettings = window.IPCSanitizer ? window.IPCSanitizer.sanitizeSettings(settings) : this.sanitizeSettingsManual(settings);
-        await window.electronAPI.fs.saveSettings(sanitizedSettings);
-      } else {
-        localStorage.setItem("achievements-settings", JSON.stringify(settings));
-      }
-      const setupWizard = document.getElementById("setupWizard");
-      const mainApp = document.getElementById("mainApp");
-      if (setupWizard) {
-        setupWizard.classList.add("hidden");
-      }
-      if (mainApp) {
-        mainApp.classList.remove("hidden");
-      }
-      if (window.app) {
-        window.app.state.setState("settings", settings);
-        window.app.isSetupComplete = true;
-        window.app.applyTheme(settings.theme);
-        window.app.applyLiteMode(settings.liteMode);
-        window.app.loadDashboard();
-      }
-    } catch (error) {
+    }
+    if (virtualScrollToggle) {
+      this.setupData.virtualScrolling = virtualScrollToggle.checked;
+      debugManagerPromise?.then(
+        (debugManager) => debugManager?.log("\u{1F4DC} Virtual Scrolling capturado:", virtualScrollToggle.checked)
+      );
+    }
+    if (languageSelect) {
+      this.setupData.language = languageSelect.value;
+      debugManagerPromise?.then(
+        (debugManager) => debugManager?.log("\u{1F30D} Idioma capturado:", languageSelect.value)
+      );
+    }
+    const settings = {
+      setupComplete: true,
+      language: this.setupData.language || "en",
+      theme: this.setupData.theme || "dark",
+      liteMode: this.setupData.liteMode || false,
+      virtualScrolling: this.setupData.virtualScrolling !== false,
+      animations: this.setupData.liteMode ? "disabled" : "enabled",
+      compactMode: false,
+      showTooltips: true,
+      notifications: {
+        enabled: true,
+        achievements: true
+      },
+      autoSync: true,
+      syncInterval: 15,
+      cacheSize: 100,
+      ...this.setupData
+    };
+    debugManagerPromise?.then(
+      (debugManager) => debugManager?.log("\u{1F4BE} Configura\xE7\xF5es finais a serem salvas:", settings)
+    );
+    if (window.electronAPI && window.electronAPI.fs) {
+      const sanitizedSettings = window.IPCSanitizer ? window.IPCSanitizer.sanitizeSettings(settings) : this.sanitizeSettingsManual(settings);
+      await window.electronAPI.fs.saveSettings(sanitizedSettings);
+    } else {
+      localStorage.setItem("achievements-settings", JSON.stringify(settings));
+    }
+    const setupWizard = document.getElementById("setupWizard");
+    const mainApp = document.getElementById("mainApp");
+    if (setupWizard) {
+      setupWizard.classList.add("hidden");
+    }
+    if (mainApp) {
+      mainApp.classList.remove("hidden");
+    }
+    if (window.app) {
+      window.app.state.setState("settings", settings);
+      window.app.isSetupComplete = true;
+      window.app.applyTheme(settings.theme);
+      window.app.applyLiteMode(settings.liteMode);
+      window.app.loadDashboard();
     }
   }
   // Métodos para configurações específicas
   async setLanguage(language) {
     this.updateSetupData("language", language);
-    try {
-      await changeLanguage(language);
-      await this.translatePage();
-      this.updateLanguageSummary(language);
-      this.showLanguageChangeEffect(language);
-    } catch (error) {
-    }
+    await changeLanguage(language);
+    await this.translatePage();
+    this.updateLanguageSummary(language);
+    this.showLanguageChangeEffect(language);
   }
   // Atualizar o resumo do idioma na tela final
   updateLanguageSummary(language) {

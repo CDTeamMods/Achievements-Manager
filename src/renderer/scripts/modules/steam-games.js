@@ -12,6 +12,16 @@ var __name222 = /* @__PURE__ */ __name22(
   (target, value) => __defProp222(target, "name", { value, configurable: true }),
   "__name"
 );
+var __defProp2222 = Object.defineProperty;
+var __name2222 = /* @__PURE__ */ __name222(
+  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp22222 = Object.defineProperty;
+var __name22222 = __name2222(
+  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
+  "__name"
+);
 class SteamGamesManager {
   static {
     __name(this, "SteamGamesManager");
@@ -24,6 +34,12 @@ class SteamGamesManager {
   }
   static {
     __name222(this, "SteamGamesManager");
+  }
+  static {
+    __name2222(this, "SteamGamesManager");
+  }
+  static {
+    __name22222(this, "SteamGamesManager");
   }
   constructor(app) {
     this.app = app;
@@ -213,18 +229,14 @@ class SteamGamesManager {
    * Mostrar dialog de conversão
    */
   async showConvertDialog(gameId, gameName) {
-    try {
-      const featureName = this.app && this.app.modules && this.app.modules.helpers && this.app.modules.helpers.t ? await this.app.modules.helpers.t("steam.convertToGse") : await this.app?.t?.("steam.convertToGse", "Converter para GSE");
-      if (this.app && typeof this.app.showFeatureDialog === "function") {
-        this.app.showFeatureDialog(featureName);
-        return;
-      }
-    } catch (e) {
-      if (this.app && typeof this.app.showFeatureDialog === "function") {
-        const featureName = await this.app?.t?.("steam.convertToGse", "Converter para GSE");
-        this.app.showFeatureDialog(featureName);
-        return;
-      }
+    const featureName = this.app && this.app.modules && this.app.modules.helpers && this.app.modules.helpers.t ? await this.app.modules.helpers.t("steam.convertToGse") : await this.app?.t?.("steam.convertToGse", "Converter para GSE");
+    if (this.app && typeof this.app.showFeatureDialog === "function") {
+      this.app.showFeatureDialog(featureName);
+      return;
+    }
+    if (this.app && typeof this.app.showFeatureDialog === "function") {
+      const featureName2 = await this.app?.t?.("steam.convertToGse", "Converter para GSE");
+      this.app.showFeatureDialog(featureName2);
     }
     try {
       const achievementsResult = await this.app.safeElectronAPICall(
@@ -328,56 +340,43 @@ class SteamGamesManager {
       this.showDialog(dialogHTML);
     } catch (error) {
       const loadErrorText = await this.app.modules.helpers.t("errors.gameInfoLoadError");
-      this.app.showError(loadErrorText);
+      this.app.showError(loadErrorText + "\n" + error);
     }
   }
   /**
    * Converter jogo para GSE
    */
   async convertGameToGSE(gameId, gameName) {
-    try {
-      const confirmBtn = document.getElementById("confirmConvertBtn");
-      const [convertingText, convertNowText] = await Promise.all([
-        this.app.modules.helpers.t("steam.conversion.converting"),
-        this.app.modules.helpers.t("steam.conversion.convertNow")
+    const confirmBtn = document.getElementById("confirmConvertBtn");
+    const [convertingText, convertNowText] = await Promise.all([
+      this.app.modules.helpers.t("steam.conversion.converting"),
+      this.app.modules.helpers.t("steam.conversion.convertNow")
+    ]);
+    if (confirmBtn) {
+      confirmBtn.disabled = true;
+      confirmBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${convertingText}`;
+    }
+    const result = await this.app.safeElectronAPICall("steam.convertToGSE", gameId);
+    if (result.success) {
+      const [successText, ofText, achievementsTitleText, fileSavedText] = await Promise.all([
+        this.app.modules.helpers.t("steam.conversion.success", { gameName }),
+        this.app.modules.helpers.t("common.of"),
+        this.app.modules.helpers.t("steam.achievements.title"),
+        this.app.modules.helpers.t("steam.conversion.fileSaved")
       ]);
-      if (confirmBtn) {
-        confirmBtn.disabled = true;
-        confirmBtn.innerHTML = `<i class="fas fa-spinner fa-spin"></i> ${convertingText}`;
-      }
-      const result = await this.app.safeElectronAPICall("steam.convertToGSE", gameId);
-      if (result.success) {
-        const [successText, ofText, achievementsTitleText, fileSavedText] = await Promise.all([
-          this.app.modules.helpers.t("steam.conversion.success", { gameName }),
-          this.app.modules.helpers.t("common.of"),
-          this.app.modules.helpers.t("steam.achievements.title"),
-          this.app.modules.helpers.t("steam.conversion.fileSaved")
-        ]);
-        this.app.showSuccess(
-          `\u{1F389} ${successText}
+      this.app.showSuccess(
+        `\u{1F389} ${successText}
 
 \u{1F4CA} ${result.earnedAchievements} ${ofText} ${result.totalAchievements} ${achievementsTitleText} (${result.completionPercentage}%)
 \u{1F4C1} ${fileSavedText}: ${result.filePath}`
-        );
-        this.closeDialog();
-      } else {
-        const [conversionErrorText, unknownErrorText] = await Promise.all([
-          this.app.modules.helpers.t("steam.conversion.error"),
-          this.app.modules.helpers.t("errors.unknownError")
-        ]);
-        this.app.showError(`${conversionErrorText}: ${result.error || unknownErrorText}`);
-        if (confirmBtn) {
-          confirmBtn.disabled = false;
-          confirmBtn.innerHTML = `<i class="fas fa-download"></i> ${convertNowText}`;
-        }
-      }
-    } catch (error) {
-      const [conversionErrorText, convertNowText] = await Promise.all([
+      );
+      this.closeDialog();
+    } else {
+      const [conversionErrorText, unknownErrorText] = await Promise.all([
         this.app.modules.helpers.t("steam.conversion.error"),
-        this.app.modules.helpers.t("steam.conversion.convertNow")
+        this.app.modules.helpers.t("errors.unknownError")
       ]);
-      this.app.showError(conversionErrorText);
-      const confirmBtn = document.getElementById("confirmConvertBtn");
+      this.app.showError(`${conversionErrorText}: ${result.error || unknownErrorText}`);
       if (confirmBtn) {
         confirmBtn.disabled = false;
         confirmBtn.innerHTML = `<i class="fas fa-download"></i> ${convertNowText}`;
@@ -461,7 +460,7 @@ class SteamGamesManager {
       }
     } catch (error) {
       const loadErrorText = await this.app.modules.helpers.t("steam.achievements.loadError");
-      this.app.showError(loadErrorText);
+      this.app.showError(loadErrorText + "\n" + error);
     }
   }
   /**
@@ -525,12 +524,12 @@ class SteamGamesManager {
    * Exibir dialog de conquistas
    */
   async displayAchievementsDialog(gameId, gameName, achievementsData) {
+    gameId = null;
     const achievements = achievementsData.achievements || [];
     const earnedCount = achievementsData.earnedAchievements || 0;
     const totalCount = achievementsData.totalAchievements || 0;
     const percentage = achievementsData.completionPercentage || 0;
     const hasWarning = achievementsData.warning || achievementsData.warningType;
-    const strategy = achievementsData.strategy || "unknown";
     const hasUserProgress = achievementsData.hasUserProgress !== false;
     const [
       earnedOnText,
@@ -538,7 +537,6 @@ class SteamGamesManager {
       limitedDataWarningText,
       progressText,
       ofText,
-      conversionTitleText,
       globalProgressWarningText,
       legendaryText,
       epicText,
@@ -560,7 +558,7 @@ class SteamGamesManager {
       this.app.modules.helpers.t("dashboard.trophies.rare.name"),
       this.app.modules.helpers.t("dashboard.trophies.common.name")
     ]);
-    const achievementsList = achievements.map((achievement, index) => {
+    const achievementsList = achievements.map((achievement) => {
       const earnedClass = achievement.earned ? "earned" : "unearned";
       const earnedIcon = achievement.earned ? "fas fa-check-circle" : "far fa-circle";
       let earnedDate = "";
@@ -651,53 +649,52 @@ class SteamGamesManager {
    * Configurar Virtual Scrolling para conquistas
    */
   async setupVirtualScrolling(achievements) {
-    try {
-      const settings = this.app.modules.state?.getState("settings") || {};
-      const isVirtualScrollingEnabled = settings.virtualScrolling !== false;
-      if (!isVirtualScrollingEnabled || achievements.length < 10) {
-        return;
-      }
-      const achievementsList = document.getElementById("achievementsList");
-      if (!achievementsList || !window.VirtualScroller) {
-        return;
-      }
-      achievementsList.innerHTML = "";
-      const [earnedOnTextVS, legendaryTextVS, epicTextVS, rareTextVS, commonTextVS] = await Promise.all([
-        this.app.modules.helpers.t("steam.achievements.earnedOn"),
-        this.app.modules.helpers.t("dashboard.trophies.legendary.name"),
-        this.app.modules.helpers.t("dashboard.trophies.epic.name"),
-        this.app.modules.helpers.t("dashboard.trophies.rare.name"),
-        this.app.modules.helpers.t("dashboard.trophies.common.name")
-      ]);
-      const virtualScroller = new window.VirtualScroller(achievementsList, {
-        itemHeight: 120,
-        // Altura do item de conquista
-        bufferSize: 3,
-        // Itens extras para buffer
-        threshold: 50,
-        // Limite para ativar
-        renderItem: /* @__PURE__ */ __name222((achievement, index) => {
-          const earnedClass = achievement.earned ? "earned" : "unearned";
-          const earnedIcon = achievement.earned ? "fas fa-check-circle" : "far fa-circle";
-          const earnedDate = achievement.earned && achievement.earnedTime ? new Date(achievement.earnedTime * 1e3).toLocaleDateString("pt-BR") : "";
-          let rarityInfo = "";
-          if (achievement.globalPercent !== null && achievement.globalPercent !== void 0) {
-            const rarity = achievement.globalPercent;
-            let rarityClass = "common";
-            let rarityText = commonTextVS;
-            if (rarity < 1) {
-              rarityClass = "legendary";
-              rarityText = legendaryTextVS;
-            } else if (rarity < 5) {
-              rarityClass = "epic";
-              rarityText = epicTextVS;
-            } else if (rarity < 15) {
-              rarityClass = "rare";
-              rarityText = rareTextVS;
-            }
-            rarityInfo = `<div class="achievement-rarity ${rarityClass}"><i class="fas fa-star"></i> ${rarityText} (${rarity.toFixed(1)}%)</div>`;
+    const settings = this.app.modules.state?.getState("settings") || {};
+    const isVirtualScrollingEnabled = settings.virtualScrolling !== false;
+    if (!isVirtualScrollingEnabled || achievements.length < 10) {
+      return;
+    }
+    const achievementsList = document.getElementById("achievementsList");
+    if (!achievementsList || !window.VirtualScroller) {
+      return;
+    }
+    achievementsList.innerHTML = "";
+    const [earnedOnTextVS, legendaryTextVS, epicTextVS, rareTextVS, commonTextVS] = await Promise.all([
+      this.app.modules.helpers.t("steam.achievements.earnedOn"),
+      this.app.modules.helpers.t("dashboard.trophies.legendary.name"),
+      this.app.modules.helpers.t("dashboard.trophies.epic.name"),
+      this.app.modules.helpers.t("dashboard.trophies.rare.name"),
+      this.app.modules.helpers.t("dashboard.trophies.common.name")
+    ]);
+    const virtualScroller = new window.VirtualScroller(achievementsList, {
+      itemHeight: 120,
+      // Altura do item de conquista
+      bufferSize: 3,
+      // Itens extras para buffer
+      threshold: 50,
+      // Limite para ativar
+      renderItem: __name22222((achievement) => {
+        const earnedClass = achievement.earned ? "earned" : "unearned";
+        const earnedIcon = achievement.earned ? "fas fa-check-circle" : "far fa-circle";
+        const earnedDate = achievement.earned && achievement.earnedTime ? new Date(achievement.earnedTime * 1e3).toLocaleDateString("pt-BR") : "";
+        let rarityInfo = "";
+        if (achievement.globalPercent !== null && achievement.globalPercent !== void 0) {
+          const rarity = achievement.globalPercent;
+          let rarityClass = "common";
+          let rarityText = commonTextVS;
+          if (rarity < 1) {
+            rarityClass = "legendary";
+            rarityText = legendaryTextVS;
+          } else if (rarity < 5) {
+            rarityClass = "epic";
+            rarityText = epicTextVS;
+          } else if (rarity < 15) {
+            rarityClass = "rare";
+            rarityText = rareTextVS;
           }
-          return `
+          rarityInfo = `<div class="achievement-rarity ${rarityClass}"><i class="fas fa-star"></i> ${rarityText} (${rarity.toFixed(1)}%)</div>`;
+        }
+        return `
             <div class="achievement-item ${earnedClass}">
               <div class="achievement-icon">
                 <img src="${achievement.earned ? achievement.icon : achievement.icongray}" 
@@ -715,12 +712,10 @@ class SteamGamesManager {
               </div>
             </div>
           `;
-        }, "renderItem")
-      });
-      virtualScroller.setData(achievements);
-      this.currentVirtualScroller = virtualScroller;
-    } catch (error) {
-    }
+      }, "renderItem")
+    });
+    virtualScroller.setData(achievements);
+    this.currentVirtualScroller = virtualScroller;
   }
   /**
    * Mostrar dialog genérico
@@ -735,7 +730,7 @@ class SteamGamesManager {
         this.closeDialog();
       }
     });
-    const handleEscKey = /* @__PURE__ */ __name222((e) => {
+    const handleEscKey = __name22222((e) => {
       if (e.key === "Escape") {
         this.closeDialog();
       }
@@ -743,11 +738,8 @@ class SteamGamesManager {
     overlay.escKeyHandler = handleEscKey;
     document.addEventListener("keydown", handleEscKey);
     document.body.appendChild(overlay);
-    try {
-      if (this.app && typeof this.app.translatePage === "function") {
-        this.app.translatePage();
-      }
-    } catch (e) {
+    if (this.app && typeof this.app.translatePage === "function") {
+      this.app.translatePage();
     }
     setTimeout(() => {
       overlay.classList.add("show");
@@ -760,7 +752,6 @@ class SteamGamesManager {
   closeDialog() {
     if (this.currentVirtualScroller) {
       this.currentVirtualScroller.destroy();
-      this.currentVirtualScroller = null;
     }
     const overlay = document.querySelector(".dialog-overlay");
     if (overlay) {

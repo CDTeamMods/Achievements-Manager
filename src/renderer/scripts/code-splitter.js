@@ -12,6 +12,16 @@ var __name222 = /* @__PURE__ */ __name22(
   (target, value) => __defProp222(target, "name", { value, configurable: true }),
   "__name"
 );
+var __defProp2222 = Object.defineProperty;
+var __name2222 = /* @__PURE__ */ __name222(
+  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp22222 = Object.defineProperty;
+var __name22222 = /* @__PURE__ */ __name2222(
+  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
+  "__name"
+);
 class CodeSplitter {
   static {
     __name(this, "CodeSplitter");
@@ -24,6 +34,12 @@ class CodeSplitter {
   }
   static {
     __name222(this, "CodeSplitter");
+  }
+  static {
+    __name2222(this, "CodeSplitter");
+  }
+  static {
+    __name22222(this, "CodeSplitter");
   }
   constructor() {
     this.chunks = /* @__PURE__ */ new Map();
@@ -58,14 +74,10 @@ class CodeSplitter {
         await this.loadChunk(dep);
       }
     }
-    try {
-      const chunk = await this.loadChunkByName(chunkName);
-      this.chunks.set(chunkName, chunk);
-      this.loadedChunks.add(chunkName);
-      return chunk;
-    } catch (error) {
-      throw error;
-    }
+    const chunk = await this.loadChunkByName(chunkName);
+    this.chunks.set(chunkName, chunk);
+    this.loadedChunks.add(chunkName);
+    return chunk;
   }
   /**
    * Carrega chunk por nome
@@ -149,23 +161,15 @@ class CodeSplitter {
    * Carrega chunk steam (Steam integration)
    */
   async loadSteamChunk() {
-    try {
-      const { SteamGamesManager } = await import("./modules/steam-games.js");
-      return { SteamGamesManager };
-    } catch (error) {
-      return { SteamGamesManager: null };
-    }
+    const { SteamGamesManager } = await import("./modules/steam-games.js");
+    return { SteamGamesManager };
   }
   /**
    * Carrega chunk performance (monitoramento)
    */
   async loadPerformanceChunk() {
-    try {
-      const { PerformanceMonitor } = await import("./performance.js");
-      return { PerformanceMonitor };
-    } catch (error) {
-      return { PerformanceMonitor: null };
-    }
+    const { PerformanceMonitor } = await import("./performance.js");
+    return { PerformanceMonitor };
   }
   /**
    * Pré-carrega chunks críticos
@@ -173,7 +177,7 @@ class CodeSplitter {
    */
   async preloadChunks(chunkNames) {
     const preloadPromises = chunkNames.map(
-      (chunkName) => this.loadChunk(chunkName).catch((error) => {
+      (chunkName) => this.loadChunk(chunkName).catch(() => {
         return null;
       })
     );
@@ -185,15 +189,11 @@ class CodeSplitter {
    * @param {Function} callback - Callback após carregamento
    */
   async loadOnDemand(chunkNames, callback = null) {
-    try {
-      const chunks = await Promise.all(chunkNames.map((chunkName) => this.loadChunk(chunkName)));
-      if (callback && typeof callback === "function") {
-        await callback(chunks);
-      }
-      return chunks;
-    } catch (error) {
-      throw error;
+    const chunks = await Promise.all(chunkNames.map((chunkName) => this.loadChunk(chunkName)));
+    if (callback && typeof callback === "function") {
+      await callback(chunks);
     }
+    return chunks;
   }
   /**
    * Verifica se um chunk está carregado
@@ -238,11 +238,7 @@ class CodeSplitter {
   getChunkSizes() {
     const sizes = {};
     for (const [chunkName, chunk] of this.chunks) {
-      try {
-        sizes[chunkName] = JSON.stringify(chunk).length;
-      } catch (error) {
-        sizes[chunkName] = "N/A";
-      }
+      sizes[chunkName] = JSON.stringify(chunk).length;
     }
     return sizes;
   }

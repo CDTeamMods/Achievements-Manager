@@ -8,16 +8,32 @@ var __name22 = /* @__PURE__ */ __name2(
   "__name"
 );
 var __defProp222 = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name222 = /* @__PURE__ */ __name22(
   (target, value) => __defProp222(target, "name", { value, configurable: true }),
   "__name"
 );
-var __commonJS = /* @__PURE__ */ __name22(
-  (cb, mod) => /* @__PURE__ */ __name22(
-    /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
-      return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-    }, "__require"), "__require"),
+var __defProp2222 = Object.defineProperty;
+var __name2222 = /* @__PURE__ */ __name222(
+  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp22222 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name22222 = /* @__PURE__ */ __name2222(
+  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __commonJS = /* @__PURE__ */ __name2222(
+  (cb, mod) => /* @__PURE__ */ __name2222(
+    /* @__PURE__ */ __name222(
+      /* @__PURE__ */ __name22(
+        /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
+          return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+        }, "__require"), "__require"),
+        "__require"
+      ),
+      "__require"
+    ),
     "__require"
   ),
   "__commonJS"
@@ -38,6 +54,12 @@ var require_sandbox_manager = __commonJS({
       }
       static {
         __name222(this, "SandboxManager");
+      }
+      static {
+        __name2222(this, "SandboxManager");
+      }
+      static {
+        __name22222(this, "SandboxManager");
       }
       constructor() {
         this.isDev = process.env.NODE_ENV === "development";
@@ -173,10 +195,8 @@ var require_sandbox_manager = __commonJS({
           this.processMetrics.created++;
           this.processMetrics.active++;
           this.setupProcessEvents(processInfo);
-          console.log(`\u{1F4E6} Processo sandboxed criado: ${processId} (${type})`);
           return processId;
         } catch (error) {
-          console.error(`\u274C Erro ao criar processo sandboxed: ${error.message}`);
           this.processMetrics.errors++;
           throw error;
         }
@@ -185,19 +205,17 @@ var require_sandbox_manager = __commonJS({
        * Configura eventos de um processo
        */
       setupProcessEvents(processInfo) {
-        const { process: process2, id, type } = processInfo;
+        const { process: process2, id } = processInfo;
         process2.on("message", (message) => {
           processInfo.lastActivity = Date.now();
           processInfo.messageCount++;
           this.handleProcessMessage(id, message);
         });
-        process2.on("error", (error) => {
-          console.error(`\u274C Erro no processo ${id}: ${error.message}`);
+        process2.on("error", () => {
           this.processMetrics.errors++;
           this.destroyProcess(id);
         });
-        process2.on("exit", (code) => {
-          console.log(`\u{1F4E6} Processo ${id} finalizado com c\xF3digo: ${code}`);
+        process2.on("exit", () => {
           this.sandboxedProcesses.delete(id);
           this.processMetrics.active--;
           this.processMetrics.destroyed++;
@@ -206,7 +224,6 @@ var require_sandbox_manager = __commonJS({
           if (this.sandboxedProcesses.has(id)) {
             const timeSinceActivity = Date.now() - processInfo.lastActivity;
             if (timeSinceActivity > this.resourceLimits.idleTimeout) {
-              console.log(`\u23F0 Processo ${id} inativo, finalizando...`);
               this.destroyProcess(id);
             }
           }
@@ -224,14 +241,8 @@ var require_sandbox_manager = __commonJS({
             processInfo.cpuUsage = message.data.cpu;
             break;
           case "error":
-            console.error(`\u274C Erro reportado pelo processo ${processId}: ${message.data}`);
             this.processMetrics.errors++;
             break;
-          case "ready":
-            console.log(`\u2705 Processo ${processId} pronto`);
-            break;
-          default:
-            console.log(`\u{1F4E6} Mensagem do processo ${processId}:`, message);
         }
       }
       /**
@@ -252,7 +263,7 @@ var require_sandbox_manager = __commonJS({
             id: messageId,
             timestamp: Date.now()
           };
-          const responseListener = /* @__PURE__ */ __name222((response) => {
+          const responseListener = /* @__PURE__ */ __name22222((response) => {
             if (response.id === messageId) {
               clearTimeout(timeoutId);
               processInfo.process.off("message", responseListener);
@@ -269,15 +280,10 @@ var require_sandbox_manager = __commonJS({
       destroyProcess(processId) {
         const processInfo = this.sandboxedProcesses.get(processId);
         if (!processInfo) return;
-        try {
-          processInfo.process.kill();
-          this.sandboxedProcesses.delete(processId);
-          this.processMetrics.active--;
-          this.processMetrics.destroyed++;
-          console.log(`\u{1F5D1}\uFE0F Processo ${processId} destru\xEDdo`);
-        } catch (error) {
-          console.error(`\u274C Erro ao destruir processo ${processId}: ${error.message}`);
-        }
+        processInfo.process.kill();
+        this.sandboxedProcesses.delete(processId);
+        this.processMetrics.active--;
+        this.processMetrics.destroyed++;
       }
       /**
        * Limpa processos inativos
@@ -294,9 +300,6 @@ var require_sandbox_manager = __commonJS({
         for (const id of processesToCleanup) {
           this.destroyProcess(id);
         }
-        console.log(
-          `\u{1F9F9} Limpeza conclu\xEDda: ${processesToCleanup.length} processos removidos`
-        );
       }
       /**
        * Monitora recursos dos processos
@@ -308,11 +311,9 @@ var require_sandbox_manager = __commonJS({
           totalMemory += processInfo.memoryUsage;
           totalCPU += processInfo.cpuUsage;
           if (processInfo.memoryUsage > processInfo.config.maxMemory) {
-            console.warn(`\u26A0\uFE0F Processo ${id} excedeu limite de mem\xF3ria`);
             this.destroyProcess(id);
           }
           if (processInfo.cpuUsage > processInfo.config.maxCPU) {
-            console.warn(`\u26A0\uFE0F Processo ${id} excedeu limite de CPU`);
             this.destroyProcess(id);
           }
         }
@@ -358,13 +359,11 @@ var require_sandbox_manager = __commonJS({
        * Finaliza todos os processos
        */
       async shutdown() {
-        console.log("\u{1F4E6} Finalizando todos os processos sandboxed...");
         const processIds = Array.from(this.sandboxedProcesses.keys());
         for (const id of processIds) {
           this.destroyProcess(id);
         }
         await new Promise((resolve) => setTimeout(resolve, 1e3));
-        console.log("\u2705 Todos os processos sandboxed finalizados");
       }
     }
     let sandboxManager = null;
@@ -378,6 +377,8 @@ var require_sandbox_manager = __commonJS({
     __name2(getSandboxManager, "getSandboxManager");
     __name22(getSandboxManager, "getSandboxManager");
     __name222(getSandboxManager, "getSandboxManager");
+    __name2222(getSandboxManager, "getSandboxManager");
+    __name22222(getSandboxManager, "getSandboxManager");
     module.exports = {
       SandboxManager,
       getSandboxManager

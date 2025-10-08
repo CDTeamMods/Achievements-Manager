@@ -12,6 +12,16 @@ var __name222 = /* @__PURE__ */ __name22(
   (target, value) => __defProp222(target, "name", { value, configurable: true }),
   "__name"
 );
+var __defProp2222 = Object.defineProperty;
+var __name2222 = /* @__PURE__ */ __name222(
+  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp22222 = Object.defineProperty;
+var __name22222 = /* @__PURE__ */ __name2222(
+  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
+  "__name"
+);
 const fs = require("node:fs").promises;
 const path = require("node:path");
 const crypto = require("crypto");
@@ -27,6 +37,12 @@ class FileOperationsWorker {
   }
   static {
     __name222(this, "FileOperationsWorker");
+  }
+  static {
+    __name2222(this, "FileOperationsWorker");
+  }
+  static {
+    __name22222(this, "FileOperationsWorker");
   }
   constructor() {
     this.allowedPaths = [];
@@ -60,10 +76,11 @@ class FileOperationsWorker {
           await this.initialize(data);
           this.sendResponse(id, { success: true });
           break;
-        case "readFile":
+        case "readFile": {
           const content = await this.readFile(data.filePath);
           this.sendResponse(id, { content });
           break;
+        }
         case "writeFile":
           await this.writeFile(data.filePath, data.content);
           this.sendResponse(id, { success: true });
@@ -72,10 +89,11 @@ class FileOperationsWorker {
           await this.deleteFile(data.filePath);
           this.sendResponse(id, { success: true });
           break;
-        case "listDirectory":
+        case "listDirectory": {
           const files = await this.listDirectory(data.dirPath);
           this.sendResponse(id, { files });
           break;
+        }
         case "createDirectory":
           await this.createDirectory(data.dirPath);
           this.sendResponse(id, { success: true });
@@ -88,14 +106,16 @@ class FileOperationsWorker {
           await this.moveFile(data.sourcePath, data.destPath);
           this.sendResponse(id, { success: true });
           break;
-        case "getFileStats":
+        case "getFileStats": {
           const stats = await this.getFileStats(data.filePath);
           this.sendResponse(id, { stats });
           break;
-        case "validateFileIntegrity":
+        }
+        case "validateFileIntegrity": {
           const integrity = await this.validateFileIntegrity(data.filePath);
           this.sendResponse(id, { integrity });
           break;
+        }
         default:
           throw new Error(`Tipo de mensagem n\xE3o suportado: ${type}`);
       }
@@ -110,7 +130,6 @@ class FileOperationsWorker {
     this.config = config.config;
     this.processId = config.processId;
     this.allowedPaths = this.config.allowedPaths || [];
-    console.log(`\u{1F4C1} Worker de arquivos inicializado: ${this.processId}`);
   }
   /**
    * Valida se um caminho é permitido
@@ -303,10 +322,8 @@ class FileOperationsWorker {
 }
 new FileOperationsWorker();
 process.on("SIGTERM", () => {
-  console.log("\u{1F4C1} Worker de arquivos finalizando...");
   process.exit(0);
 });
 process.on("SIGINT", () => {
-  console.log("\u{1F4C1} Worker de arquivos interrompido...");
   process.exit(0);
 });

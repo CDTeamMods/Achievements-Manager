@@ -8,16 +8,32 @@ var __name22 = /* @__PURE__ */ __name2(
   "__name"
 );
 var __defProp222 = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name222 = /* @__PURE__ */ __name22(
   (target, value) => __defProp222(target, "name", { value, configurable: true }),
   "__name"
 );
-var __commonJS = /* @__PURE__ */ __name22(
-  (cb, mod) => /* @__PURE__ */ __name22(
-    /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
-      return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-    }, "__require"), "__require"),
+var __defProp2222 = Object.defineProperty;
+var __name2222 = /* @__PURE__ */ __name222(
+  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp22222 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name22222 = /* @__PURE__ */ __name2222(
+  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __commonJS = /* @__PURE__ */ __name2222(
+  (cb, mod) => /* @__PURE__ */ __name2222(
+    /* @__PURE__ */ __name222(
+      /* @__PURE__ */ __name22(
+        /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
+          return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+        }, "__require"), "__require"),
+        "__require"
+      ),
+      "__require"
+    ),
     "__require"
   ),
   "__commonJS"
@@ -40,6 +56,12 @@ var require_i18n = __commonJS({
       static {
         __name222(this, "I18nManager");
       }
+      static {
+        __name2222(this, "I18nManager");
+      }
+      static {
+        __name22222(this, "I18nManager");
+      }
       constructor(pathManager = null, debugManager = null) {
         this.pathManager = pathManager;
         this.debugManager = debugManager;
@@ -56,17 +78,11 @@ var require_i18n = __commonJS({
       async init() {
         try {
           let savedLanguage = null;
-          try {
-            const settingsPath = this.pathManager ? path.join(this.pathManager.getDataPath(), "settings", "app.json") : path.join(__dirname, "..", "..", "data", "settings", "app.json");
-            const settingsContent = await fs.readFile(settingsPath, "utf8");
-            const settings = JSON.parse(settingsContent);
-            savedLanguage = settings.language;
-            this.debugManager?.log(`\u{1F4C1} Idioma salvo encontrado: ${savedLanguage}`);
-          } catch (error) {
-            this.debugManager?.log(
-              "\u{1F4C1} Nenhuma configura\xE7\xE3o de idioma salva encontrada"
-            );
-          }
+          const settingsPath = this.pathManager ? path.join(this.pathManager.getDataPath(), "settings", "app.json") : path.join(__dirname, "..", "..", "data", "settings", "app.json");
+          const settingsContent = await fs.readFile(settingsPath, "utf8");
+          const settings = JSON.parse(settingsContent);
+          savedLanguage = settings.language;
+          this.debugManager?.log(`\u{1F4C1} Idioma salvo encontrado: ${savedLanguage}`);
           if (savedLanguage && ["pt-BR", "en"].includes(savedLanguage)) {
             this.currentLanguage = savedLanguage;
             this.debugManager?.log(`\u{1F504} Usando idioma salvo: ${savedLanguage}`);
@@ -313,60 +329,32 @@ var require_i18n = __commonJS({
       }
       setupIPC() {
         ipcMain.handle("i18n:get", (event, key, params = {}) => {
-          try {
-            const result = this.get(key, params);
-            return this.sanitizeTranslationResult(result);
-          } catch (error) {
-            return typeof key === "string" ? key : "Translation Error";
-          }
+          const result = this.get(key, params);
+          return this.sanitizeTranslationResult(result);
         });
         ipcMain.handle("i18n:translate", (event, key, params = {}) => {
-          try {
-            const result = this.get(key, params);
-            const sanitizedResult = this.sanitizeTranslationResult(result);
-            try {
-              structuredClone(sanitizedResult);
-            } catch (cloneError) {
-              return typeof key === "string" ? key : "Translation Error";
-            }
-            return sanitizedResult;
-          } catch (error) {
-            return typeof key === "string" ? key : "Translation Error";
-          }
+          const result = this.get(key, params);
+          const sanitizedResult = this.sanitizeTranslationResult(result);
+          structuredClone(sanitizedResult);
+          return sanitizedResult;
         });
         ipcMain.handle("i18n:getCurrentLanguage", () => {
-          try {
-            let language = this.currentLanguage;
-            if (!language || typeof language !== "string") {
-              language = "pt-BR";
-            }
-            const safeLanguage = "" + language;
-            try {
-              structuredClone(safeLanguage);
-              return safeLanguage;
-            } catch (cloneError) {
-              return "pt-BR";
-            }
-          } catch (error) {
-            return "pt-BR";
+          let language = this.currentLanguage;
+          if (!language || typeof language !== "string") {
+            language = "pt-BR";
           }
+          const safeLanguage = "" + language;
+          structuredClone(safeLanguage);
+          return safeLanguage;
         });
         ipcMain.handle("i18n:getLanguage", () => {
-          try {
-            let language = this.currentLanguage;
-            if (!language || typeof language !== "string") {
-              language = "pt-BR";
-            }
-            const safeLanguage = "" + language;
-            try {
-              structuredClone(safeLanguage);
-              return safeLanguage;
-            } catch (cloneError) {
-              return "pt-BR";
-            }
-          } catch (error) {
-            return "pt-BR";
+          let language = this.currentLanguage;
+          if (!language || typeof language !== "string") {
+            language = "pt-BR";
           }
+          const safeLanguage = "" + language;
+          structuredClone(safeLanguage);
+          return safeLanguage;
         });
         ipcMain.handle("i18n:setLanguage", async (event, language) => {
           return await this.setLanguage(language);
@@ -390,44 +378,32 @@ var require_i18n = __commonJS({
        * @returns {string} - Resultado sanitizado e clonável
        */
       sanitizeTranslationResult(result) {
-        try {
-          if (result == null) {
-            return "";
-          }
-          if (typeof result === "string") {
-            const sanitized = "" + result;
-            try {
-              structuredClone(sanitized);
-              return sanitized;
-            } catch (cloneError) {
-              return String(result);
-            }
-          }
-          if (typeof result === "number") {
-            return String(result);
-          }
-          if (typeof result === "boolean") {
-            return String(result);
-          }
-          if (typeof result === "object") {
-            try {
-              const serialized = JSON.stringify(result);
-              return serialized;
-            } catch (jsonError) {
-              return "[Object]";
-            }
-          }
-          return String(result);
-        } catch (error) {
-          return "Translation Error";
+        if (result == null) {
+          return "";
         }
+        if (typeof result === "string") {
+          const sanitized = "" + result;
+          structuredClone(sanitized);
+          return sanitized;
+        }
+        if (typeof result === "number") {
+          return String(result);
+        }
+        if (typeof result === "boolean") {
+          return String(result);
+        }
+        if (typeof result === "object") {
+          const serialized = JSON.stringify(result);
+          return serialized;
+        }
+        return String(result);
       }
       get(key, params = {}) {
         const translation = this.getTranslation(key);
         return this.interpolate(translation, params);
       }
       getTranslation(key) {
-        const getNestedValue = /* @__PURE__ */ __name222((obj, path2) => {
+        const getNestedValue = /* @__PURE__ */ __name22222((obj, path2) => {
           return path2.split(".").reduce((current, prop) => {
             return current && current[prop] !== void 0 ? current[prop] : void 0;
           }, obj);
@@ -464,13 +440,9 @@ var require_i18n = __commonJS({
       }
       async setLanguage(language) {
         if (!language || typeof language !== "string") {
-          console.warn(`[MAIN] Idioma inv\xE1lido fornecido: ${language}`);
           return false;
         }
         if (!this.translations.has(language)) {
-          console.warn(
-            `[MAIN] Idioma ${language} n\xE3o dispon\xEDvel. Idiomas dispon\xEDveis: ${Array.from(this.translations.keys()).join(", ")}`
-          );
           return false;
         }
         this.currentLanguage = language;
@@ -480,7 +452,7 @@ var require_i18n = __commonJS({
           try {
             const settingsContent = await fs.readFile(settingsPath, "utf8");
             settings = JSON.parse(settingsContent);
-          } catch (error) {
+          } catch {
           }
           settings.language = language;
           await fs.mkdir(path.dirname(settingsPath), { recursive: true });
@@ -551,6 +523,8 @@ var require_i18n = __commonJS({
     __name2(setupI18n, "setupI18n");
     __name22(setupI18n, "setupI18n");
     __name222(setupI18n, "setupI18n");
+    __name2222(setupI18n, "setupI18n");
+    __name22222(setupI18n, "setupI18n");
     module.exports = { I18nManager, setupI18n };
     module.exports.default = module.exports;
   }

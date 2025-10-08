@@ -8,16 +8,32 @@ var __name22 = /* @__PURE__ */ __name2(
   "__name"
 );
 var __defProp222 = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name222 = /* @__PURE__ */ __name22(
   (target, value) => __defProp222(target, "name", { value, configurable: true }),
   "__name"
 );
-var __commonJS = /* @__PURE__ */ __name22(
-  (cb, mod) => /* @__PURE__ */ __name22(
-    /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
-      return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-    }, "__require"), "__require"),
+var __defProp2222 = Object.defineProperty;
+var __name2222 = /* @__PURE__ */ __name222(
+  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp22222 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name22222 = /* @__PURE__ */ __name2222(
+  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __commonJS = /* @__PURE__ */ __name2222(
+  (cb, mod) => /* @__PURE__ */ __name2222(
+    /* @__PURE__ */ __name222(
+      /* @__PURE__ */ __name22(
+        /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
+          return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+        }, "__require"), "__require"),
+        "__require"
+      ),
+      "__require"
+    ),
     "__require"
   ),
   "__commonJS"
@@ -146,6 +162,8 @@ var require_main = __commonJS({
     __name2(isInstalledVersion, "isInstalledVersion");
     __name22(isInstalledVersion, "isInstalledVersion");
     __name222(isInstalledVersion, "isInstalledVersion");
+    __name2222(isInstalledVersion, "isInstalledVersion");
+    __name22222(isInstalledVersion, "isInstalledVersion");
     let store = null;
     let mainWindow;
     let splashWindow;
@@ -156,9 +174,6 @@ var require_main = __commonJS({
       x: void 0,
       y: void 0
     };
-    let performanceManager = null;
-    let gamesManager = null;
-    let achievementsManager = null;
     function createSplashWindow() {
       splashWindow = new BrowserWindow({
         width: 500,
@@ -194,16 +209,11 @@ var require_main = __commonJS({
     __name2(createSplashWindow, "createSplashWindow");
     __name22(createSplashWindow, "createSplashWindow");
     __name222(createSplashWindow, "createSplashWindow");
+    __name2222(createSplashWindow, "createSplashWindow");
+    __name22222(createSplashWindow, "createSplashWindow");
     function createMainWindow() {
       const bounds = windowBoundsCache;
       const preloadPath = path.join(__dirname, "../preload/preload.js");
-      const alternativePaths = [
-        path.join(__dirname, "../preload/preload.js"),
-        path.join(__dirname, "../../preload/preload.js"),
-        path.join(__dirname, "preload/preload.js"),
-        path.join(process.resourcesPath, "app.asar", "dist", "preload", "preload.js"),
-        path.join(process.resourcesPath, "app.asar", "preload", "preload.js")
-      ];
       const securityManager = typeof getSecurityManager === "function" ? getSecurityManager() : (() => {
         throw new Error("getSecurityManager is not available");
       })();
@@ -229,15 +239,11 @@ var require_main = __commonJS({
           titleBarStyle: "hidden"
         }
       });
-      mainWindow.webContents.on("preload-error", (event, preloadPath2, error) => {
-        console.error("PRELOAD ERROR:", error.message);
-        console.error("PRELOAD PATH:", preloadPath2);
-      });
-      mainWindow.webContents.on("context-menu", () => {
+      mainWindow.webContents.on("context-menu", (e) => {
+        e.preventDefault();
       });
       if (isDev) {
-        mainWindow.loadURL("http://localhost:3000").catch((err) => {
-          console.error("Erro ao carregar servidor de desenvolvimento:", err.message);
+        mainWindow.loadURL("http://localhost:3000").catch(() => {
           const htmlPath = path.join(__dirname, "../renderer/index.html");
           mainWindow.loadFile(htmlPath);
         });
@@ -248,13 +254,13 @@ var require_main = __commonJS({
       securityManager.setupSecurityHeaders(mainWindow.webContents);
       securityManager.setupURLValidation(mainWindow.webContents);
       setupWindowEvents();
-      const closeSplashIfPresent = /* @__PURE__ */ __name222(() => {
+      const closeSplashIfPresent = /* @__PURE__ */ __name22222(() => {
         if (splashWindow && !splashWindow.isDestroyed()) {
           splashWindow.close();
           splashWindow = null;
         }
       }, "closeSplashIfPresent");
-      const boostWindowFocus = /* @__PURE__ */ __name222(() => {
+      const boostWindowFocus = /* @__PURE__ */ __name22222(() => {
         if (!mainWindow || mainWindow.isDestroyed()) return;
         mainWindow.show();
         setTimeout(() => {
@@ -266,31 +272,20 @@ var require_main = __commonJS({
           }, 1e3);
         }, 500);
       }, "boostWindowFocus");
-      const handleDidFailLoad = /* @__PURE__ */ __name222(
-        (event, errorCode, errorDescription, validatedURL) => {
-          if (isDev && validatedURL && validatedURL.includes("localhost:3000")) {
-            debugManager.warn(
-              "\u26A0\uFE0F Servidor de desenvolvimento n\xE3o dispon\xEDvel, usando arquivo est\xE1tico"
-            );
-            mainWindow.loadFile(path.join(__dirname, "../renderer/index.html"));
-            return;
-          }
-          console.error(
-            "Falha ao carregar:",
-            errorCode,
-            "-",
-            errorDescription,
-            "- URL:",
-            validatedURL
+      const handleDidFailLoad = /* @__PURE__ */ __name22222((validatedURL) => {
+        if (isDev && validatedURL && validatedURL.includes("localhost:3000")) {
+          debugManager.warn(
+            "\u26A0\uFE0F Servidor de desenvolvimento n\xE3o dispon\xEDvel, usando arquivo est\xE1tico"
           );
-        },
-        "handleDidFailLoad"
-      );
-      const handleDidFinishLoad = /* @__PURE__ */ __name222(() => {
+          mainWindow.loadFile(path.join(__dirname, "../renderer/index.html"));
+          return;
+        }
+      }, "handleDidFailLoad");
+      const handleDidFinishLoad = /* @__PURE__ */ __name22222(() => {
         if (!isDev) return;
         debugManager.log("\u2705 P\xE1gina carregada com sucesso");
       }, "handleDidFinishLoad");
-      const ensureLiteModeCSS = /* @__PURE__ */ __name222(() => {
+      const ensureLiteModeCSS = /* @__PURE__ */ __name22222(() => {
         if (!store.get("liteMode")) return;
         mainWindow.webContents.insertCSS(`
         * {
@@ -344,8 +339,10 @@ var require_main = __commonJS({
     __name2(createMainWindow, "createMainWindow");
     __name22(createMainWindow, "createMainWindow");
     __name222(createMainWindow, "createMainWindow");
+    __name2222(createMainWindow, "createMainWindow");
+    __name22222(createMainWindow, "createMainWindow");
     function setupWindowEvents() {
-      const saveBoundsIfNormal = /* @__PURE__ */ __name222(() => {
+      const saveBoundsIfNormal = /* @__PURE__ */ __name22222(() => {
         if (!mainWindow || mainWindow.isDestroyed()) return;
         const isNormalState = !mainWindow.isMaximized() && !mainWindow.isMinimized() && !mainWindow.isFullScreen();
         if (isNormalState) {
@@ -356,25 +353,25 @@ var require_main = __commonJS({
       mainWindow.on("resize", saveBoundsIfNormal);
       mainWindow.on("move", saveBoundsIfNormal);
       mainWindow.on("unmaximize", saveBoundsIfNormal);
-      mainWindow.on("close", (event) => {
+      mainWindow.on("close", (event2) => {
         const minimizeToTray = store.get("minimizeToTray", false);
         if (minimizeToTray && tray && !app.isQuitting) {
-          event.preventDefault();
+          event2.preventDefault();
           mainWindow.hide();
         } else if (process.platform !== "darwin") {
           app.quit();
         } else {
-          event.preventDefault();
+          event2.preventDefault();
           mainWindow.hide();
         }
       });
       mainWindow.on("closed", () => {
         mainWindow = null;
       });
-      mainWindow.webContents.on("will-navigate", (event, navigationUrl) => {
+      mainWindow.webContents.on("will-navigate", (event2, navigationUrl) => {
         const parsedUrl = new URL(navigationUrl);
         if (parsedUrl.origin !== "file://") {
-          event.preventDefault();
+          event2.preventDefault();
           shell.openExternal(navigationUrl);
         }
       });
@@ -390,6 +387,8 @@ var require_main = __commonJS({
     __name2(setupWindowEvents, "setupWindowEvents");
     __name22(setupWindowEvents, "setupWindowEvents");
     __name222(setupWindowEvents, "setupWindowEvents");
+    __name2222(setupWindowEvents, "setupWindowEvents");
+    __name22222(setupWindowEvents, "setupWindowEvents");
     function setupSystemTheme() {
       const theme = store.get("theme", "auto");
       if (theme === "auto") {
@@ -441,7 +440,7 @@ var require_main = __commonJS({
           }
         }
       });
-      ipcMain.handle("set-theme", (event, theme2) => {
+      ipcMain.handle("set-theme", (_event, theme2) => {
         try {
           nativeTheme.themeSource = theme2;
           store.set("theme", theme2);
@@ -465,8 +464,10 @@ var require_main = __commonJS({
     __name2(setupSystemTheme, "setupSystemTheme");
     __name22(setupSystemTheme, "setupSystemTheme");
     __name222(setupSystemTheme, "setupSystemTheme");
+    __name2222(setupSystemTheme, "setupSystemTheme");
+    __name22222(setupSystemTheme, "setupSystemTheme");
     function setupAutoStart() {
-      ipcMain.handle("set-auto-start", (event, enabled) => {
+      ipcMain.handle("set-auto-start", (_event, enabled) => {
         try {
           const isInstalled = store.get("isInstalledVersion", false);
           if (!isInstalled) {
@@ -502,6 +503,8 @@ var require_main = __commonJS({
     __name2(setupAutoStart, "setupAutoStart");
     __name22(setupAutoStart, "setupAutoStart");
     __name222(setupAutoStart, "setupAutoStart");
+    __name2222(setupAutoStart, "setupAutoStart");
+    __name22222(setupAutoStart, "setupAutoStart");
     function createTray() {
       try {
         const iconPath = path.join(__dirname, "../../assets/icons/icon.ico");
@@ -509,7 +512,7 @@ var require_main = __commonJS({
         const contextMenu = Menu.buildFromTemplate([
           {
             label: "Mostrar Achievements Manager",
-            click: /* @__PURE__ */ __name222(() => {
+            click: /* @__PURE__ */ __name22222(() => {
               if (mainWindow) {
                 mainWindow.show();
                 mainWindow.focus();
@@ -518,7 +521,7 @@ var require_main = __commonJS({
           },
           {
             label: "Sair",
-            click: /* @__PURE__ */ __name222(() => {
+            click: /* @__PURE__ */ __name22222(() => {
               app.isQuiting = true;
               app.quit();
             }, "click")
@@ -542,8 +545,10 @@ var require_main = __commonJS({
     __name2(createTray, "createTray");
     __name22(createTray, "createTray");
     __name222(createTray, "createTray");
+    __name2222(createTray, "createTray");
+    __name22222(createTray, "createTray");
     function setupMinimizeToTray() {
-      ipcMain.handle("set-minimize-to-tray", (event, enabled) => {
+      ipcMain.handle("set-minimize-to-tray", (_event, enabled) => {
         try {
           const isInstalled = store.get("isInstalledVersion", false);
           if (!isInstalled) {
@@ -565,7 +570,7 @@ var require_main = __commonJS({
           return { success: false, error: error.message };
         }
       });
-      ipcMain.handle("get-minimize-to-tray", (event) => {
+      ipcMain.handle("get-minimize-to-tray", (_event) => {
         const isInstalled = store.get("isInstalledVersion", false);
         const enabled = store.get("minimizeToTray", false);
         return {
@@ -578,55 +583,33 @@ var require_main = __commonJS({
     __name2(setupMinimizeToTray, "setupMinimizeToTray");
     __name22(setupMinimizeToTray, "setupMinimizeToTray");
     __name222(setupMinimizeToTray, "setupMinimizeToTray");
+    __name2222(setupMinimizeToTray, "setupMinimizeToTray");
+    __name22222(setupMinimizeToTray, "setupMinimizeToTray");
     function protectCriticalSettings(store2, pathManager) {
-      try {
-        if (!pathManager || pathManager.isInstalledVersion()) {
-          return;
+      if (!pathManager || pathManager.isInstalledVersion()) {
+        return;
+      }
+      const criticalSettings = {
+        isInstalledVersion: false
+        // Não definir steamPath e userDataPath aqui pois eles podem ser undefined nos defaults
+      };
+      for (const [key, safeValue] of Object.entries(criticalSettings)) {
+        const currentValue = store2.get(key);
+        if (currentValue !== safeValue) {
+          store2.set(key, safeValue);
         }
-        let needsCorrection = false;
-        const criticalSettings = {
-          isInstalledVersion: false
-          // Não definir steamPath e userDataPath aqui pois eles podem ser undefined nos defaults
-        };
-        for (const [key, safeValue] of Object.entries(criticalSettings)) {
-          const currentValue = store2.get(key);
-          if (currentValue !== safeValue) {
-            console.warn(
-              `\u{1F6E1}\uFE0F Prote\xE7\xE3o ativada: Corrigindo ${key} de "${currentValue}" para "${safeValue}"`
-            );
-            store2.set(key, safeValue);
-            needsCorrection = true;
-          }
-        }
-        const steamPath = store2.get("steamPath");
-        const userDataPath = store2.get("userDataPath");
-        if (steamPath !== void 0) {
-          console.warn(
-            `\u{1F6E1}\uFE0F Prote\xE7\xE3o ativada: Removendo steamPath customizado em modo portable`
-          );
-          store2.delete("steamPath");
-          needsCorrection = true;
-        }
-        if (userDataPath !== void 0) {
-          console.warn(
-            `\u{1F6E1}\uFE0F Prote\xE7\xE3o ativada: Removendo userDataPath customizado em modo portable`
-          );
-          store2.delete("userDataPath");
-          needsCorrection = true;
-        }
-        if (needsCorrection) {
-          console.log(
-            "\u{1F6E1}\uFE0F Configura\xE7\xF5es cr\xEDticas protegidas e corrigidas automaticamente"
-          );
-        }
-      } catch (error) {
-        console.error("\u274C Erro ao proteger configura\xE7\xF5es cr\xEDticas:", error);
+      }
+      const steamPath = store2.get("steamPath");
+      if (steamPath !== void 0) {
+        store2.delete("steamPath");
       }
     }
     __name(protectCriticalSettings, "protectCriticalSettings");
     __name2(protectCriticalSettings, "protectCriticalSettings");
     __name22(protectCriticalSettings, "protectCriticalSettings");
     __name222(protectCriticalSettings, "protectCriticalSettings");
+    __name2222(protectCriticalSettings, "protectCriticalSettings");
+    __name22222(protectCriticalSettings, "protectCriticalSettings");
     async function initializeApp() {
       try {
         const pathManager = await setupPathManager();
@@ -678,12 +661,7 @@ var require_main = __commonJS({
         await configManager.init(pathManager.getUserDataPath());
         await configManager.initializeDefaultConfigs();
         await setupI18n(pathManager);
-        const filesystemManager = await setupFileSystem(
-          store,
-          pathManager,
-          globalThis.crashReporter,
-          configManager
-        );
+        await setupFileSystem(store, pathManager, globalThis.crashReporter, configManager);
         await setupWindowManager(ipcMain, store);
         await setupPerformance(store);
         const gseSavesManager = new GSESavesManager(pathManager, debugManager);
@@ -716,10 +694,10 @@ var require_main = __commonJS({
         setTimeout(() => {
           createMainWindow();
         }, 1500);
-      } catch (error) {
+      } catch {
         dialog.showErrorBox(
           "Erro de Inicializa\xE7\xE3o",
-          `Falha ao inicializar a aplica\xE7\xE3o: ${error.message}`
+          "Falha ao inicializar a aplica\xE7\xE3o"
         );
         app.quit();
       }
@@ -728,10 +706,12 @@ var require_main = __commonJS({
     __name2(initializeApp, "initializeApp");
     __name22(initializeApp, "initializeApp");
     __name222(initializeApp, "initializeApp");
+    __name2222(initializeApp, "initializeApp");
+    __name22222(initializeApp, "initializeApp");
     app.whenReady().then(async () => {
       try {
         await initializeApp();
-      } catch (error) {
+      } catch {
         app.quit();
       }
     });
@@ -743,7 +723,7 @@ var require_main = __commonJS({
     app.on("activate", () => {
       if (BrowserWindow.getAllWindows().length === 0) createMainWindow();
     });
-    app.on("before-quit", async (event) => {
+    app.on("before-quit", async (_event) => {
       app.isQuitting = true;
       debugManager.log("\u{1F504} Iniciando processo de cleanup...");
       try {
@@ -769,45 +749,30 @@ var require_main = __commonJS({
         debugManager.error("\u274C Erro durante cleanup:", error);
       }
     });
-    app.on("web-contents-created", (event, contents) => {
-      contents.on("new-window", (event2, navigationUrl) => {
-        event2.preventDefault();
+    app.on("web-contents-created", (event2, contents) => {
+      contents.on("new-window", (event22, navigationUrl) => {
+        event22.preventDefault();
         shell.openExternal(navigationUrl);
       });
-      contents.once("dom-ready", () => {
-        if (!isDev) return;
-        contents.executeJavaScript(`
-        const originalError = console.error;
-        console.error = function(...args) {
-          const message = args.join(' ');
-          if (message.includes('Autofill.enable') || 
-              message.includes('Autofill.setAddresses') ||
-              message.includes('protocol_client')) {
-            return; // Suprimir esses erros espec\xEDficos
-          }
-          originalError.apply(console, args);
-        };
-      `);
-      });
     });
-    ipcMain.handle("debug:log", (event, ...args) => {
+    ipcMain.handle("debug:log", (_event, ...args) => {
       if (debugManager) {
         debugManager.log(...args);
       }
     });
-    ipcMain.handle("debug:error", (event, ...args) => {
+    ipcMain.handle("debug:error", (_event, ...args) => {
       if (debugManager) {
         debugManager.error(...args);
       }
     });
-    ipcMain.handle("debug:warn", (event, ...args) => {
+    ipcMain.handle("debug:warn", (_event, ...args) => {
       if (debugManager) {
         debugManager.warn(...args);
       }
     });
     ipcMain.handle("app:getVersion", () => app.getVersion());
     ipcMain.handle("app:getPlatform", () => process.platform);
-    ipcMain.handle("app:getPath", (event, name) => app.getPath(name));
+    ipcMain.handle("app:getPath", (_event, name) => app.getPath(name));
     ipcMain.handle("system:getVersion", () => app.getVersion());
     ipcMain.handle("system:getPlatform", () => process.platform);
     ipcMain.handle("system:getSystemInfo", () => {
@@ -819,8 +784,8 @@ var require_main = __commonJS({
         nodeVersion: process.versions.node
       };
     });
-    ipcMain.handle("system:openExternal", (event, url) => shell.openExternal(url));
-    ipcMain.handle("system:showInFolder", (event, path2) => shell.showItemInFolder(path2));
+    ipcMain.handle("system:openExternal", (_event, url) => shell.openExternal(url));
+    ipcMain.handle("system:showInFolder", (_event, path2) => shell.showItemInFolder(path2));
     ipcMain.handle("system:quit", () => app.quit());
     ipcMain.handle("system:minimize", () => {
       const focusedWindow = BrowserWindow.getFocusedWindow();
@@ -869,7 +834,7 @@ var require_main = __commonJS({
       const pathManager = getPathManager();
       return pathManager ? pathManager.isInstalledVersion() : false;
     });
-    ipcMain.handle("system:setAutoStart", (event, enabled) => {
+    ipcMain.handle("system:setAutoStart", (_event, enabled) => {
       return ipcMain.emit("set-auto-start", event, enabled);
     });
     ipcMain.handle("system:getAutoStart", () => {
@@ -881,7 +846,7 @@ var require_main = __commonJS({
         available: isInstalled
       };
     });
-    ipcMain.handle("system:setMinimizeToTray", (event, enabled) => {
+    ipcMain.handle("system:setMinimizeToTray", (_event, enabled) => {
       try {
         const isInstalled = store.get("isInstalledVersion", false);
         if (!isInstalled) {

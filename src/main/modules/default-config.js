@@ -8,16 +8,32 @@ var __name22 = /* @__PURE__ */ __name2(
   "__name"
 );
 var __defProp222 = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name222 = /* @__PURE__ */ __name22(
   (target, value) => __defProp222(target, "name", { value, configurable: true }),
   "__name"
 );
-var __commonJS = /* @__PURE__ */ __name22(
-  (cb, mod) => /* @__PURE__ */ __name22(
-    /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
-      return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-    }, "__require"), "__require"),
+var __defProp2222 = Object.defineProperty;
+var __name2222 = /* @__PURE__ */ __name222(
+  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp22222 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name22222 = /* @__PURE__ */ __name2222(
+  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __commonJS = /* @__PURE__ */ __name2222(
+  (cb, mod) => /* @__PURE__ */ __name2222(
+    /* @__PURE__ */ __name222(
+      /* @__PURE__ */ __name22(
+        /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
+          return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+        }, "__require"), "__require"),
+        "__require"
+      ),
+      "__require"
+    ),
     "__require"
   ),
   "__commonJS"
@@ -39,6 +55,12 @@ var require_default_config = __commonJS({
       }
       static {
         __name222(this, "DefaultConfigManager");
+      }
+      static {
+        __name2222(this, "DefaultConfigManager");
+      }
+      static {
+        __name22222(this, "DefaultConfigManager");
       }
       constructor(pathManager = null, crashReporter = null) {
         this.pathManager = pathManager;
@@ -111,27 +133,8 @@ var require_default_config = __commonJS({
       /**
        * Cria um arquivo de configuração se não existir
        */
-      async ensureConfigFile(filePath, defaultConfig) {
-        try {
-          await fs.access(filePath);
-        } catch (error) {
-          try {
-            await fs.mkdir(path.dirname(filePath), { recursive: true });
-            await fs.writeFile(filePath, JSON.stringify(defaultConfig, null, 2), "utf8");
-          } catch (createError) {
-            this.debugManager.error(
-              `\u274C Erro ao criar arquivo de configura\xE7\xE3o ${path.basename(filePath)}:`,
-              createError
-            );
-            if (this.crashReporter && this.crashReporter.logError) {
-              this.crashReporter.logError("DefaultConfigManager", createError, {
-                action: "ensureConfigFile",
-                filePath
-              });
-            }
-            throw createError;
-          }
-        }
+      async ensureConfigFile(filePath) {
+        await fs.access(filePath);
       }
       /**
        * Inicializa todas as configurações padrão
@@ -181,7 +184,8 @@ var require_default_config = __commonJS({
           if (hasNewFields) {
             await fs.writeFile(filePath, JSON.stringify(updatedConfig, null, 2), "utf8");
           }
-        } catch (error) {
+        } catch {
+          return;
         }
       }
       /**
@@ -196,17 +200,6 @@ var require_default_config = __commonJS({
           const settingsPath = this.pathManager.getPaths().settings;
           const oldSettingsPath = path.join(dataPath, "settings.json");
           const newSettingsPath = path.join(settingsPath, "app.json");
-          try {
-            await fs.access(oldSettingsPath);
-          } catch (error) {
-            return;
-          }
-          try {
-            await fs.access(newSettingsPath);
-            await fs.unlink(oldSettingsPath);
-            return;
-          } catch (error) {
-          }
           const oldSettingsContent = await fs.readFile(oldSettingsPath, "utf8");
           const oldSettings = JSON.parse(oldSettingsContent);
           const migratedSettings = {
@@ -236,6 +229,8 @@ var require_default_config = __commonJS({
     __name2(setupDefaultConfig, "setupDefaultConfig");
     __name22(setupDefaultConfig, "setupDefaultConfig");
     __name222(setupDefaultConfig, "setupDefaultConfig");
+    __name2222(setupDefaultConfig, "setupDefaultConfig");
+    __name22222(setupDefaultConfig, "setupDefaultConfig");
     function getDefaultConfigManager() {
       return defaultConfigManager;
     }
@@ -243,6 +238,8 @@ var require_default_config = __commonJS({
     __name2(getDefaultConfigManager, "getDefaultConfigManager");
     __name22(getDefaultConfigManager, "getDefaultConfigManager");
     __name222(getDefaultConfigManager, "getDefaultConfigManager");
+    __name2222(getDefaultConfigManager, "getDefaultConfigManager");
+    __name22222(getDefaultConfigManager, "getDefaultConfigManager");
     module.exports = {
       DefaultConfigManager,
       setupDefaultConfig,

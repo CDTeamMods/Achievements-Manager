@@ -12,6 +12,16 @@ var __name222 = /* @__PURE__ */ __name22(
   (target, value) => __defProp222(target, "name", { value, configurable: true }),
   "__name"
 );
+var __defProp2222 = Object.defineProperty;
+var __name2222 = /* @__PURE__ */ __name222(
+  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp22222 = Object.defineProperty;
+var __name22222 = /* @__PURE__ */ __name2222(
+  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
+  "__name"
+);
 class LazyLoader {
   static {
     __name(this, "LazyLoader");
@@ -24,6 +34,12 @@ class LazyLoader {
   }
   static {
     __name222(this, "LazyLoader");
+  }
+  static {
+    __name2222(this, "LazyLoader");
+  }
+  static {
+    __name22222(this, "LazyLoader");
   }
   constructor() {
     this.loadedModules = /* @__PURE__ */ new Map();
@@ -60,35 +76,35 @@ class LazyLoader {
    */
   static getModuleImporter(modulePath) {
     const moduleMap = {
-      "./modules/state.js": /* @__PURE__ */ __name222(
+      "./modules/state.js": /* @__PURE__ */ __name22222(
         () => import("./modules/state.js"),
         "./modules/state.js"
       ),
-      "./modules/navigation.js": /* @__PURE__ */ __name222(
+      "./modules/navigation.js": /* @__PURE__ */ __name22222(
         () => import("./modules/navigation.js"),
         "./modules/navigation.js"
       ),
-      "./components.js": /* @__PURE__ */ __name222(
+      "./components.js": /* @__PURE__ */ __name22222(
         () => import("./components.js"),
         "./components.js"
       ),
-      "./modules/settings.js": /* @__PURE__ */ __name222(
+      "./modules/settings.js": /* @__PURE__ */ __name22222(
         () => import("./modules/settings.js"),
         "./modules/settings.js"
       ),
-      "./modules/events.js": /* @__PURE__ */ __name222(
+      "./modules/events.js": /* @__PURE__ */ __name22222(
         () => import("./modules/events.js"),
         "./modules/events.js"
       ),
-      "./modules/helpers.js": /* @__PURE__ */ __name222(
+      "./modules/helpers.js": /* @__PURE__ */ __name22222(
         () => import("./modules/helpers.js"),
         "./modules/helpers.js"
       ),
-      "./performance.js": /* @__PURE__ */ __name222(
+      "./performance.js": /* @__PURE__ */ __name22222(
         () => import("./performance.js"),
         "./performance.js"
       ),
-      "./modules/steam-games.js": /* @__PURE__ */ __name222(
+      "./modules/steam-games.js": /* @__PURE__ */ __name22222(
         () => import("./modules/steam-games.js"),
         "./modules/steam-games.js"
       )
@@ -105,24 +121,17 @@ class LazyLoader {
    * @returns {Promise<any>} - Módulo carregado
    */
   async loadModuleInternal(moduleName, modulePath) {
-    try {
-      const importer = LazyLoader.getModuleImporter(modulePath);
-      const module = await importer();
-      return module;
-    } catch (error) {
-      throw error;
-    }
+    moduleName = null;
+    const importer = LazyLoader.getModuleImporter(modulePath);
+    const module = await importer();
+    return module;
   }
   /**
    * Pré-carrega módulos críticos
    * @param {Array<{name: string, path: string}>} modules - Lista de módulos para pré-carregar
    */
   async preloadCriticalModules(modules) {
-    const preloadPromises = modules.map(
-      ({ name, path }) => this.loadModule(name, path).catch((error) => {
-        return null;
-      })
-    );
+    const preloadPromises = modules.map(({ name, path }) => this.loadModule(name, path));
     await Promise.allSettled(preloadPromises);
   }
   /**
@@ -132,15 +141,11 @@ class LazyLoader {
    * @param {Function} callback - Callback para executar após carregamento
    */
   async loadOnDemand(moduleName, modulePath, callback = null) {
-    try {
-      const module = await this.loadModule(moduleName, modulePath);
-      if (callback && typeof callback === "function") {
-        await callback(module);
-      }
-      return module;
-    } catch (error) {
-      throw error;
+    const module = await this.loadModule(moduleName, modulePath);
+    if (callback && typeof callback === "function") {
+      await callback(module);
     }
+    return module;
   }
   /**
    * Verifica se um módulo está carregado

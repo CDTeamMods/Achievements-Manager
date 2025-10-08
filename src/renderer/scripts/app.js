@@ -12,9 +12,19 @@ var __name222 = /* @__PURE__ */ __name22(
   (target, value) => __defProp222(target, "name", { value, configurable: true }),
   "__name"
 );
-import { initI18n, translatePage } from "./i18n-hot.js";
-import { lazyLoader, MODULE_CONFIG } from "./lazy-loader.js";
-import { codeSplitter, CHUNK_CONFIG } from "./code-splitter.js";
+var __defProp2222 = Object.defineProperty;
+var __name2222 = /* @__PURE__ */ __name222(
+  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp22222 = Object.defineProperty;
+var __name22222 = /* @__PURE__ */ __name2222(
+  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
+  "__name"
+);
+import { initI18n } from "./i18n-hot.js";
+import { lazyLoader } from "./lazy-loader.js";
+import { codeSplitter } from "./code-splitter.js";
 class AchievementsApp {
   static {
     __name(this, "AchievementsApp");
@@ -27,6 +37,12 @@ class AchievementsApp {
   }
   static {
     __name222(this, "AchievementsApp");
+  }
+  static {
+    __name2222(this, "AchievementsApp");
+  }
+  static {
+    __name22222(this, "AchievementsApp");
   }
   constructor() {
     this.isElectron = typeof window !== "undefined" && window.electronAPI;
@@ -43,106 +59,83 @@ class AchievementsApp {
    * Carrega chunks críticos necessários para inicialização
    */
   async loadCriticalChunks() {
-    try {
-      const coreChunk = await this.codeSplitter.loadChunk("core");
-      this.loadedChunks.add("core");
-      this.modules.state = new coreChunk.StateManager();
-      this.modules.navigation = new coreChunk.NavigationManager(this);
-      this.modules.components = new coreChunk.ComponentManager();
-    } catch (error) {
-      throw error;
-    }
+    const coreChunk = await this.codeSplitter.loadChunk("core");
+    this.loadedChunks.add("core");
+    this.modules.state = new coreChunk.StateManager();
+    this.modules.navigation = new coreChunk.NavigationManager(this);
+    this.modules.components = new coreChunk.ComponentManager();
   }
   /**
    * Carrega módulos essenciais para funcionamento básico
    */
   async loadEssentialModules() {
-    try {
-      const [settingsChunk, gamesChunk] = await Promise.all([
-        this.codeSplitter.loadChunk("settings"),
-        this.codeSplitter.loadChunk("games")
-      ]);
-      this.modules.settings = new settingsChunk.SettingsManager(this);
-      this.modules.events = new gamesChunk.EventsManager(this);
-      this.modules.helpers = new gamesChunk.HelpersManager(this);
-      this.loadedChunks.add("settings");
-      this.loadedChunks.add("games");
-    } catch (error) {
-      throw error;
-    }
+    const [settingsChunk, gamesChunk] = await Promise.all([
+      this.codeSplitter.loadChunk("settings"),
+      this.codeSplitter.loadChunk("games")
+    ]);
+    this.modules.settings = new settingsChunk.SettingsManager(this);
+    this.modules.events = new gamesChunk.EventsManager(this);
+    this.modules.helpers = new gamesChunk.HelpersManager(this);
+    this.loadedChunks.add("settings");
+    this.loadedChunks.add("games");
   }
   /**
    * Carrega módulos não críticos em background
    */
   async loadNonCriticalModules() {
-    try {
-      setTimeout(async () => {
-        try {
-          const [performanceChunk, steamChunk] = await Promise.allSettled([
-            this.codeSplitter.loadChunk("performance"),
-            this.codeSplitter.loadChunk("steam")
-          ]);
-          if (performanceChunk.status === "fulfilled" && performanceChunk.value.PerformanceMonitor) {
-            this.modules.performance = new performanceChunk.value.PerformanceMonitor();
-            this.loadedChunks.add("performance");
-            if (typeof this.modules.performance.start === "function") {
-              this.modules.performance.start();
-            }
-          }
-          if (steamChunk.status === "fulfilled" && steamChunk.value.SteamGamesManager) {
-            this.modules.steamGames = new steamChunk.value.SteamGamesManager(this);
-            this.loadedChunks.add("steam");
-          }
-        } catch (error) {
+    setTimeout(async () => {
+      const [performanceChunk, steamChunk] = await Promise.allSettled([
+        this.codeSplitter.loadChunk("performance"),
+        this.codeSplitter.loadChunk("steam")
+      ]);
+      if (performanceChunk.status === "fulfilled" && performanceChunk.value.PerformanceMonitor) {
+        this.modules.performance = new performanceChunk.value.PerformanceMonitor();
+        this.loadedChunks.add("performance");
+        if (typeof this.modules.performance.start === "function") {
+          this.modules.performance.start();
         }
-      }, 100);
-    } catch (error) {
-    }
+      }
+      if (steamChunk.status === "fulfilled" && steamChunk.value.SteamGamesManager) {
+        this.modules.steamGames = new steamChunk.value.SteamGamesManager(this);
+        this.loadedChunks.add("steam");
+      }
+    }, 100);
   }
   /**
    * Fallback para carregamento tradicional se lazy loading falhar
    */
   async fallbackInit() {
-    try {
-      const [
-        { StateManager: StateManager2 },
-        { NavigationManager: NavigationManager2 },
-        { ComponentManager: ComponentManager2 },
-        { SettingsManager: SettingsManager2 },
-        { EventsManager: EventsManager2 },
-        { HelpersManager: HelpersManager2 },
-        { PerformanceMonitor: PerformanceMonitor2 }
-      ] = await Promise.all([
-        import("./modules/state.js"),
-        import("./modules/navigation.js"),
-        import("./components.js"),
-        import("./modules/settings.js"),
-        import("./modules/events.js"),
-        import("./modules/helpers.js"),
-        import("./performance.js")
-      ]);
-      this.modules.state = new StateManager2();
-      this.modules.navigation = new NavigationManager2(this);
-      this.modules.components = new ComponentManager2();
-      this.modules.settings = new SettingsManager2(this);
-      this.modules.events = new EventsManager2(this);
-      this.modules.helpers = new HelpersManager2(this);
-      this.modules.performance = new PerformanceMonitor2();
-      try {
-        const { SteamGamesManager: SteamGamesManager2 } = await import("./modules/steam-games.js");
-        this.modules.steamGames = new SteamGamesManager2(this);
-        window.steamGamesManager = this.modules.steamGames;
-      } catch (steamError) {
-        console.warn("SteamGamesManager n\xE3o p\xF4de ser carregado:", steamError);
-      }
-      if (this.modules.navigation && this.modules.navigation.navigateTo) {
-        setTimeout(() => {
-          this.modules.navigation.navigateTo("dashboard", true);
-        }, 100);
-      }
-    } catch (error) {
-      console.error("Erro cr\xEDtico na inicializa\xE7\xE3o da aplica\xE7\xE3o:", error);
-      this.showError("Erro cr\xEDtico na inicializa\xE7\xE3o da aplica\xE7\xE3o");
+    const [
+      { StateManager: StateManager2 },
+      { NavigationManager: NavigationManager2 },
+      { ComponentManager: ComponentManager2 },
+      { SettingsManager: SettingsManager2 },
+      { EventsManager: EventsManager2 },
+      { HelpersManager: HelpersManager2 },
+      { PerformanceMonitor: PerformanceMonitor2 }
+    ] = await Promise.all([
+      import("./modules/state.js"),
+      import("./modules/navigation.js"),
+      import("./components.js"),
+      import("./modules/settings.js"),
+      import("./modules/events.js"),
+      import("./modules/helpers.js"),
+      import("./performance.js")
+    ]);
+    this.modules.state = new StateManager2();
+    this.modules.navigation = new NavigationManager2(this);
+    this.modules.components = new ComponentManager2();
+    this.modules.settings = new SettingsManager2(this);
+    this.modules.events = new EventsManager2(this);
+    this.modules.helpers = new HelpersManager2(this);
+    this.modules.performance = new PerformanceMonitor2();
+    const { SteamGamesManager: SteamGamesManager2 } = await import("./modules/steam-games.js");
+    this.modules.steamGames = new SteamGamesManager2(this);
+    window.steamGamesManager = this.modules.steamGames;
+    if (this.modules.navigation && this.modules.navigation.navigateTo) {
+      setTimeout(() => {
+        this.modules.navigation.navigateTo("dashboard", true);
+      }, 100);
     }
   }
   // Delegação para o HelpersManager
@@ -347,86 +340,60 @@ class AchievementsApp {
     }
   }
   async loadData() {
-    try {
-      if (this.isElectronAPIAvailable("games")) {
-        const games = await this.safeElectronAPICall("games.getAll");
-        this.modules.state.set("games", games || []);
-      }
-      if (this.isElectronAPIAvailable("achievements")) {
-        const achievements = await this.safeElectronAPICall("achievements.getAll");
-        this.modules.state.set("achievements", achievements || []);
-      }
-    } catch (error) {
+    if (this.isElectronAPIAvailable("games")) {
+      const games = await this.safeElectronAPICall("games.getAll");
+      this.modules.state.set("games", games || []);
+    }
+    if (this.isElectronAPIAvailable("achievements")) {
+      const achievements = await this.safeElectronAPICall("achievements.getAll");
+      this.modules.state.set("achievements", achievements || []);
     }
   }
   async init() {
-    try {
-      const isProduction = !window.location.href.includes("localhost") || window.electronAPI;
-      if (isProduction) {
-        await this.fallbackInit();
-      } else {
-        await this.loadCriticalChunks();
-        await this.loadEssentialModules();
-      }
-      await this.initI18nSystem();
-      if (window.i18nHot && window.i18nHot.reloadTranslations) {
-        await window.i18nHot.reloadTranslations();
-      }
-      if (this.modules.settings && this.modules.settings.loadSettings) {
-        await this.modules.settings.loadSettings();
-      }
-      this.checkSetupStatus();
-      this.initializeComponents();
-      if (this.modules.events && this.modules.events.setupEventListeners) {
-        this.modules.events.setupEventListeners();
-      }
-      const settings = this.modules.state && this.modules.state.getState ? this.modules.state.getState("settings") : {};
-      if (this.modules.settings && this.modules.settings.applyAllSettings) {
-        await this.modules.settings.applyAllSettings(settings);
-      }
-      if (window.i18nHot && window.i18nHot.translatePage) {
-        window.i18nHot.translatePage();
-      }
-      await this.translatePage();
-      if (this.modules.helpers && this.modules.helpers.simulateLoading) {
-        await this.modules.helpers.simulateLoading();
-      }
-      if (this.modules.helpers && this.modules.helpers.showInterface) {
-        this.modules.helpers.showInterface();
-      }
-      await this.translatePage();
-      if (!isProduction) {
-        this.loadNonCriticalModules();
-      }
-    } catch (error) {
-      console.error("Erro na inicializa\xE7\xE3o:", error);
+    const isProduction = !window.location.href.includes("localhost") || window.electronAPI;
+    if (isProduction) {
       await this.fallbackInit();
+    } else {
+      await this.loadCriticalChunks();
+      await this.loadEssentialModules();
+    }
+    await this.initI18nSystem();
+    if (window.i18nHot && window.i18nHot.reloadTranslations) {
+      await window.i18nHot.reloadTranslations();
+    }
+    if (this.modules.settings && this.modules.settings.loadSettings) {
+      await this.modules.settings.loadSettings();
+    }
+    this.checkSetupStatus();
+    this.initializeComponents();
+    if (this.modules.events && this.modules.events.setupEventListeners) {
+      this.modules.events.setupEventListeners();
+    }
+    const settings = this.modules.state && this.modules.state.getState ? this.modules.state.getState("settings") : {};
+    if (this.modules.settings && this.modules.settings.applyAllSettings) {
+      await this.modules.settings.applyAllSettings(settings);
+    }
+    if (window.i18nHot && window.i18nHot.translatePage) {
+      window.i18nHot.translatePage();
+    }
+    await this.translatePage();
+    if (this.modules.helpers && this.modules.helpers.simulateLoading) {
+      await this.modules.helpers.simulateLoading();
+    }
+    if (this.modules.helpers && this.modules.helpers.showInterface) {
+      this.modules.helpers.showInterface();
+    }
+    await this.translatePage();
+    if (!isProduction) {
+      this.loadNonCriticalModules();
     }
   }
   async initI18nSystem() {
-    try {
-      let currentLanguage = "en";
-      if (this.isElectronAPIAvailable("i18n")) {
-        try {
-          currentLanguage = await this.safeElectronAPICall("i18n.getCurrentLanguage") || "en";
-        } catch (error) {
-        }
-      }
-      await initI18n(currentLanguage);
-    } catch (error) {
-      if (this.modules.helpers && this.modules.helpers.translatePage) {
-        await this.modules.helpers.translatePage();
-      }
+    let currentLanguage = "en";
+    if (this.isElectronAPIAvailable("i18n")) {
+      currentLanguage = await this.safeElectronAPICall("i18n.getCurrentLanguage") || "en";
     }
-  }
-  async translatePage() {
-    try {
-      await translatePage();
-    } catch (error) {
-      if (this.modules.helpers && this.modules.helpers.translatePage) {
-        await this.modules.helpers.translatePage();
-      }
-    }
+    await initI18n(currentLanguage);
   }
   checkSetupStatus() {
     const settings = this.modules.state && this.modules.state.getState ? this.modules.state.getState("settings") : {};
@@ -631,38 +598,28 @@ class AchievementsApp {
     await this.modules.settings.saveSettings(newSettings);
   }
   async saveSettingsFromModal() {
-    try {
-      const settingsData = {
-        theme: document.getElementById("settingsTheme")?.value || "dark",
-        language: document.getElementById("settingsLanguage")?.value || "en",
-        liteMode: document.getElementById("settingsLiteMode")?.checked || false,
-        virtualScrolling: document.getElementById("settingsVirtualScrolling")?.checked || true,
-        apiSource: document.getElementById("settingsApiSource")?.value || "steam",
-        notifications: {
-          enabled: document.getElementById("settingsNotifications")?.checked || true
-        }
-      };
-      await this.modules.settings.saveSettings(settingsData);
-      this.modules.settings.applyAllSettings();
-      this.closeModal("settingsModal");
-      this.modules.helpers.showSuccess(
-        await this.t("settings.saved", "Configura\xE7\xF5es salvas com sucesso!")
-      );
-    } catch (error) {
-      this.modules.helpers.showError(
-        await this.t("error.saveSettings", "Erro ao salvar configura\xE7\xF5es")
-      );
-    }
+    const settingsData = {
+      theme: document.getElementById("settingsTheme")?.value || "dark",
+      language: document.getElementById("settingsLanguage")?.value || "en",
+      liteMode: document.getElementById("settingsLiteMode")?.checked || false,
+      virtualScrolling: document.getElementById("settingsVirtualScrolling")?.checked || true,
+      apiSource: document.getElementById("settingsApiSource")?.value || "steam",
+      notifications: {
+        enabled: document.getElementById("settingsNotifications")?.checked || true
+      }
+    };
+    await this.modules.settings.saveSettings(settingsData);
+    this.modules.settings.applyAllSettings();
+    this.closeModal("settingsModal");
+    this.modules.helpers.showSuccess(
+      await this.t("settings.saved", "Configura\xE7\xF5es salvas com sucesso!")
+    );
   }
   // Métodos de jogos
   async openGameDetails(gameId) {
-    try {
-      const game = await this.safeElectronAPICall("games.getGameById", gameId);
-      if (game) {
-        this.modules.navigation.navigateTo("game-details", { gameId });
-      }
-    } catch (error) {
-      this.showError(await this.t("error.loadGameDetails"));
+    const game = await this.safeElectronAPICall("games.getGameById", gameId);
+    if (game) {
+      this.modules.navigation.navigateTo("game-details", { gameId });
     }
   }
   async openAddGameModal() {
@@ -704,62 +661,28 @@ class AchievementsApp {
     this.openModal("addGameModal");
   }
   async selectGamePath() {
-    try {
-      const path = await this.safeElectronAPICall("fs.selectDirectory");
-      if (path) {
-        document.getElementById("gamePath").value = path;
-      }
-    } catch (error) {
-      this.showError(await this.t("error.selectPath"));
+    const path = await this.safeElectronAPICall("fs.selectDirectory");
+    if (path) {
+      document.getElementById("gamePath").value = path;
     }
   }
   async addGame() {
-    try {
-      const form = document.getElementById("addGameForm");
-      const formData = new FormData(form);
-      const gameData = Object.fromEntries(formData);
-      await this.safeElectronAPICall("games.addGame", gameData);
-      this.showSuccess(await this.t("game.addSuccess", "Jogo adicionado com sucesso!"));
-      this.closeModal("addGameModal");
-      this.modules.navigation.refreshCurrentPage();
-    } catch (error) {
-      this.showError(await this.t("error.addGame"));
-    }
-  }
-  // Métodos de backup
-  async createBackup() {
-    try {
-      const result = await this.safeElectronAPICall("backup.create");
-      if (result.success) {
-        this.showSuccess(await this.t("backup.createSuccess", "Backup criado com sucesso!"));
-      }
-    } catch (error) {
-      this.showError(await this.t("error.createBackup"));
-    }
-  }
-  async restoreBackup() {
-    try {
-      const result = await this.safeElectronAPICall("backup.restore");
-      if (result.success) {
-        this.showSuccess(await this.t("backup.restoreSuccess", "Backup restaurado com sucesso!"));
-        this.modules.navigation.refreshCurrentPage();
-      }
-    } catch (error) {
-      this.showError(await this.t("error.restoreBackup"));
-    }
+    const form = document.getElementById("addGameForm");
+    const formData = new FormData(form);
+    const gameData = Object.fromEntries(formData);
+    await this.safeElectronAPICall("games.addGame", gameData);
+    this.showSuccess(await this.t("game.addSuccess", "Jogo adicionado com sucesso!"));
+    this.closeModal("addGameModal");
+    this.modules.navigation.refreshCurrentPage();
   }
   // Método para atualizar dados
   async refreshData() {
-    try {
-      if (this.currentPage === "dashboard") {
-        await this.modules.navigation.renderDashboard();
-      } else if (this.currentPage === "statistics") {
-        await this.modules.navigation.renderStatistics();
-      }
-      this.showSuccess(await this.t("common.refreshSuccess", "Dados atualizados!"));
-    } catch (error) {
-      this.showError(await this.t("error.refreshData"));
+    if (this.currentPage === "dashboard") {
+      await this.modules.navigation.renderDashboard();
+    } else if (this.currentPage === "statistics") {
+      await this.modules.navigation.renderStatistics();
     }
+    this.showSuccess(await this.t("common.refreshSuccess", "Dados atualizados!"));
   }
   // Método de limpeza
   destroy() {
@@ -770,58 +693,42 @@ class AchievementsApp {
   }
 }
 document.addEventListener("DOMContentLoaded", async () => {
-  try {
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    if (typeof StateManager === "undefined" || typeof NavigationManager === "undefined" || typeof SettingsManager === "undefined" || typeof EventsManager === "undefined" || typeof HelpersManager === "undefined" || typeof ComponentManager === "undefined" || typeof PerformanceMonitor === "undefined" || typeof SteamGamesManager === "undefined" || typeof DebugManager === "undefined") {
-      console.warn(
-        "Alguns m\xF3dulos n\xE3o foram carregados, tentando carregamento din\xE2mico..."
-      );
-      const modulePromises = [];
-      if (typeof StateManager === "undefined") {
-        modulePromises.push(import("./modules/state.js"));
-      }
-      if (typeof NavigationManager === "undefined") {
-        modulePromises.push(import("./modules/navigation.js"));
-      }
-      if (typeof SettingsManager === "undefined") {
-        modulePromises.push(import("./modules/settings.js"));
-      }
-      if (typeof EventsManager === "undefined") {
-        modulePromises.push(import("./modules/events.js"));
-      }
-      if (typeof HelpersManager === "undefined") {
-        modulePromises.push(import("./modules/helpers.js"));
-      }
-      if (typeof ComponentManager === "undefined") {
-        modulePromises.push(import("./components.js"));
-      }
-      if (typeof PerformanceMonitor === "undefined") {
-        modulePromises.push(import("./performance.js"));
-      }
-      if (typeof SteamGamesManager === "undefined") {
-        modulePromises.push(import("./modules/steam-games.js"));
-      }
-      if (typeof DebugManager === "undefined") {
-        modulePromises.push(import("./utils/debug-manager.js"));
-      }
-      await Promise.all(modulePromises);
+  await new Promise((resolve) => setTimeout(resolve, 100));
+  if (typeof StateManager === "undefined" || typeof NavigationManager === "undefined" || typeof SettingsManager === "undefined" || typeof EventsManager === "undefined" || typeof HelpersManager === "undefined" || typeof ComponentManager === "undefined" || typeof PerformanceMonitor === "undefined" || typeof SteamGamesManager === "undefined" || typeof DebugManager === "undefined") {
+    const modulePromises = [];
+    if (typeof StateManager === "undefined") {
+      modulePromises.push(import("./modules/state.js"));
     }
-    window.app = new AchievementsApp();
-    await window.app.init();
-    window.navigationManager = window.app.modules?.navigation || window.app.navigation;
-    window.steamGamesManager = window.app.modules?.steamGames || window.app.steamGames;
-    console.log("Aplica\xE7\xE3o inicializada:", {
-      app: !!window.app,
-      navigation: !!window.navigationManager,
-      steamGames: !!window.steamGamesManager
-    });
-  } catch (error) {
-    console.error("Erro ao inicializar aplica\xE7\xE3o:", error);
-    window.app = new AchievementsApp();
-    await window.app.init();
-    window.navigationManager = window.app.modules?.navigation || window.app.navigation;
-    window.steamGamesManager = window.app.modules?.steamGames || window.app.steamGames;
+    if (typeof NavigationManager === "undefined") {
+      modulePromises.push(import("./modules/navigation.js"));
+    }
+    if (typeof SettingsManager === "undefined") {
+      modulePromises.push(import("./modules/settings.js"));
+    }
+    if (typeof EventsManager === "undefined") {
+      modulePromises.push(import("./modules/events.js"));
+    }
+    if (typeof HelpersManager === "undefined") {
+      modulePromises.push(import("./modules/helpers.js"));
+    }
+    if (typeof ComponentManager === "undefined") {
+      modulePromises.push(import("./components.js"));
+    }
+    if (typeof PerformanceMonitor === "undefined") {
+      modulePromises.push(import("./performance.js"));
+    }
+    if (typeof SteamGamesManager === "undefined") {
+      modulePromises.push(import("./modules/steam-games.js"));
+    }
+    if (typeof DebugManager === "undefined") {
+      modulePromises.push(import("./utils/debug-manager.js"));
+    }
+    await Promise.all(modulePromises);
   }
+  window.app = new AchievementsApp();
+  await window.app.init();
+  window.navigationManager = window.app.modules?.navigation || window.app.navigation;
+  window.steamGamesManager = window.app.modules?.steamGames || window.app.steamGames;
 });
 window.AchievementsApp = AchievementsApp;
 export {

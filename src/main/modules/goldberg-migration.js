@@ -1,14 +1,30 @@
 var __defProp = Object.defineProperty;
 var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
 var __defProp2 = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
-var __commonJS = /* @__PURE__ */ __name((cb, mod) => /* @__PURE__ */ __name(function __require() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-}, "__require"), "__commonJS");
+var __defProp22 = Object.defineProperty;
+var __name22 = /* @__PURE__ */ __name2(
+  (target, value) => __defProp22(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp222 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name222 = /* @__PURE__ */ __name22(
+  (target, value) => __defProp222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __commonJS = /* @__PURE__ */ __name22(
+  (cb, mod) => /* @__PURE__ */ __name22(
+    /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
+      return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+    }, "__require"), "__require"),
+    "__require"
+  ),
+  "__commonJS"
+);
 var require_goldberg_migration = __commonJS({
   "src/main/modules/goldberg-migration.js"(exports, module) {
-    const { ipcMain, dialog } = require("electron");
+    const { ipcMain } = require("electron");
     const fs = require("node:fs").promises;
     const path = require("node:path");
     const os = require("node:os");
@@ -19,6 +35,12 @@ var require_goldberg_migration = __commonJS({
       }
       static {
         __name2(this, "GoldbergMigrationManager");
+      }
+      static {
+        __name22(this, "GoldbergMigrationManager");
+      }
+      static {
+        __name222(this, "GoldbergMigrationManager");
       }
       constructor(crashReporter = null, pathManager = null) {
         this.currentUser = null;
@@ -88,7 +110,6 @@ var require_goldberg_migration = __commonJS({
               return username;
             }
           } catch (osError) {
-            console.log("\u274C [Goldberg] os.userInfo() falhou:", osError.message);
             this.debugManager?.warn("\u26A0\uFE0F os.userInfo() falhou:", osError.message);
           }
           try {
@@ -218,12 +239,8 @@ var require_goldberg_migration = __commonJS({
        * Obtém data da última modificação
        */
       async getLastModified(dirPath) {
-        try {
-          const stats = await fs.stat(dirPath);
-          return stats.mtime.toISOString();
-        } catch (error) {
-          return /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString();
-        }
+        const stats = await fs.stat(dirPath);
+        return stats.mtime.toISOString();
       }
       /**
        * Migra um jogo específico da pasta antiga Goldberg SteamEmu Saves para GSE Saves
@@ -363,12 +380,8 @@ var require_goldberg_migration = __commonJS({
       async loadMigrationSettings() {
         try {
           const settingsPath = this.pathManager ? path.join(this.pathManager.getDataPath(), "settings", "migration-settings.json") : path.join(__dirname, "..", "..", "data", "settings", "migration-settings.json");
-          try {
-            const content = await fs.readFile(settingsPath, "utf8");
-            this.migrationSettings = { ...this.migrationSettings, ...JSON.parse(content) };
-          } catch (error) {
-            await this.saveMigrationSettings();
-          }
+          const content = await fs.readFile(settingsPath, "utf8");
+          this.migrationSettings = { ...this.migrationSettings, ...JSON.parse(content) };
           this.debugManager.log(
             "\u2699\uFE0F Configura\xE7\xF5es de migra\xE7\xE3o carregadas:",
             this.migrationSettings

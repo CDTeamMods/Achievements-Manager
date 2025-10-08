@@ -12,6 +12,16 @@ var __name222 = /* @__PURE__ */ __name22(
   (target, value) => __defProp222(target, "name", { value, configurable: true }),
   "__name"
 );
+var __defProp2222 = Object.defineProperty;
+var __name2222 = /* @__PURE__ */ __name222(
+  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp22222 = Object.defineProperty;
+var __name22222 = /* @__PURE__ */ __name2222(
+  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
+  "__name"
+);
 class CrashHandler {
   static {
     __name(this, "CrashHandler");
@@ -25,26 +35,28 @@ class CrashHandler {
   static {
     __name222(this, "CrashHandler");
   }
+  static {
+    __name2222(this, "CrashHandler");
+  }
+  static {
+    __name22222(this, "CrashHandler");
+  }
   constructor() {
     this.isReporting = false;
-    if (typeof getDebugManager === "function") {
-      this.debug = getDebugManager();
-    } else {
-      this.debug = {
-        ipc: /* @__PURE__ */ __name222(() => {
-        }, "ipc"),
-        crash: /* @__PURE__ */ __name222(() => {
-        }, "crash"),
-        error: /* @__PURE__ */ __name222(() => {
-        }, "error"),
-        info: /* @__PURE__ */ __name222(() => {
-        }, "info"),
-        warn: /* @__PURE__ */ __name222(() => {
-        }, "warn"),
-        sanitize: /* @__PURE__ */ __name222(() => {
-        }, "sanitize")
-      };
-    }
+    this.debug = {
+      ipc: /* @__PURE__ */ __name22222(() => {
+      }, "ipc"),
+      crash: /* @__PURE__ */ __name22222(() => {
+      }, "crash"),
+      error: /* @__PURE__ */ __name22222(() => {
+      }, "error"),
+      info: /* @__PURE__ */ __name22222(() => {
+      }, "info"),
+      warn: /* @__PURE__ */ __name22222(() => {
+      }, "warn"),
+      sanitize: /* @__PURE__ */ __name22222(() => {
+      }, "sanitize")
+    };
     this.setupErrorHandlers();
     this.setupConsoleOverrides();
   }
@@ -92,27 +104,6 @@ class CrashHandler {
       },
       true
     );
-  }
-  setupConsoleOverrides() {
-    const originalError = console.error;
-    console.error = (...args) => {
-      originalError.apply(console, args);
-      const errorMessage = args.join(" ");
-      if (errorMessage.includes("\u{1F6A8} ERRO DE CLONAGEM DETECTADO") || errorMessage.includes("Stack trace completo:") || errorMessage.includes("Dados do erro:") || errorMessage.includes("Timestamp:") || errorMessage.includes("INTERCEPTADO - Erro de clonagem detectado") || errorMessage.includes("could not be cloned") || errorMessage.includes("IpcRendererInternal.send")) {
-        return;
-      }
-      if (args.length > 0 && (args[0] instanceof Error || typeof args[0] === "string")) {
-        this.reportError({
-          type: "console-error",
-          message: args.map(
-            (arg) => arg instanceof Error ? arg.message : typeof arg === "object" ? JSON.stringify(arg) : String(arg)
-          ).join(" "),
-          stack: args[0] instanceof Error ? args[0].stack : void 0,
-          timestamp: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString(),
-          context: { consoleArgs: args.length }
-        });
-      }
-    };
   }
   async reportError(errorData) {
     if (this.isReporting) {
@@ -248,10 +239,7 @@ class CrashHandler {
       }
       return null;
     } catch (error) {
-      try {
-        await window.electronAPI.debug.error("Failed to get crash stats:", error);
-      } catch (ipcError) {
-      }
+      await window.electronAPI.debug.error("Failed to get crash stats:", error);
       return null;
     }
   }
@@ -263,10 +251,7 @@ class CrashHandler {
       }
       return false;
     } catch (error) {
-      try {
-        await window.electronAPI.debug.error("Failed to clear crash reports:", error);
-      } catch (ipcError) {
-      }
+      await window.electronAPI.debug.error("Failed to clear crash reports:", error);
       return false;
     }
   }
@@ -278,10 +263,7 @@ class CrashHandler {
       }
       return [];
     } catch (error) {
-      try {
-        await window.electronAPI.debug.error("Failed to get crash list:", error);
-      } catch (ipcError) {
-      }
+      await window.electronAPI.debug.error("Failed to get crash list:", error);
       return [];
     }
   }

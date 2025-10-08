@@ -1,226 +1,200 @@
-const fs = require('node:fs').promises;
-const path = require('node:path');
-const { ipcMain } = require('electron');
-
-/**
- * Gerenciador de jogos Steam instalados localmente
- * Detecta jogos através dos arquivos appmanifest_*.acf
- */
-class SteamLocalGamesManager {
-  constructor(debugManager, crashReporter) {
-    this.debugManager = debugManager;
-    this.crashReporter = crashReporter;
-    this.installedGames = new Set();
-    this.steamPaths = [];
-    this.lastScan = null;
-
-    this.setupIpcHandlers();
-  }
-
-  /**
-   * Configurar handlers IPC
-   */
-  setupIpcHandlers() {
-    ipcMain.handle('steam.getInstalledGames', async () => {
-      return await this.getInstalledGames();
-    });
-
-    ipcMain.handle('steam.scanInstalledGames', async () => {
-      return await this.scanInstalledGames();
-    });
-
-    ipcMain.handle('steam.isGameInstalled', async (event, appId) => {
-      return this.isGameInstalled(appId);
-    });
-  }
-
-  /**
-   * Detectar caminhos do Steam automaticamente
-   */
-  async detectSteamPaths() {
-    const possiblePaths = [
-      'C:\\Program Files (x86)\\Steam',
-      'C:\\Program Files\\Steam',
-      'D:\\Steam',
-      'E:\\Steam',
-      'F:\\Steam',
-    ];
-
-    const validPaths = [];
-
-    for (const steamPath of possiblePaths) {
-      try {
-        const steamAppsPath = path.join(steamPath, 'steamapps');
-        await fs.access(steamAppsPath);
-        validPaths.push(steamAppsPath);
-      } catch (error) {
-        // Caminho não existe, continuar
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+var __defProp2 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
+var __commonJS = /* @__PURE__ */ __name((cb, mod) => /* @__PURE__ */ __name(function __require() {
+  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+}, "__require"), "__commonJS");
+var require_steam_local_games = __commonJS({
+  "src/main/modules/steam-local-games.js"(exports, module) {
+    const fs = require("node:fs").promises;
+    const path = require("node:path");
+    const { ipcMain } = require("electron");
+    class SteamLocalGamesManager {
+      static {
+        __name(this, "SteamLocalGamesManager");
       }
-    }
-
-    // Verificar bibliotecas adicionais através do libraryfolders.vdf
-    for (const steamAppsPath of validPaths) {
-      try {
-        const libraryFoldersPath = path.join(steamAppsPath, 'libraryfolders.vdf');
-        const libraryContent = await fs.readFile(libraryFoldersPath, 'utf8');
-
-        // Parse simples do VDF para encontrar caminhos adicionais
-        const pathMatches = libraryContent.match(/"path"\s+"([^"]+)"/g);
-        if (pathMatches) {
-          for (const match of pathMatches) {
-            const pathMatch = match.match(/"path"\s+"([^"]+)"/);
-            if (pathMatch) {
-              const additionalPath = path.join(pathMatch[1].replace(/\\\\/g, '\\'), 'steamapps');
-              if (!validPaths.includes(additionalPath)) {
-                try {
+      static {
+        __name2(this, "SteamLocalGamesManager");
+      }
+      constructor(debugManager, crashReporter) {
+        this.debugManager = debugManager;
+        this.crashReporter = crashReporter;
+        this.installedGames = /* @__PURE__ */ new Set();
+        this.steamPaths = [];
+        this.lastScan = null;
+        this.setupIpcHandlers();
+      }
+      /**
+       * Configurar handlers IPC
+       */
+      setupIpcHandlers() {
+        ipcMain.handle("steam.getInstalledGames", async () => {
+          return await this.getInstalledGames();
+        });
+        ipcMain.handle("steam.scanInstalledGames", async () => {
+          return await this.scanInstalledGames();
+        });
+        ipcMain.handle("steam.isGameInstalled", async (event, appId) => {
+          return this.isGameInstalled(appId);
+        });
+      }
+      /**
+       * Detectar caminhos do Steam automaticamente
+       */
+      async detectSteamPaths() {
+        const possiblePaths = [
+          "C:\\Program Files (x86)\\Steam",
+          "C:\\Program Files\\Steam",
+          "D:\\Steam",
+          "E:\\Steam",
+          "F:\\Steam"
+        ];
+        const validPaths = [];
+        for (const steamPath of possiblePaths) {
+          const steamAppsPath = path.join(steamPath, "steamapps");
+          await fs.access(steamAppsPath);
+          validPaths.push(steamAppsPath);
+        }
+        for (const steamAppsPath of validPaths) {
+          const libraryFoldersPath = path.join(steamAppsPath, "libraryfolders.vdf");
+          const libraryContent = await fs.readFile(libraryFoldersPath, "utf8");
+          const pathMatches = libraryContent.match(/"path"\s+"([^"]+)"/g);
+          if (pathMatches) {
+            for (const match of pathMatches) {
+              const pathMatch = match.match(/"path"\s+"([^"]+)"/);
+              if (pathMatch) {
+                const additionalPath = path.join(pathMatch[1].replace(/\\\\/g, "\\"), "steamapps");
+                if (!validPaths.includes(additionalPath)) {
                   await fs.access(additionalPath);
                   validPaths.push(additionalPath);
-                } catch (error) {
-                  // Caminho não existe
                 }
               }
             }
           }
         }
-      } catch (error) {
-        // Arquivo libraryfolders.vdf não existe ou erro de leitura
+        this.steamPaths = validPaths;
+        return validPaths;
       }
-    }
-
-    this.steamPaths = validPaths;
-    return validPaths;
-  }
-
-  /**
-   * Escanear jogos instalados em todos os caminhos Steam
-   */
-  async scanInstalledGames() {
-    try {
-      console.log('🔍 Escaneando jogos Steam instalados...');
-
-      if (this.steamPaths.length === 0) {
-        await this.detectSteamPaths();
-      }
-
-      if (this.steamPaths.length === 0) {
-        return {
-          success: false,
-          error: 'Nenhuma instalação do Steam encontrada',
-          installedGames: [],
-        };
-      }
-
-      const installedGames = new Set();
-
-      for (const steamAppsPath of this.steamPaths) {
+      /**
+       * Escanear jogos instalados em todos os caminhos Steam
+       */
+      async scanInstalledGames() {
         try {
-          const files = await fs.readdir(steamAppsPath);
-
-          for (const file of files) {
-            if (file.startsWith('appmanifest_') && file.endsWith('.acf')) {
-              const appId = file.match(/appmanifest_(\d+)\.acf/);
-              if (appId) {
-                const gameAppId = appId[1];
-
-                // Verificar se o jogo está realmente instalado (StateFlags = 4)
-                try {
+          if (this.steamPaths.length === 0) {
+            await this.detectSteamPaths();
+          }
+          if (this.steamPaths.length === 0) {
+            return {
+              success: false,
+              error: "Nenhuma instala\xE7\xE3o do Steam encontrada",
+              installedGames: []
+            };
+          }
+          const installedGames = /* @__PURE__ */ new Set();
+          for (const steamAppsPath of this.steamPaths) {
+            const files = await fs.readdir(steamAppsPath).catch((err) => {
+              this.debugManager?.warn(
+                `\u26A0\uFE0F Erro ao escanear ${steamAppsPath}:`,
+                err.message
+              );
+              return [];
+            });
+            for (const file of files) {
+              if (file.startsWith("appmanifest_") && file.endsWith(".acf")) {
+                const appId = file.match(/appmanifest_(\d+)\.acf/);
+                if (appId) {
+                  const gameAppId = appId[1];
                   const manifestPath = path.join(steamAppsPath, file);
-                  const manifestContent = await fs.readFile(manifestPath, 'utf8');
-
-                  // Parse simples do ACF para verificar StateFlags
+                  const manifestContent = await fs.readFile(manifestPath, "utf8").catch((err) => {
+                    this.debugManager?.warn(
+                      `\u26A0\uFE0F Erro ao ler manifest ${file}:`,
+                      err.message
+                    );
+                    return null;
+                  });
+                  if (!manifestContent) continue;
                   const stateFlagsMatch = manifestContent.match(/"StateFlags"\s+"(\d+)"/);
                   if (stateFlagsMatch) {
                     const stateFlags = parseInt(stateFlagsMatch[1]);
-                    // StateFlags 4 = Fully Installed
                     if (stateFlags === 4) {
                       installedGames.add(gameAppId);
                     }
                   }
-                } catch (error) {
-                  this.debugManager?.warn(`⚠️ Erro ao ler manifest ${file}:`, error.message);
                 }
               }
             }
           }
+          this.installedGames = installedGames;
+          this.lastScan = /* @__PURE__ */ new Date();
+          return {
+            success: true,
+            installedGames: Array.from(installedGames),
+            totalInstalled: installedGames.size,
+            steamPaths: this.steamPaths,
+            lastScan: this.lastScan
+          };
         } catch (error) {
-          this.debugManager?.warn(`⚠️ Erro ao escanear ${steamAppsPath}:`, error.message);
+          this.crashReporter.logError("SteamLocalGamesManager.scanInstalledGames", error);
+          return {
+            success: false,
+            error: `Erro ao escanear jogos: ${error.message}`,
+            installedGames: []
+          };
         }
       }
-
-      this.installedGames = installedGames;
-      this.lastScan = new Date();
-
-      return {
-        success: true,
-        installedGames: Array.from(installedGames),
-        totalInstalled: installedGames.size,
-        steamPaths: this.steamPaths,
-        lastScan: this.lastScan,
-      };
-    } catch (error) {
-      this.crashReporter.logError('SteamLocalGamesManager.scanInstalledGames', error);
-
-      return {
-        success: false,
-        error: `Erro ao escanear jogos: ${error.message}`,
-        installedGames: [],
-      };
+      /**
+       * Obter lista de jogos instalados (com cache)
+       */
+      async getInstalledGames() {
+        const oneHourAgo = new Date(Date.now() - 60 * 60 * 1e3);
+        if (!this.lastScan || this.lastScan < oneHourAgo) {
+          return await this.scanInstalledGames();
+        }
+        return {
+          success: true,
+          installedGames: Array.from(this.installedGames),
+          totalInstalled: this.installedGames.size,
+          steamPaths: this.steamPaths,
+          lastScan: this.lastScan,
+          fromCache: true
+        };
+      }
+      /**
+       * Verificar se um jogo específico está instalado
+       */
+      isGameInstalled(appId) {
+        return this.installedGames.has(String(appId));
+      }
+      /**
+       * Filtrar lista de jogos para mostrar apenas os instalados
+       */
+      filterInstalledGames(allGames) {
+        if (!Array.isArray(allGames)) {
+          return [];
+        }
+        return allGames.filter((game) => {
+          const gameId = String(game.id || game.appid || game.appID);
+          return this.installedGames.has(gameId);
+        });
+      }
+      /**
+       * Obter estatísticas
+       */
+      getStats() {
+        return {
+          totalInstalled: this.installedGames.size,
+          steamPaths: this.steamPaths.length,
+          lastScan: this.lastScan,
+          isInitialized: this.steamPaths.length > 0
+        };
+      }
     }
+    module.exports = SteamLocalGamesManager;
   }
-
-  /**
-   * Obter lista de jogos instalados (com cache)
-   */
-  async getInstalledGames() {
-    // Se não escaneou ainda ou escaneamento é muito antigo (>1 hora), escanear novamente
-    const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
-
-    if (!this.lastScan || this.lastScan < oneHourAgo) {
-      return await this.scanInstalledGames();
-    }
-
-    return {
-      success: true,
-      installedGames: Array.from(this.installedGames),
-      totalInstalled: this.installedGames.size,
-      steamPaths: this.steamPaths,
-      lastScan: this.lastScan,
-      fromCache: true,
-    };
-  }
-
-  /**
-   * Verificar se um jogo específico está instalado
-   */
-  isGameInstalled(appId) {
-    return this.installedGames.has(String(appId));
-  }
-
-  /**
-   * Filtrar lista de jogos para mostrar apenas os instalados
-   */
-  filterInstalledGames(allGames) {
-    if (!Array.isArray(allGames)) {
-      return [];
-    }
-
-    return allGames.filter(game => {
-      const gameId = String(game.id || game.appid || game.appID);
-      return this.installedGames.has(gameId);
-    });
-  }
-
-  /**
-   * Obter estatísticas
-   */
-  getStats() {
-    return {
-      totalInstalled: this.installedGames.size,
-      steamPaths: this.steamPaths.length,
-      lastScan: this.lastScan,
-      isInitialized: this.steamPaths.length > 0,
-    };
-  }
-}
-
-module.exports = SteamLocalGamesManager;
+});
+var steam_local_games_default = require_steam_local_games();
+export {
+  steam_local_games_default as default
+};

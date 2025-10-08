@@ -31,7 +31,7 @@
     "postinstall": "electron-builder install-app-deps",
     "clean": "rimraf dist release",
     "clean:all": "rimraf dist node_modules yarn.lock && yarn install",
-    "lint": "eslint src --ext .js,.jsx,.ts,.tsx",
+    "lint": "eslint src --ext .mjs,.js,.jsx,.ts,.tsx",
     "lint:fix": "eslint src --ext .mjs,.js,.jsx,.ts,.tsx --fix",
     "format": "yarn format:write",
     "format:write": "prettier --write \"src/**/*.{mjs,js,jsx,ts,tsx,json,css}\"",
@@ -115,7 +115,7 @@
     }
   },
   "lint-staged": {
-    "*.{mjs, js,jsx,ts,tsx}": [
+    "*.{mjs,js,jsx,ts,tsx}": [
       "eslint --fix",
       "prettier --write"
     ],

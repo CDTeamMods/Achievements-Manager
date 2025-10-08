@@ -12,7 +12,17 @@ var __name222 = /* @__PURE__ */ __name22(
   (target, value) => __defProp222(target, "name", { value, configurable: true }),
   "__name"
 );
-import { ALLOWED_SETTINGS_KEYS, filterAllowedSettings } from "../config/allowed-settings-keys.js";
+var __defProp2222 = Object.defineProperty;
+var __name2222 = /* @__PURE__ */ __name222(
+  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp22222 = Object.defineProperty;
+var __name22222 = /* @__PURE__ */ __name2222(
+  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
+  "__name"
+);
+import { filterAllowedSettings } from "../config/allowed-settings-keys.js";
 class SettingsManager {
   static {
     __name(this, "SettingsManager");
@@ -26,6 +36,12 @@ class SettingsManager {
   static {
     __name222(this, "SettingsManager");
   }
+  static {
+    __name2222(this, "SettingsManager");
+  }
+  static {
+    __name22222(this, "SettingsManager");
+  }
   constructor(app) {
     this.app = app;
     this.currentConfiguredTheme = "auto";
@@ -36,42 +52,16 @@ class SettingsManager {
     try {
       let settings = {};
       if (this.app.isElectron) {
+        settings = await window.electronAPI.fs.loadSettings();
         try {
-          settings = await window.electronAPI.fs.loadSettings();
-          try {
-          } catch (cloneError) {
-            if (settings && typeof settings === "object") {
-              for (const [key, value] of Object.entries(settings)) {
-                try {
-                  structuredClone(value);
-                } catch (propError) {
-                  if (value && typeof value === "object") {
-                    for (const [subKey, subValue] of Object.entries(value)) {
-                      try {
-                        structuredClone(subValue);
-                      } catch (subError) {
-                      }
-                    }
-                  }
-                }
-              }
-            }
-            for (const [key, value] of Object.entries(settings)) {
-              try {
-                structuredClone(value);
-              } catch (propError) {
-              }
-            }
-            settings = this.sanitizeSettingsManual(settings);
-          }
-        } catch (ipcError) {
-          throw ipcError;
+          structuredClone(settings);
+        } catch {
+          settings = this.sanitizeSettingsManual(settings);
         }
       } else {
         const storedSettings = JSON.parse(localStorage.getItem("achievements-settings") || "{}");
         settings = {
           setupComplete: true,
-          // No web sempre true
           language: "en",
           theme: "dark",
           liteMode: false,
@@ -101,15 +91,14 @@ class SettingsManager {
               localStorage.setItem("achievements-settings", JSON.stringify(settings));
             }
           }
-        } catch (error) {
+        } catch {
         }
       }
       if (this.app.modules.state && this.app.modules.state.setState) {
         this.app.modules.state.setState("settings", settings);
-        const savedSettings = this.app.modules.state.getState("settings");
       }
       await this.applyAllSettings();
-    } catch (error) {
+    } catch {
       const defaultSettings = {
         setupComplete: true,
         language: "en",
@@ -131,107 +120,90 @@ class SettingsManager {
     return this.app.modules.state && this.app.modules.state.getState ? this.app.modules.state.getState("settings") || {} : {};
   }
   async set(key, value) {
-    try {
-      const currentSettings = this.getAll();
-      const newSettings = { ...currentSettings, [key]: value };
-      if (this.app.modules.state && this.app.modules.state.setState) {
-        this.app.modules.state.setState("settings", newSettings);
-      }
-      if (this.app.isElectron) {
-        const sanitizedSettings = window.IPCSanitizer ? window.IPCSanitizer.sanitizeSettings(newSettings) : this.sanitizeSettingsManual(newSettings);
-        await window.electronAPI.fs.saveSettings(sanitizedSettings);
-      } else {
-        localStorage.setItem("achievements-settings", JSON.stringify(newSettings));
-      }
-      await this.applySingleSetting(key, value);
-      return true;
-    } catch (error) {
-      return false;
+    const currentSettings = this.getAll();
+    const newSettings = { ...currentSettings, [key]: value };
+    if (this.app.modules.state && this.app.modules.state.setState) {
+      this.app.modules.state.setState("settings", newSettings);
     }
+    if (this.app.isElectron) {
+      const sanitizedSettings = window.IPCSanitizer ? window.IPCSanitizer.sanitizeSettings(newSettings) : this.sanitizeSettingsManual(newSettings);
+      await window.electronAPI.fs.saveSettings(sanitizedSettings);
+    } else {
+      localStorage.setItem("achievements-settings", JSON.stringify(newSettings));
+    }
+    await this.applySingleSetting(key, value);
+    return true;
   }
   // Método de fallback para sanitização manual
   sanitizeSettingsManual(settings) {
     return filterAllowedSettings(settings);
   }
   async reset() {
-    try {
-      const defaultSettings = {
-        // Garantir que não volte para false ao resetar; manter como true
-        setupComplete: true,
-        language: "pt-BR",
-        theme: "dark",
-        liteMode: false,
-        virtualScrolling: true
-      };
-      if (this.app.modules.state && this.app.modules.state.setState) {
-        this.app.modules.state.setState("settings", defaultSettings);
-      }
-      if (this.app.isElectron) {
-        await window.electronAPI.fs.saveSettings(defaultSettings);
-      } else {
-        localStorage.setItem("achievements-settings", JSON.stringify(defaultSettings));
-      }
-      await this.applyAllSettings();
-      return true;
-    } catch (error) {
-      return false;
+    const defaultSettings = {
+      // Garantir que não volte para false ao resetar; manter como true
+      setupComplete: true,
+      language: "pt-BR",
+      theme: "dark",
+      liteMode: false,
+      virtualScrolling: true
+    };
+    if (this.app.modules.state && this.app.modules.state.setState) {
+      this.app.modules.state.setState("settings", defaultSettings);
     }
+    if (this.app.isElectron) {
+      await window.electronAPI.fs.saveSettings(defaultSettings);
+    } else {
+      localStorage.setItem("achievements-settings", JSON.stringify(defaultSettings));
+    }
+    await this.applyAllSettings();
+    return true;
   }
   async saveSettings(newSettings) {
-    try {
-      const currentSettings = this.getAll();
-      const mergedSettings = { ...currentSettings, ...newSettings };
-      if (this.app.modules.state && this.app.modules.state.setState) {
-        this.app.modules.state.setState("settings", mergedSettings);
-      }
-      if (this.app.isElectron) {
-        const sanitizedSettings = window.IPCSanitizer ? window.IPCSanitizer.sanitizeSettings(mergedSettings) : this.sanitizeSettingsManual(mergedSettings);
-        await window.electronAPI.fs.saveSettings(sanitizedSettings);
-      } else {
-        localStorage.setItem("achievements-settings", JSON.stringify(mergedSettings));
-      }
-      await this.applyAllSettings();
-      return true;
-    } catch (error) {
-      return false;
+    const currentSettings = this.getAll();
+    const mergedSettings = { ...currentSettings, ...newSettings };
+    if (this.app.modules.state && this.app.modules.state.setState) {
+      this.app.modules.state.setState("settings", mergedSettings);
     }
+    if (this.app.isElectron) {
+      const sanitizedSettings = window.IPCSanitizer ? window.IPCSanitizer.sanitizeSettings(mergedSettings) : this.sanitizeSettingsManual(mergedSettings);
+      await window.electronAPI.fs.saveSettings(sanitizedSettings);
+    } else {
+      localStorage.setItem("achievements-settings", JSON.stringify(mergedSettings));
+    }
+    await this.applyAllSettings();
+    return true;
   }
+  /*
   sanitizeSettingsManual(settings) {
     const sanitized = {};
     for (const [key, value] of Object.entries(settings)) {
       if (value !== void 0 && value !== null) {
-        if (typeof value === "function") {
+        if (typeof value === 'function') {
           sanitized[key] = null;
-        } else if (typeof value === "object") {
-          try {
-            JSON.stringify(value);
-            sanitized[key] = value;
-          } catch (error) {
-          }
+        } else if (typeof value === 'object') {
+          JSON.stringify(value);
+          sanitized[key] = value;
         } else {
           sanitized[key] = value;
         }
       }
     }
     return sanitized;
-  }
+  }*/
   async applySingleSetting(key, value) {
-    try {
-      switch (key) {
-        case "theme":
-          await this.applyTheme(value);
-          break;
-        case "liteMode":
-          this.applyLiteMode(value);
-          break;
-        case "virtualScrolling":
-          this.applyVirtualScrolling(value);
-          break;
-        case "language":
-          await this.applyLanguage(value);
-          break;
-      }
-    } catch (error) {
+    switch (key) {
+      case "theme":
+        await this.applyTheme(value);
+        break;
+      case "liteMode":
+        this.applyLiteMode(value);
+        break;
+      case "virtualScrolling":
+        this.applyVirtualScrolling(value);
+        break;
+      case "language":
+        await this.applyLanguage(value);
+        break;
     }
   }
   async applyTheme(theme) {
@@ -243,15 +215,11 @@ class SettingsManager {
     document.documentElement.setAttribute("data-theme", themeToApply);
     let effectiveTheme = themeToApply;
     if (themeToApply === "auto") {
-      try {
-        if (this.app.isElectronAPIAvailable("theme")) {
-          const systemTheme = await this.app.safeElectronAPICall("theme.getSystemTheme");
-          effectiveTheme = systemTheme;
-        } else {
-          effectiveTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-        }
-      } catch (error) {
-        effectiveTheme = "dark";
+      if (this.app.isElectronAPIAvailable("theme")) {
+        const systemTheme = await this.app.safeElectronAPICall("theme.getSystemTheme");
+        effectiveTheme = systemTheme;
+      } else {
+        effectiveTheme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
       }
     }
     let metaThemeColor = document.querySelector('meta[name="theme-color"]');
@@ -318,43 +286,35 @@ class SettingsManager {
     }
   }
   async applyLanguage(language, showNotification = true) {
-    try {
-      const settings = this.app.modules.state && this.app.modules.state.getState ? this.app.modules.state.getState("settings") : {};
-      let newLanguage = language !== void 0 ? language : settings.language;
-      if (!newLanguage || typeof newLanguage !== "string") {
-        newLanguage = "pt-BR";
+    const settings = this.app.modules.state && this.app.modules.state.getState ? this.app.modules.state.getState("settings") : {};
+    let newLanguage = language !== void 0 ? language : settings.language;
+    if (!newLanguage || typeof newLanguage !== "string") {
+      newLanguage = "pt-BR";
+    }
+    let success = false;
+    if (window.i18nHot && window.i18nHot.syncLanguageWithBackend) {
+      success = await window.i18nHot.syncLanguageWithBackend(newLanguage);
+    } else if (this.app.isElectronAPIAvailable("i18n")) {
+      success = await this.app.safeElectronAPICall("i18n.setLanguage", newLanguage);
+      if (success && this.app.modules.helpers && this.app.modules.helpers.translatePage) {
+        await this.app.modules.helpers.translatePage();
       }
-      let success = false;
-      if (window.i18nHot && window.i18nHot.syncLanguageWithBackend) {
-        success = await window.i18nHot.syncLanguageWithBackend(newLanguage);
-      } else if (this.app.isElectronAPIAvailable("i18n")) {
-        success = await this.app.safeElectronAPICall("i18n.setLanguage", newLanguage);
-        if (success && this.app.modules.helpers && this.app.modules.helpers.translatePage) {
-          await this.app.modules.helpers.translatePage();
-        }
+    }
+    if (success) {
+      if (this.app.modules.state && this.app.modules.state.getState && this.app.modules.state.setState) {
+        const currentSettings = this.app.modules.state.getState("settings") || {};
+        this.app.modules.state.setState("settings", {
+          ...currentSettings,
+          language: newLanguage
+        });
       }
-      if (success) {
-        if (this.app.modules.state && this.app.modules.state.getState && this.app.modules.state.setState) {
-          const currentSettings = this.app.modules.state.getState("settings") || {};
-          this.app.modules.state.setState("settings", {
-            ...currentSettings,
-            language: newLanguage
-          });
-        }
-        if (showNotification && this.app.modules.helpers) {
-          this.app.modules.helpers.showNotification(
-            await this.app.t("msg.saveSuccess", "Idioma alterado com sucesso!"),
-            "success"
-          );
-        }
-      } else {
-        if (this.app.modules.helpers) {
-          this.app.modules.helpers.showError(
-            await this.app.t("error.applyLanguage", "Erro ao aplicar idioma")
-          );
-        }
+      if (showNotification && this.app.modules.helpers) {
+        this.app.modules.helpers.showNotification(
+          await this.app.t("msg.saveSuccess", "Idioma alterado com sucesso!"),
+          "success"
+        );
       }
-    } catch (error) {
+    } else {
       if (this.app.modules.helpers) {
         this.app.modules.helpers.showError(
           await this.app.t("error.applyLanguage", "Erro ao aplicar idioma")
@@ -363,20 +323,16 @@ class SettingsManager {
     }
   }
   async performAutoSync() {
-    try {
-      if (window.electronAPI && window.electronAPI.fs) {
-        const settings = this.app.modules.state && this.app.modules.state.getState ? this.app.modules.state.getState("settings") : {};
-        const sanitizedSettings = window.IPCSanitizer ? window.IPCSanitizer.sanitizeSettings(settings) : this.sanitizeSettingsManual(settings);
-        await window.electronAPI.fs.saveSettings(sanitizedSettings);
-      }
-    } catch (error) {
+    if (window.electronAPI && window.electronAPI.fs) {
+      const settings = this.app.modules.state && this.app.modules.state.getState ? this.app.modules.state.getState("settings") : {};
+      const sanitizedSettings = window.IPCSanitizer ? window.IPCSanitizer.sanitizeSettings(settings) : this.sanitizeSettingsManual(settings);
+      await window.electronAPI.fs.saveSettings(sanitizedSettings);
     }
   }
   setupSystemThemeListener() {
     if (this.app.isElectronAPIAvailable("on")) {
-      window.electronAPI.on("theme:systemChanged", async (systemTheme) => {
+      window.electronAPI.on("theme:systemChanged", async () => {
         try {
-          const sanitizedTheme = typeof systemTheme === "string" ? systemTheme : "dark";
           const settings = this.app.modules.state && this.app.modules.state.getState ? this.app.modules.state.getState("settings") : {};
           if (settings.theme === "auto") {
             await this.applyTheme("auto");
@@ -426,10 +382,9 @@ class SettingsManager {
     }
     if (window.matchMedia) {
       const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
-      mediaQuery.addEventListener("change", async (e) => {
+      mediaQuery.addEventListener("change", async () => {
         const settings = this.app.modules.state && this.app.modules.state.getState ? this.app.modules.state.getState("settings") : {};
         if (settings.theme === "auto") {
-          const newTheme = e.matches ? "dark" : "light";
           await this.applyTheme("auto");
         }
       });
@@ -447,20 +402,13 @@ class SettingsManager {
   }
   // Aplicar configuração de scroll virtual
   applyVirtualScrollSetting() {
-    try {
-      const settings = this.app.modules.state && this.app.modules.state.getState ? this.app.modules.state.getState("settings") : {};
-      const enabled = settings.virtualScrolling || false;
-      if (enabled) {
-        document.body.classList.add("virtual-scroll-enabled");
-      } else {
-        document.body.classList.remove("virtual-scroll-enabled");
-      }
-    } catch (error) {
+    const settings = this.app.modules.state && this.app.modules.state.getState ? this.app.modules.state.getState("settings") : {};
+    const enabled = settings.virtualScrolling || false;
+    if (enabled) {
+      document.body.classList.add("virtual-scroll-enabled");
+    } else {
+      document.body.classList.remove("virtual-scroll-enabled");
     }
-  }
-  // Função para obter configurações formatadas para a página
-  getSettingsForPage() {
-    return this.getAll();
   }
   // Método para obter configurações formatadas para a página
   getSettingsForPage() {
@@ -479,17 +427,13 @@ class SettingsManager {
   }
   // Aplicar todas as configurações
   applyAllSettings() {
-    try {
-      this.applyTheme();
-      this.applyLanguage(void 0, false);
-      this.applyLiteMode();
-      this.applyVirtualScrollSetting();
-      this.applyShowTooltips();
-      this.applyAutoSync();
-      this.applyCacheSize();
-    } catch (error) {
-      return this.getDefaultSettings();
-    }
+    this.applyTheme();
+    this.applyLanguage(void 0, false);
+    this.applyLiteMode();
+    this.applyVirtualScrollSetting();
+    this.applyShowTooltips();
+    this.applyAutoSync();
+    this.applyCacheSize();
   }
 }
 window.SettingsManager = SettingsManager;

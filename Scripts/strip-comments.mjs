@@ -1,10 +1,35 @@
 import { build } from 'esbuild'
 import fs from 'node:fs'
 import path from 'node:path'
-import { execSync } from 'node:child_process'
+import { execFileSync } from 'node:child_process'
 
+/**
+ * Executa um comando do SO de forma segura (sem shell), mitigando riscos de injeção.
+ * Aceita um comando em string e o separa em programa + argumentos, com validações.
+ */
 function sh(cmd) {
-  return execSync(cmd, { stdio: 'pipe' }).toString().trim()
+  if (typeof cmd !== 'string' || cmd.length === 0) {
+    throw new TypeError('cmd deve ser uma string não vazia')
+  }
+  // Bloquear metacaracteres perigosos que habilitam encadeamento e redirecionamento
+  const unsafePattern = /[;&|`$><]/
+  if (unsafePattern.test(cmd)) {
+    throw new Error('Comando contém metacaracteres perigosos')
+  }
+  // Quebra segura por espaços preservando conteúdo entre aspas simples/duplas
+  const parts = cmd.match(/(?:"[^"]*"|'[^']*'|\S+)/g) || []
+  const stripQuotes = (s) => s.replace(/^(["'])|(["'])$/g, '')
+  const program = parts.shift()
+  const args = parts.map(stripQuotes)
+  // Whitelist básica de programas permitidos (ajuste conforme necessário)
+  const allowedPrograms = new Set(['node', 'git', 'yarn', 'npm', 'pnpm'])
+  const baseProgram = String(program).split(/\s+/)[0]
+  if (!allowedPrograms.has(baseProgram)) {
+    throw new Error(`Programa não permitido: ${baseProgram}`)
+  }
+  // Executa sem shell para evitar interpretação de metacaracteres pelo shell
+  const output = execFileSync(baseProgram, args, { stdio: 'pipe' })
+  return output.toString().trim()
 }
 
 async function stripFile(file) {
@@ -35,8 +60,6 @@ if (!staged.length) {
   console.log('Nenhum arquivo JS/TS para limpar.')
   process.exit(0)
 }
-
-console.log(`Removendo comentários de ${staged.length} arquivo(s)...`)
 
 Promise.all(staged.map(stripFile))
   .then(() => {

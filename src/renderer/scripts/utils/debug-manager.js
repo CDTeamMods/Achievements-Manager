@@ -1,44 +1,35 @@
-/**
- * Debug Manager para Renderer Process - Achievements Manager
- * Versão simplificada que se comunica com o main process via IPC
- */
-
+var __defProp = Object.defineProperty;
+var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
+var __defProp2 = Object.defineProperty;
+var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
 class RendererDebugManager {
+  static {
+    __name(this, "RendererDebugManager");
+  }
+  static {
+    __name2(this, "RendererDebugManager");
+  }
   constructor() {
-    // Verificar se DEBUG_TOOLS está habilitado via variável global ou localStorage
     this.isDebugEnabled = this.checkDebugEnabled();
-    this.debugLevel = 'info';
-
+    this.debugLevel = "info";
     this.init();
   }
-
   checkDebugEnabled() {
-    // Verificar múltiplas fontes para determinar se debug está habilitado
     try {
-      // 1. Verificar localStorage
-      const localStorageDebug = localStorage.getItem('DEBUG_TOOLS');
-      if (localStorageDebug === 'true') return true;
-
-      // 2. Verificar URL parameters
+      const localStorageDebug = localStorage.getItem("DEBUG_TOOLS");
+      if (localStorageDebug === "true") return true;
       const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get('debug') === 'true') return true;
-
-      // 3. Verificar se está em modo desenvolvimento (baseado na URL)
-      if (window.location.protocol === 'file:' && window.location.href.includes('src')) {
+      if (urlParams.get("debug") === "true") return true;
+      if (window.location.protocol === "file:" && window.location.href.includes("src")) {
         return true;
       }
-
-      // 4. Padrão: desabilitado
       return false;
     } catch {
       return false;
     }
   }
-
   init() {
-    // Debug manager inicializado silenciosamente
   }
-
   /**
    * Verifica se o debug está habilitado
    * @returns {boolean}
@@ -46,49 +37,39 @@ class RendererDebugManager {
   isEnabled() {
     return this.isDebugEnabled;
   }
-
   /**
    * Log de debug condicional
    * @param {string} level - Nível do log
    * @param {string} message - Mensagem
    * @param {any} data - Dados adicionais
    */
-  log(level, message, data = null) {
+  log(level, message, _data = null) {
     if (!this.isDebugEnabled) return;
-
-    const timestamp = new Date().toISOString();
-    const prefix = this.getLogPrefix(level);
-
-    // Log interno do debug manager - removido para produção
   }
-
   /**
    * Log de informação
    * @param {string} message
    * @param {any} data
    */
   info(message, data = null) {
-    this.log('info', message, data);
+    this.log("info", message, data);
   }
-
   /**
    * Log de aviso
    * @param {string} message
    * @param {any} data
    */
   warn(message, data = null) {
-    this.log('warn', message, data);
+    this.log("warn", message, data);
   }
-
   /**
    * Log de erro
    * @param {string} message
    * @param {any} data
    */
   error(message, data = null) {
-    this.log('error', message, data);
+    this.log("error", message, data);
   }
-
   /**
    * Log específico para crash reports
    * @param {string} message
@@ -96,10 +77,9 @@ class RendererDebugManager {
    */
   crash(message, data = null) {
     if (this.isDebugEnabled) {
-      this.log('crash', `💥 CRASH: ${message}`, data);
+      this.log("crash", `\u{1F4A5} CRASH: ${message}`, data);
     }
   }
-
   /**
    * Log específico para IPC
    * @param {string} message
@@ -107,10 +87,9 @@ class RendererDebugManager {
    */
   ipc(message, data = null) {
     if (this.isDebugEnabled) {
-      this.log('ipc', `📡 IPC: ${message}`, data);
+      this.log("ipc", `\u{1F4E1} IPC: ${message}`, data);
     }
   }
-
   /**
    * Log específico para sanitização
    * @param {string} message
@@ -118,10 +97,9 @@ class RendererDebugManager {
    */
   sanitize(message, data = null) {
     if (this.isDebugEnabled) {
-      this.log('sanitize', `🧹 SANITIZE: ${message}`, data);
+      this.log("sanitize", `\u{1F9F9} SANITIZE: ${message}`, data);
     }
   }
-
   /**
    * Obtém o prefixo do log baseado no nível
    * @param {string} level
@@ -129,27 +107,23 @@ class RendererDebugManager {
    */
   getLogPrefix(level) {
     const prefixes = {
-      info: '📝',
-      warn: '⚠️',
-      error: '❌',
-      crash: '💥',
-      ipc: '📡',
-      sanitize: '🧹',
+      info: "\u{1F4DD}",
+      warn: "\u26A0\uFE0F",
+      error: "\u274C",
+      crash: "\u{1F4A5}",
+      ipc: "\u{1F4E1}",
+      sanitize: "\u{1F9F9}"
     };
-
-    return prefixes[level] || '📝';
+    return prefixes[level] || "\u{1F4DD}";
   }
-
   /**
    * Ativa/desativa debug em tempo de execução
    * @param {boolean} enabled
    */
   setDebugEnabled(enabled) {
     this.isDebugEnabled = enabled;
-    localStorage.setItem('DEBUG_TOOLS', enabled.toString());
-    console.log(`🔧 Debug ${enabled ? 'ativado' : 'desativado'} em tempo de execução (renderer)`);
+    localStorage.setItem("DEBUG_TOOLS", enabled.toString());
   }
-
   /**
    * Obtém estatísticas de debug
    * @returns {object}
@@ -159,28 +133,22 @@ class RendererDebugManager {
       enabled: this.isDebugEnabled,
       level: this.debugLevel,
       location: window.location.href,
-      userAgent: navigator.userAgent,
+      userAgent: navigator.userAgent
     };
   }
 }
-
-// Instância singleton
 let debugManager = null;
-
-/**
- * Obtém a instância do Debug Manager para renderer
- * @returns {RendererDebugManager}
- */
-export function getDebugManager() {
+function getDebugManager() {
   if (!debugManager) {
     debugManager = new RendererDebugManager();
   }
   return debugManager;
 }
-
-// Exportar a classe
-export { RendererDebugManager };
-
-// Disponibilizar globalmente para compatibilidade
+__name(getDebugManager, "getDebugManager");
+__name2(getDebugManager, "getDebugManager");
 window.DebugManager = RendererDebugManager;
 window.getDebugManager = getDebugManager;
+export {
+  RendererDebugManager,
+  getDebugManager
+};

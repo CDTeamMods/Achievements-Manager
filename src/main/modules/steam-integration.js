@@ -8,16 +8,32 @@ var __name22 = /* @__PURE__ */ __name2(
   "__name"
 );
 var __defProp222 = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name222 = /* @__PURE__ */ __name22(
   (target, value) => __defProp222(target, "name", { value, configurable: true }),
   "__name"
 );
-var __commonJS = /* @__PURE__ */ __name22(
-  (cb, mod) => /* @__PURE__ */ __name22(
-    /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
-      return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-    }, "__require"), "__require"),
+var __defProp2222 = Object.defineProperty;
+var __name2222 = /* @__PURE__ */ __name222(
+  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp22222 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name22222 = /* @__PURE__ */ __name2222(
+  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __commonJS = /* @__PURE__ */ __name2222(
+  (cb, mod) => /* @__PURE__ */ __name2222(
+    /* @__PURE__ */ __name222(
+      /* @__PURE__ */ __name22(
+        /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
+          return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+        }, "__require"), "__require"),
+        "__require"
+      ),
+      "__require"
+    ),
     "__require"
   ),
   "__commonJS"
@@ -40,6 +56,12 @@ var require_steam_integration = __commonJS({
       }
       static {
         __name222(this, "SteamIntegrationManager");
+      }
+      static {
+        __name2222(this, "SteamIntegrationManager");
+      }
+      static {
+        __name22222(this, "SteamIntegrationManager");
       }
       constructor(pathManager = null, configManager = null, debugManager = null) {
         this.pathManager = pathManager;
@@ -70,23 +92,19 @@ var require_steam_integration = __commonJS({
        * Carregar credenciais salvas automaticamente
        */
       async loadSavedCredentials() {
-        try {
-          const credentials = await this.getCredentials();
-          if (credentials.success && credentials.apiKey) {
-            this.apiKey = credentials.apiKey;
-            if (credentials.steamId) {
-              this.steamId = credentials.steamId;
-            }
-            this.isConnected = credentials.connected;
-            if (this.debugManager) {
-              this.debugManager.log(
-                "steam",
-                `Credenciais carregadas do cache - API Key: ${credentials.apiKey ? "Definida" : "N\xE3o definida"}, Steam ID: ${credentials.steamId || "N\xE3o definido"}, Connected: ${credentials.connected}`
-              );
-            }
+        const credentials = await this.getCredentials();
+        if (credentials.success && credentials.apiKey) {
+          this.apiKey = credentials.apiKey;
+          if (credentials.steamId) {
+            this.steamId = credentials.steamId;
           }
-        } catch (error) {
-          console.error("Erro ao carregar credenciais do cache:", error);
+          this.isConnected = credentials.connected;
+          if (this.debugManager) {
+            this.debugManager.log(
+              "steam",
+              `Credenciais carregadas do cache - API Key: ${credentials.apiKey ? "Definida" : "N\xE3o definida"}, Steam ID: ${credentials.steamId || "N\xE3o definido"}, Connected: ${credentials.connected}`
+            );
+          }
         }
       }
       /**
@@ -163,12 +181,9 @@ var require_steam_integration = __commonJS({
         try {
           const cachePath = await this.getCredentialsCachePath();
           let existingData = {};
-          try {
-            await fs.access(cachePath);
-            const existingContent = await fs.readFile(cachePath, "utf8");
-            existingData = JSON.parse(existingContent);
-          } catch {
-          }
+          await fs.access(cachePath);
+          const existingContent = await fs.readFile(cachePath, "utf8");
+          existingData = JSON.parse(existingContent);
           const cacheData = {
             apiKey: apiKey !== null ? apiKey : existingData.apiKey || "",
             steamId: steamId !== null ? steamId : existingData.steamId || ""
@@ -348,26 +363,25 @@ var require_steam_integration = __commonJS({
         ipcMain.handle("steam.checkConnection", async () => {
           return await this.checkConnection();
         });
-        ipcMain.handle("steam.getUserGames", async (event, options = {}) => {
-          const { installedOnly = false } = options;
+        ipcMain.handle("steam.getUserGames", async (options = {}) => {
           return await this.getUserGames(0, options);
         });
-        ipcMain.handle("steam.getGameAchievements", async (event, gameId, language = null) => {
+        ipcMain.handle("steam.getGameAchievements", async (gameId, language = null) => {
           return await this.getGameAchievements(gameId, language);
         });
-        ipcMain.handle("steam.getUserGameAchievements", async (event, gameId, language = null) => {
+        ipcMain.handle("steam.getUserGameAchievements", async (gameId, language = null) => {
           return await this.getUserGameAchievements(gameId, language);
         });
-        ipcMain.handle("steam.convertToGSE", async (event, gameId) => {
+        ipcMain.handle("steam.convertToGSE", async (gameId) => {
           return await this.convertToGSE(gameId);
         });
-        ipcMain.handle("steam.getGameDetails", async (event, gameId) => {
+        ipcMain.handle("steam.getGameDetails", async (gameId) => {
           return await this.getGameDetails(gameId);
         });
-        ipcMain.handle("steam.discoverSteamId", async (event, apiKey) => {
+        ipcMain.handle("steam.discoverSteamId", async (apiKey) => {
           return await this.discoverSteamId(apiKey);
         });
-        ipcMain.handle("steam.clearCache", async (event, type = null) => {
+        ipcMain.handle("steam.clearCache", async (type = null) => {
           this.clearCache(type);
           return {
             success: true,
@@ -377,7 +391,7 @@ var require_steam_integration = __commonJS({
         ipcMain.handle("steam.getCacheStats", async () => {
           return this.getCacheStats();
         });
-        ipcMain.handle("steam.testGameAchievements", async (event, gameId) => {
+        ipcMain.handle("steam.testGameAchievements", async (gameId) => {
           return await this.getGameAchievements(gameId);
         });
         ipcMain.handle("steam.getSteamDefaultPaths", async () => {
@@ -398,12 +412,9 @@ var require_steam_integration = __commonJS({
           }
           let finalSteamId = steamId;
           if (!finalSteamId) {
-            try {
-              const discovery = await this.discoverSteamId(apiKey);
-              if (discovery.success) {
-                finalSteamId = discovery.steamId;
-              }
-            } catch (_) {
+            const discovery = await this.discoverSteamId(apiKey);
+            if (discovery.success) {
+              finalSteamId = discovery.steamId;
             }
           }
           await this.saveCredentials(apiKey, finalSteamId);
@@ -419,7 +430,6 @@ var require_steam_integration = __commonJS({
             message: "Credenciais configuradas com sucesso!"
           };
         } catch (error) {
-          console.error("\u274C Erro ao definir credenciais Steam:", error);
           return {
             success: false,
             error: `Erro ao configurar credenciais: ${error.message}`
@@ -486,7 +496,6 @@ var require_steam_integration = __commonJS({
             };
           }
         } catch (error) {
-          console.error("\u274C Erro no teste de conex\xE3o:", error);
           return {
             success: false,
             error: `Erro na conex\xE3o: ${error.message}`
@@ -525,125 +534,6 @@ var require_steam_integration = __commonJS({
             success: false,
             connected: false,
             error: error.message
-          };
-        }
-      }
-      /**
-       * Testar conexão com credenciais específicas (sem salvar)
-       */
-      async testConnection(apiKey, steamId) {
-        try {
-          const testApiKey = apiKey || this.apiKey;
-          if (!testApiKey) {
-            return {
-              success: false,
-              error: "API Key \xE9 obrigat\xF3ria"
-            };
-          }
-          let testSteamId = steamId || this.steamId;
-          if (!testSteamId) {
-            const discoveryResult = await this.discoverSteamId(testApiKey);
-            if (discoveryResult.success) {
-              testSteamId = discoveryResult.steamId;
-              return {
-                success: true,
-                data: {
-                  personaname: discoveryResult.profile.personaname,
-                  avatar: discoveryResult.profile.avatar,
-                  profileurl: discoveryResult.profile.profileurl,
-                  steamid: discoveryResult.steamId
-                },
-                autoDiscovered: true,
-                gamesCount: discoveryResult.gamesCount,
-                message: `Conex\xE3o bem-sucedida! ${discoveryResult.message}`
-              };
-            } else {
-              try {
-                const { data: data2 } = await this.http.get("/ISteamUser/GetPlayerSummaries/v2/", {
-                  params: {
-                    key: testApiKey,
-                    steamids: "76561197960265728"
-                    // Steam ID público para teste
-                  }
-                });
-                return {
-                  success: true,
-                  apiKeyValid: true,
-                  needsSteamId: false,
-                  // Mudamos para false pois tentamos descobrir automaticamente
-                  message: "API Key v\xE1lida! N\xE3o foi poss\xEDvel descobrir seu Steam ID automaticamente. Verifique se sua biblioteca de jogos est\xE1 p\xFAblica.",
-                  suggestion: "Para descoberta autom\xE1tica, certifique-se de que sua biblioteca de jogos Steam est\xE1 p\xFAblica.",
-                  discoveryError: discoveryResult.error
-                };
-              } catch (apiError) {
-                console.error("\u274C Erro na valida\xE7\xE3o da API Key:", apiError);
-                if (apiError.response?.status === 403) {
-                  return {
-                    success: false,
-                    error: "API Key inv\xE1lida ou sem permiss\xF5es"
-                  };
-                } else if (apiError.response?.status === 401) {
-                  return {
-                    success: false,
-                    error: "API Key n\xE3o autorizada"
-                  };
-                } else if (apiError.response?.status === 429) {
-                  return {
-                    success: false,
-                    error: "Muitas requisi\xE7\xF5es. Tente novamente em alguns minutos"
-                  };
-                }
-                throw apiError;
-              }
-            }
-          }
-          const { data } = await this.http.get("/ISteamUser/GetPlayerSummaries/v2/", {
-            params: {
-              key: testApiKey,
-              steamids: testSteamId
-            }
-          });
-          const player = data?.response?.players?.[0];
-          if (player && player.steamid) {
-            return {
-              success: true,
-              data: {
-                personaname: player.personaname || "Usu\xE1rio Steam",
-                avatar: player.avatarfull || player.avatar || "",
-                profileurl: player.profileurl || "",
-                steamid: player.steamid
-              }
-            };
-          } else {
-            return {
-              success: false,
-              error: "Steam ID n\xE3o encontrado ou inv\xE1lido"
-            };
-          }
-        } catch (error) {
-          console.error("\u274C Erro no teste de conex\xE3o Steam:", error);
-          if (error.response) {
-            const status = error.response.status;
-            if (status === 403) {
-              return {
-                success: false,
-                error: "API Key inv\xE1lida ou sem permiss\xF5es"
-              };
-            } else if (status === 401) {
-              return {
-                success: false,
-                error: "API Key n\xE3o autorizada"
-              };
-            } else if (status === 429) {
-              return {
-                success: false,
-                error: "Muitas requisi\xE7\xF5es. Tente novamente em alguns minutos"
-              };
-            }
-          }
-          return {
-            success: false,
-            error: `Erro na conex\xE3o: ${error.message}`
           };
         }
       }
@@ -723,24 +613,15 @@ var require_steam_integration = __commonJS({
             });
             let finalGames = mappedGames;
             if (options && options.installedOnly) {
-              try {
-                const steamLocalGames = global.steamLocalGamesManager;
-                if (steamLocalGames) {
-                  const installedGames = await steamLocalGames.getInstalledGames();
-                  if (installedGames && installedGames.success && installedGames.installedGames && installedGames.installedGames.length > 0) {
-                    const installedAppIds = new Set(
-                      installedGames.installedGames.map((appId) => String(appId))
-                    );
-                    const apiGameIds = new Set(mappedGames.map((game) => game.id));
-                    const matchingGames = Array.from(installedAppIds).filter(
-                      (id) => apiGameIds.has(id)
-                    );
-                    finalGames = mappedGames.filter((game) => installedAppIds.has(game.id));
-                  } else {
-                  }
-                } else {
+              const steamLocalGames = global.steamLocalGamesManager;
+              if (steamLocalGames) {
+                const installedGames = await steamLocalGames.getInstalledGames();
+                if (installedGames && installedGames.success && installedGames.installedGames && installedGames.installedGames.length > 0) {
+                  const installedAppIds = new Set(
+                    installedGames.installedGames.map((appId) => String(appId))
+                  );
+                  finalGames = mappedGames.filter((game) => installedAppIds.has(game.id));
                 }
-              } catch (error) {
               }
             }
             const result = {
@@ -1016,64 +897,58 @@ var require_steam_integration = __commonJS({
                 megaBatch.push(batch);
               }
             }
-            const megaBatchPromises = megaBatch.map(async (batch, batchIndex) => {
+            const megaBatchPromises = megaBatch.map(async (batch) => {
               const batchResults = [];
               for (const appId of batch) {
-                try {
-                  const storeResponse = await this.http.get(
-                    `https://store.steampowered.com/api/appdetails`,
+                const storeResponse = await this.http.get(
+                  `https://store.steampowered.com/api/appdetails`,
+                  {
+                    params: {
+                      appids: appId,
+                      l: "portuguese",
+                      cc: "BR",
+                      filters: "basic,price_overview"
+                    },
+                    timeout: 8e3
+                  }
+                );
+                if (storeResponse.data && storeResponse.data[appId] && storeResponse.data[appId].success) {
+                  const gameData = storeResponse.data[appId].data;
+                  let playtimeData = null;
+                  const playtimeResponse = await this.http.get(
+                    "/IPlayerService/GetOwnedGames/v1/",
                     {
                       params: {
-                        appids: appId,
-                        l: "portuguese",
-                        cc: "BR",
-                        filters: "basic,price_overview"
+                        key: this.apiKey,
+                        steamid: this.steamId,
+                        appids_filter: [appId],
+                        include_appinfo: false,
+                        // Não precisamos de info extra
+                        format: "json"
                       },
-                      timeout: 8e3
+                      timeout: 5e3
                     }
                   );
-                  if (storeResponse.data && storeResponse.data[appId] && storeResponse.data[appId].success) {
-                    const gameData = storeResponse.data[appId].data;
-                    let playtimeData = null;
-                    try {
-                      const playtimeResponse = await this.http.get(
-                        "/IPlayerService/GetOwnedGames/v1/",
-                        {
-                          params: {
-                            key: this.apiKey,
-                            steamid: this.steamId,
-                            appids_filter: [appId],
-                            include_appinfo: false,
-                            // Não precisamos de info extra
-                            format: "json"
-                          },
-                          timeout: 5e3
-                        }
-                      );
-                      if (playtimeResponse.data?.response?.games?.length > 0) {
-                        playtimeData = playtimeResponse.data.response.games[0];
-                      }
-                    } catch (playtimeError) {
-                    }
-                    const baseImageUrl = `https://media.steampowered.com/steamcommunity/public/images/apps/${appId}`;
-                    const gameInfo = {
-                      id: String(appId),
-                      name: gameData.name || `Jogo ${appId}`,
-                      playtimeForever: playtimeData?.playtime_forever || 0,
-                      playTime2Weeks: playtimeData?.playtime_2weeks || 0,
-                      imgIconUrl: gameData.header_image ? gameData.header_image.replace("header", "icon") : `${baseImageUrl}/icon.jpg`,
-                      imgLogoUrl: gameData.header_image || `${baseImageUrl}/logo.jpg`,
-                      hasAchievements: true,
-                      // Assumir que tem conquistas
-                      lastPlayed: playtimeData?.rtime_last_played ? new Date(playtimeData.rtime_last_played * 1e3) : null,
-                      price: gameData.price_overview?.final_formatted || "Gratuito",
-                      developer: gameData.developers?.[0] || "Desconhecido",
-                      publisher: gameData.publishers?.[0] || "Desconhecido"
-                    };
-                    batchResults.push(gameInfo);
-                  } else {
+                  if (playtimeResponse.data?.response?.games?.length > 0) {
+                    playtimeData = playtimeResponse.data.response.games[0];
                   }
-                } catch (error) {
+                  const baseImageUrl = `https://media.steampowered.com/steamcommunity/public/images/apps/${appId}`;
+                  const gameInfo = {
+                    id: String(appId),
+                    name: gameData.name || `Jogo ${appId}`,
+                    playtimeForever: playtimeData?.playtime_forever || 0,
+                    playTime2Weeks: playtimeData?.playtime_2weeks || 0,
+                    imgIconUrl: gameData.header_image ? gameData.header_image.replace("header", "icon") : `${baseImageUrl}/icon.jpg`,
+                    imgLogoUrl: gameData.header_image || `${baseImageUrl}/logo.jpg`,
+                    hasAchievements: true,
+                    // Assumir que tem conquistas
+                    lastPlayed: playtimeData?.rtime_last_played ? new Date(playtimeData.rtime_last_played * 1e3) : null,
+                    price: gameData.price_overview?.final_formatted || "Gratuito",
+                    developer: gameData.developers?.[0] || "Desconhecido",
+                    publisher: gameData.publishers?.[0] || "Desconhecido"
+                  };
+                  batchResults.push(gameInfo);
+                } else {
                 }
                 await new Promise((resolve) => setTimeout(resolve, 200));
               }
@@ -1130,59 +1005,49 @@ var require_steam_integration = __commonJS({
           for (let i = 0; i < installedAppIds.length; i += batchSize) {
             const batch = installedAppIds.slice(i, i + batchSize);
             const batchPromises = batch.map(async (appId) => {
-              try {
-                const response = await this.http.get(
-                  `https://store.steampowered.com/api/appdetails`,
-                  {
-                    params: {
-                      appids: appId,
-                      l: "portuguese",
-                      cc: "BR"
-                    },
-                    timeout: 1e4
-                  }
-                );
-                if (response.data && response.data[appId] && response.data[appId].success) {
-                  const gameData = response.data[appId].data;
-                  let playtimeData = null;
-                  try {
-                    const playtimeResponse = await this.http.get(
-                      "/IPlayerService/GetOwnedGames/v1/",
-                      {
-                        params: {
-                          key: this.apiKey,
-                          steamid: this.steamId,
-                          appids_filter: [appId],
-                          include_appinfo: true,
-                          format: "json"
-                        },
-                        timeout: 5e3
-                      }
-                    );
-                    if (playtimeResponse.data?.response?.games?.length > 0) {
-                      playtimeData = playtimeResponse.data.response.games[0];
-                    }
-                  } catch (playtimeError) {
-                  }
-                  const baseImageUrl = `https://media.steampowered.com/steamcommunity/public/images/apps/${appId}`;
-                  return {
-                    id: String(appId),
-                    name: gameData.name || `Jogo ${appId}`,
-                    playtimeForever: playtimeData?.playtime_forever || 0,
-                    playTime2Weeks: playtimeData?.playtime_2weeks || 0,
-                    imgIconUrl: gameData.header_image ? gameData.header_image.replace("header", "icon") : `${baseImageUrl}/icon.jpg`,
-                    imgLogoUrl: gameData.header_image || `${baseImageUrl}/logo.jpg`,
-                    hasAchievements: gameData.achievements?.total > 0 || true,
-                    lastPlayed: playtimeData?.rtime_last_played ? new Date(playtimeData.rtime_last_played * 1e3) : null,
-                    price: gameData.price_overview?.final_formatted || "Gratuito",
-                    developer: gameData.developers?.[0] || "Desconhecido",
-                    publisher: gameData.publishers?.[0] || "Desconhecido"
-                  };
+              const response = await this.http.get(
+                `https://store.steampowered.com/api/appdetails`,
+                {
+                  params: {
+                    appids: appId,
+                    l: "portuguese",
+                    cc: "BR"
+                  },
+                  timeout: 1e4
                 }
-                return null;
-              } catch (error) {
-                return null;
+              );
+              if (response.data && response.data[appId] && response.data[appId].success) {
+                const gameData = response.data[appId].data;
+                let playtimeData = null;
+                const playtimeResponse = await this.http.get("/IPlayerService/GetOwnedGames/v1/", {
+                  params: {
+                    key: this.apiKey,
+                    steamid: this.steamId,
+                    appids_filter: [appId],
+                    include_appinfo: true,
+                    format: "json"
+                  },
+                  timeout: 5e3
+                });
+                if (playtimeResponse.data?.response?.games?.length > 0) {
+                  playtimeData = playtimeResponse.data.response.games[0];
+                }
+                const baseImageUrl = `https://media.steampowered.com/steamcommunity/public/images/apps/${appId}`;
+                return {
+                  id: String(appId),
+                  name: gameData.name || `Jogo ${appId}`,
+                  playtimeForever: playtimeData?.playtime_forever || 0,
+                  playTime2Weeks: playtimeData?.playtime_2weeks || 0,
+                  imgIconUrl: gameData.header_image ? gameData.header_image.replace("header", "icon") : `${baseImageUrl}/icon.jpg`,
+                  imgLogoUrl: gameData.header_image || `${baseImageUrl}/logo.jpg`,
+                  hasAchievements: gameData.achievements?.total > 0 || true,
+                  lastPlayed: playtimeData?.rtime_last_played ? new Date(playtimeData.rtime_last_played * 1e3) : null,
+                  price: gameData.price_overview?.final_formatted || "Gratuito",
+                  developer: gameData.developers?.[0] || "Desconhecido",
+                  publisher: gameData.publishers?.[0] || "Desconhecido"
+                };
               }
+              return null;
             });
             const batchResults = await Promise.all(batchPromises);
             const validGames = batchResults.filter((game) => game !== null);
@@ -1328,30 +1193,6 @@ var require_steam_integration = __commonJS({
         }
       }
       /**
-       * Detectar idioma do usuário a partir das configurações
-       */
-      async detectUserLanguage() {
-        try {
-          if (this.pathManager) {
-            const settingsPath = path.join(this.pathManager.getDataPath(), "settings", "app.json");
-            try {
-              const settingsContent = await fs.readFile(settingsPath, "utf8");
-              const settings = JSON.parse(settingsContent);
-              if (settings.language) {
-                const mappedLanguage2 = this.mapLanguageToSteamCode(settings.language);
-                return mappedLanguage2;
-              }
-            } catch (error) {
-            }
-          }
-          const systemLanguage = Intl.DateTimeFormat().resolvedOptions().locale;
-          const mappedLanguage = this.mapLanguageToSteamCode(systemLanguage);
-          return mappedLanguage;
-        } catch (error) {
-          return "en";
-        }
-      }
-      /**
        * Mapear código de idioma para código da Steam API
        */
       mapLanguageToSteamCode(languageCode) {
@@ -1412,7 +1253,6 @@ var require_steam_integration = __commonJS({
             language
           };
         } catch (error) {
-          console.error("Erro geral no getUserGameAchievements:", error);
           if (this.debugManager) {
             this.debugManager.error("Erro geral ao buscar conquistas do usu\xE1rio:", error);
           }
@@ -1467,7 +1307,6 @@ var require_steam_integration = __commonJS({
             language
           };
         } catch (error) {
-          console.error("Erro em GetPlayerAchievements:", error.message);
           return {
             success: false,
             error: error.message,
@@ -1479,41 +1318,33 @@ var require_steam_integration = __commonJS({
       // ESTRATÉGIA 2: GetUserStatsForGame (estatísticas gerais)
       // FALLBACK GLOBAL: Schema sem progresso do usuário
       async tryGetSchemaOnly(gameId, language = null) {
-        try {
-          const gameSchema = await this.getGameAchievements(gameId, language);
-          if (gameSchema.success && gameSchema.achievements?.length > 0) {
-            const achievementsFromSchema = gameSchema.achievements.map((achievement) => ({
-              ...achievement,
-              earned: false,
-              earnedTime: 0,
-              globalPercent: null,
-              hasUserProgress: false
-            }));
-            return {
-              success: true,
-              achievements: achievementsFromSchema,
-              totalAchievements: achievementsFromSchema.length,
-              earnedAchievements: 0,
-              completionPercentage: 0,
-              source: "Schema Fallback",
-              hasUserProgress: false,
-              message: "Mostrando apenas lista de conquistas dispon\xEDveis.",
-              language
-            };
-          }
+        const gameSchema = await this.getGameAchievements(gameId, language);
+        if (gameSchema.success && gameSchema.achievements?.length > 0) {
+          const achievementsFromSchema = gameSchema.achievements.map((achievement) => ({
+            ...achievement,
+            earned: false,
+            earnedTime: 0,
+            globalPercent: null,
+            hasUserProgress: false
+          }));
           return {
-            success: false,
-            error: "Nenhuma conquista encontrada para este jogo",
-            errorType: "NO_ACHIEVEMENTS",
+            success: true,
+            achievements: achievementsFromSchema,
+            totalAchievements: achievementsFromSchema.length,
+            earnedAchievements: 0,
+            completionPercentage: 0,
+            source: "Schema Fallback",
+            hasUserProgress: false,
+            message: "Mostrando apenas lista de conquistas dispon\xEDveis.",
             language
           };
-        } catch (error) {
-          return {
-            success: false,
-            error: "Falha ao obter schema do jogo",
-            errorType: "SCHEMA_FALLBACK_ERROR"
-          };
         }
+        return {
+          success: false,
+          error: "Nenhuma conquista encontrada para este jogo",
+          errorType: "NO_ACHIEVEMENTS",
+          language
+        };
       }
       // Método auxiliar para combinar dados do usuário com schema
       combineUserAndSchemaData(userAchievements, schemaAchievements) {
@@ -1597,7 +1428,6 @@ var require_steam_integration = __commonJS({
             "N\xE3o foi poss\xEDvel descobrir o Steam ID automaticamente. Tente configurar manualmente."
           );
         } catch (error) {
-          console.error("Erro na descoberta do Steam ID:", error.message);
           return {
             success: false,
             error: error.message
@@ -1619,41 +1449,18 @@ var require_steam_integration = __commonJS({
             path2.join("E:", "Steam")
           ];
           for (const steamPath of steamPaths) {
-            try {
-              const loginUsersPath = path2.join(steamPath, "config", "loginusers.vdf");
-              const configPath = path2.join(steamPath, "config", "config.vdf");
-              try {
-                const loginData = await fs.readFile(loginUsersPath, "utf8");
-                const steamIdMatch = loginData.match(/"76561\d{12}"/g);
-                if (steamIdMatch && steamIdMatch.length > 0) {
-                  const steamId = steamIdMatch[0].replace(/"/g, "");
-                  return {
-                    success: true,
-                    steamId,
-                    method: "local_files",
-                    source: "loginusers.vdf",
-                    message: `Steam ID encontrado nos arquivos locais: ${steamId}`
-                  };
-                }
-              } catch (error) {
-              }
-              try {
-                const configData = await fs.readFile(configPath, "utf8");
-                const steamIdMatch = configData.match(/"76561\d{12}"/g);
-                if (steamIdMatch && steamIdMatch.length > 0) {
-                  const steamId = steamIdMatch[0].replace(/"/g, "");
-                  return {
-                    success: true,
-                    steamId,
-                    method: "local_files",
-                    source: "config.vdf",
-                    message: `Steam ID encontrado nos arquivos locais: ${steamId}`
-                  };
-                }
-              } catch (error) {
-              }
-            } catch (error) {
-              continue;
+            const loginUsersPath = path2.join(steamPath, "config", "loginusers.vdf");
+            const loginData = await fs.readFile(loginUsersPath, "utf8");
+            const steamIdMatch = loginData.match(/"76561\d{12}"/g);
+            if (steamIdMatch && steamIdMatch.length > 0) {
+              const steamId = steamIdMatch[0].replace(/"/g, "");
+              return {
+                success: true,
+                steamId,
+                method: "local_files",
+                source: "loginusers.vdf",
+                message: `Steam ID encontrado nos arquivos locais: ${steamId}`
+              };
             }
           }
           return { success: false, error: "Steam ID n\xE3o encontrado nos arquivos locais" };
@@ -1697,20 +1504,16 @@ var require_steam_integration = __commonJS({
         try {
           const defaultPaths = this.getSteamDefaultPaths();
           for (const steamPath of defaultPaths) {
-            try {
-              const configPath = path.join(steamPath.path, "config");
-              const loginUsersPath = path.join(configPath, "loginusers.vdf");
-              await fs.access(configPath);
-              await fs.access(loginUsersPath);
-              return {
-                success: true,
-                path: steamPath.path,
-                description: steamPath.description,
-                message: `Diret\xF3rio Steam detectado: ${steamPath.path}`
-              };
-            } catch (error) {
-              continue;
-            }
+            const configPath = path.join(steamPath.path, "config");
+            const loginUsersPath = path.join(configPath, "loginusers.vdf");
+            await fs.access(configPath);
+            await fs.access(loginUsersPath);
+            return {
+              success: true,
+              path: steamPath.path,
+              description: steamPath.description,
+              message: `Diret\xF3rio Steam detectado: ${steamPath.path}`
+            };
           }
           return {
             success: false,
@@ -1757,7 +1560,6 @@ var require_steam_integration = __commonJS({
             };
           }
         } catch (error) {
-          console.error("\u274C Erro ao obter detalhes do jogo:", error);
           return {
             success: false,
             error: `Erro ao buscar detalhes: ${error.message}`

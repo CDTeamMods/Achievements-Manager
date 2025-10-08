@@ -1,19 +1,55 @@
-name: Build
+name: Build App (Windows)
+
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    types: [opened, synchronize, reopened]
+    branches: [ main ]
+
+permissions:
+  contents: write
+
 jobs:
-  sonarqube:
-    name: SonarQube
+  build:
+    name: Build on Windows
     runs-on: windows-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Instalar Node.js
+        uses: actions/setup-node@v4
         with:
-          fetch-depth: 0
-      - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@v6
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          node-version: 22
+
+      - name: Instalar dependências
+        run: npm install
+
+      - name: Build do projeto (Electron)
+        run: npm run build
+
+      - name: Empacotar (electron-builder)
+        run: npm run build:win
+
+      - name: Upload de artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: electron-build
+          path: |
+            release/win-unpacked/**
+            release/*.exe
+            
+      - name: Ler versão do package.json
+        id: pkg
+        run: echo "version=$(node -p \"require('./package.json').version\")" >> $env:GITHUB_OUTPUT
+
+      - name: Criar Release no GitHub
+        if: ${{ github.event_name == 'push' }}
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: v${{ steps.pkg.outputs.version }}
+          name: Release v${{ steps.pkg.outputs.version }}
+          body: |
+            • Versão: v${{ steps.pkg.outputs.version }}
+          draft: true
+          files: |
+            dist/*.exe

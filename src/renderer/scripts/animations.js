@@ -12,6 +12,17 @@ var __name222 = /* @__PURE__ */ __name22(
   (target, value) => __defProp222(target, "name", { value, configurable: true }),
   "__name"
 );
+var __defProp2222 = Object.defineProperty;
+var __name2222 = /* @__PURE__ */ __name222(
+  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp22222 = Object.defineProperty;
+var __name22222 = /* @__PURE__ */ __name2222(
+  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
+  "__name"
+);
+import Utils from "./utils";
 class AnimationEngine {
   static {
     __name(this, "AnimationEngine");
@@ -24,6 +35,12 @@ class AnimationEngine {
   }
   static {
     __name222(this, "AnimationEngine");
+  }
+  static {
+    __name2222(this, "AnimationEngine");
+  }
+  static {
+    __name22222(this, "AnimationEngine");
   }
   constructor() {
     this.animations = /* @__PURE__ */ new Map();
@@ -54,7 +71,7 @@ class AnimationEngine {
     });
   }
   disableAllAnimations() {
-    this.animations.forEach((animation, id) => {
+    this.animations.forEach((animation) => {
       if (animation.element && animation.element.style) {
         animation.element.style.animation = "none";
         animation.element.style.transition = "none";
@@ -272,6 +289,12 @@ class MicroInteractions {
   }
   static {
     __name222(this, "MicroInteractions");
+  }
+  static {
+    __name2222(this, "MicroInteractions");
+  }
+  static {
+    __name22222(this, "MicroInteractions");
   }
   constructor() {
     this.interactions = /* @__PURE__ */ new Map();
@@ -498,7 +521,6 @@ class MicroInteractions {
     const updateParallax = Utils.throttle(() => {
       const scrollY = window.pageYOffset;
       parallaxElements.forEach((element) => {
-        const rect = element.getBoundingClientRect();
         const speed = element.dataset.parallaxSpeed || 0.5;
         const yPos = -(scrollY * speed);
         element.style.transform = `translateY(${yPos}px)`;
@@ -519,6 +541,12 @@ class PageTransitions {
   }
   static {
     __name222(this, "PageTransitions");
+  }
+  static {
+    __name2222(this, "PageTransitions");
+  }
+  static {
+    __name22222(this, "PageTransitions");
   }
   constructor() {
     this.isTransitioning = false;
@@ -556,7 +584,6 @@ class PageTransitions {
           detail: { pageId, page: newPage }
         })
       );
-    } catch (error) {
     } finally {
       this.isTransitioning = false;
     }
@@ -581,7 +608,7 @@ class PageTransitions {
     }
     page.style.display = "none";
   }
-  async showPage(page, animation = "fadeIn", tabName = null) {
+  async showPage(page, animation = "fadeIn") {
     page.style.display = "block";
     page.style.pointerEvents = "auto";
     switch (animation) {
@@ -605,15 +632,12 @@ class PageTransitions {
   async preloadPage(pageId) {
     const page = document.querySelector(`[data-page-content="${pageId}"]`);
     if (page && page.dataset.src && !page.dataset.loaded) {
-      try {
-        const response = await fetch(page.dataset.src);
-        const content = await response.text();
-        page.innerHTML = content;
-        page.dataset.loaded = "true";
-        if (window.Components) {
-          window.Components.ComponentFactory.initAll(page);
-        }
-      } catch (error) {
+      const response = await fetch(page.dataset.src);
+      const content = await response.text();
+      page.innerHTML = content;
+      page.dataset.loaded = "true";
+      if (window.Components) {
+        window.Components.ComponentFactory.initAll(page);
       }
     }
   }
@@ -630,6 +654,12 @@ class LoadingAnimations {
   }
   static {
     __name222(this, "LoadingAnimations");
+  }
+  static {
+    __name2222(this, "LoadingAnimations");
+  }
+  static {
+    __name22222(this, "LoadingAnimations");
   }
   static createSkeleton(container, type = "card") {
     const skeletons = {

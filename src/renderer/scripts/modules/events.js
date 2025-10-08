@@ -12,6 +12,16 @@ var __name222 = /* @__PURE__ */ __name22(
   (target, value) => __defProp222(target, "name", { value, configurable: true }),
   "__name"
 );
+var __defProp2222 = Object.defineProperty;
+var __name2222 = /* @__PURE__ */ __name222(
+  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp22222 = Object.defineProperty;
+var __name22222 = /* @__PURE__ */ __name2222(
+  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
+  "__name"
+);
 class EventsManager {
   static {
     __name(this, "EventsManager");
@@ -24,6 +34,12 @@ class EventsManager {
   }
   static {
     __name222(this, "EventsManager");
+  }
+  static {
+    __name2222(this, "EventsManager");
+  }
+  static {
+    __name22222(this, "EventsManager");
   }
   constructor(app) {
     this.app = app;
@@ -86,24 +102,21 @@ class EventsManager {
       });
     }
     if (maximizeBtn) {
-      const updateMaximizeUI = /* @__PURE__ */ __name222(async () => {
-        try {
-          const isMax = await window.electronAPI.isMaximized();
-          const icon = maximizeBtn.querySelector("i");
-          if (isMax) {
-            maximizeBtn.title = "Restaurar";
-            maximizeBtn.setAttribute("data-i18n-title", "window.restore");
-            if (icon) {
-              icon.className = "far fa-clone";
-            }
-          } else {
-            maximizeBtn.title = "Maximizar";
-            maximizeBtn.setAttribute("data-i18n-title", "window.maximize");
-            if (icon) {
-              icon.className = "fas fa-square";
-            }
+      const updateMaximizeUI = /* @__PURE__ */ __name22222(async () => {
+        const isMax = await window.electronAPI.isMaximized();
+        const icon = maximizeBtn.querySelector("i");
+        if (isMax) {
+          maximizeBtn.title = "Restaurar";
+          maximizeBtn.setAttribute("data-i18n-title", "window.restore");
+          if (icon) {
+            icon.className = "far fa-clone";
           }
-        } catch (e) {
+        } else {
+          maximizeBtn.title = "Maximizar";
+          maximizeBtn.setAttribute("data-i18n-title", "window.maximize");
+          if (icon) {
+            icon.className = "fas fa-square";
+          }
         }
       }, "updateMaximizeUI");
       updateMaximizeUI();

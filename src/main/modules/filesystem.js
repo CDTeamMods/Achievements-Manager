@@ -8,16 +8,32 @@ var __name22 = /* @__PURE__ */ __name2(
   "__name"
 );
 var __defProp222 = Object.defineProperty;
-var __getOwnPropNames = Object.getOwnPropertyNames;
 var __name222 = /* @__PURE__ */ __name22(
   (target, value) => __defProp222(target, "name", { value, configurable: true }),
   "__name"
 );
-var __commonJS = /* @__PURE__ */ __name22(
-  (cb, mod) => /* @__PURE__ */ __name22(
-    /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
-      return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
-    }, "__require"), "__require"),
+var __defProp2222 = Object.defineProperty;
+var __name2222 = /* @__PURE__ */ __name222(
+  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp22222 = Object.defineProperty;
+var __getOwnPropNames = Object.getOwnPropertyNames;
+var __name22222 = /* @__PURE__ */ __name2222(
+  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __commonJS = /* @__PURE__ */ __name2222(
+  (cb, mod) => /* @__PURE__ */ __name2222(
+    /* @__PURE__ */ __name222(
+      /* @__PURE__ */ __name22(
+        /* @__PURE__ */ __name2(/* @__PURE__ */ __name(function __require() {
+          return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+        }, "__require"), "__require"),
+        "__require"
+      ),
+      "__require"
+    ),
     "__require"
   ),
   "__commonJS"
@@ -41,6 +57,12 @@ var require_filesystem = __commonJS({
       }
       static {
         __name222(this, "FilesystemManager");
+      }
+      static {
+        __name2222(this, "FilesystemManager");
+      }
+      static {
+        __name22222(this, "FilesystemManager");
       }
       constructor(pathManager, crashReporter = null, configManager = null) {
         this.pathManager = pathManager;
@@ -147,46 +169,46 @@ var require_filesystem = __commonJS({
         ipcMain.handle("fs:loadAchievementData", async (event, gameId) => {
           return await this.loadAchievementData(gameId);
         });
-        ipcMain.handle("fs:saveSettings", async (event, settings) => {
+        ipcMain.handle("fs:saveSettings", async (settings) => {
           return await this.saveSettings(settings);
         });
-        ipcMain.handle("fs:loadSettings", async (event) => {
+        ipcMain.handle("fs:loadSettings", async () => {
           return await this.loadSettings();
         });
-        ipcMain.handle("fs:createBackup", async (event, name) => {
+        ipcMain.handle("fs:createBackup", async (name) => {
           return await this.createBackup(name);
         });
-        ipcMain.handle("fs:restoreBackup", async (event, backupId) => {
+        ipcMain.handle("fs:restoreBackup", async (backupId) => {
           return await this.restoreBackup(backupId);
         });
-        ipcMain.handle("fs:listBackups", async (event) => {
+        ipcMain.handle("fs:listBackups", async () => {
           return await this.listBackups();
         });
-        ipcMain.handle("fs:deleteBackup", async (event, backupId) => {
+        ipcMain.handle("fs:deleteBackup", async (backupId) => {
           return await this.deleteBackup(backupId);
         });
-        ipcMain.handle("fs:exportData", async (event, options = {}) => {
+        ipcMain.handle("fs:exportData", async (options = {}) => {
           return await this.exportData(options);
         });
-        ipcMain.handle("fs:importData", async (event, filePath) => {
+        ipcMain.handle("fs:importData", async (filePath) => {
           return await this.importData(filePath);
         });
-        ipcMain.handle("fs:showOpenDialog", async (event, options = {}) => {
+        ipcMain.handle("fs:showOpenDialog", async (options = {}) => {
           return await this.showOpenDialog(options);
         });
-        ipcMain.handle("fs:showSaveDialog", async (event, options = {}) => {
+        ipcMain.handle("fs:showSaveDialog", async (options = {}) => {
           return await this.showSaveDialog(options);
         });
-        ipcMain.handle("fs:clearCache", async (event) => {
+        ipcMain.handle("fs:clearCache", async () => {
           return await this.clearCache();
         });
-        ipcMain.handle("fs:getCacheSize", async (event) => {
+        ipcMain.handle("fs:getCacheSize", async () => {
           return await this.getCacheSize();
         });
-        ipcMain.handle("fs:getLogs", async (event, options = {}) => {
+        ipcMain.handle("fs:getLogs", async (options = {}) => {
           return await this.getLogs(options);
         });
-        ipcMain.handle("fs:clearLogs", async (event) => {
+        ipcMain.handle("fs:clearLogs", async () => {
           return await this.clearLogs();
         });
       }
@@ -528,12 +550,8 @@ var require_filesystem = __commonJS({
             if (entry.isDirectory()) {
               const metadataPath = path.join(this.backupsPath, entry.name, "backup.json");
               if (await this.exists(metadataPath)) {
-                try {
-                  const metadata = JSON.parse(await fs.readFile(metadataPath, "utf8"));
-                  backups.push(metadata);
-                } catch (error) {
-                  console.warn(`Invalid backup metadata: ${entry.name}`);
-                }
+                const metadata = JSON.parse(await fs.readFile(metadataPath, "utf8"));
+                backups.push(metadata);
               }
             }
           }
@@ -573,32 +591,24 @@ var require_filesystem = __commonJS({
           };
           if (options.includeGames !== false) {
             const gamesDir = path.join(this.dataPath, "games");
-            try {
-              const gameFiles = await fs.readdir(gamesDir);
-              for (const file of gameFiles) {
-                if (file.endsWith(".json")) {
-                  const gameData = JSON.parse(await fs.readFile(path.join(gamesDir, file), "utf8"));
-                  exportData.games.push(gameData);
-                }
+            const gameFiles = await fs.readdir(gamesDir);
+            for (const file of gameFiles) {
+              if (file.endsWith(".json")) {
+                const gameData = JSON.parse(await fs.readFile(path.join(gamesDir, file), "utf8"));
+                exportData.games.push(gameData);
               }
-            } catch (error) {
-              console.warn("No games to export:", error);
             }
           }
           if (options.includeAchievements !== false) {
             const achievementsDir = path.join(this.dataPath, "achievements");
-            try {
-              const achievementFiles = await fs.readdir(achievementsDir);
-              for (const file of achievementFiles) {
-                if (file.endsWith(".json")) {
-                  const achievementData = JSON.parse(
-                    await fs.readFile(path.join(achievementsDir, file), "utf8")
-                  );
-                  exportData.achievements.push(achievementData);
-                }
+            const achievementFiles = await fs.readdir(achievementsDir);
+            for (const file of achievementFiles) {
+              if (file.endsWith(".json")) {
+                const achievementData = JSON.parse(
+                  await fs.readFile(path.join(achievementsDir, file), "utf8")
+                );
+                exportData.achievements.push(achievementData);
               }
-            } catch (error) {
-              console.warn("No achievements to export:", error);
             }
           }
           await fs.writeFile(exportPath, JSON.stringify(exportData, null, 2));
@@ -698,7 +708,7 @@ var require_filesystem = __commonJS({
         }
       }
       // Logs
-      async getLogs(options = {}) {
+      async getLogs() {
         try {
           const logs = [];
           const logFiles = await fs.readdir(this.logsPath);
@@ -792,55 +802,32 @@ var require_filesystem = __commonJS({
       }
       async getDirectorySize(dirPath) {
         let totalSize = 0;
-        try {
-          const entries = await fs.readdir(dirPath, { withFileTypes: true });
-          for (const entry of entries) {
-            const entryPath = path.join(dirPath, entry.name);
-            if (entry.isDirectory()) {
-              totalSize += await this.getDirectorySize(entryPath);
-            } else {
-              const stats = await fs.stat(entryPath);
-              totalSize += stats.size;
-            }
+        const entries = await fs.readdir(dirPath, { withFileTypes: true });
+        for (const entry of entries) {
+          const entryPath = path.join(dirPath, entry.name);
+          if (entry.isDirectory()) {
+            totalSize += await this.getDirectorySize(entryPath);
+          } else {
+            const stats = await fs.stat(entryPath);
+            totalSize += stats.size;
           }
-        } catch (error) {
-          console.warn(`Error calculating directory size for ${dirPath}:`, error);
         }
         return totalSize;
       }
       setupFileWatchers() {
         const watchOptions = { recursive: true };
-        try {
-          fsSync.watch(this.dataPath, watchOptions, (eventType, filename) => {
-            if (filename && !filename.includes("temp") && !filename.includes("cache")) {
-              if (globalThis.mainWindow && !globalThis.mainWindow.isDestroyed()) {
-                try {
-                  const fileChangeData = structuredClone({
-                    type: String(eventType || "unknown"),
-                    filename: String(filename || ""),
-                    timestamp: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString()
-                  });
-                  try {
-                    globalThis.mainWindow.webContents.send("file-changed", fileChangeData);
-                  } catch (cloneError) {
-                    console.error(
-                      "\u{1F4C1} [FILESYSTEM] \u274C ERRO DE CLONAGEM em file-changed:",
-                      cloneError
-                    );
-                    console.error("\u{1F4C1} [FILESYSTEM] Dados problem\xE1ticos:", fileChangeData);
-                  }
-                } catch (sendError) {
-                  console.error(
-                    "\u{1F4C1} [FILESYSTEM] \u274C Erro ao enviar evento file-changed:",
-                    sendError
-                  );
-                }
-              }
+        fsSync.watch(this.dataPath, watchOptions, (eventType, filename) => {
+          if (filename && !filename.includes("temp") && !filename.includes("cache")) {
+            if (globalThis.mainWindow && !globalThis.mainWindow.isDestroyed()) {
+              const fileChangeData = structuredClone({
+                type: String(eventType || "unknown"),
+                filename: String(filename || ""),
+                timestamp: /* @__PURE__ */ (/* @__PURE__ */ new Date()).toISOString()
+              });
+              globalThis.mainWindow.webContents.send("file-changed", fileChangeData);
             }
-          });
-        } catch (error) {
-          console.warn("Could not setup file watchers:", error);
-        }
+          }
+        });
       }
     }
     let filesystemManager = null;
@@ -854,6 +841,8 @@ var require_filesystem = __commonJS({
     __name2(setupFileSystem, "setupFileSystem");
     __name22(setupFileSystem, "setupFileSystem");
     __name222(setupFileSystem, "setupFileSystem");
+    __name2222(setupFileSystem, "setupFileSystem");
+    __name22222(setupFileSystem, "setupFileSystem");
     module.exports = { FilesystemManager, setupFileSystem };
   }
 });

@@ -12,7 +12,17 @@ var __name222 = /* @__PURE__ */ __name22(
   (target, value) => __defProp222(target, "name", { value, configurable: true }),
   "__name"
 );
-import { EventEmitter } from "./utils.js";
+var __defProp2222 = Object.defineProperty;
+var __name2222 = /* @__PURE__ */ __name222(
+  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
+  "__name"
+);
+var __defProp22222 = Object.defineProperty;
+var __name22222 = /* @__PURE__ */ __name2222(
+  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
+  "__name"
+);
+import { EventEmitter, DOMUtils, NumberUtils, throttle } from "./utils.js";
 class VirtualScroller {
   static {
     __name(this, "VirtualScroller");
@@ -26,14 +36,20 @@ class VirtualScroller {
   static {
     __name222(this, "VirtualScroller");
   }
+  static {
+    __name2222(this, "VirtualScroller");
+  }
+  static {
+    __name22222(this, "VirtualScroller");
+  }
   constructor(container, options = {}) {
     this.container = typeof container === "string" ? document.querySelector(container) : container;
     this.options = {
       itemHeight: 50,
       bufferSize: 5,
       threshold: 100,
-      renderItem: /* @__PURE__ */ __name222(
-        (item, index) => `<div class="virtual-item">${item}</div>`,
+      renderItem: /* @__PURE__ */ __name22222(
+        (item) => `<div class="virtual-item">${item}</div>`,
         "renderItem"
       ),
       ...options
@@ -55,11 +71,11 @@ class VirtualScroller {
   setupContainer() {
     this.container.style.overflow = "auto";
     this.container.style.position = "relative";
-    this.viewport = Utils.DOMUtils.createElement("div", {
+    this.viewport = DOMUtils.createElement("div", {
       className: "virtual-scroller__viewport",
       style: "position: relative; width: 100%;"
     });
-    this.spacer = Utils.DOMUtils.createElement("div", {
+    this.spacer = DOMUtils.createElement("div", {
       className: "virtual-scroller__spacer",
       style: "position: absolute; top: 0; left: 0; right: 0; pointer-events: none;"
     });
@@ -67,7 +83,7 @@ class VirtualScroller {
     this.container.appendChild(this.viewport);
   }
   bindEvents() {
-    this.scrollHandler = Utils.throttle(() => {
+    this.scrollHandler = throttle(() => {
       this.handleScroll();
     }, 16);
     this.container.addEventListener("scroll", this.scrollHandler);
@@ -105,7 +121,7 @@ class VirtualScroller {
     const fragment = document.createDocumentFragment();
     for (let i = this.startIndex; i < this.endIndex; i++) {
       const item = this.data[i];
-      const element = Utils.DOMUtils.createElement("div", {
+      const element = DOMUtils.createElement("div", {
         className: "virtual-scroller__item",
         style: `position: absolute; top: ${i * this.options.itemHeight}px; width: 100%; height: ${this.options.itemHeight}px;`,
         innerHTML: this.options.renderItem(item, i)
@@ -137,6 +153,12 @@ class LazyLoader {
   }
   static {
     __name222(this, "LazyLoader");
+  }
+  static {
+    __name2222(this, "LazyLoader");
+  }
+  static {
+    __name22222(this, "LazyLoader");
   }
   constructor(options = {}) {
     this.options = {
@@ -204,21 +226,15 @@ class LazyLoader {
     tempImg.src = src;
   }
   async loadContent(element) {
-    try {
-      const response = await fetch(element.dataset.src);
-      const content = await response.text();
-      element.innerHTML = content;
-      element.classList.remove(this.options.loadingClass);
-      element.classList.add(this.options.loadedClass);
-      if (window.Components) {
-        window.Components.ComponentFactory.initAll(element);
-      }
-      element.dispatchEvent(new CustomEvent("lazyloaded"));
-    } catch (error) {
-      element.classList.remove(this.options.loadingClass);
-      element.classList.add(this.options.errorClass);
-      element.dispatchEvent(new CustomEvent("lazyerror"));
+    const response = await fetch(element.dataset.src);
+    const content = await response.text();
+    element.innerHTML = content;
+    element.classList.remove(this.options.loadingClass);
+    element.classList.add(this.options.loadedClass);
+    if (window.Components) {
+      window.Components.ComponentFactory.initAll(element);
     }
+    element.dispatchEvent(new CustomEvent("lazyloaded"));
   }
   // Auto-initialize lazy elements
   static init(container = document) {
@@ -240,6 +256,12 @@ class CacheManager {
   }
   static {
     __name222(this, "CacheManager");
+  }
+  static {
+    __name2222(this, "CacheManager");
+  }
+  static {
+    __name22222(this, "CacheManager");
   }
   constructor(options = {}) {
     this.options = {
@@ -328,7 +350,7 @@ class CacheManager {
     });
     return {
       entries: this.cache.size,
-      totalSize: Utils.NumberUtils.formatBytes(totalSize),
+      totalSize: NumberUtils.formatBytes(totalSize),
       expiredCount,
       hitRate: this.hitRate || 0
     };
@@ -380,25 +402,18 @@ class CacheManager {
   }
   // Save cache to localStorage
   saveToStorage() {
-    try {
-      const cacheData = Array.from(this.cache.entries());
-      const compressed = this.options.compression ? this.compress(JSON.stringify(cacheData)) : JSON.stringify(cacheData);
-      localStorage.setItem(this.options.storageKey, compressed);
-    } catch (error) {
-    }
+    const cacheData = Array.from(this.cache.entries());
+    const compressed = this.options.compression ? this.compress(JSON.stringify(cacheData)) : JSON.stringify(cacheData);
+    localStorage.setItem(this.options.storageKey, compressed);
   }
   // Load cache from localStorage
   loadFromStorage() {
-    try {
-      const stored = localStorage.getItem(this.options.storageKey);
-      if (!stored) return;
-      const decompressed = this.options.compression ? this.decompress(stored) : stored;
-      const cacheData = JSON.parse(decompressed);
-      this.cache = new Map(cacheData);
-      this.cleanup();
-    } catch (error) {
-      this.cache = /* @__PURE__ */ new Map();
-    }
+    const stored = localStorage.getItem(this.options.storageKey);
+    if (!stored) return;
+    const decompressed = this.options.compression ? this.decompress(stored) : stored;
+    const cacheData = JSON.parse(decompressed);
+    this.cache = new Map(cacheData);
+    this.cleanup();
   }
   // Simple compression (base64 encoding)
   compress(data) {
@@ -428,6 +443,12 @@ class HttpCache extends CacheManager {
   }
   static {
     __name222(this, "HttpCache");
+  }
+  static {
+    __name2222(this, "HttpCache");
+  }
+  static {
+    __name22222(this, "HttpCache");
   }
   constructor(options = {}) {
     super(options);
@@ -473,7 +494,7 @@ class HttpCache extends CacheManager {
   async prefetch(urls, options = {}) {
     const promises = urls.map(
       (url) => this.fetch(url, { ...options, priority: "low" }).catch(
-        (error) => (
+        (_error) => (
           // Log removido para evitar dependência circular com DebugManager
           null
         )
@@ -494,6 +515,12 @@ class ImageOptimizer {
   }
   static {
     __name222(this, "ImageOptimizer");
+  }
+  static {
+    __name2222(this, "ImageOptimizer");
+  }
+  static {
+    __name22222(this, "ImageOptimizer");
   }
   constructor(options = {}) {
     this.options = {
@@ -554,6 +581,12 @@ class PerformanceMonitor extends EventEmitter {
   static {
     __name222(this, "PerformanceMonitor");
   }
+  static {
+    __name2222(this, "PerformanceMonitor");
+  }
+  static {
+    __name22222(this, "PerformanceMonitor");
+  }
   constructor() {
     super();
     this.metrics = {
@@ -612,7 +645,7 @@ class PerformanceMonitor extends EventEmitter {
   monitorFPS() {
     let lastTime = performance.now();
     let frames = 0;
-    const measureFPS = /* @__PURE__ */ __name222(() => {
+    const measureFPS = /* @__PURE__ */ __name22222(() => {
       if (!this.isMonitoring) return;
       frames++;
       const currentTime = performance.now();
