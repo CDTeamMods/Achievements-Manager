@@ -7,46 +7,6 @@ var __name22 = /* @__PURE__ */ __name2(
   (target, value) => __defProp22(target, "name", { value, configurable: true }),
   "__name"
 );
-var __defProp222 = Object.defineProperty;
-var __name222 = /* @__PURE__ */ __name22(
-  (target, value) => __defProp222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp2222 = Object.defineProperty;
-var __name2222 = /* @__PURE__ */ __name222(
-  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp22222 = Object.defineProperty;
-var __name22222 = /* @__PURE__ */ __name2222(
-  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp222222 = Object.defineProperty;
-var __name222222 = /* @__PURE__ */ __name22222(
-  (target, value) => __defProp222222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp2222222 = Object.defineProperty;
-var __name2222222 = /* @__PURE__ */ __name222222(
-  (target, value) => __defProp2222222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp22222222 = Object.defineProperty;
-var __name22222222 = /* @__PURE__ */ __name2222222(
-  (target, value) => __defProp22222222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp222222222 = Object.defineProperty;
-var __name222222222 = /* @__PURE__ */ __name22222222(
-  (target, value) => __defProp222222222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp2222222222 = Object.defineProperty;
-var __name2222222222 = /* @__PURE__ */ __name222222222(
-  (target, value) => __defProp2222222222(target, "name", { value, configurable: true }),
-  "__name"
-);
 import ptBRTranslations from "../locales/pt-BR.json";
 import enTranslations from "../locales/en.json";
 let translations = ptBRTranslations;
@@ -67,14 +27,6 @@ function loadTranslations(language) {
 __name(loadTranslations, "loadTranslations");
 __name2(loadTranslations, "loadTranslations");
 __name22(loadTranslations, "loadTranslations");
-__name222(loadTranslations, "loadTranslations");
-__name2222(loadTranslations, "loadTranslations");
-__name22222(loadTranslations, "loadTranslations");
-__name222222(loadTranslations, "loadTranslations");
-__name2222222(loadTranslations, "loadTranslations");
-__name22222222(loadTranslations, "loadTranslations");
-__name222222222(loadTranslations, "loadTranslations");
-__name2222222222(loadTranslations, "loadTranslations");
 async function initI18n(language = "en") {
   currentLanguage = language;
   translations = await loadTranslations(language);
@@ -87,14 +39,6 @@ async function initI18n(language = "en") {
 __name(initI18n, "initI18n");
 __name2(initI18n, "initI18n");
 __name22(initI18n, "initI18n");
-__name222(initI18n, "initI18n");
-__name2222(initI18n, "initI18n");
-__name22222(initI18n, "initI18n");
-__name222222(initI18n, "initI18n");
-__name2222222(initI18n, "initI18n");
-__name22222222(initI18n, "initI18n");
-__name222222222(initI18n, "initI18n");
-__name2222222222(initI18n, "initI18n");
 async function changeLanguage(language) {
   if (!language || typeof language !== "string") {
     return;
@@ -107,14 +51,6 @@ async function changeLanguage(language) {
 __name(changeLanguage, "changeLanguage");
 __name2(changeLanguage, "changeLanguage");
 __name22(changeLanguage, "changeLanguage");
-__name222(changeLanguage, "changeLanguage");
-__name2222(changeLanguage, "changeLanguage");
-__name22222(changeLanguage, "changeLanguage");
-__name222222(changeLanguage, "changeLanguage");
-__name2222222(changeLanguage, "changeLanguage");
-__name22222222(changeLanguage, "changeLanguage");
-__name222222222(changeLanguage, "changeLanguage");
-__name2222222222(changeLanguage, "changeLanguage");
 async function syncLanguageWithBackend(language) {
   if (!language || typeof language !== "string") {
     return false;
@@ -128,16 +64,8 @@ async function syncLanguageWithBackend(language) {
 __name(syncLanguageWithBackend, "syncLanguageWithBackend");
 __name2(syncLanguageWithBackend, "syncLanguageWithBackend");
 __name22(syncLanguageWithBackend, "syncLanguageWithBackend");
-__name222(syncLanguageWithBackend, "syncLanguageWithBackend");
-__name2222(syncLanguageWithBackend, "syncLanguageWithBackend");
-__name22222(syncLanguageWithBackend, "syncLanguageWithBackend");
-__name222222(syncLanguageWithBackend, "syncLanguageWithBackend");
-__name2222222(syncLanguageWithBackend, "syncLanguageWithBackend");
-__name22222222(syncLanguageWithBackend, "syncLanguageWithBackend");
-__name222222222(syncLanguageWithBackend, "syncLanguageWithBackend");
-__name2222222222(syncLanguageWithBackend, "syncLanguageWithBackend");
 function t(key, params = {}) {
-  const getNestedValue = /* @__PURE__ */ __name2222222222((obj, path) => {
+  const getNestedValue = /* @__PURE__ */ __name22((obj, path) => {
     return path.split(".").reduce((current, prop) => {
       return current && current[prop] !== void 0 ? current[prop] : void 0;
     }, obj);
@@ -162,14 +90,6 @@ function t(key, params = {}) {
 __name(t, "t");
 __name2(t, "t");
 __name22(t, "t");
-__name222(t, "t");
-__name2222(t, "t");
-__name22222(t, "t");
-__name222222(t, "t");
-__name2222222(t, "t");
-__name22222222(t, "t");
-__name222222222(t, "t");
-__name2222222222(t, "t");
 function translatePage() {
   const elements = document.querySelectorAll("[data-i18n]");
   elements.forEach((element) => {
@@ -185,14 +105,6 @@ function translatePage() {
 __name(translatePage, "translatePage");
 __name2(translatePage, "translatePage");
 __name22(translatePage, "translatePage");
-__name222(translatePage, "translatePage");
-__name2222(translatePage, "translatePage");
-__name22222(translatePage, "translatePage");
-__name222222(translatePage, "translatePage");
-__name2222222(translatePage, "translatePage");
-__name22222222(translatePage, "translatePage");
-__name222222222(translatePage, "translatePage");
-__name2222222222(translatePage, "translatePage");
 async function reloadTranslations() {
   translationCache.clear();
   translations = await loadTranslations(currentLanguage);
@@ -201,14 +113,6 @@ async function reloadTranslations() {
 __name(reloadTranslations, "reloadTranslations");
 __name2(reloadTranslations, "reloadTranslations");
 __name22(reloadTranslations, "reloadTranslations");
-__name222(reloadTranslations, "reloadTranslations");
-__name2222(reloadTranslations, "reloadTranslations");
-__name22222(reloadTranslations, "reloadTranslations");
-__name222222(reloadTranslations, "reloadTranslations");
-__name2222222(reloadTranslations, "reloadTranslations");
-__name22222222(reloadTranslations, "reloadTranslations");
-__name222222222(reloadTranslations, "reloadTranslations");
-__name2222222222(reloadTranslations, "reloadTranslations");
 async function reloadCurrentTranslations() {
   if (!import.meta.env?.DEV) return;
   translationCache.clear();
@@ -218,14 +122,6 @@ async function reloadCurrentTranslations() {
 __name(reloadCurrentTranslations, "reloadCurrentTranslations");
 __name2(reloadCurrentTranslations, "reloadCurrentTranslations");
 __name22(reloadCurrentTranslations, "reloadCurrentTranslations");
-__name222(reloadCurrentTranslations, "reloadCurrentTranslations");
-__name2222(reloadCurrentTranslations, "reloadCurrentTranslations");
-__name22222(reloadCurrentTranslations, "reloadCurrentTranslations");
-__name222222(reloadCurrentTranslations, "reloadCurrentTranslations");
-__name2222222(reloadCurrentTranslations, "reloadCurrentTranslations");
-__name22222222(reloadCurrentTranslations, "reloadCurrentTranslations");
-__name222222222(reloadCurrentTranslations, "reloadCurrentTranslations");
-__name2222222222(reloadCurrentTranslations, "reloadCurrentTranslations");
 if (import.meta.hot) {
   import.meta.hot.accept(["../locales/pt-BR.json", "../locales/en.json"], (newModules) => {
     if (newModules) {

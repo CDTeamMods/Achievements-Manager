@@ -7,46 +7,6 @@ var __name22 = /* @__PURE__ */ __name2(
   (target, value) => __defProp22(target, "name", { value, configurable: true }),
   "__name"
 );
-var __defProp222 = Object.defineProperty;
-var __name222 = /* @__PURE__ */ __name22(
-  (target, value) => __defProp222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp2222 = Object.defineProperty;
-var __name2222 = /* @__PURE__ */ __name222(
-  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp22222 = Object.defineProperty;
-var __name22222 = /* @__PURE__ */ __name2222(
-  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp222222 = Object.defineProperty;
-var __name222222 = /* @__PURE__ */ __name22222(
-  (target, value) => __defProp222222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp2222222 = Object.defineProperty;
-var __name2222222 = /* @__PURE__ */ __name222222(
-  (target, value) => __defProp2222222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp22222222 = Object.defineProperty;
-var __name22222222 = /* @__PURE__ */ __name2222222(
-  (target, value) => __defProp22222222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp222222222 = Object.defineProperty;
-var __name222222222 = /* @__PURE__ */ __name22222222(
-  (target, value) => __defProp222222222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp2222222222 = Object.defineProperty;
-var __name2222222222 = /* @__PURE__ */ __name222222222(
-  (target, value) => __defProp2222222222(target, "name", { value, configurable: true }),
-  "__name"
-);
 import { EventEmitter, DOMUtils, NumberUtils, throttle } from "./utils.js";
 class VirtualScroller {
   static {
@@ -58,37 +18,13 @@ class VirtualScroller {
   static {
     __name22(this, "VirtualScroller");
   }
-  static {
-    __name222(this, "VirtualScroller");
-  }
-  static {
-    __name2222(this, "VirtualScroller");
-  }
-  static {
-    __name22222(this, "VirtualScroller");
-  }
-  static {
-    __name222222(this, "VirtualScroller");
-  }
-  static {
-    __name2222222(this, "VirtualScroller");
-  }
-  static {
-    __name22222222(this, "VirtualScroller");
-  }
-  static {
-    __name222222222(this, "VirtualScroller");
-  }
-  static {
-    __name2222222222(this, "VirtualScroller");
-  }
   constructor(container, options = {}) {
     this.container = typeof container === "string" ? document.querySelector(container) : container;
     this.options = {
       itemHeight: 50,
       bufferSize: 5,
       threshold: 100,
-      renderItem: /* @__PURE__ */ __name2222222222(
+      renderItem: /* @__PURE__ */ __name22(
         (item) => `<div class="virtual-item">${item}</div>`,
         "renderItem"
       ),
@@ -191,30 +127,6 @@ class LazyLoader {
   static {
     __name22(this, "LazyLoader");
   }
-  static {
-    __name222(this, "LazyLoader");
-  }
-  static {
-    __name2222(this, "LazyLoader");
-  }
-  static {
-    __name22222(this, "LazyLoader");
-  }
-  static {
-    __name222222(this, "LazyLoader");
-  }
-  static {
-    __name2222222(this, "LazyLoader");
-  }
-  static {
-    __name22222222(this, "LazyLoader");
-  }
-  static {
-    __name222222222(this, "LazyLoader");
-  }
-  static {
-    __name2222222222(this, "LazyLoader");
-  }
   constructor(options = {}) {
     this.options = {
       rootMargin: "50px",
@@ -308,30 +220,6 @@ class CacheManager {
   }
   static {
     __name22(this, "CacheManager");
-  }
-  static {
-    __name222(this, "CacheManager");
-  }
-  static {
-    __name2222(this, "CacheManager");
-  }
-  static {
-    __name22222(this, "CacheManager");
-  }
-  static {
-    __name222222(this, "CacheManager");
-  }
-  static {
-    __name2222222(this, "CacheManager");
-  }
-  static {
-    __name22222222(this, "CacheManager");
-  }
-  static {
-    __name222222222(this, "CacheManager");
-  }
-  static {
-    __name2222222222(this, "CacheManager");
   }
   constructor(options = {}) {
     this.options = {
@@ -511,30 +399,6 @@ class HttpCache extends CacheManager {
   static {
     __name22(this, "HttpCache");
   }
-  static {
-    __name222(this, "HttpCache");
-  }
-  static {
-    __name2222(this, "HttpCache");
-  }
-  static {
-    __name22222(this, "HttpCache");
-  }
-  static {
-    __name222222(this, "HttpCache");
-  }
-  static {
-    __name2222222(this, "HttpCache");
-  }
-  static {
-    __name22222222(this, "HttpCache");
-  }
-  static {
-    __name222222222(this, "HttpCache");
-  }
-  static {
-    __name2222222222(this, "HttpCache");
-  }
   constructor(options = {}) {
     super(options);
     this.requests = 0;
@@ -598,30 +462,6 @@ class ImageOptimizer {
   static {
     __name22(this, "ImageOptimizer");
   }
-  static {
-    __name222(this, "ImageOptimizer");
-  }
-  static {
-    __name2222(this, "ImageOptimizer");
-  }
-  static {
-    __name22222(this, "ImageOptimizer");
-  }
-  static {
-    __name222222(this, "ImageOptimizer");
-  }
-  static {
-    __name2222222(this, "ImageOptimizer");
-  }
-  static {
-    __name22222222(this, "ImageOptimizer");
-  }
-  static {
-    __name222222222(this, "ImageOptimizer");
-  }
-  static {
-    __name2222222222(this, "ImageOptimizer");
-  }
   constructor(options = {}) {
     this.options = {
       quality: 0.8,
@@ -677,30 +517,6 @@ class PerformanceMonitor extends EventEmitter {
   }
   static {
     __name22(this, "PerformanceMonitor");
-  }
-  static {
-    __name222(this, "PerformanceMonitor");
-  }
-  static {
-    __name2222(this, "PerformanceMonitor");
-  }
-  static {
-    __name22222(this, "PerformanceMonitor");
-  }
-  static {
-    __name222222(this, "PerformanceMonitor");
-  }
-  static {
-    __name2222222(this, "PerformanceMonitor");
-  }
-  static {
-    __name22222222(this, "PerformanceMonitor");
-  }
-  static {
-    __name222222222(this, "PerformanceMonitor");
-  }
-  static {
-    __name2222222222(this, "PerformanceMonitor");
   }
   constructor() {
     super();
@@ -760,7 +576,7 @@ class PerformanceMonitor extends EventEmitter {
   monitorFPS() {
     let lastTime = performance.now();
     let frames = 0;
-    const measureFPS = /* @__PURE__ */ __name2222222222(() => {
+    const measureFPS = /* @__PURE__ */ __name22(() => {
       if (!this.isMonitoring) return;
       frames++;
       const currentTime = performance.now();

@@ -195,16 +195,7 @@ const electronAPI = {
     reset: debugInvoke("config:reset")
   },
   // Jogos
-  games: {
-    getAll: debugInvoke("games:getAll"),
-    getById: debugInvoke("games:getById"),
-    add: debugInvoke("games:add"),
-    update: debugInvoke("games:update"),
-    delete: debugInvoke("games:delete"),
-    scan: debugInvoke("games:scan"),
-    import: debugInvoke("games:import"),
-    export: debugInvoke("games:export")
-  },
+  // (removido) games: API removida
   // Conquistas
   achievements: {
     getAll: debugInvoke("achievements:getAll"),

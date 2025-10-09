@@ -1,66 +1,16 @@
-var __defProp = Object.defineProperty;
-var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
-var __defProp2 = Object.defineProperty;
-var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
-var __defProp22 = Object.defineProperty;
-var __name22 = /* @__PURE__ */ __name2(
-  (target, value) => __defProp22(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp222 = Object.defineProperty;
-var __name222 = /* @__PURE__ */ __name22(
-  (target, value) => __defProp222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp2222 = Object.defineProperty;
-var __name2222 = /* @__PURE__ */ __name222(
-  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp22222 = Object.defineProperty;
-var __name22222 = /* @__PURE__ */ __name2222(
-  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp222222 = Object.defineProperty;
-var __name222222 = /* @__PURE__ */ __name22222(
-  (target, value) => __defProp222222(target, "name", { value, configurable: true }),
-  "__name"
-);
 class RendererDebugManager {
-  static {
-    __name(this, "RendererDebugManager");
-  }
-  static {
-    __name2(this, "RendererDebugManager");
-  }
-  static {
-    __name22(this, "RendererDebugManager");
-  }
-  static {
-    __name222(this, "RendererDebugManager");
-  }
-  static {
-    __name2222(this, "RendererDebugManager");
-  }
-  static {
-    __name22222(this, "RendererDebugManager");
-  }
-  static {
-    __name222222(this, "RendererDebugManager");
-  }
   constructor() {
     this.isDebugEnabled = this.checkDebugEnabled();
-    this.debugLevel = "info";
+    this.debugLevel = 'info';
     this.init();
   }
   checkDebugEnabled() {
     try {
-      const localStorageDebug = localStorage.getItem("DEBUG_TOOLS");
-      if (localStorageDebug === "true") return true;
+      const localStorageDebug = localStorage.getItem('DEBUG_TOOLS');
+      if (localStorageDebug === 'true') return true;
       const urlParams = new URLSearchParams(window.location.search);
-      if (urlParams.get("debug") === "true") return true;
-      if (window.location.protocol === "file:" && window.location.href.includes("src")) {
+      if (urlParams.get('debug') === 'true') return true;
+      if (window.location.protocol === 'file:' && window.location.href.includes('src')) {
         return true;
       }
       return false;
@@ -68,8 +18,7 @@ class RendererDebugManager {
       return false;
     }
   }
-  init() {
-  }
+  init() {}
   /**
    * Verifica se o debug está habilitado
    * @returns {boolean}
@@ -92,7 +41,7 @@ class RendererDebugManager {
    * @param {any} data
    */
   info(message, data = null) {
-    this.log("info", message, data);
+    this.log('info', message, data);
   }
   /**
    * Log de aviso
@@ -100,7 +49,7 @@ class RendererDebugManager {
    * @param {any} data
    */
   warn(message, data = null) {
-    this.log("warn", message, data);
+    this.log('warn', message, data);
   }
   /**
    * Log de erro
@@ -108,7 +57,7 @@ class RendererDebugManager {
    * @param {any} data
    */
   error(message, data = null) {
-    this.log("error", message, data);
+    this.log('error', message, data);
   }
   /**
    * Log específico para crash reports
@@ -117,7 +66,7 @@ class RendererDebugManager {
    */
   crash(message, data = null) {
     if (this.isDebugEnabled) {
-      this.log("crash", `\u{1F4A5} CRASH: ${message}`, data);
+      this.log('crash', `\u{1F4A5} CRASH: ${message}`, data);
     }
   }
   /**
@@ -127,7 +76,7 @@ class RendererDebugManager {
    */
   ipc(message, data = null) {
     if (this.isDebugEnabled) {
-      this.log("ipc", `\u{1F4E1} IPC: ${message}`, data);
+      this.log('ipc', `\u{1F4E1} IPC: ${message}`, data);
     }
   }
   /**
@@ -137,7 +86,7 @@ class RendererDebugManager {
    */
   sanitize(message, data = null) {
     if (this.isDebugEnabled) {
-      this.log("sanitize", `\u{1F9F9} SANITIZE: ${message}`, data);
+      this.log('sanitize', `\u{1F9F9} SANITIZE: ${message}`, data);
     }
   }
   /**
@@ -147,14 +96,14 @@ class RendererDebugManager {
    */
   getLogPrefix(level) {
     const prefixes = {
-      info: "\u{1F4DD}",
-      warn: "\u26A0\uFE0F",
-      error: "\u274C",
-      crash: "\u{1F4A5}",
-      ipc: "\u{1F4E1}",
-      sanitize: "\u{1F9F9}"
+      info: '\u{1F4DD}',
+      warn: '\u26A0\uFE0F',
+      error: '\u274C',
+      crash: '\u{1F4A5}',
+      ipc: '\u{1F4E1}',
+      sanitize: '\u{1F9F9}',
     };
-    return prefixes[level] || "\u{1F4DD}";
+    return prefixes[level] || '\u{1F4DD}';
   }
   /**
    * Ativa/desativa debug em tempo de execução
@@ -162,7 +111,7 @@ class RendererDebugManager {
    */
   setDebugEnabled(enabled) {
     this.isDebugEnabled = enabled;
-    localStorage.setItem("DEBUG_TOOLS", enabled.toString());
+    localStorage.setItem('DEBUG_TOOLS', enabled.toString());
   }
   /**
    * Obtém estatísticas de debug
@@ -173,7 +122,7 @@ class RendererDebugManager {
       enabled: this.isDebugEnabled,
       level: this.debugLevel,
       location: window.location.href,
-      userAgent: navigator.userAgent
+      userAgent: navigator.userAgent,
     };
   }
 }
@@ -184,16 +133,7 @@ function getDebugManager() {
   }
   return debugManager;
 }
-__name(getDebugManager, "getDebugManager");
-__name2(getDebugManager, "getDebugManager");
-__name22(getDebugManager, "getDebugManager");
-__name222(getDebugManager, "getDebugManager");
-__name2222(getDebugManager, "getDebugManager");
-__name22222(getDebugManager, "getDebugManager");
-__name222222(getDebugManager, "getDebugManager");
+
 window.DebugManager = RendererDebugManager;
 window.getDebugManager = getDebugManager;
-export {
-  RendererDebugManager,
-  getDebugManager
-};
+export { RendererDebugManager, getDebugManager };

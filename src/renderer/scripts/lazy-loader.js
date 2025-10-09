@@ -1,90 +1,8 @@
-var __defProp = Object.defineProperty;
-var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
-var __defProp2 = Object.defineProperty;
-var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
-var __defProp22 = Object.defineProperty;
-var __name22 = /* @__PURE__ */ __name2(
-  (target, value) => __defProp22(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp222 = Object.defineProperty;
-var __name222 = /* @__PURE__ */ __name22(
-  (target, value) => __defProp222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp2222 = Object.defineProperty;
-var __name2222 = /* @__PURE__ */ __name222(
-  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp22222 = Object.defineProperty;
-var __name22222 = /* @__PURE__ */ __name2222(
-  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp222222 = Object.defineProperty;
-var __name222222 = /* @__PURE__ */ __name22222(
-  (target, value) => __defProp222222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp2222222 = Object.defineProperty;
-var __name2222222 = /* @__PURE__ */ __name222222(
-  (target, value) => __defProp2222222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp22222222 = Object.defineProperty;
-var __name22222222 = /* @__PURE__ */ __name2222222(
-  (target, value) => __defProp22222222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp222222222 = Object.defineProperty;
-var __name222222222 = /* @__PURE__ */ __name22222222(
-  (target, value) => __defProp222222222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp2222222222 = Object.defineProperty;
-var __name2222222222 = /* @__PURE__ */ __name222222222(
-  (target, value) => __defProp2222222222(target, "name", { value, configurable: true }),
-  "__name"
-);
 class LazyLoader {
-  static {
-    __name(this, "LazyLoader");
-  }
-  static {
-    __name2(this, "LazyLoader");
-  }
-  static {
-    __name22(this, "LazyLoader");
-  }
-  static {
-    __name222(this, "LazyLoader");
-  }
-  static {
-    __name2222(this, "LazyLoader");
-  }
-  static {
-    __name22222(this, "LazyLoader");
-  }
-  static {
-    __name222222(this, "LazyLoader");
-  }
-  static {
-    __name2222222(this, "LazyLoader");
-  }
-  static {
-    __name22222222(this, "LazyLoader");
-  }
-  static {
-    __name222222222(this, "LazyLoader");
-  }
-  static {
-    __name2222222222(this, "LazyLoader");
-  }
   constructor() {
-    this.loadedModules = /* @__PURE__ */ new Map();
-    this.loadingPromises = /* @__PURE__ */ new Map();
-    this.moduleCache = /* @__PURE__ */ new Map();
+    this.loadedModules = new Map();
+    this.loadingPromises = new Map();
+    this.moduleCache = new Map();
   }
   /**
    * Carrega um módulo dinamicamente
@@ -116,43 +34,23 @@ class LazyLoader {
    */
   static getModuleImporter(modulePath) {
     const moduleMap = {
-      "./modules/state.js": /* @__PURE__ */ __name2222222222(
-        () => import("./modules/state.js"),
-        "./modules/state.js"
-      ),
-      "./modules/navigation.js": /* @__PURE__ */ __name2222222222(
-        () => import("./modules/navigation.js"),
-        "./modules/navigation.js"
-      ),
-      "./components.js": /* @__PURE__ */ __name2222222222(
-        () => import("./components.js"),
-        "./components.js"
-      ),
-      "./modules/settings.js": /* @__PURE__ */ __name2222222222(
-        () => import("./modules/settings.js"),
-        "./modules/settings.js"
-      ),
-      "./modules/events.js": /* @__PURE__ */ __name2222222222(
-        () => import("./modules/events.js"),
-        "./modules/events.js"
-      ),
-      "./modules/helpers.js": /* @__PURE__ */ __name2222222222(
-        () => import("./modules/helpers.js"),
-        "./modules/helpers.js"
-      ),
-      "./performance.js": /* @__PURE__ */ __name2222222222(
-        () => import("./performance.js"),
-        "./performance.js"
-      ),
-      "./modules/steam-games.js": /* @__PURE__ */ __name2222222222(
-        () => import("./modules/steam-games.js"),
-        "./modules/steam-games.js"
-      )
+      './modules/state.js': () => import('./modules/state.js'),
+      './modules/navigation.js': () => import('./modules/navigation.js'),
+      './components.js': () => import('./components.js'),
+      './modules/settings.js': () => import('./modules/settings.js'),
+      './modules/events.js': () => import('./modules/events.js'),
+      './modules/helpers.js': () => import('./modules/helpers.js'),
+      './performance.js': () => import('./performance.js'),
+      './modules/steam-games.js': () => import('./modules/steam-games.js'),
     };
-    return moduleMap[modulePath] || (() => import(
-      /* @vite-ignore */
-      modulePath
-    ));
+    return (
+      moduleMap[modulePath] ||
+      (() =>
+        import(
+          /* @vite-ignore */
+          modulePath
+        ))
+    );
   }
   /**
    * Carregamento interno do módulo
@@ -182,7 +80,7 @@ class LazyLoader {
    */
   async loadOnDemand(moduleName, modulePath, callback = null) {
     const module = await this.loadModule(moduleName, modulePath);
-    if (callback && typeof callback === "function") {
+    if (callback && typeof callback === 'function') {
       await callback(module);
     }
     return module;
@@ -228,29 +126,25 @@ class LazyLoader {
       loadedModules: this.loadedModules.size,
       loadingModules: this.loadingPromises.size,
       cachedModules: this.moduleCache.size,
-      moduleNames: Array.from(this.loadedModules.keys())
+      moduleNames: Array.from(this.loadedModules.keys()),
     };
   }
 }
 const MODULE_CONFIG = {
   // Módulos críticos (carregados imediatamente)
   critical: [
-    { name: "StateManager", path: "./modules/state.js" },
-    { name: "NavigationManager", path: "./modules/navigation.js" },
-    { name: "ComponentManager", path: "./components.js" }
+    { name: 'StateManager', path: './modules/state.js' },
+    { name: 'NavigationManager', path: './modules/navigation.js' },
+    { name: 'ComponentManager', path: './components.js' },
   ],
   // Módulos sob demanda (carregados quando necessário)
   onDemand: [
-    { name: "SettingsManager", path: "./modules/settings.js" },
-    { name: "EventsManager", path: "./modules/events.js" },
-    { name: "HelpersManager", path: "./modules/helpers.js" },
-    { name: "PerformanceMonitor", path: "./performance.js" },
-    { name: "SteamGamesManager", path: "./modules/steam-games.js" }
-  ]
+    { name: 'SettingsManager', path: './modules/settings.js' },
+    { name: 'EventsManager', path: './modules/events.js' },
+    { name: 'HelpersManager', path: './modules/helpers.js' },
+    { name: 'PerformanceMonitor', path: './performance.js' },
+    { name: 'SteamGamesManager', path: './modules/steam-games.js' },
+  ],
 };
 const lazyLoader = new LazyLoader();
-export {
-  LazyLoader,
-  MODULE_CONFIG,
-  lazyLoader
-};
+export { LazyLoader, MODULE_CONFIG, lazyLoader };

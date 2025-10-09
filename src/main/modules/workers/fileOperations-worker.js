@@ -1,89 +1,7 @@
-var __defProp = Object.defineProperty;
-var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
-var __defProp2 = Object.defineProperty;
-var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
-var __defProp22 = Object.defineProperty;
-var __name22 = /* @__PURE__ */ __name2(
-  (target, value) => __defProp22(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp222 = Object.defineProperty;
-var __name222 = /* @__PURE__ */ __name22(
-  (target, value) => __defProp222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp2222 = Object.defineProperty;
-var __name2222 = /* @__PURE__ */ __name222(
-  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp22222 = Object.defineProperty;
-var __name22222 = /* @__PURE__ */ __name2222(
-  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp222222 = Object.defineProperty;
-var __name222222 = /* @__PURE__ */ __name22222(
-  (target, value) => __defProp222222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp2222222 = Object.defineProperty;
-var __name2222222 = /* @__PURE__ */ __name222222(
-  (target, value) => __defProp2222222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp22222222 = Object.defineProperty;
-var __name22222222 = /* @__PURE__ */ __name2222222(
-  (target, value) => __defProp22222222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp222222222 = Object.defineProperty;
-var __name222222222 = /* @__PURE__ */ __name22222222(
-  (target, value) => __defProp222222222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp2222222222 = Object.defineProperty;
-var __name2222222222 = /* @__PURE__ */ __name222222222(
-  (target, value) => __defProp2222222222(target, "name", { value, configurable: true }),
-  "__name"
-);
-const fs = require("node:fs").promises;
-const path = require("node:path");
-const crypto = require("crypto");
+const fs = require('node:fs').promises;
+const path = require('node:path');
+const crypto = require('crypto');
 class FileOperationsWorker {
-  static {
-    __name(this, "FileOperationsWorker");
-  }
-  static {
-    __name2(this, "FileOperationsWorker");
-  }
-  static {
-    __name22(this, "FileOperationsWorker");
-  }
-  static {
-    __name222(this, "FileOperationsWorker");
-  }
-  static {
-    __name2222(this, "FileOperationsWorker");
-  }
-  static {
-    __name22222(this, "FileOperationsWorker");
-  }
-  static {
-    __name222222(this, "FileOperationsWorker");
-  }
-  static {
-    __name2222222(this, "FileOperationsWorker");
-  }
-  static {
-    __name22222222(this, "FileOperationsWorker");
-  }
-  static {
-    __name222222222(this, "FileOperationsWorker");
-  }
-  static {
-    __name2222222222(this, "FileOperationsWorker");
-  }
   constructor() {
     this.allowedPaths = [];
     this.config = null;
@@ -94,12 +12,12 @@ class FileOperationsWorker {
    * Configura o worker
    */
   setupWorker() {
-    process.on("message", (message) => {
+    process.on('message', message => {
       this.handleMessage(message);
     });
     this.sendMessage({
-      type: "ready",
-      data: { processId: process.pid }
+      type: 'ready',
+      data: { processId: process.pid },
     });
     setInterval(() => {
       this.reportResourceUsage();
@@ -112,46 +30,46 @@ class FileOperationsWorker {
     try {
       const { type, data, id } = message;
       switch (type) {
-        case "init":
+        case 'init':
           await this.initialize(data);
           this.sendResponse(id, { success: true });
           break;
-        case "readFile": {
+        case 'readFile': {
           const content = await this.readFile(data.filePath);
           this.sendResponse(id, { content });
           break;
         }
-        case "writeFile":
+        case 'writeFile':
           await this.writeFile(data.filePath, data.content);
           this.sendResponse(id, { success: true });
           break;
-        case "deleteFile":
+        case 'deleteFile':
           await this.deleteFile(data.filePath);
           this.sendResponse(id, { success: true });
           break;
-        case "listDirectory": {
+        case 'listDirectory': {
           const files = await this.listDirectory(data.dirPath);
           this.sendResponse(id, { files });
           break;
         }
-        case "createDirectory":
+        case 'createDirectory':
           await this.createDirectory(data.dirPath);
           this.sendResponse(id, { success: true });
           break;
-        case "copyFile":
+        case 'copyFile':
           await this.copyFile(data.sourcePath, data.destPath);
           this.sendResponse(id, { success: true });
           break;
-        case "moveFile":
+        case 'moveFile':
           await this.moveFile(data.sourcePath, data.destPath);
           this.sendResponse(id, { success: true });
           break;
-        case "getFileStats": {
+        case 'getFileStats': {
           const stats = await this.getFileStats(data.filePath);
           this.sendResponse(id, { stats });
           break;
         }
-        case "validateFileIntegrity": {
+        case 'validateFileIntegrity': {
           const integrity = await this.validateFileIntegrity(data.filePath);
           this.sendResponse(id, { integrity });
           break;
@@ -176,7 +94,7 @@ class FileOperationsWorker {
    */
   validatePath(filePath) {
     const normalizedPath = path.normalize(filePath);
-    const isAllowed = this.allowedPaths.some((allowedPath) => {
+    const isAllowed = this.allowedPaths.some(allowedPath => {
       const normalizedAllowed = path.normalize(allowedPath);
       return normalizedPath.startsWith(normalizedAllowed);
     });
@@ -191,7 +109,7 @@ class FileOperationsWorker {
   async readFile(filePath) {
     const validPath = this.validatePath(filePath);
     try {
-      const content = await fs.readFile(validPath, "utf8");
+      const content = await fs.readFile(validPath, 'utf8');
       return content;
     } catch (error) {
       throw new Error(`Erro ao ler arquivo: ${error.message}`);
@@ -205,7 +123,7 @@ class FileOperationsWorker {
     try {
       const dir = path.dirname(validPath);
       await fs.mkdir(dir, { recursive: true });
-      await fs.writeFile(validPath, content, "utf8");
+      await fs.writeFile(validPath, content, 'utf8');
     } catch (error) {
       throw new Error(`Erro ao escrever arquivo: ${error.message}`);
     }
@@ -228,11 +146,11 @@ class FileOperationsWorker {
     const validPath = this.validatePath(dirPath);
     try {
       const entries = await fs.readdir(validPath, { withFileTypes: true });
-      return entries.map((entry) => ({
+      return entries.map(entry => ({
         name: entry.name,
         isDirectory: entry.isDirectory(),
         isFile: entry.isFile(),
-        path: path.join(validPath, entry.name)
+        path: path.join(validPath, entry.name),
       }));
     } catch (error) {
       throw new Error(`Erro ao listar diret\xF3rio: ${error.message}`);
@@ -290,7 +208,7 @@ class FileOperationsWorker {
         isDirectory: stats.isDirectory(),
         createdAt: stats.birthtime,
         modifiedAt: stats.mtime,
-        accessedAt: stats.atime
+        accessedAt: stats.atime,
       };
     } catch (error) {
       throw new Error(`Erro ao obter estat\xEDsticas: ${error.message}`);
@@ -303,11 +221,11 @@ class FileOperationsWorker {
     const validPath = this.validatePath(filePath);
     try {
       const content = await fs.readFile(validPath);
-      const hash = crypto.createHash("sha256").update(content).digest("hex");
+      const hash = crypto.createHash('sha256').update(content).digest('hex');
       return {
         valid: true,
         hash,
-        size: content.length
+        size: content.length,
       };
     } catch (error) {
       throw new Error(`Erro na valida\xE7\xE3o de integridade: ${error.message}`);
@@ -320,13 +238,13 @@ class FileOperationsWorker {
     const memoryUsage = process.memoryUsage();
     const cpuUsage = process.cpuUsage();
     this.sendMessage({
-      type: "resource-usage",
+      type: 'resource-usage',
       data: {
         memory: memoryUsage.heapUsed,
         cpu: (cpuUsage.user + cpuUsage.system) / 1e6,
         // Converter para ms
-        pid: process.pid
-      }
+        pid: process.pid,
+      },
     });
   }
   /**
@@ -336,7 +254,7 @@ class FileOperationsWorker {
     process.send({
       ...message,
       timestamp: Date.now(),
-      workerId: this.processId
+      workerId: this.processId,
     });
   }
   /**
@@ -344,9 +262,9 @@ class FileOperationsWorker {
    */
   sendResponse(messageId, data) {
     this.sendMessage({
-      type: "response",
+      type: 'response',
       id: messageId,
-      data
+      data,
     });
   }
   /**
@@ -354,16 +272,16 @@ class FileOperationsWorker {
    */
   sendError(messageId, errorMessage) {
     this.sendMessage({
-      type: "error",
+      type: 'error',
       id: messageId,
-      data: errorMessage
+      data: errorMessage,
     });
   }
 }
 new FileOperationsWorker();
-process.on("SIGTERM", () => {
+process.on('SIGTERM', () => {
   process.exit(0);
 });
-process.on("SIGINT", () => {
+process.on('SIGINT', () => {
   process.exit(0);
 });

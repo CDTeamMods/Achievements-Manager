@@ -235,7 +235,6 @@ Thumbs.db
 src/data/
 
 examples/
-**/*lock*
 **/*.backup
 
 **/*tmp*

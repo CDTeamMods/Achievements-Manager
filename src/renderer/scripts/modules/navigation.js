@@ -7,46 +7,6 @@ var __name22 = /* @__PURE__ */ __name2(
   (target, value) => __defProp22(target, "name", { value, configurable: true }),
   "__name"
 );
-var __defProp222 = Object.defineProperty;
-var __name222 = /* @__PURE__ */ __name22(
-  (target, value) => __defProp222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp2222 = Object.defineProperty;
-var __name2222 = /* @__PURE__ */ __name222(
-  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp22222 = Object.defineProperty;
-var __name22222 = /* @__PURE__ */ __name2222(
-  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp222222 = Object.defineProperty;
-var __name222222 = /* @__PURE__ */ __name22222(
-  (target, value) => __defProp222222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp2222222 = Object.defineProperty;
-var __name2222222 = /* @__PURE__ */ __name222222(
-  (target, value) => __defProp2222222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp22222222 = Object.defineProperty;
-var __name22222222 = /* @__PURE__ */ __name2222222(
-  (target, value) => __defProp22222222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp222222222 = Object.defineProperty;
-var __name222222222 = /* @__PURE__ */ __name22222222(
-  (target, value) => __defProp222222222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp2222222222 = Object.defineProperty;
-var __name2222222222 = /* @__PURE__ */ __name222222222(
-  (target, value) => __defProp2222222222(target, "name", { value, configurable: true }),
-  "__name"
-);
 class NavigationManager {
   static {
     __name(this, "NavigationManager");
@@ -56,30 +16,6 @@ class NavigationManager {
   }
   static {
     __name22(this, "NavigationManager");
-  }
-  static {
-    __name222(this, "NavigationManager");
-  }
-  static {
-    __name2222(this, "NavigationManager");
-  }
-  static {
-    __name22222(this, "NavigationManager");
-  }
-  static {
-    __name222222(this, "NavigationManager");
-  }
-  static {
-    __name2222222(this, "NavigationManager");
-  }
-  static {
-    __name22222222(this, "NavigationManager");
-  }
-  static {
-    __name222222222(this, "NavigationManager");
-  }
-  static {
-    __name2222222222(this, "NavigationManager");
   }
   constructor(app) {
     this.app = app;
@@ -1023,7 +959,7 @@ class NavigationManager {
             "data-i18n",
             "settings.api.steam.status.error.description"
           );
-          const looksLikeKey = /* @__PURE__ */ __name2222222222(
+          const looksLikeKey = /* @__PURE__ */ __name22(
             (s) => typeof s === "string" && s.includes(".") && !s.includes(" "),
             "looksLikeKey"
           );
@@ -1434,7 +1370,7 @@ class NavigationManager {
             "data-i18n",
             "settings.api.steam.status.disconnected.description"
           );
-          const looksLikeKey = /* @__PURE__ */ __name2222222222(
+          const looksLikeKey = /* @__PURE__ */ __name22(
             (s) => typeof s === "string" && s.includes(".") && !s.includes(" "),
             "looksLikeKey"
           );
@@ -2095,7 +2031,7 @@ ${devMessage}`);
         style.remove();
       }
     });
-    const handleEsc = /* @__PURE__ */ __name2222222222((e) => {
+    const handleEsc = /* @__PURE__ */ __name22((e) => {
       if (e.key === "Escape") {
         overlay.remove();
         style.remove();
@@ -2198,7 +2134,7 @@ ${devMessage}`);
         style.remove();
       }
     });
-    const handleEsc = /* @__PURE__ */ __name2222222222((e) => {
+    const handleEsc = /* @__PURE__ */ __name22((e) => {
       if (e.key === "Escape") {
         overlay.remove();
         style.remove();

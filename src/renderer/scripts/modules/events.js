@@ -1,129 +1,50 @@
-var __defProp = Object.defineProperty;
-var __name = (target, value) => __defProp(target, "name", { value, configurable: true });
-var __defProp2 = Object.defineProperty;
-var __name2 = /* @__PURE__ */ __name((target, value) => __defProp2(target, "name", { value, configurable: true }), "__name");
-var __defProp22 = Object.defineProperty;
-var __name22 = /* @__PURE__ */ __name2(
-  (target, value) => __defProp22(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp222 = Object.defineProperty;
-var __name222 = /* @__PURE__ */ __name22(
-  (target, value) => __defProp222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp2222 = Object.defineProperty;
-var __name2222 = /* @__PURE__ */ __name222(
-  (target, value) => __defProp2222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp22222 = Object.defineProperty;
-var __name22222 = /* @__PURE__ */ __name2222(
-  (target, value) => __defProp22222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp222222 = Object.defineProperty;
-var __name222222 = /* @__PURE__ */ __name22222(
-  (target, value) => __defProp222222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp2222222 = Object.defineProperty;
-var __name2222222 = /* @__PURE__ */ __name222222(
-  (target, value) => __defProp2222222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp22222222 = Object.defineProperty;
-var __name22222222 = /* @__PURE__ */ __name2222222(
-  (target, value) => __defProp22222222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp222222222 = Object.defineProperty;
-var __name222222222 = /* @__PURE__ */ __name22222222(
-  (target, value) => __defProp222222222(target, "name", { value, configurable: true }),
-  "__name"
-);
-var __defProp2222222222 = Object.defineProperty;
-var __name2222222222 = /* @__PURE__ */ __name222222222(
-  (target, value) => __defProp2222222222(target, "name", { value, configurable: true }),
-  "__name"
-);
 class EventsManager {
-  static {
-    __name(this, "EventsManager");
-  }
-  static {
-    __name2(this, "EventsManager");
-  }
-  static {
-    __name22(this, "EventsManager");
-  }
-  static {
-    __name222(this, "EventsManager");
-  }
-  static {
-    __name2222(this, "EventsManager");
-  }
-  static {
-    __name22222(this, "EventsManager");
-  }
-  static {
-    __name222222(this, "EventsManager");
-  }
-  static {
-    __name2222222(this, "EventsManager");
-  }
-  static {
-    __name22222222(this, "EventsManager");
-  }
-  static {
-    __name222222222(this, "EventsManager");
-  }
-  static {
-    __name2222222222(this, "EventsManager");
-  }
   constructor(app) {
     this.app = app;
   }
   setupEventListeners() {
-    document.addEventListener("click", (e) => {
-      const navItem = e.target.closest(".nav-item");
+    document.addEventListener('click', e => {
+      const navItem = e.target.closest('.nav-item');
       if (navItem) {
         e.preventDefault();
-        const page = navItem.getAttribute("href").substring(1);
+        const page = navItem.getAttribute('href').substring(1);
         this.app.modules.navigation.navigateTo(page);
       }
     });
     if (this.app.isElectron) {
       this.setupWindowControls();
     }
-    const sidebarSettingsBtn = document.getElementById("sidebarSettingsBtn");
+    const sidebarSettingsBtn = document.getElementById('sidebarSettingsBtn');
     if (sidebarSettingsBtn) {
-      sidebarSettingsBtn.addEventListener("click", async (e) => {
+      sidebarSettingsBtn.addEventListener('click', async e => {
         e.preventDefault();
         await this.app.openSettings();
       });
     }
-    const refreshBtn = document.getElementById("refreshBtn");
+    const refreshBtn = document.getElementById('refreshBtn');
     if (refreshBtn) {
-      refreshBtn.addEventListener("click", () => {
+      refreshBtn.addEventListener('click', () => {
         this.app.modules.navigation.refreshCurrentPage();
       });
     }
-    const addGameBtn = document.getElementById("addGameBtn");
+    const addGameBtn = document.getElementById('addGameBtn');
     if (addGameBtn) {
-      addGameBtn.addEventListener("click", () => {
+      addGameBtn.addEventListener('click', () => {
         this.app.openAddGameModal();
       });
     }
-    document.addEventListener("keydown", (e) => {
+    document.addEventListener('keydown', e => {
       this.handleKeyboardShortcuts(e);
     });
     if (this.app.modules.state && this.app.modules.state.subscribe) {
-      this.app.modules.state.subscribe("settings", (settings) => {
+      this.app.modules.state.subscribe('settings', settings => {
         if (this.app.modules.settings) {
-          this.app.modules.settings.applyTheme && this.app.modules.settings.applyTheme(settings.theme);
-          this.app.modules.settings.applyLiteMode && this.app.modules.settings.applyLiteMode(settings.liteMode);
-          this.app.modules.settings.applyVirtualScrolling && this.app.modules.settings.applyVirtualScrolling(settings.virtualScrolling);
+          this.app.modules.settings.applyTheme &&
+            this.app.modules.settings.applyTheme(settings.theme);
+          this.app.modules.settings.applyLiteMode &&
+            this.app.modules.settings.applyLiteMode(settings.liteMode);
+          this.app.modules.settings.applyVirtualScrolling &&
+            this.app.modules.settings.applyVirtualScrolling(settings.virtualScrolling);
         }
       });
     }
@@ -133,35 +54,35 @@ class EventsManager {
       return;
     }
     window.__amWindowControlsInitialized = true;
-    const minimizeBtn = document.getElementById("minimizeBtn");
-    const maximizeBtn = document.getElementById("maximizeBtn");
-    const closeBtn = document.getElementById("closeBtn");
+    const minimizeBtn = document.getElementById('minimizeBtn');
+    const maximizeBtn = document.getElementById('maximizeBtn');
+    const closeBtn = document.getElementById('closeBtn');
     if (minimizeBtn) {
-      minimizeBtn.addEventListener("click", () => {
+      minimizeBtn.addEventListener('click', () => {
         window.electronAPI.minimizeWindow();
       });
     }
     if (maximizeBtn) {
-      const updateMaximizeUI = /* @__PURE__ */ __name2222222222(async () => {
+      const updateMaximizeUI = async () => {
         const isMax = await window.electronAPI.isMaximized();
-        const icon = maximizeBtn.querySelector("i");
+        const icon = maximizeBtn.querySelector('i');
         if (isMax) {
-          maximizeBtn.title = "Restaurar";
-          maximizeBtn.setAttribute("data-i18n-title", "window.restore");
+          maximizeBtn.title = 'Restaurar';
+          maximizeBtn.setAttribute('data-i18n-title', 'window.restore');
           if (icon) {
-            icon.className = "far fa-clone";
+            icon.className = 'far fa-clone';
           }
         } else {
-          maximizeBtn.title = "Maximizar";
-          maximizeBtn.setAttribute("data-i18n-title", "window.maximize");
+          maximizeBtn.title = 'Maximizar';
+          maximizeBtn.setAttribute('data-i18n-title', 'window.maximize');
           if (icon) {
-            icon.className = "fas fa-square";
+            icon.className = 'fas fa-square';
           }
         }
-      }, "updateMaximizeUI");
+      };
       updateMaximizeUI();
       let maxToggleLock = false;
-      maximizeBtn.addEventListener("click", async () => {
+      maximizeBtn.addEventListener('click', async () => {
         if (maxToggleLock) return;
         maxToggleLock = true;
         try {
@@ -175,34 +96,34 @@ class EventsManager {
       });
     }
     if (closeBtn) {
-      closeBtn.addEventListener("click", () => {
+      closeBtn.addEventListener('click', () => {
         window.electronAPI.closeWindow();
       });
     }
   }
   handleKeyboardShortcuts(e) {
-    if ((e.ctrlKey || e.metaKey) && e.key === "r") {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'r') {
       e.preventDefault();
       this.app.modules.navigation.refreshCurrentPage();
     }
-    if ((e.ctrlKey || e.metaKey) && e.key === ",") {
+    if ((e.ctrlKey || e.metaKey) && e.key === ',') {
       e.preventDefault();
       this.app.openSettings();
     }
-    if ((e.ctrlKey || e.metaKey) && e.key === "n") {
+    if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
       e.preventDefault();
       this.app.openAddGameModal();
     }
-    if (e.key === "F5") {
+    if (e.key === 'F5') {
       e.preventDefault();
       this.app.modules.navigation.refreshCurrentPage();
     }
-    if (e.key === "Escape") {
+    if (e.key === 'Escape') {
       this.closeActiveModals();
     }
-    if (e.key >= "1" && e.key <= "4" && (e.ctrlKey || e.metaKey)) {
+    if (e.key >= '1' && e.key <= '4' && (e.ctrlKey || e.metaKey)) {
       e.preventDefault();
-      const pages = ["dashboard", "statistics", "backup", "configuracoes"];
+      const pages = ['dashboard', 'statistics', 'backup', 'configuracoes'];
       const pageIndex = parseInt(e.key) - 1;
       if (pages[pageIndex]) {
         this.app.modules.navigation.navigateTo(pages[pageIndex]);
@@ -210,17 +131,15 @@ class EventsManager {
     }
   }
   closeActiveModals() {
-    const activeModals = document.querySelectorAll(".modal.active, .modal.show");
-    activeModals.forEach((modal) => {
-      modal.classList.remove("active", "show");
+    const activeModals = document.querySelectorAll('.modal.active, .modal.show');
+    activeModals.forEach(modal => {
+      modal.classList.remove('active', 'show');
     });
-    const activeDropdowns = document.querySelectorAll(".dropdown.active");
-    activeDropdowns.forEach((dropdown) => {
-      dropdown.classList.remove("active");
+    const activeDropdowns = document.querySelectorAll('.dropdown.active');
+    activeDropdowns.forEach(dropdown => {
+      dropdown.classList.remove('active');
     });
   }
 }
 window.EventsManager = EventsManager;
-export {
-  EventsManager
-};
+export { EventsManager };
